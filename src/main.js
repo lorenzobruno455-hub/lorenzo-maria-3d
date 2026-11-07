@@ -55,7 +55,7 @@ const particles = Array.from({ length: 12 }, (_, i) => {
 });
 effect.visible = false; let effectTime = 0;
 
-function notify(message) { $('toast').textContent = message; $('toast').hidden = false; toastTime = 3; }
+function notify(message) { $('toast').textContent = message; $('toast').hidden = false; toastTime = 3; if (message.startsWith('◇')) visualEffects.burst('MEMÓRIA!'); else if (message.startsWith('★')) visualEffects.burst('CONQUISTA!'); }
 function save() {
   progress.position = { x: player.position.x, z: player.position.z }; progress.yaw = follow.yaw; progress.pitch = follow.pitch; progress.doors = world.doors.map(d => d.open);
   const ok = saveProgress(storage, progress, settings);
