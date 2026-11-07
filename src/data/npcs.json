@@ -1,0 +1,182 @@
+[
+  {
+    "id": "bia",
+    "name": "Bia",
+    "role": "Estudante · biblioteca",
+    "color": "#a88b76",
+    "personality": "Curiosa, adora trocar leituras.",
+    "start": {
+      "x": -6,
+      "z": 17
+    },
+    "route": [
+      {
+        "x": 19,
+        "z": -15,
+        "state": "sit",
+        "duration": 12
+      },
+      {
+        "x": 7,
+        "z": 0,
+        "state": "talk",
+        "duration": 8
+      },
+      {
+        "x": -7,
+        "z": 16,
+        "state": "observe",
+        "duration": 8
+      }
+    ],
+    "lines": [
+      "Eu vim devolver um livro e acabei levando outros três. A biblioteca sempre vence.",
+      "Já reparou nas anotações que a gente deixa entre as páginas? Às vezes são outra história."
+    ],
+    "friendLine": "Você já conhece o caminho das estantes. Que tal tentar o jogo de pares da biblioteca?"
+  },
+  {
+    "id": "caio",
+    "name": "Caio",
+    "role": "Estudante · quadra",
+    "color": "#7f97b0",
+    "personality": "Bem-humorado, organiza o recreio.",
+    "start": {
+      "x": -21,
+      "z": 8
+    },
+    "route": [
+      {
+        "x": -33,
+        "z": 4,
+        "state": "observe",
+        "duration": 9
+      },
+      {
+        "x": -24,
+        "z": 0,
+        "state": "wave",
+        "duration": 5
+      },
+      {
+        "x": -7,
+        "z": 0,
+        "state": "talk",
+        "duration": 8
+      }
+    ],
+    "lines": [
+      "O placar da quadra é temporário. A discussão sobre o placar dura o recreio inteiro.",
+      "Se a bola foi parar no jardim, foi um experimento de trajetória. Totalmente planejado."
+    ],
+    "friendLine": "Já que você conhece a turma, topa escolher o próximo treino: passes ou arremessos?"
+  },
+  {
+    "id": "helena",
+    "name": "Prof. Helena",
+    "role": "Professora fictícia · ciências",
+    "color": "#8e8baf",
+    "personality": "Paciente, responde perguntas com novas perguntas.",
+    "start": {
+      "x": -14,
+      "z": 0
+    },
+    "route": [
+      {
+        "x": -20,
+        "z": -15,
+        "state": "observe",
+        "duration": 14
+      },
+      {
+        "x": -20.5,
+        "z": -3,
+        "state": "talk",
+        "duration": 10
+      },
+      {
+        "x": -5,
+        "z": -1,
+        "state": "idle",
+        "duration": 6
+      }
+    ],
+    "lines": [
+      "Uma pergunta bem feita costuma valer mais que uma resposta decorada.",
+      "Nesta escola, errar uma hipótese é o começo da conversa, não o fim."
+    ],
+    "friendLine": "Gostei da sua curiosidade. Posso propor uma segunda pergunta, sem valer nota."
+  },
+  {
+    "id": "davi",
+    "name": "Davi",
+    "role": "Estudante · música",
+    "color": "#ad817f",
+    "personality": "Observador, organiza ensaios.",
+    "start": {
+      "x": 12,
+      "z": 18
+    },
+    "route": [
+      {
+        "x": 35,
+        "z": -12,
+        "state": "observe",
+        "duration": 12
+      },
+      {
+        "x": 8,
+        "z": 0,
+        "state": "talk",
+        "duration": 8
+      },
+      {
+        "x": 13,
+        "z": 18,
+        "state": "wave",
+        "duration": 6
+      }
+    ],
+    "lines": [
+      "Estou tentando ensaiar baixinho. O piano ainda não concordou com essa ideia.",
+      "Uma pausa também faz parte da música. Principalmente antes do sinal."
+    ],
+    "friendLine": "Agora você já faz parte do ensaio. Prefere começar devagar ou marcar o compasso?"
+  },
+  {
+    "id": "lia",
+    "name": "Lia",
+    "role": "Funcionária fictícia · cantina",
+    "color": "#799e95",
+    "personality": "Acolhedora, conhece o movimento da escola.",
+    "start": {
+      "x": 2,
+      "z": -22
+    },
+    "route": [
+      {
+        "x": 2,
+        "z": -23,
+        "state": "idle",
+        "duration": 16
+      },
+      {
+        "x": 4,
+        "z": -19,
+        "state": "observe",
+        "duration": 7
+      },
+      {
+        "x": 5,
+        "z": -2,
+        "state": "talk",
+        "duration": 8
+      }
+    ],
+    "lines": [
+      "A cantina tem água, fruta e pão de queijo virtual. O intervalo é de verdade para quem joga.",
+      "Se encontrar alguém perdido, diga para seguir o cheiro imaginário do pão de queijo."
+    ],
+    "friendLine": "Já conhece a casa! Pode escolher o lanche do próximo encontro da turma."
+  }
+]

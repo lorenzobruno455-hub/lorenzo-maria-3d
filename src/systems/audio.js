@@ -6,17 +6,18 @@ export class Audio {
     if (!this.settings.sound || !this.context || this.context.state !== 'running') return;
     const ctx = this.context, oscillator = ctx.createOscillator(), gain = ctx.createGain();
     oscillator.connect(gain); gain.connect(ctx.destination);
-    oscillator.type = 'sine'; oscillator.frequency.setValueAtTime(kind === 'collect' ? 660 : 160, ctx.currentTime);
-    oscillator.frequency.exponentialRampToValueAtTime(kind === 'collect' ? 990 : 90, ctx.currentTime + .15);
-    gain.gain.setValueAtTime(Math.max(.0001, this.settings.volume * .12), ctx.currentTime); gain.gain.exponentialRampToValueAtTime(.0001, ctx.currentTime + .32);
+    oscillator.type = 'sine'; oscillator.frequency.setValueAtTime(({ collect: 660, door: 160, step: 85, ball: 120, confirm: 440 })[kind] || 160, ctx.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(({ collect: 990, door: 90, step: 45, ball: 65, confirm: 660 })[kind] || 90, ctx.currentTime + .15);
+    gain.gain.setValueAtTime(Math.max(.0001, this.settings.volume * (this.settings.effectsVolume ?? .5) * .12), ctx.currentTime); gain.gain.exponentialRampToValueAtTime(.0001, ctx.currentTime + .32);
     oscillator.start(); oscillator.stop(ctx.currentTime + .33); oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); };
   }
   setMood(mood) { if (this.mood === mood) return; this.mood = mood; this.step = 0; this.nextNote = this.context?.currentTime || 0; if (this.musicGain) { this.musicGain.gain.cancelScheduledValues(this.context.currentTime); this.musicGain.gain.setValueAtTime(0, this.context.currentTime); } }
   update() {
     const ctx = this.context; if (!ctx || !this.musicGain || ctx.state !== 'running') return;
     const audible = this.settings.sound && !document.hidden;
-    this.musicGain.gain.setTargetAtTime(audible ? this.settings.volume * .045 : 0, ctx.currentTime, .15);
+    this.musicGain.gain.setTargetAtTime(audible ? this.settings.volume * (this.settings.musicVolume ?? .5) * .045 : 0, ctx.currentTime, .15);
     if (!audible) { this.nextNote = ctx.currentTime; return; }
+    if (this.mood === 'exploration' && ctx.currentTime > (this.nextAmbience || 0)) { this.ambience(); this.nextAmbience = ctx.currentTime + 9; }
     const name = { exploration: 'menu', conversation: 'soft', memory: 'soft', minigame: 'battle', completion: 'win' }[this.mood];
     const track = tracks[name]; if (!track) return; if (track.once && this.step >= track.lead.length) { this.setMood('exploration'); return; }
     const duration = 30 / track.bpm; if (this.nextNote < ctx.currentTime) this.nextNote = ctx.currentTime + .02;
@@ -32,6 +33,13 @@ export class Audio {
       }
       this.step++; this.nextNote += duration; if (track.once && this.step >= track.lead.length) break;
     }
+  }
+  ambience() {
+    const ctx = this.context; if (!ctx || !this.settings.sound) return;
+    if (!this.windBuffer) { this.windBuffer = ctx.createBuffer(1, Math.floor(ctx.sampleRate * .8), ctx.sampleRate); const values = this.windBuffer.getChannelData(0); for (let i = 0; i < values.length; i++) values[i] = Math.random() * 2 - 1; }
+    const source = ctx.createBufferSource(), filter = ctx.createBiquadFilter(), gain = ctx.createGain(); source.buffer = this.windBuffer; filter.type = 'bandpass'; filter.frequency.value = 320; filter.Q.value = .7;
+    gain.gain.setValueAtTime(.0001, ctx.currentTime); gain.gain.linearRampToValueAtTime(Math.max(.0001, this.settings.volume * this.settings.effectsVolume * .035), ctx.currentTime + .2); gain.gain.exponentialRampToValueAtTime(.0001, ctx.currentTime + .75);
+    source.connect(filter); filter.connect(gain); gain.connect(ctx.destination); this.nodes.add(source); source.start(); source.onended = () => { source.disconnect(); filter.disconnect(); gain.disconnect(); this.nodes.delete(source); };
   }
   dispose() { for (const node of this.nodes) { try { node.stop(); } catch {} node.disconnect(); } this.nodes.clear(); this.musicGain?.disconnect(); this.context?.close(); }
 

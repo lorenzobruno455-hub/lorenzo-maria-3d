@@ -16,7 +16,7 @@ export class Dialogue {
   showLine() {
     const line = this.lines[this.index]; this.elapsed = 0; this.visible = 0; this.speaker.textContent = line.speaker;
     this.root.querySelector('.portrait').textContent = line.speaker[0];
-    this.tag.textContent = line.provenance === 'creative-fiction' ? 'Diálogo criativo do jogo Color · não é transcrição' : line.provenance === 'author-reported-memory' ? 'Memória relatada pelo autor' : '';
+    this.tag.textContent = line.provenance === 'school-fiction' ? 'Personagem ou acontecimento fictício · Colégio Aurora' : line.provenance === 'creative-fiction' ? 'Diálogo criativo do jogo Color · não é transcrição' : line.provenance === 'author-reported-memory' ? 'Memória relatada pelo autor' : '';
     this.speech.textContent = ''; this.choices.replaceChildren(); this.next.hidden = false;
     this.onLine?.(line); if (this.instant || this.reducedMotion()) this.reveal();
   }

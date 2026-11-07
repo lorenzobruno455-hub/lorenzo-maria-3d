@@ -28,11 +28,11 @@ test('memory matching, quiz and rhythm are playable and reject duplicate input',
   const q = new QuizGame(() => .5); for (let i = 0; i < 6; i++) q.answer(0); assert(q.done); assert.equal(q.score, 6); assert.equal(q.answer(0), false);
   const r = new RhythmGame(); for (let i = 0; i < 10; i++) { while (r.time < .8) r.update(.01); assert.equal(r.hit(), 2); assert.equal(r.hit(), 0); while (r.round <= i) r.update(.01); } assert(r.done); assert.equal(r.score, 20);
 });
-test('migration preserves old save untouched while writing campaign progress to v03', () => {
+test('migration preserves old save untouched while writing campaign progress to v04', () => {
   const map = new Map(), storage = { getItem: k => map.get(k), setItem: (k, v) => map.set(k, v) };
   const old = JSON.stringify({ version: 2, progress: { stage: 1, collected: ['card'], position: { x: 5, z: 6 } }, settings: { quality: 'low' } }); storage.setItem(LEGACY_SAVE_KEY, old);
   const loaded = loadSave(storage); assert.equal(loaded.progress.collected[0], 'card'); assert.equal(loaded.settings.quality, 'low'); assert.equal(loaded.progress.position.x, 5);
-  loaded.progress.campaign.talks = 7; assert(saveProgress(storage, loaded.progress, loaded.settings)); assert.equal(storage.getItem(LEGACY_SAVE_KEY), old); assert.equal(JSON.parse(storage.getItem(SAVE_KEY)).version, 3); assert.equal(loadSave(storage).progress.campaign.talks, 7);
+  loaded.progress.campaign.talks = 7; assert(saveProgress(storage, loaded.progress, loaded.settings)); assert.equal(storage.getItem(LEGACY_SAVE_KEY), old); assert.equal(JSON.parse(storage.getItem(SAVE_KEY)).version, 4); assert.equal(loadSave(storage).progress.campaign.talks, 7);
 });
 test('every imported utterance and the final letter exactly match the original HTML literals', () => {
   const html = readFileSync(new URL('../../reference/color-source.txt', import.meta.url), 'utf8');

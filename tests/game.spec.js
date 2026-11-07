@@ -62,7 +62,7 @@ test('mouse controls both camera axes and sensitivity is saved', async ({ page }
   await expect.poll(async () => (await state(page)).yaw).toBeLessThan(-.05);
   const result = await state(page); expect(result.pitch).toBeGreaterThan(.38);
   await page.locator('#pause-button').click(); await page.locator('#sensitivity').fill('2');
-  const value = await page.evaluate(() => JSON.parse(localStorage.getItem('lorenzo-maria-v03')).settings.sensitivity); expect(value).toBe(2);
+  const value = await page.evaluate(() => JSON.parse(localStorage.getItem('lorenzo-maria-v04')).settings.sensitivity); expect(value).toBe(2);
 });
 
 test('toolbar focus does not steal WASD and static batching keeps draw calls bounded', async ({ page }) => {

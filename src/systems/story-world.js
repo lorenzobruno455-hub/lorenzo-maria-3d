@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { batchMeshes } from './batching.js';
 export function createStoryWorld(scene, world, memories, games) {
   const objects = [], resources = world.resources, owned = [], group = new THREE.Group(); scene.add(group);
   const place = (kind, color, scale, x, y, z, parent = group) => { const m = resources.mesh(kind, color, scale); m.position.set(x, y, z); parent.add(m); return m; };
@@ -29,5 +30,7 @@ export function createStoryWorld(scene, world, memories, games) {
     memoryLight.intensity = focus ? 9 + Math.sin(time * 2) * 2 : 0; if (focus) memoryLight.position.set(focus.x, 2.2, focus.z);
     for (const object of objects) { object.beacon.position.y = 1.7 + Math.sin(time * 2 + object.x) * .08; if (object.kind === 'memory') object.mesh.rotation.y = Math.sin(time) * .12; }
   }
+  const movable = new Set(objects.map(o => o.mesh));
+  batchMeshes(group, group.children.filter(m => m.isMesh && !movable.has(m)), owned);
   return { objects, update, dispose() { group.removeFromParent(); owned.forEach(g => g.dispose()); }, album };
 }

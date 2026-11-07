@@ -5,7 +5,7 @@ import { batchMeshes } from './batching.js';
 import { segmentHit } from './physics.js';
 
 export function createWorld(scene) {
-  const resources = new Resources(), solids = [], occluders = [], roofs = [], doors = [], signs = [], water = [];
+  const resources = new Resources(), solids = [], occluders = [], roofs = [], doors = [], signs = [], water = [], interiorLights = [];
   const box3 = new THREE.Box3();
   function collider(mesh, collision, camera = collision) {
     mesh.updateMatrixWorld(true); box3.setFromObject(mesh);
@@ -60,7 +60,7 @@ export function createWorld(scene) {
     box(cx, 2.2, -16.6, 6, 1.7, .12, '#31564a'); box(cx, 1.35, -16.4, 6.1, .08, .25, '#987953', false, 'wood');
     sign(label, cx, 4.25, -5.65); door(cx, label);
     // Indoor fill avoids black interiors without extra shadow maps.
-    const fill = new THREE.PointLight('#fff2d3', 14, 12, 2); fill.position.set(cx, 3, -11); scene.add(fill);
+    const fill = new THREE.PointLight('#fff2d3', 14, 12, 2); fill.position.set(cx, 3, -11); scene.add(fill); interiorLights.push(fill);
   }
   wing(-17, 'SALA 01 · LITERATURA'); wing(17, 'BIBLIOTECA');
   for (let i = 0; i < 3; i++) {
@@ -127,7 +127,7 @@ export function createWorld(scene) {
       const next = THREE.MathUtils.damp(d.angle, target, 9, dt), old = d.angle;
       d.angle = next; d.pivot.rotation.y = next; updateDoorBounds(d);
       const b = d.bounds;
-      if (player.x > b.minX - .34 && player.x < b.maxX + .34 && player.z > b.minZ - .34 && player.z < b.maxZ + .34) {
+      if ([player, ...(api.occupants || [])].some(p => p.x > b.minX - .34 && p.x < b.maxX + .34 && p.z > b.minZ - .34 && p.z < b.maxZ + .34)) {
         d.angle = old; d.pivot.rotation.y = old; updateDoorBounds(d);
       }
     }
@@ -147,8 +147,9 @@ export function createWorld(scene) {
   const batched = [];
   const dynamic = new Set([...water, ...roofs.map(r => r.mesh), ...signs.map(s => s.mesh), ...collectibles.flatMap(c => [c.mesh, c.light, c.ring]), canopy]);
   batchMeshes(scene, scene.children.filter(m => m.isMesh && !dynamic.has(m)), batched);
-  return { resources, solids, occluders, doors, collectibles, points, update, sign, toggleDoor, lineOfSight,
+  const api = { interiorLights, resources, solids, occluders, doors, collectibles, points, update, sign, toggleDoor, lineOfSight,
     restoreDoors(states) { doors.forEach((d, i) => { d.open = !!states[i]; d.angle = d.open ? Math.PI / 2 : 0; d.pivot.rotation.y = d.angle; updateDoorBounds(d); }); },
     dispose() { signs.forEach(({ mesh, map }) => { map.dispose(); mesh.material.dispose(); }); collectibles.forEach(c => { c.ring.geometry.dispose(); c.ring.material.dispose(); }); canopy.dispose(); batched.forEach(g => g.dispose()); resources.dispose(); },
   };
+  return api;
 }

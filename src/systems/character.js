@@ -4,11 +4,12 @@ import { batchMeshes } from './batching.js';
 // Neutral study mannequins: no claim about either person's actual appearance.
 // Named joint pivots support continuous blended procedural animation.
 export class Character {
-  constructor(resources, uniform = '#d6d9d2') {
-    this.root = new THREE.Group(); this.body = new THREE.Group(); this.root.add(this.body);
-    this.resources = resources; this.time = 0; this.state = 'idle'; this.weights = { idle: 1, walk: 0, run: 0, talk: 0, interact: 0 };
+  constructor(resources, uniform = '#d6d9d2', { simple = false } = {}) {
+    this.root = new THREE.Group(); this.body = new THREE.Group(); this.root.add(this.body); this.body.name = 'body';
+    this.resources = resources; this.time = 0; this.state = 'idle'; this.weights = { idle: 1, walk: 0, run: 0, talk: 0, interact: 0, turn: 0, sit: 0, stand: 0, wave: 0, observe: 0, react: 0 };
     this.owned = []; this.joints = {}; this.custom = null; this.mixer = null; this.actions = {};
     const mesh = (kind, color, scale, parent, position = [0, 0, 0]) => {
+      if (simple) { if (parent === this.body && color !== '#56656b') color = uniform; if (parent.name.startsWith('shoulder')) color = uniform; if (color === '#414c4d') color = '#56656b'; }
       const m = resources.mesh(kind, color, scale); m.position.set(...position); parent.add(m); return m;
     };
     const joint = (name, parent, pos) => { const j = new THREE.Group(); j.name = name; j.position.set(...pos); parent.add(j); this.joints[name] = j; return j; };
@@ -45,11 +46,19 @@ export class Character {
     mesh('box', '#eeeae0', [.08, .035, .12], this.body, [0, 1.425, .105]);
     mesh('box', '#929d94', [.065, .085, .01], this.body, [-.11, 1.27, .126]);
     mesh('box', '#727e7e', [.33, .025, .22], this.body, [0, .99, 0]);
-    for (const parent of [this.body, ...Object.values(this.joints)]) batchMeshes(parent, parent.children.filter(m => m.isMesh), this.owned);
+    for (const parent of [this.body, ...Object.values(this.joints)]) {
+      batchMeshes(parent, parent.children.filter(m => m.isMesh), this.owned);
+      parent.children.filter(m => m.isMesh).forEach((m, i) => {
+        const key = `humanoid:${simple ? 'npc' : 'full'}:${parent.name}:${i}`, cached = resources.geometries.get(key);
+        this.owned = this.owned.filter(g => g !== m.geometry);
+        if (cached) { m.geometry.dispose(); m.geometry = cached; } else resources.geometries.set(key, m.geometry);
+      });
+    }
+    this.gait = 0;
   }
-  update(dt, speed = 0, talking = false, interacting = false) {
+  update(dt, speed = 0, talking = false, interacting = false, pose = {}) {
     this.time += dt;
-    const next = interacting ? 'interact' : talking ? 'talk' : speed > 4 ? 'run' : speed > .12 ? 'walk' : 'idle';
+    const next = pose.state || (interacting ? 'interact' : talking ? 'talk' : speed > 4 ? 'run' : speed > .12 ? 'walk' : 'idle');
     if (this.state !== next) {
       const previous = this.actions[this.state], action = this.actions[next] || this.actions.idle;
       if (action && action !== previous) { action.reset().play(); if (previous) action.crossFadeFrom(previous, .22, false); }
@@ -57,18 +66,20 @@ export class Character {
     }
     for (const name in this.weights) this.weights[name] = THREE.MathUtils.damp(this.weights[name], name === next ? 1 : 0, 10, dt);
     if (this.mixer) { this.mixer.update(dt); return; }
-    const w = this.weights, phase = this.time * (next === 'run' ? 12 : 8), stride = Math.sin(phase);
+    this.gait += speed * dt * 2.7;
+    const w = this.weights, stride = Math.sin(this.gait);
     this.body.position.y = Math.sin(this.time * 2) * .006 * w.idle + Math.abs(stride) * (.025 * w.walk + .045 * w.run);
-    this.body.rotation.x = -.06 * w.run;
+    this.body.position.y -= .5 * w.sit;
+    this.body.rotation.x = -.06 * w.run - .08 * w.observe + .07 * w.react;
     this.joints.head.rotation.y = Math.sin(this.time * 1.4) * (.04 * w.idle + .12 * w.talk);
-    this.joints.head.rotation.x = Math.sin(this.time * 3) * .05 * w.talk;
+    this.joints.head.rotation.x = Math.sin(this.time * 3) * .05 * w.talk + .2 * w.observe - .12 * w.react;
     for (const side of [-1, 1]) {
       const swing = stride * side;
-      this.joints[`hip${side}`].rotation.x = swing * (.5 * w.walk + .85 * w.run);
-      this.joints[`knee${side}`].rotation.x = Math.max(0, -swing) * (.6 * w.walk + 1.1 * w.run);
-      this.joints[`shoulder${side}`].rotation.x = -swing * (.4 * w.walk + .7 * w.run) - (side === -1 ? .25 + Math.sin(this.time * 3) * .25 : .1) * w.talk - .9 * w.interact;
-      this.joints[`shoulder${side}`].rotation.z = side * (.07 + .08 * w.talk);
-      this.joints[`elbow${side}`].rotation.x = -.12 - .65 * w.run - (.5 + Math.sin(this.time * 2) * .12) * w.talk - .2 * w.interact;
+      this.joints[`hip${side}`].rotation.x = swing * (.5 * w.walk + .85 * w.run) - 1.45 * w.sit;
+      this.joints[`knee${side}`].rotation.x = Math.max(0, -swing) * (.6 * w.walk + 1.1 * w.run) + 1.45 * w.sit;
+      this.joints[`shoulder${side}`].rotation.x = -swing * (.4 * w.walk + .7 * w.run) - (side === -1 ? .25 + Math.sin(this.time * 3) * .25 : .1) * w.talk - .9 * w.interact - (side === 1 ? 1.8 : .1) * w.wave - .25 * w.observe;
+      this.joints[`shoulder${side}`].rotation.z = side * (.07 + .08 * w.talk + (side === 1 ? .3 + Math.sin(this.time * 5) * .12 : 0) * w.wave);
+      this.joints[`elbow${side}`].rotation.x = -.12 - .65 * w.run - (.5 + Math.sin(this.time * 2) * .12) * w.talk - .2 * w.interact - .8 * w.sit - .3 * w.react;
     }
   }
   async loadGLB(url, clipNames = {}) {

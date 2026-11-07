@@ -9,11 +9,14 @@ export class FollowCamera {
   rotate(x, y) { this.yaw = (this.yaw + x) % (Math.PI * 2); this.pitch = clamp(this.pitch + y, .08, 1.15); }
   update(player, dt, snap = false) {
     const target = new THREE.Vector3(this.focusObject?.x ?? player.x, this.focusObject?.y ?? 1.42, this.focusObject?.z ?? player.z);
+    if (this.conversation && this.partner) target.set((player.x + this.partner.x) / 2, 1.5, (player.z + this.partner.z) / 2);
     if (!this.initialized || snap) this.focus.copy(target); else this.focus.lerp(target, 1 - Math.exp(-dt * 12));
     // Never interpolate the focus through a wall when the player turns a corner.
     if (cameraFraction(target, this.focus, this.obstacles, .08) < 1) this.focus.copy(target);
-    const distance = this.focusObject ? 3.2 : this.conversation ? 3.8 : this.distance;
-    this.desired.set(Math.sin(this.yaw) * Math.cos(this.pitch), Math.sin(this.pitch), Math.cos(this.yaw) * Math.cos(this.pitch)).multiplyScalar(distance).add(this.focus);
+    const distance = this.focusObject ? 3.2 : this.conversation ? 3.8 : (this.interiorDistance || this.distance);
+    const viewYaw = this.conversation && this.partner ? Math.atan2(this.partner.x - player.x, this.partner.z - player.z) + 1.1 : this.yaw;
+    this.renderYaw = !this.initialized || snap ? viewYaw : this.renderYaw + Math.atan2(Math.sin(viewYaw - this.renderYaw), Math.cos(viewYaw - this.renderYaw)) * (1 - Math.exp(-dt * 12));
+    this.desired.set(Math.sin(this.renderYaw) * Math.cos(this.pitch), Math.sin(this.pitch), Math.cos(this.renderYaw) * Math.cos(this.pitch)).multiplyScalar(distance).add(this.focus);
     const allowed = distance * cameraFraction(this.focus, this.desired, this.obstacles, .28);
     this.actualDistance = allowed < this.actualDistance || snap ? allowed : THREE.MathUtils.damp(this.actualDistance, allowed, 5, dt);
     this.position.copy(this.desired).sub(this.focus).normalize().multiplyScalar(this.actualDistance).add(this.focus);

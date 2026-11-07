@@ -1,0 +1,5 @@
+[
+ {"id":"lost-book","title":"O Livro Perdido","npc":"bia","achievement":"Amiga das Páginas","description":"Converse com Bia, procure o livro na biblioteca e devolva-o.","position":{"x":21,"z":-15},"reward":2},
+ {"id":"physics-question","title":"A Pergunta Impossível","npc":"helena","achievement":"Curiosidade em Movimento","description":"Aceite o desafio de Helena, escolha uma hipótese e ouça a explicação.","position":{"x":-20,"z":-15},"reward":2},
+ {"id":"familiar-music","title":"Uma Música Conhecida","npc":"davi","achievement":"Ouvidos Atentos","description":"Converse com Davi, encontre a partitura e compartilhe sua descoberta.","position":{"x":31,"z":-12},"reward":2}
+]
