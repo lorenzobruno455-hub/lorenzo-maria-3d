@@ -1,0 +1,62 @@
+[
+  {
+    "id": "quiz-1",
+    "question": "Qual é a banda favorita do Lorenzo?",
+    "options": [
+      "Red Hot Chili Peppers",
+      "Pink Floyd",
+      "Oasis"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "quiz-2",
+    "question": "Qual é a música do casal?",
+    "options": [
+      "Until I Found You",
+      "Everlong",
+      "Californication"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "quiz-3",
+    "question": "Como a Maria chama o Lorenzo?",
+    "options": [
+      "Lorenzini",
+      "Lorenzão",
+      "Enzo"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "quiz-4",
+    "question": "Quando a história começou?",
+    "options": [
+      "19/08/2024",
+      "31/03/2026",
+      "21/09/2026"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "quiz-5",
+    "question": "Quando foi o primeiro beijo?",
+    "options": [
+      "31/03/2026",
+      "19/08/2024",
+      "17/08/2025"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "quiz-6",
+    "question": "Onde tudo começou?",
+    "options": [
+      "Numa aula de história",
+      "No recreio",
+      "Na biblioteca"
+    ],
+    "answer": 0
+  }
+]

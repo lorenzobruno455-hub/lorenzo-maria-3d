@@ -1,0 +1,218 @@
+{
+  "vouchers": [
+    {
+      "id": "vale-1",
+      "name": "1 abraço de 1 minuto",
+      "rarityLevel": 1,
+      "virtual": true
+    },
+    {
+      "id": "vale-2",
+      "name": "cafuné à vontade",
+      "rarityLevel": 1,
+      "virtual": true
+    },
+    {
+      "id": "vale-3",
+      "name": "escolher a música do dia",
+      "rarityLevel": 1,
+      "virtual": true
+    },
+    {
+      "id": "vale-4",
+      "name": "10 minutos sem YouTube Shorts",
+      "rarityLevel": 1,
+      "virtual": true
+    },
+    {
+      "id": "vale-5",
+      "name": "apertamento à escolha",
+      "rarityLevel": 1,
+      "virtual": true
+    },
+    {
+      "id": "vale-6",
+      "name": "1 “um dia eu te conto” (o Lorenzo conta!)",
+      "rarityLevel": 2,
+      "virtual": true
+    },
+    {
+      "id": "vale-7",
+      "name": "escolher o filme sem reclamação",
+      "rarityLevel": 2,
+      "virtual": true
+    },
+    {
+      "id": "vale-8",
+      "name": "1 beijo surpresa",
+      "rarityLevel": 2,
+      "virtual": true
+    },
+    {
+      "id": "vale-9",
+      "name": "1 chocolate",
+      "rarityLevel": 2,
+      "virtual": true
+    },
+    {
+      "id": "vale-10",
+      "name": "sessão de fotos do casal",
+      "rarityLevel": 3,
+      "virtual": true
+    },
+    {
+      "id": "vale-11",
+      "name": "o Lorenzo explicar o universo por 5 min (você escolhe o assunto)",
+      "rarityLevel": 3,
+      "virtual": true
+    },
+    {
+      "id": "vale-12",
+      "name": "1 date surpresa",
+      "rarityLevel": 3,
+      "virtual": true
+    }
+  ],
+  "letter": {
+    "id": "final-letter",
+    "title": "Para a Maria",
+    "text": "Você chegou ao final da campanha!!!\n\nForam 2 anos e 2 meses de uma história que começou muito antes de existir um pedido oficial. Teve fase difícil, missão que parecia impossível, momentos em que a gente não sabia qual seria o próximo capítulo, ou se existiria uma nova fase e, mesmo assim, a nossa história continuou.\n\nE agora, depois de tudo isso, desbloqueamos uma nova fase: nosso primeiro mês de namoro meu Amor!!!\n\nMas tem uma coisa que esse jogo nunca vai conseguir mostrar direito: o quanto você significa pra mim. Porque, se eu pudesse escolher uma única recompensa pra receber depois de terminar qualquer jogo, seria continuar tendo você comigo.\n\nE, se a nossa história fosse um jogo infinito, eu não ia querer procurar o botão de sair. Ia querer descobrir todas as próximas fases com você.\n\nQuando o meu jogo acabar quero que seja muito feliz por que será uma honra terminá-lo com Você. Eu Te Amo muito Maria, feliz 1 mês!!"
+  },
+  "messages": [
+    {
+      "id": "message-001",
+      "text": "Meu plano era conquistar seu coração. Aparentemente, agora tenho que conquistar também sua paciência e o departamento de aprovação divina.",
+      "source": "Color"
+    },
+    {
+      "id": "message-002",
+      "text": "Maria usou Provocação Carinhosa! Foi super efetivo! Lorenzo perdeu 100 pontos de racionalidade.",
+      "source": "Color"
+    },
+    {
+      "id": "message-003",
+      "text": "O jogador Lorenzo tenta desbloquear a conquista ‘Ser Normal por Cinco Minutos’. Conquista indisponível para esta personagem.",
+      "source": "Color"
+    },
+    {
+      "id": "message-004",
+      "text": "Se a vida fosse um RPG, eu teria colocado quase todos os pontos em curiosidade e esquecido de distribuir os pontos em normalidade.",
+      "source": "Color"
+    },
+    {
+      "id": "message-005",
+      "text": "12 pontos no Compasso do Coração",
+      "source": "Color"
+    },
+    {
+      "id": "message-006",
+      "text": "Completou a Memória de Vocês",
+      "source": "Color"
+    },
+    {
+      "id": "message-007",
+      "text": "15 pontos no Esmaga-Pensamentos",
+      "source": "Color"
+    },
+    {
+      "id": "message-008",
+      "text": "COMBO: Dupla Dinâmica! Lorenzo +100 de felicidade. Maria +100 de paciência. Duração: indefinida.",
+      "source": "Color"
+    },
+    {
+      "id": "message-009",
+      "text": " VITÓRIA! Aperte A para jogar de novo.",
+      "source": "Color"
+    },
+    {
+      "id": "message-010",
+      "text": " VITÓRIA!",
+      "source": "Color"
+    },
+    {
+      "id": "message-011",
+      "text": " conquistas.",
+      "source": "Color"
+    },
+    {
+      "id": "message-012",
+      "text": " pontos de carinho. ",
+      "source": "Color"
+    },
+    {
+      "id": "message-013",
+      "text": "Conquista liberada!",
+      "source": "Color"
+    },
+    {
+      "id": "message-014",
+      "text": "Faça 10 para a conquista.",
+      "source": "Color"
+    },
+    {
+      "id": "message-015",
+      "text": "FIM! ",
+      "source": "Color"
+    },
+    {
+      "id": "message-016",
+      "text": " de 20 pontos. ",
+      "source": "Color"
+    },
+    {
+      "id": "message-017",
+      "text": "Faça 12 para a conquista.",
+      "source": "Color"
+    },
+    {
+      "id": "message-018",
+      "text": "PERFEITO! +2",
+      "source": "Color"
+    },
+    {
+      "id": "message-019",
+      "text": "Completou em ",
+      "source": "Color"
+    },
+    {
+      "id": "message-020",
+      "text": "Casal nerd confirmado! Conquista liberada.",
+      "source": "Color"
+    },
+    {
+      "id": "message-021",
+      "text": "Quase! Faça 5 para a conquista.",
+      "source": "Color"
+    },
+    {
+      "id": "message-022",
+      "text": "Certo!",
+      "source": "Color"
+    },
+    {
+      "id": "message-023",
+      "text": "Pegue 6 para a conquista.",
+      "source": "Color"
+    },
+    {
+      "id": "message-024",
+      "text": " pontos. ",
+      "source": "Color"
+    },
+    {
+      "id": "message-025",
+      "text": "Faça 15 para a conquista.",
+      "source": "Color"
+    },
+    {
+      "id": "message-026",
+      "text": "Telepatia de casal! Conquista liberada.",
+      "source": "Color"
+    },
+    {
+      "id": "message-027",
+      "text": "Faça 6 para a conquista.",
+      "source": "Color"
+    }
+  ]
+}

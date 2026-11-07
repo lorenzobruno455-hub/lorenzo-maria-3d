@@ -1,0 +1,67 @@
+[
+  {
+    "id": "mini",
+    "title": "CHUVA DE CARINHO",
+    "playable": false,
+    "environment": "Planejado",
+    "position": null
+  },
+  {
+    "id": "rit",
+    "title": "NO COMPASSO DO CORAÇÃO",
+    "playable": true,
+    "environment": "Sala de música",
+    "position": {
+      "x": 30,
+      "z": -11
+    }
+  },
+  {
+    "id": "mem",
+    "title": "MEMÓRIA DE VOCÊS",
+    "playable": true,
+    "environment": "Biblioteca",
+    "position": {
+      "x": 19,
+      "z": -10
+    }
+  },
+  {
+    "id": "quiz",
+    "title": "QUIZ: QUEM CONHECE MAIS",
+    "playable": true,
+    "environment": "Sala de história",
+    "position": {
+      "x": -20,
+      "z": -10
+    }
+  },
+  {
+    "id": "bike",
+    "title": "PEDALADA NOTURNA",
+    "playable": false,
+    "environment": "Planejado",
+    "position": null
+  },
+  {
+    "id": "whack",
+    "title": "ESMAGA-PENSAMENTOS",
+    "playable": false,
+    "environment": "Planejado",
+    "position": null
+  },
+  {
+    "id": "who",
+    "title": "QUEM DISSE ISSO?",
+    "playable": false,
+    "environment": "Planejado",
+    "position": null
+  },
+  {
+    "id": "vale",
+    "title": "MÁQUINA DE VALES",
+    "playable": false,
+    "environment": "Planejado",
+    "position": null
+  }
+]

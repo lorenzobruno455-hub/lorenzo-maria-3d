@@ -1,6 +1,7 @@
+import tracks from '../data/music.json' with { type: 'json' };
 export class Audio {
-  constructor(settings) { this.settings = settings; this.context = null; }
-  unlock() { if (!this.context) this.context = new AudioContext(); this.context.resume().catch(() => {}); }
+  constructor(settings) { this.settings = settings; this.context = null; this.mood = 'exploration'; this.step = 0; this.nextNote = 0; this.nodes = new Set(); }
+  unlock() { if (!this.context) this.context = new AudioContext(); if (!this.musicGain) { this.musicGain = this.context.createGain(); this.musicGain.gain.value = 0; this.musicGain.connect(this.context.destination); } this.context.resume().catch(() => {}); }
   play(kind = 'collect') {
     if (!this.settings.sound || !this.context || this.context.state !== 'running') return;
     const ctx = this.context, oscillator = ctx.createOscillator(), gain = ctx.createGain();
@@ -10,5 +11,28 @@ export class Audio {
     gain.gain.setValueAtTime(Math.max(.0001, this.settings.volume * .12), ctx.currentTime); gain.gain.exponentialRampToValueAtTime(.0001, ctx.currentTime + .32);
     oscillator.start(); oscillator.stop(ctx.currentTime + .33); oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); };
   }
-  dispose() { this.context?.close(); }
+  setMood(mood) { if (this.mood === mood) return; this.mood = mood; this.step = 0; this.nextNote = this.context?.currentTime || 0; if (this.musicGain) { this.musicGain.gain.cancelScheduledValues(this.context.currentTime); this.musicGain.gain.setValueAtTime(0, this.context.currentTime); } }
+  update() {
+    const ctx = this.context; if (!ctx || !this.musicGain || ctx.state !== 'running') return;
+    const audible = this.settings.sound && !document.hidden;
+    this.musicGain.gain.setTargetAtTime(audible ? this.settings.volume * .045 : 0, ctx.currentTime, .15);
+    if (!audible) { this.nextNote = ctx.currentTime; return; }
+    const name = { exploration: 'menu', conversation: 'soft', memory: 'soft', minigame: 'battle', completion: 'win' }[this.mood];
+    const track = tracks[name]; if (!track) return; if (track.once && this.step >= track.lead.length) { this.setMood('exploration'); return; }
+    const duration = 30 / track.bpm; if (this.nextNote < ctx.currentTime) this.nextNote = ctx.currentTime + .02;
+    while (this.nextNote < ctx.currentTime + .12) {
+      for (const [notes, type, volume] of [[track.lead, track.ty, .55], [track.bass, 'triangle', .4]]) {
+        const note = notes[this.step % notes.length], match = /^([a-g])(#?)(\d)$/.exec(note);
+        if (!match) continue;
+        const frequency = 440 * 2 ** (({ c: -9, d: -7, e: -5, f: -4, g: -2, a: 0, b: 2 }[match[1]] + (match[2] ? 1 : 0) + (Number(match[3]) - 4) * 12) / 12);
+        const oscillator = ctx.createOscillator(), gain = ctx.createGain(); oscillator.type = type; oscillator.frequency.value = frequency;
+        gain.gain.setValueAtTime(volume, this.nextNote); gain.gain.exponentialRampToValueAtTime(.001, this.nextNote + duration * .9);
+        oscillator.connect(gain); gain.connect(this.musicGain); this.nodes.add(oscillator); oscillator.start(this.nextNote); oscillator.stop(this.nextNote + duration);
+        oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); this.nodes.delete(oscillator); };
+      }
+      this.step++; this.nextNote += duration; if (track.once && this.step >= track.lead.length) break;
+    }
+  }
+  dispose() { for (const node of this.nodes) { try { node.stop(); } catch {} node.disconnect(); } this.nodes.clear(); this.musicGain?.disconnect(); this.context?.close(); }
+
 }

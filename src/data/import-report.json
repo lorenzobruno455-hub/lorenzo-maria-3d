@@ -1,0 +1,23 @@
+{
+  "source": "Lorenzo & Maria Color (2).html",
+  "sha256": "b8934b0b821748f77b4542fba7e4bd811c604c5cfcc56cfab04ef1cf61637f19",
+  "counts": {
+    "LL": 64,
+    "MM": 63,
+    "NN": 27,
+    "memories": 6,
+    "achievements": 17,
+    "visibleAchievements": 16,
+    "secretAchievements": 1,
+    "minigames": 8,
+    "quiz": 6,
+    "vouchers": 12
+  },
+  "duplicateTexts": [],
+  "notes": [
+    "O pedido menciona 16 conquistas: AC contém 16 comuns e uma secreta (egg). Todas preservadas.",
+    "Datas mantidas sem correção automática. CARTA menciona 2 anos e 2 meses e primeiro mês; revisar a data de referência com o autor.",
+    "LL/MM/NN são diálogos criativos, não transcrições factuais. MO é relato fornecido pelo autor.",
+    "Títulos GL mantidos em maiúsculas conforme o HTML. Nenhuma gravação de músicas comerciais foi importada."
+  ]
+}

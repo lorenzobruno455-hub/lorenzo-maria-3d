@@ -37,7 +37,7 @@ test('collection, dialogue completion, persistence and settings', async ({ page 
   // Continue through the actual game, using the already collected items.
   await page.keyboard.down('Shift'); await move(page, 'a', 'x', 5); await move(page, 'w', 'z', 6); await page.keyboard.up('Shift');
   await expect(page.locator('#prompt')).toContainText('Maria'); await page.keyboard.press('e'); await expect(page.locator('#speech')).toContainText('Você encontrou tudo');
-  await page.locator('#next').click(); expect((await state(page)).stage).toBe(2); await expect(page.locator('#objective')).toContainText('concluído');
+  await page.locator('#next').click(); expect((await state(page)).stage).toBe(2); await expect(page.locator('#count')).toContainText('concluído');
 });
 
 test('pause stops movement and reset requires explicit confirmation', async ({ page }) => {
@@ -62,7 +62,7 @@ test('mouse controls both camera axes and sensitivity is saved', async ({ page }
   await expect.poll(async () => (await state(page)).yaw).toBeLessThan(-.05);
   const result = await state(page); expect(result.pitch).toBeGreaterThan(.38);
   await page.locator('#pause-button').click(); await page.locator('#sensitivity').fill('2');
-  const value = await page.evaluate(() => JSON.parse(localStorage.getItem('lorenzo-maria-v02')).settings.sensitivity); expect(value).toBe(2);
+  const value = await page.evaluate(() => JSON.parse(localStorage.getItem('lorenzo-maria-v03')).settings.sensitivity); expect(value).toBe(2);
 });
 
 test('toolbar focus does not steal WASD and static batching keeps draw calls bounded', async ({ page }) => {

@@ -1,0 +1,167 @@
+[
+  {
+    "id": "chapter-1",
+    "title": "Quando a gente começou",
+    "date": "19/08/2024",
+    "requires": null,
+    "steps": [
+      {
+        "id": "visit",
+        "type": "visit",
+        "label": "Explore: Sala de história",
+        "position": {
+          "x": -17,
+          "z": -7
+        }
+      },
+      {
+        "id": "talk",
+        "type": "talk",
+        "label": "Converse com Maria no pátio"
+      },
+      {
+        "id": "discover",
+        "type": "memory",
+        "label": "Revisite: Quando a gente começou",
+        "memory": "memory-1"
+      }
+    ],
+    "conclusion": "Aula de história. Eu estava extremamente envergonhado, mas pedi para ficar com você.",
+    "reward": "vale-1"
+  },
+  {
+    "id": "chapter-2",
+    "title": "Se fomos babau",
+    "date": "19/05/2025",
+    "requires": "chapter-1",
+    "steps": [
+      {
+        "id": "visit",
+        "type": "visit",
+        "label": "Explore: Jardim",
+        "position": {
+          "x": -7,
+          "z": 20
+        }
+      },
+      {
+        "id": "talk",
+        "type": "talk",
+        "label": "Converse com Maria no pátio"
+      },
+      {
+        "id": "discover",
+        "type": "memory",
+        "label": "Revisite: Se fomos babau",
+        "memory": "memory-2"
+      }
+    ],
+    "conclusion": "O dia em que você disse que a gente não poderia ficar mais, por ora. (Spoiler: o ‘por ora’ acabou.)",
+    "reward": "vale-2"
+  },
+  {
+    "id": "chapter-3",
+    "title": "Um dos dias mais importantes da minha vida",
+    "date": "17/08/2025",
+    "requires": "chapter-2",
+    "steps": [
+      {
+        "id": "visit",
+        "type": "visit",
+        "label": "Explore: Espaço de reflexão",
+        "position": {
+          "x": -24,
+          "z": 19
+        }
+      },
+      {
+        "id": "discover",
+        "type": "memory",
+        "label": "Revisite: Um dos dias mais importantes da minha vida",
+        "memory": "memory-3"
+      }
+    ],
+    "conclusion": "Foi quando percebi que você significava mais do que alguém, e que Deus estava na minha vida.",
+    "reward": "vale-3"
+  },
+  {
+    "id": "chapter-4",
+    "title": "O meu primeiro beijo",
+    "date": "31/03/2026",
+    "requires": "chapter-3",
+    "steps": [
+      {
+        "id": "visit",
+        "type": "visit",
+        "label": "Explore: Pátio",
+        "position": {
+          "x": 7,
+          "z": 15
+        }
+      },
+      {
+        "id": "discover",
+        "type": "memory",
+        "label": "Revisite: O meu primeiro beijo",
+        "memory": "memory-4"
+      }
+    ],
+    "conclusion": "A primeira vez que nos beijamos.",
+    "reward": "vale-4"
+  },
+  {
+    "id": "chapter-5",
+    "title": "O último dia (que não foi)",
+    "date": "05/09/2026",
+    "requires": "chapter-4",
+    "steps": [
+      {
+        "id": "visit",
+        "type": "visit",
+        "label": "Explore: Jardim das flores",
+        "position": {
+          "x": 23,
+          "z": 20
+        }
+      },
+      {
+        "id": "discover",
+        "type": "memory",
+        "label": "Revisite: O último dia (que não foi)",
+        "memory": "memory-5"
+      }
+    ],
+    "conclusion": "Achei que podia ser a última vez que eu te veria, então levei flores pra que, se fosse, ela fosse marcante.",
+    "reward": "vale-5"
+  },
+  {
+    "id": "chapter-6",
+    "title": "Finalmente",
+    "date": "21/09/2026",
+    "requires": "chapter-5",
+    "steps": [
+      {
+        "id": "visit",
+        "type": "visit",
+        "label": "Explore: Biblioteca",
+        "position": {
+          "x": 17,
+          "z": -7
+        }
+      },
+      {
+        "id": "talk",
+        "type": "talk",
+        "label": "Converse com Maria no pátio"
+      },
+      {
+        "id": "discover",
+        "type": "memory",
+        "label": "Revisite: Finalmente",
+        "memory": "memory-6"
+      }
+    ],
+    "conclusion": "Quando te pedi em namoro.",
+    "reward": "vale-6"
+  }
+]

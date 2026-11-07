@@ -1,0 +1,155 @@
+[
+  {
+    "id": "talk",
+    "name": "Primeiro Contato",
+    "description": "Falou com um dos dois",
+    "secret": false,
+    "available": true,
+    "source": "AC",
+    "condition": "talk"
+  },
+  {
+    "id": "conv",
+    "name": "Conversador",
+    "description": "Ouviu 20 falas",
+    "secret": false,
+    "available": true,
+    "source": "AC",
+    "condition": "conv"
+  },
+  {
+    "id": "narr",
+    "name": "Voz do Destino",
+    "description": "Chamou o Narrador",
+    "secret": false,
+    "available": true,
+    "source": "AC",
+    "condition": "narr"
+  },
+  {
+    "id": "combo",
+    "name": "Dupla Dinâmica",
+    "description": "Juntou os dois",
+    "secret": false,
+    "available": true,
+    "source": "AC",
+    "condition": "combo"
+  },
+  {
+    "id": "win",
+    "name": "Maria Riu",
+    "description": "Venceu uma batalha",
+    "secret": false,
+    "available": false,
+    "source": "AC",
+    "condition": "win"
+  },
+  {
+    "id": "album",
+    "name": "Colecionadora",
+    "description": "Revelou as 6 cartas",
+    "secret": false,
+    "available": true,
+    "source": "AC",
+    "condition": "album"
+  },
+  {
+    "id": "mini",
+    "name": "Mãos Rápidas",
+    "description": "10 corações na Chuva de Carinho",
+    "secret": false,
+    "available": false,
+    "source": "AC",
+    "condition": "mini"
+  },
+  {
+    "id": "boss",
+    "name": "Chefão Caído",
+    "description": "Derrotou um chefe",
+    "secret": false,
+    "available": false,
+    "source": "AC",
+    "condition": "boss"
+  },
+  {
+    "id": "both",
+    "name": "Dupla de Jogadores",
+    "description": "Jogou como Lorenzo e como Maria",
+    "secret": false,
+    "available": false,
+    "source": "AC",
+    "condition": "both"
+  },
+  {
+    "id": "rit",
+    "name": "Batida Perfeita",
+    "description": "12 pontos no Compasso do Coração",
+    "secret": false,
+    "available": true,
+    "source": "AC",
+    "condition": "rit"
+  },
+  {
+    "id": "mem",
+    "name": "Memória de Elefante",
+    "description": "Completou a Memória de Vocês",
+    "secret": false,
+    "available": true,
+    "source": "AC",
+    "condition": "mem"
+  },
+  {
+    "id": "quiz",
+    "name": "Casal Nerd",
+    "description": "5 acertos ou mais no Quiz",
+    "secret": false,
+    "available": true,
+    "source": "AC",
+    "condition": "quiz"
+  },
+  {
+    "id": "bike",
+    "name": "Ciclista Noturno",
+    "description": "6 corações na Pedalada Noturna",
+    "secret": false,
+    "available": false,
+    "source": "AC",
+    "condition": "bike"
+  },
+  {
+    "id": "whack",
+    "name": "Mente Tranquila",
+    "description": "15 pontos no Esmaga-Pensamentos",
+    "secret": false,
+    "available": false,
+    "source": "AC",
+    "condition": "whack"
+  },
+  {
+    "id": "who",
+    "name": "Telepatia",
+    "description": "6 acertos no Quem Disse Isso",
+    "secret": false,
+    "available": false,
+    "source": "AC",
+    "condition": "who"
+  },
+  {
+    "id": "vale",
+    "name": "Colecionadora de Vales",
+    "description": "Ganhou 6 vales diferentes",
+    "secret": false,
+    "available": false,
+    "source": "AC",
+    "condition": "vale"
+  },
+  {
+    "id": "egg",
+    "name": "Segredo Descoberto",
+    "description": "Achou um easter egg",
+    "secret": true,
+    "available": true,
+    "source": "AC",
+    "condition": "egg"
+  }
+]

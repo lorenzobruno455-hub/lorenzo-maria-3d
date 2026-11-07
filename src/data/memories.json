@@ -1,0 +1,128 @@
+[
+  {
+    "id": "memory-1",
+    "date": "19/08/2024",
+    "title": "Quando a gente começou",
+    "description": "Aula de história. Eu estava extremamente envergonhado, mas pedi para ficar com você.",
+    "rarity": "ÉPICA",
+    "rarityLevel": 2,
+    "image": "",
+    "source": "MO",
+    "provenance": "author-reported-memory",
+    "environment": "Sala de história",
+    "position": {
+      "x": -17,
+      "z": -7
+    },
+    "quest": "chapter-1",
+    "reward": "vale-1",
+    "narrativeIds": [
+      "memory-1"
+    ]
+  },
+  {
+    "id": "memory-2",
+    "date": "19/05/2025",
+    "title": "Se fomos babau",
+    "description": "O dia em que você disse que a gente não poderia ficar mais, por ora. (Spoiler: o ‘por ora’ acabou.)",
+    "rarity": "RARA",
+    "rarityLevel": 1,
+    "image": "",
+    "source": "MO",
+    "provenance": "author-reported-memory",
+    "environment": "Jardim",
+    "position": {
+      "x": -7,
+      "z": 20
+    },
+    "quest": "chapter-2",
+    "reward": "vale-2",
+    "narrativeIds": [
+      "memory-2"
+    ]
+  },
+  {
+    "id": "memory-3",
+    "date": "17/08/2025",
+    "title": "Um dos dias mais importantes da minha vida",
+    "description": "Foi quando percebi que você significava mais do que alguém, e que Deus estava na minha vida.",
+    "rarity": "ÉPICA",
+    "rarityLevel": 2,
+    "image": "",
+    "source": "MO",
+    "provenance": "author-reported-memory",
+    "environment": "Espaço de reflexão",
+    "position": {
+      "x": -24,
+      "z": 19
+    },
+    "quest": "chapter-3",
+    "reward": "vale-3",
+    "narrativeIds": [
+      "memory-3"
+    ]
+  },
+  {
+    "id": "memory-4",
+    "date": "31/03/2026",
+    "title": "O meu primeiro beijo",
+    "description": "A primeira vez que nos beijamos.",
+    "rarity": "LENDÁRIA",
+    "rarityLevel": 3,
+    "image": "",
+    "source": "MO",
+    "provenance": "author-reported-memory",
+    "environment": "Pátio",
+    "position": {
+      "x": 7,
+      "z": 15
+    },
+    "quest": "chapter-4",
+    "reward": "vale-4",
+    "narrativeIds": [
+      "memory-4"
+    ]
+  },
+  {
+    "id": "memory-5",
+    "date": "05/09/2026",
+    "title": "O último dia (que não foi)",
+    "description": "Achei que podia ser a última vez que eu te veria, então levei flores pra que, se fosse, ela fosse marcante.",
+    "rarity": "RARA",
+    "rarityLevel": 1,
+    "image": "",
+    "source": "MO",
+    "provenance": "author-reported-memory",
+    "environment": "Jardim das flores",
+    "position": {
+      "x": 23,
+      "z": 20
+    },
+    "quest": "chapter-5",
+    "reward": "vale-5",
+    "narrativeIds": [
+      "memory-5"
+    ]
+  },
+  {
+    "id": "memory-6",
+    "date": "21/09/2026",
+    "title": "Finalmente",
+    "description": "Quando te pedi em namoro.",
+    "rarity": "LENDÁRIA",
+    "rarityLevel": 3,
+    "image": "",
+    "source": "MO",
+    "provenance": "author-reported-memory",
+    "environment": "Biblioteca",
+    "position": {
+      "x": 17,
+      "z": -7
+    },
+    "quest": "chapter-6",
+    "reward": "vale-6",
+    "narrativeIds": [
+      "memory-6"
+    ]
+  }
+]
