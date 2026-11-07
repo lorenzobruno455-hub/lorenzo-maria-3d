@@ -29,6 +29,8 @@ jobs:
       - run: npm run test:unit
       - run: npm run build
       - run: npx playwright install --with-deps chromium
+      - name: Colorbeat visual smoke checks
+        run: npx playwright test tests/colorbeat.spec.js
       - run: npm test
       - name: Attach screenshots for visual review
         if: always()
