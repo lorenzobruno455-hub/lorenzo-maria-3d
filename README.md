@@ -1,4 +1,4 @@
-# Lorenzo & Maria 3D — 0.3 · Memórias de Uma História
+# Lorenzo & Maria 3D — 0.4 · O Colégio Vivo
 
 Exploração em terceira pessoa no fictício Colégio Aurora, com Three.js, JavaScript e Vite. Interface e diálogos em português. O capítulo inicial continua completo: converse com Maria, encontre três lembranças e retorne ao pátio.
 
@@ -23,7 +23,13 @@ npm run dev
 
 Para testar no Android na mesma rede Wi-Fi, abra `http://IP-DO-COMPUTADOR:5173`. Vite já escuta em `0.0.0.0`. A porta precisa estar acessível na rede; no Chromebook pode ser necessário ativar o encaminhamento da porta 5173 nas configurações do Linux. Evite redes públicas para o servidor de desenvolvimento. LocalStorage funciona por navegador e endereço: mudar a URL ou porta usa outro salvamento.
 
-## Campanha 0.3
+## O Colégio Vivo · 0.4
+
+Cinco NPCs fictícios têm rotinas e amizade; Maria circula respeitando as missões. Explore cantina e quadra, encontre o livro de Bia, responda ao enigma de Helena e descubra a partitura de Davi. O menu permite alternar entre campanha e exploração livre, ver histórico e ajustar tamanho/opacidade dos controles e volumes separados.
+
+Leia [a entrega 0.4](docs/ENTREGA-04.md) e [a auditoria inicial](docs/AUDITORIA-04.md). O salvamento v04 mantém os registros v03/v02 como fallback. Modelos finais e testes em Samsung físicos ainda são necessários.
+
+## Campanha preservada · 0.3
 
 Depois do prólogo, siga o indicador para descobrir as seis memórias originais. Converse com Maria e conclua as sequências para liberar cartas e vales. Use **Álbum e história** (◇ no celular) para capítulos, álbum, inventário, minijogos, conquistas e carta final. Os três minijogos começam em objetos físicos da sala, biblioteca e pavilhão de música. O progresso da 0.2 é migrado mantendo o registro antigo como backup.
 
