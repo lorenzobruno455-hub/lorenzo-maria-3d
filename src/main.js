@@ -5,6 +5,7 @@ import { installPreferences } from './systems/preferences.js';
 import { updateAtmosphere } from './systems/atmosphere.js';
 import * as THREE from 'three';
 import './style.css';
+import './colorbeat.css';
 import { Story } from './systems/story.js';
 import { Dialogue } from './systems/dialogue.js';
 import { createWorld } from './systems/world.js';
@@ -13,6 +14,8 @@ import { CHARACTER_ASSETS } from './character-assets.js';
 import { Controls } from './systems/controls.js';
 import { FollowCamera } from './systems/camera.js';
 import { Quality } from './systems/quality.js';
+import { OutlineManager } from './systems/outline-manager.js';
+import { VisualEffects } from './systems/visual-effects.js';
 import { registerStateReader } from './systems/diagnostics.js';
 import { Audio } from './systems/audio.js';
 import { blocked, relativeMovement, moveWithCollisions, clamp } from './systems/physics.js';
@@ -43,6 +46,8 @@ if (blocked(player.position.x, player.position.z, world.solids)) player.position
 world.collectibles.forEach(c => c.taken = progress.collected.includes(c.id));
 const follow = new FollowCamera(camera, world.occluders, progress.yaw, progress.pitch);
 const quality = new Quality(renderer, sun, settings), audio = new Audio(settings);
+const outlines = new OutlineManager(); outlines.attach(lorenzo); outlines.attach(maria); outlines.setQuality(settings.quality);
+const visualEffects = new VisualEffects();
 const active = () => started && !paused && !dialog && !panelOpen && !document.hidden;
 const markerPosition = new THREE.Vector3(), effect = new THREE.Group(); scene.add(effect);
 const particles = Array.from({ length: 12 }, (_, i) => {
@@ -50,7 +55,7 @@ const particles = Array.from({ length: 12 }, (_, i) => {
 });
 effect.visible = false; let effectTime = 0;
 
-function notify(message) { $('toast').textContent = message; $('toast').hidden = false; toastTime = 3; }
+function notify(message) { $('toast').textContent = message; $('toast').hidden = false; toastTime = 3; if (message.startsWith('◇')) visualEffects.burst('MEMÓRIA!'); else if (message.startsWith('★')) visualEffects.burst('CONQUISTA!'); }
 function save() {
   progress.position = { x: player.position.x, z: player.position.z }; progress.yaw = follow.yaw; progress.pitch = follow.pitch; progress.doors = world.doors.map(d => d.open);
   const ok = saveProgress(storage, progress, settings);
@@ -108,7 +113,7 @@ function handleInteraction(target) {
   } else if (target.kind === 'point') speak(target.name.toUpperCase(), target.text);
   else if (collect(progress, target.id)) {
     const c = target.ref; c.taken = true; interactionTime = .6; effect.position.set(c.x, 1, c.z); effectTime = .8; effect.visible = true;
-    audio.play('collect'); notify(`${c.name} encontrado!`); updateHUD(); save();
+    audio.play('collect'); notify(`${c.name} encontrado!`); visualEffects.burst('DESCOBERTA!'); updateHUD(); save();
   }
 }
 function interact(){if(!active())return;const t=nearestTarget();if(t)interactions.activate(t.interactionId,player.position);}
@@ -143,7 +148,7 @@ $('sound').onclick = () => { audio.unlock(); settings.sound = !settings.sound; s
 for (const id of ['quality', 'sensitivity', 'volume', 'audio-enabled', 'shadows', 'adaptive']) $(id).addEventListener('input', () => {
   settings.quality = $('quality').value; settings.sensitivity = Number($('sensitivity').value); settings.volume = Number($('volume').value);
   settings.sound = $('audio-enabled').checked; settings.shadows = $('shadows').checked; settings.adaptive = $('adaptive').checked;
-  audio.unlock(); if (id === 'quality' || id === 'shadows') quality.apply(); syncSettings(); save();
+  audio.unlock(); if (id === 'quality' || id === 'shadows') { quality.apply(); outlines.setQuality(settings.quality); } syncSettings(); save();
 });
 $('restart').onclick = () => { $('reset-confirm').hidden = false; $('confirm-reset').focus(); };
 $('cancel-reset').onclick = () => { $('reset-confirm').hidden = true; $('restart').focus(); };
@@ -256,13 +261,13 @@ export function getGameState() {
     living: structuredClone(progress.living), npcs: living.actors.map(a => ({ id: a.definition.id, x: a.agent.position.x, z: a.agent.position.z, state: a.agent.state, distance: a.agent.distanceWalked, transitions: a.agent.transitions })),
     campaign: structuredClone(progress.campaign), storyPage: story?.page, rhythm: story?.game?.phase,
     spatial:validator.inspect(world.placed), memoryBooks:story.world.books.map(b=>({id:b.id,x:b.x,z:b.z,unlocked:b.unlocked,angle:b.mesh.userData.cover.rotation.z})),
-    quality: settings.quality, resolutionScale: quality.scale, fps: Math.round(quality.fps), drawCalls: renderer.info.render.calls, geometries: renderer.info.memory.geometries };
+    quality: settings.quality, resolutionScale: quality.scale, outlines: outlines.shells.filter(s=>s.visible).length, fps: Math.round(quality.fps), drawCalls: renderer.info.render.calls, geometries: renderer.info.memory.geometries };
 }
 registerStateReader(getGameState);
 if(new URLSearchParams(location.search).has('debug')){addEventListener('keydown',e=>{if(e.code==='F3'){e.preventDefault();if(validator.visible)validator.clear();else validator.show([...world.placed,...story.world.placed],[player,...living.actors.map(a=>a.character.root)]);needsRender=true;}});}
 
 export function dispose() {
-  validator.dispose();interactions.dispose();
+  validator.dispose();interactions.dispose(); visualEffects.dispose(); outlines.dispose();
   disposed = true; cancelAnimationFrame(frame); controls.clear(); save(); story?.dispose(); living?.dispose(); dialogues?.dispose(); lorenzo.dispose(); maria.dispose(); world.dispose(); audio.dispose(); renderer.dispose();
 }
 if (import.meta.hot) import.meta.hot.dispose(dispose);

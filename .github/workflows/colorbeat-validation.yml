@@ -1,0 +1,42 @@
+name: Colorbeat v0.6 validation
+
+on:
+  push:
+    branches:
+      - feat/colorbeat-v06-foundation
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: colorbeat-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run test:unit
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - name: Colorbeat visual smoke checks
+        run: npx playwright test tests/colorbeat.spec.js
+      - run: npm test
+      - name: Attach screenshots for visual review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: colorbeat-screenshots
+          path: test-results/*.png
+          if-no-files-found: ignore
+          retention-days: 5
