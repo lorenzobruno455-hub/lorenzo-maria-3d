@@ -32,8 +32,8 @@ export class Resources {
   gradient() {
     if (this.toonGradient) return this.toonGradient;
     // Shared three-band lighting ramp. Nearest filtering keeps the illustrated transitions crisp.
-    const values = new Uint8Array([76, 76, 76, 170, 170, 170, 255, 255, 255]);
-    const texture = new THREE.DataTexture(values, 3, 1, THREE.RGBFormat);
+    const values = new Uint8Array([76, 76, 76, 255, 170, 170, 170, 255, 255, 255, 255, 255]);
+    const texture = new THREE.DataTexture(values, 3, 1, THREE.RGBAFormat);
     texture.minFilter = texture.magFilter = THREE.NearestFilter;
     texture.generateMipmaps = false;
     texture.needsUpdate = true;
