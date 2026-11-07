@@ -16,13 +16,13 @@ export class Resources {
     // Deterministic procedural textures, available offline without external assets.
     for (let i = 0; i < 600; i++) {
       const x = (i * 37) % 128, y = (i * 61 + Math.floor(i / 128) * 13) % 128;
-      ctx.fillStyle = i % 2 ? '#ffffff20' : '#25282018'; ctx.fillRect(x, y, 2, 2);
+      ctx.fillStyle = i % 2 ? '#ffffff10' : '#25282009'; ctx.fillRect(x, y, 2, 2);
     }
     if (kind === 'tile') {
-      ctx.strokeStyle = '#888a7c'; ctx.lineWidth = 1.5;
+      ctx.strokeStyle = '#a5a598'; ctx.lineWidth = .6;
       for (let i = 0; i <= 128; i += 32) { ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, 128); ctx.moveTo(0, i); ctx.lineTo(128, i); ctx.stroke(); }
     } else if (kind === 'wood') {
-      ctx.strokeStyle = '#66513330';
+      ctx.strokeStyle = '#66513316';
       for (let i = 0; i < 30; i++) { ctx.beginPath(); ctx.moveTo(0, i * 5); ctx.bezierCurveTo(30, i * 5 - 3, 70, i * 5 + 4, 128, i * 5); ctx.stroke(); }
     }
     const texture = new THREE.CanvasTexture(c); texture.colorSpace = THREE.SRGBColorSpace;

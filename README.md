@@ -1,4 +1,4 @@
-# Lorenzo & Maria 3D — 0.4 · O Colégio Vivo
+# Lorenzo & Maria 3D — 0.5 · Biblioteca das Memórias
 
 Exploração em terceira pessoa no fictício Colégio Aurora, com Three.js, JavaScript e Vite. Interface e diálogos em português. O capítulo inicial continua completo: converse com Maria, encontre três lembranças e retorne ao pátio.
 
@@ -22,6 +22,12 @@ npm run dev
 ```
 
 Para testar no Android na mesma rede Wi-Fi, abra `http://IP-DO-COMPUTADOR:5173`. Vite já escuta em `0.0.0.0`. A porta precisa estar acessível na rede; no Chromebook pode ser necessário ativar o encaminhamento da porta 5173 nas configurações do Linux. Evite redes públicas para o servidor de desenvolvimento. LocalStorage funciona por navegador e endereço: mudar a URL ou porta usa outro salvamento.
+
+## Biblioteca das Memórias · 0.5
+
+Seis livros físicos na biblioteca permitem revisitar as memórias desbloqueadas, com capas individuais, abertura animada e enquadramento da câmera. Os ambientes recebem móveis reconstruídos, superfícies de apoio e colisões coerentes. Caderno, livro de física, carta e fones iniciam conversas no mundo. Pressione E perto do banco de reflexão para sentar; mova para levantar.
+
+Leia [a entrega 0.5](docs/ENTREGA-05.md) e [a auditoria visual](docs/AUDITORIA-05.md). Para visualizar apoios, caixas e colisões, abra `http://localhost:5173/?debug` e pressione F3. Modelos permanecem procedurais provisórios; os saves v04 continuam compatíveis.
 
 ## O Colégio Vivo · 0.4
 

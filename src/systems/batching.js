@@ -11,7 +11,7 @@ export function batchMeshes(parent, meshes, owned) {
     mesh.updateMatrixWorld(true);
     const geometry = mesh.geometry.clone().applyMatrix4(new THREE.Matrix4().multiplyMatrices(inverse, mesh.matrixWorld));
     if (!groups.has(mesh.material)) groups.set(mesh.material, []);
-    groups.get(mesh.material).push(geometry); parent.remove(mesh);
+    groups.get(mesh.material).push(geometry); mesh.removeFromParent();
   }
   for (const [material, geometries] of groups) {
     const merged = mergeGeometries(geometries, false);

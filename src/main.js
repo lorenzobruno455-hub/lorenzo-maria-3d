@@ -1,3 +1,5 @@
+import { InteractionRegistry } from './systems/interaction-registry.js';
+import { EnvironmentValidator } from './systems/environment-validator.js';
 import { LivingSchool } from './systems/living.js';
 import { installPreferences } from './systems/preferences.js';
 import { updateAtmosphere } from './systems/atmosphere.js';
@@ -32,6 +34,7 @@ scene.add(new THREE.HemisphereLight('#e7f2ff', '#7c8862', 2.2));
 const sun = new THREE.DirectionalLight('#ffe5bc', 2.8); sun.position.set(-20, 35, 14); sun.shadow.bias = -.0004; sun.shadow.normalBias = .035;
 Object.assign(sun.shadow.camera, { left: -39, right: 39, top: 36, bottom: -36, near: 1, far: 90 }); scene.add(sun);
 const world = createWorld(scene);
+const interactions=new InteractionRegistry(world,()=>progress),validator=new EnvironmentValidator(scene,world);
 world.restoreDoors(progress.doors);
 const lorenzo = new Character(world.resources, '#dbdbcf'), maria = new Character(world.resources, '#8faaa0');
 const player = lorenzo.root; player.position.set(progress.position.x, .08, progress.position.z); maria.root.position.set(5, .08, 5); maria.root.rotation.y = -.8; scene.add(player, maria.root);
@@ -80,32 +83,21 @@ document.addEventListener('keydown', e => {
   else if (!e.shiftKey && (document.activeElement === last || !modal.contains(document.activeElement))) { e.preventDefault(); first?.focus(); }
 });
 function nearestTarget() {
-  const pos = player.position, candidates = [];
-  const add = (object, kind, radius) => { const distance = Math.hypot(pos.x - object.x, pos.z - object.z); if (distance <= radius && world.lineOfSight(pos, object)) candidates.push({ ...object, ref: object, kind, distance }); };
-  living?.targets().forEach(p => add(p, p.kind, p.kind === 'maria' ? 2.5 : 2.4));
-  world.doors.forEach(d => add(d, 'door', 3.1));
-  if (progress.stage === 1 && !living?.free) world.collectibles.filter(c => !c.taken).forEach(c => add(c, 'item', 2));
-  world.points.forEach(p => add(p, 'point', 2.4));
-  story?.world.objects.filter(p => p.kind !== 'memory' || progress.stage === 2).forEach(p => add(p, p.kind, 2.3));
-  // Door panels themselves block sight; a handle can be reached from either side.
-  for (const d of world.doors) if (Math.hypot(pos.x - d.x, pos.z + 6) <= 3.1 && !candidates.some(c => c.kind === 'door' && c.id === d.id)) {
-    // Other walls must not allow interaction around a corner.
-    const others = world.occluders.filter(b => b !== d.bounds);
-    const from = { x: pos.x, y: 1.4, z: pos.z }, to = { x: d.x, y: 1.4, z: -6 };
-    if (!others.some(b => b.enabled !== false && segmentBlocks(from, to, b))) candidates.push({ ...d, ref: d, kind: 'door', distance: Math.hypot(pos.x - d.x, pos.z + 6) });
-  }
-  // Prefer a mission object over an almost equally close door handle.
-  const score = c => c.distance - (['item', 'memory', 'game', 'album'].includes(c.kind) ? .5 : 0);
-  candidates.sort((a, b) => score(a) - score(b)); return candidates[0] || null;
+ const pos=player.position;interactions.entries.clear();
+ const add=(o,kind,distance,extra={})=>interactions.register({id:`${kind}:${o.id}`,object:{...o,kind,original:o},distance,height:o.height??(o.mesh?new THREE.Box3().setFromObject(o.mesh).max.y+.04:1.4),priority:kind==='seat'?-1.2:['item','memory','game','album','memory-book'].includes(kind)?.5:0,...extra,action:t=>handleInteraction({...t,ref:o})});
+ living?.targets().forEach(o=>add(o,o.kind,o.kind==='maria'?2.5:2.4));
+ world.doors.forEach(o=>add(o,'door',3.1,{height:1.4,ignoreCollider:o.bounds}));
+ if(progress.stage===1&&!living?.free)world.collectibles.filter(o=>!o.taken).forEach(o=>add(o,'item',2));
+ world.points.forEach(o=>add(o,'point',2.4,{height:1.5}));
+ story?.world.objects.filter(o=>(!o.mesh||o.mesh.visible)&&(o.kind!=='memory'||progress.stage===2)).forEach(o=>add(o,o.kind,o.kind==='memory-book'?2.1:2.3,{height:o.height,ignoreCollider:o.ignoreCollider}));
+ const t=interactions.nearest(pos);return t?{...t,ref:t.original}:null;
 }
-// Imported below as a static dependency to keep line-of-sight consistent with physics.
-import { segmentHit } from './systems/physics.js';
-const segmentBlocks = (a, b, bounds) => segmentHit(a, b, bounds) !== null;
-function interact() {
-  if (!active()) return; target = nearestTarget(); if (!target) return;
+function handleInteraction(target) {
+
+  if (!target) return;
   audio.unlock();
   if (['npc', 'campus'].includes(target.kind)) { living.interaction(target); return; }
-  if (['album', 'game', 'memory', 'secret'].includes(target.kind)) { story.interact(target); return; }
+  if (['album', 'game', 'memory', 'secret','memory-book','narrative','seat'].includes(target.kind)) { story.interact(target); return; }
   if (target.kind === 'maria') {
     living.speakingId = 'maria';
     if (living.free || progress.stage === 2 || (progress.stage === 1 && progress.collected.length < 3)) { story.maria(); return; }
@@ -119,6 +111,7 @@ function interact() {
     audio.play('collect'); notify(`${c.name} encontrado!`); updateHUD(); save();
   }
 }
+function interact(){if(!active())return;const t=nearestTarget();if(t)interactions.activate(t.interactionId,player.position);}
 controls = new Controls({ canvas: $('game'), joystick: $('joystick'), stick: $('stick'), run: $('run'), interact: $('interact'), active, onInteract: interact, onPause: () => { if (panelOpen) story.close(); else if (dialog) dialogues.close(); else setPause(!paused); }, sensitivity: () => settings.sensitivity });
 $('prompt').onclick = interact;
 function setPause(value) {
@@ -134,11 +127,12 @@ $('start').onclick = () => { started = true; $('welcome').hidden = true; $('star
 living = new LivingSchool({ scene, world, maria, player, getProgress: () => progress, settings, dialogue: dialogues, save, notify, audio });
 if (blocked(player.position.x, player.position.z, world.solids)) player.position.set(0, .08, 19);
 installPreferences(settings, save, controls);
-story = new Story({ living, scene, world, getProgress: () => progress, save, notify, dialogue: dialogues, audio,
+story = new Story({ player, living, scene, world, getProgress: () => progress, save, notify, dialogue: dialogues, audio,
   start: () => { if (!started) $('start').click(); if (paused) setPause(false); },
   tutorial: () => { living.setMode('campaign'); const line = mariaDialogue(progress); speak('MARIA', line.text, () => { progress.stage = line.nextStage; updateHUD(); }); },
   onPanel: open => { panelOpen = open; if (open) { dialogues.close(); if (paused) setPause(false); } syncModal(); needsRender = true; },
 });
+if(blocked(player.position.x,player.position.z,world.solids))player.position.set(0,world.groundHeight(0,19),19);
 $('help').onclick = () => speak('COMO JOGAR', 'Use WASD ou o joystick para andar. Arraste o mouse ou o lado direito da tela para olhar ao redor. Segure Shift ou Correr para correr. Aproxime-se de Maria, portas, placas ou lembranças e pressione E ou Interagir. As portas da sala e da biblioteca podem ser abertas. Use Esc ou ☰ para pausar.');
 function syncSettings() {
   $('quality').value = settings.quality; $('sensitivity').value = settings.sensitivity; $('volume').value = settings.volume;
@@ -188,10 +182,11 @@ function updateTarget() {
   target = active() ? nearestTarget() : null;
   const key = target ? `${target.kind}:${target.id}:${target.ref.open}` : '';
   if (key !== lastTarget) {
-    const label = !target ? 'Interagir' : target.kind === 'door' ? `${target.ref.open ? 'Fechar' : 'Abrir'} porta` : target.kind === 'npc' ? `Conversar com ${target.name}` : target.kind === 'campus' ? target.name : target.kind === 'maria' ? 'Conversar com Maria' : target.kind === 'memory' ? `Descobrir ${target.name}` : target.kind === 'game' ? `Jogar ${target.name}` : target.kind === 'album' ? 'Abrir álbum' : target.kind === 'item' ? `Recolher ${target.name}` : `Ler ${target.name}`;
+    const label = !target ? 'Interagir' : target.kind === 'door' ? `${target.ref.open ? 'Fechar' : 'Abrir'} porta` : target.kind === 'npc' ? `Conversar com ${target.name}` : target.kind === 'campus' ? target.name : target.kind === 'maria' ? 'Conversar com Maria' : target.kind === 'memory-book' ? `Ler ${target.name}` : target.kind === 'memory' ? `Descobrir ${target.name}` : target.kind === 'game' ? `Jogar ${target.name}` : target.kind === 'album' ? 'Abrir álbum' : target.kind === 'item' ? `Recolher ${target.name}` : `Ler ${target.name}`;
     $('prompt').textContent = `E · ${label}`; $('interact').textContent = target?.kind === 'door' ? (target.ref.open ? 'Fechar' : 'Abrir') : target?.kind === 'maria' ? 'Conversar' : target?.kind === 'item' ? 'Recolher' : 'Interagir';
     $('interact').disabled = !target; lastTarget = key;
   }
+  story?.world.highlight(target);
   $('prompt').hidden = !target;
 }
 function resize() { controls.clear(); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); quality.resize(); }
@@ -213,6 +208,7 @@ function animate(now) {
   let speed = 0;
   if (active()) {
     time += dt; const input = controls.sample(dt); follow.rotate(input.lookX, input.lookY);
+    if(story?.seat&&(Math.hypot(input.x,input.z)>.05)){player.position.set(story.seat.exit.x,world.groundHeight(story.seat.exit.x,story.seat.exit.z),story.seat.exit.z);story.seat=null;}
     const delta = relativeMovement(input.x, input.z, follow.yaw, input.running ? 6 : 3.5, dt);
     const distance = moveWithCollisions(player.position, delta, world.solids); speed = distance / dt;
     if (speed > .01) {
@@ -226,13 +222,15 @@ function animate(now) {
   if (!paused && started) {
     living.update(panelOpen ? 0 : dt, { player: player.position, active: active(), dialogueOpen: dialog, speaker: $('speaker').textContent, playerSpeed: speed });
     if (dialog && living.partner) { const p = living.partner.agent.position; const angle = Math.atan2(p.x - player.position.x, p.z - player.position.z); player.rotation.y += Math.atan2(Math.sin(angle - player.rotation.y), Math.cos(angle - player.rotation.y)) * (1 - Math.exp(-dt * 8)); }
-    lorenzo.update(dt, speed, dialog && $('speaker').textContent === 'LORENZO', interactionTime > 0);
+    player.position.y=story?.seat?story.seat.height:world.groundHeight(player.position.x,player.position.z);
+    lorenzo.update(dt, speed, dialog && $('speaker').textContent === 'LORENZO', interactionTime > 0,story?.seat?{state:'sit'}:{});
 
-    world.update(dt, time, player.position);
+    world.quality=settings.quality;world.update(dt, time, player.position);
     if (effectTime > 0) { effectTime -= dt; particles.forEach((m, i) => { const t = .8 - effectTime; m.position.set(Math.cos(m.userData.angle) * t, t * (1.5 + i % 3 * .2), Math.sin(m.userData.angle) * t); m.scale.setScalar(.035 * Math.max(0, effectTime / .8)); }); if (effectTime <= 0) effect.visible = false; }
   }
   if (toastTime > 0) { toastTime -= dt; if (toastTime <= 0) $('toast').hidden = true; }
   updateAtmosphere(renderer, follow, player.position, settings.quality, dt, world);
+  player.visible=!(dialog&&story?.focus?.hidePlayer);document.body.classList.toggle('reading-memory',!player.visible);
   follow.partner = living.partner?.agent.position;
   follow.focusObject = dialog ? story?.focus : null; follow.conversation = dialog && !story?.focus;
   follow.update(player.position, active() || dialog ? dt : 0); camera.updateMatrixWorld();
@@ -257,10 +255,14 @@ export function getGameState() {
     camera: { x: camera.position.x, y: camera.position.y, z: camera.position.z, distance: follow.actualDistance }, doors: world.doors.map(d => ({ open: d.open, angle: d.angle })),
     living: structuredClone(progress.living), npcs: living.actors.map(a => ({ id: a.definition.id, x: a.agent.position.x, z: a.agent.position.z, state: a.agent.state, distance: a.agent.distanceWalked, transitions: a.agent.transitions })),
     campaign: structuredClone(progress.campaign), storyPage: story?.page, rhythm: story?.game?.phase,
+    spatial:validator.inspect(world.placed), memoryBooks:story.world.books.map(b=>({id:b.id,x:b.x,z:b.z,unlocked:b.unlocked,angle:b.mesh.userData.cover.rotation.z})),
     quality: settings.quality, resolutionScale: quality.scale, fps: Math.round(quality.fps), drawCalls: renderer.info.render.calls, geometries: renderer.info.memory.geometries };
 }
 registerStateReader(getGameState);
+if(new URLSearchParams(location.search).has('debug')){addEventListener('keydown',e=>{if(e.code==='F3'){e.preventDefault();if(validator.visible)validator.clear();else validator.show([...world.placed,...story.world.placed],[player,...living.actors.map(a=>a.character.root)]);needsRender=true;}});}
+
 export function dispose() {
+  validator.dispose();interactions.dispose();
   disposed = true; cancelAnimationFrame(frame); controls.clear(); save(); story?.dispose(); living?.dispose(); dialogues?.dispose(); lorenzo.dispose(); maria.dispose(); world.dispose(); audio.dispose(); renderer.dispose();
 }
 if (import.meta.hot) import.meta.hot.dispose(dispose);

@@ -8,8 +8,8 @@ import { MatchingGame, QuizGame, RhythmGame } from './minigames.js';
 const el = (tag, text, className) => { const node = document.createElement(tag); if (text !== undefined) node.textContent = text; if (className) node.className = className; return node; };
 const button = (label, action) => { const b = el('button', label); b.onclick = action; return b; };
 export class Story {
-  constructor({ scene, world, getProgress, save, notify, dialogue, onPanel, audio, start, tutorial, living }) {
-    Object.assign(this, { getProgress, save, notify, dialogue, onPanel, audio, start, tutorial, living });
+  constructor({ player, scene, world, getProgress, save, notify, dialogue, onPanel, audio, start, tutorial, living }) {
+    Object.assign(this, { player, getProgress, save, notify, dialogue, onPanel, audio, start, tutorial, living });
     this.world = createStoryWorld(scene, world, memories, catalogue); this.panel = document.getElementById('story-panel'); this.content = document.getElementById('story-content');
     this.open = false; this.game = null; this.time = 0; this.finishedGame = false; this.dialogueData = null;
     this.reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
@@ -80,10 +80,10 @@ export class Story {
     this.dialogue.start([line], { instant: true, choices: [...['cotidianas', 'humor', 'filosofia', 'música', 'escola', 'fé', 'memórias', 'especiais'].map(category => ({ label: category[0].toUpperCase() + category.slice(1), action: () => this.chooseDialogue(category) })), { label: 'Dupla Dinâmica', action: () => { if (!this.c.special.includes('duo')) this.c.special.push('duo'); this.changed(); this.dialogue.start([{ speaker: 'SISTEMA', text: 'COMBO: Dupla Dinâmica! Lorenzo +100 de felicidade. Maria +100 de paciência. Duração: indefinida.', provenance: 'creative-fiction' }]); } }, { label: 'Prólogo: três lembranças', action: () => this.tutorial() }] });
     this.dialogue.advance();
   }
-  memory(m, replay = false) {
+  memory(m, replay = false, origin = null) {
     if (this.living.free && !replay) { this.notify('Retome a campanha para desbloquear novas memórias.'); return; }
     if (!replay && (this.getProgress().stage < 2 || currentChapter(this.c)?.id !== m.quest || nextStep(this.c)?.type !== 'memory')) { this.notify(this.getProgress().stage < 2 ? 'Conclua o prólogo das três lembranças primeiro.' : nextStep(this.c)?.label || 'Conclua o capítulo anterior.'); return; }
-    this.focus = { ...m.position, y: 1.1 }; this.audio.setMood?.('memory');
+    this.focus = origin ? {x:origin.x,y:(origin.height||1.1)+.4,distance:1.8,yaw:0,pitch:.65,hidePlayer:true,z:origin.z} : { ...m.position, y: 1.1 }; this.audio.setMood?.('memory');
     this.dialogue.start([{ speaker: 'MEMÓRIA', text: `${m.date} · ${m.title}`, provenance: 'author-reported-memory' }, { speaker: 'LORENZO', text: m.description, provenance: 'author-reported-memory' }], { done: () => {
       if (!replay && unlockMemory(this.c, m.id)) { this.changed(); this.audio.play('collect'); this.audio.setMood?.('completion'); this.notify(`◇ ${m.title} · carta desbloqueada${this.c.letter ? ' · Carta final disponível!' : ''}`); }
       this.focus = null;
@@ -91,6 +91,13 @@ export class Story {
   }
   interact(target) {
     this.tracked = null;
+    if(target.kind==='seat'){if(this.seat){this.player.position.set(this.seat.exit.x,0,this.seat.exit.z);this.seat=null;}else {this.seat={height:.535,exit:{x:this.player.position.x,z:this.player.position.z}};this.player.position.set(-25,.535,20);this.player.rotation.y=Math.PI;this.notify('Sentado · mova o joystick ou use WASD para levantar.');}return;}
+    if (target.kind === 'memory-book') {
+      const m=memories.find(m=>m.id===target.id);
+      if(!this.c.memories.includes(m.id)){this.dialogue.start([{speaker:'BIBLIOTECA DAS MEMÓRIAS',text:`${m.title} · ${m.date} · ${m.rarity}. Livro bloqueado: conclua o capítulo ${memories.indexOf(m)+1} no local indicado no álbum.`,provenance:'school-fiction'}]);return;}
+      this.world.openBook(m.id);this.memory(m,true,target);return;
+    }
+    if(target.kind==='narrative'){const item=this.world.narratives.find(n=>n.id===target.id);this.chooseDialogue(item.category);this.getProgress().interactions[item.id]=true;this.save();return;}
     if (target.kind === 'album') { this.show('album'); return; }
     if (target.kind === 'game') { this.launchGame(target.id); return; }
     if (target.kind === 'secret') { if (!this.c.special.includes('moon')) this.c.special.push('moon'); this.changed(); this.notify('A lua também sente saudade.'); return; }
@@ -114,7 +121,7 @@ export class Story {
     else { this.content.append(el('p', 'Toque no botão ou pressione Espaço quando o coração passar pelo centro dourado. Dez notas, até vinte pontos.')); const lane = el('div', undefined, 'rhythm-lane'), marker = el('span', '♥'); marker.id = 'rhythm-note'; lane.append(marker); this.content.append(lane, el('p', '', 'rhythm-status'), button('Marcar o compasso', () => { g.hit(); this.audio.play('collect'); })); }
   }
   update(dt, position, active) {
-    this.time += dt; this.world.update(this.c, this.time, this.focus);
+    this.time += dt; this.world.update(this.c, this.time, this.focus,dt,position,this.living.settings.quality);
     if (this.focus && !this.dialogue.open) this.focus = null;
     if (active && !this.living.free && this.getProgress().stage === 2) {
       const step = nextStep(this.c); if (step?.type === 'visit' && Math.hypot(position.x - step.position.x, position.z - step.position.z) < 3) { const chapter = currentChapter(this.c); questEvent(this.c, 'visit'); if (chapter?.id === 'chapter-2' && !this.c.special.includes('garden-letter')) this.c.special.push('garden-letter'); if (chapter?.id === 'chapter-5' && !this.c.special.includes('flowers')) this.c.special.push('flowers'); this.changed(); this.notify(nextStep(this.c)?.label || 'Explore a memória.'); }

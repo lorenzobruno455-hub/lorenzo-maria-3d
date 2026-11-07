@@ -1,6 +1,9 @@
+import { PropLibrary } from './prop-library.js';
+import { surface, groundHeight } from './prop-placement.js';
 import * as THREE from 'three';
 import { batchMeshes } from './batching.js';
 export function createCampusWorld(scene, world) {
+  const props=new PropLibrary(world.resources);
   const group = new THREE.Group(); scene.add(group); const resources = world.resources, owned = [], dynamic = new Set(), objects = [], fans = [];
   function mesh(kind, color, scale, x, y, z, texture = 'plain') { const m = resources.mesh(kind, color, scale, texture); m.position.set(x, y, z); group.add(m); return m; }
   function box(x, y, z, w, h, d, color, solid = false, texture = 'plain', seatFor = '') {
@@ -25,6 +28,7 @@ export function createCampusWorld(scene, world) {
   // Seating anchors can be occupied by their NPC; other actors/player avoid the seat.
   box(19, .47, -15, 1.9, .14, .7, '#a58a5b', true, 'wood', 'bia'); box(19, .85, -15.3, 1.9, .7, .1, '#a58a5b');
   box(20, .47, -14, .7, .14, .7, '#62867a', true, 'plain', 'maria'); box(20, .85, -14.3, .7, .7, .1, '#62867a');
+  for(const [x,z,w] of [[19,-15,1.9],[20,-14,.7]])for(const dx of [-w*.35,w*.35])box(x+dx,.24,z,.055,.48,.5,'#586b68');
   // Lockers, classroom objects, fans and hallway details share cached materials.
   for (const x of [-25, -24.2, -23.4, -22.6]) { box(x, 1.05, -3, .7, 2.1, .5, '#7e9690', true); box(x + .22, 1.05, -2.72, .04, .16, .04, '#eadfc8'); }
   for (const x of [-26, 26]) {
@@ -38,7 +42,10 @@ export function createCampusWorld(scene, world) {
   const clock = box(0, 2.7, -24.22, .025, .35, .025, '#31564a'); dynamic.add(clock);
   const ambient = new THREE.PointLight('#fff0ce', 8, 11); ambient.position.set(0, 2.8, -22); group.add(ambient);
   const addObject = (id, name, x, z, color, kind = 'campus') => {
-    const m = box(x, .95, z, .42, .13, .55, color); dynamic.add(m);
+    const floor=surface(`${id}:floor`,x,z,2.5,1.2,groundHeight(x,z));const stand=props.place(group,'desk',floor);
+    props.collider(stand,world);
+    const m=props.place(group,id==='note'||id==='familiar-music'?'letter':'book',props.tableSurface(stand),{x,z,color});dynamic.add(m);
+
     const o = { id, name, x, z, kind, mesh: m }; objects.push(o); return o;
   };
   const lostBook = addObject('lost-book', 'Livro de Bia', 21, -15, '#a88b76');
@@ -48,8 +55,8 @@ export function createCampusWorld(scene, world) {
   const ballMesh = mesh('sphere', '#bc9a63', [.24, .24, .24], -33, .27, 5); dynamic.add(ballMesh);
   const ball = { id: 'ball', name: 'Bola da quadra', x: -33, z: 5, kind: 'campus', mesh: ballMesh, vx: 0, vz: 0 }; objects.push(ball);
   const flowers = new THREE.InstancedMesh(resources.geometry('leaf'), resources.material('#bca573'), 42), transform = new THREE.Object3D();
-  for (let i = 0; i < 42; i++) { const side = i % 2 ? -1 : 1; transform.position.set(side * (8.5 + (i % 3) * 1.2), .95, 3.4 + (i % 7) * .5); transform.scale.set(.09, .14, .09); transform.updateMatrix(); flowers.setMatrixAt(i, transform.matrix); flowers.setColorAt(i, new THREE.Color(['#d4a78b', '#d2c884', '#b4a9c5'][i % 3])); } group.add(flowers);
-  batchMeshes(group, group.children.filter(m => m.isMesh && !dynamic.has(m) && m !== flowers), owned);
+  for (let i = 0; i < 42; i++) { const side = i % 2 ? -1 : 1; const fx=side*(8.5+(i%3)*1.2),fz=3.4+(i%7)*.5;mesh('cylinder','#698756',[.012,.36,.012],fx,.68,fz);transform.position.set(fx,.88,fz); transform.scale.set(.09, .14, .09); transform.updateMatrix(); flowers.setMatrixAt(i, transform.matrix); flowers.setColorAt(i, new THREE.Color(['#d4a78b', '#d2c884', '#b4a9c5'][i % 3])); } group.add(flowers);
+  const staticMeshes=[];group.traverse(m=>{if(m.isMesh&&!dynamic.has(m)&&m!==flowers&&!fans.some(f=>m.parent===f)&&!objects.some(o=>{let p=m;while(p){if(p===o.mesh)return true;p=p.parent;}return false;}))staticMeshes.push(m);});batchMeshes(group,staticMeshes,owned);
   function update(dt, time, living, quality) {
     lostBook.mesh.visible = living.events['lost-book'] === 'active'; score.mesh.visible = living.events['familiar-music'] === 'active';
     for (const fan of fans) fan.rotation.z += dt * (quality === 'low' ? 1 : 2.5);

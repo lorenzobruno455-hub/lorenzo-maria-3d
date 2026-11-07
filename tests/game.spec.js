@@ -47,9 +47,9 @@ test('pause stops movement and reset requires explicit confirmation', async ({ p
   await page.locator('#restart').click(); await page.locator('#confirm-reset').click(); expect((await state(page)).collected).toBe(0); expect((await state(page)).stage).toBe(0);
 });
 
-for (const [x, item] of [[-17, 'Caderno'], [17, 'Cartão']]) test(`collect ${item} inside its classroom`, async ({ page }) => {
+for (const [x, item] of [[-14, 'Caderno'], [14, 'Cartão']]) test(`collect ${item} inside its classroom`, async ({ page }) => {
   const errors = []; page.on('pageerror', e => errors.push(e.message));
-  await seed(page, { stage: 1, collected: [], doors: [true, true], position: { x, z: -7 } }); await start(page);
+  await seed(page, { stage: 1, collected: [], doors: [true, true], position: { x, z: -9.4 } }); await start(page);
   await expect(page.locator('#prompt')).toContainText(item); await page.keyboard.press('e');
   await expect.poll(async () => (await state(page)).collected).toBe(1); await expect(page.locator('#toast')).toContainText('encontrado');
   await page.reload(); await page.locator('#start').click(); await page.evaluate(async () => { window.readGame = (await import('/src/systems/diagnostics.js')).getGameState; });

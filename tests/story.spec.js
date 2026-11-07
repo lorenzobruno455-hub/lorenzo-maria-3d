@@ -8,7 +8,7 @@ async function advance(page) { await page.locator('#dialogue-speed').click(); aw
 for (let i = 0; i < 6; i++) test(`chapter ${i + 1}: original memory, reward and persistence`, async ({ page }) => {
   const errors = []; page.on('pageerror', e => errors.push(e.message));
   const steps = {}; for (let n = 0; n <= i; n++) steps[`chapter-${n + 1}`] = chapterSteps[n].steps.filter(s => s.type !== 'memory').map(s => s.id);
-  const m = memories[i]; await seed(page, { stage: 2, collected: ['notebook', 'card', 'photo'], doors: [true, true], position: { x: m.position.x, z: m.position.z + (i === 2 ? -.7 : .6) }, campaign: { memories: memories.slice(0, i).map(m => m.id), steps } }); await start(page);
+  const m = memories[i]; await seed(page, { stage: 2, collected: ['notebook', 'card', 'photo'], doors: [true, true], position: { x: m.position.x, z: m.position.z + (i===0||i===5?-1.15:i===2?-.7:1.05) }, campaign: { memories: memories.slice(0, i).map(m => m.id), steps } }); await start(page);
   await expect(page.locator('#prompt')).toContainText(m.title); await page.keyboard.press('e'); await advance(page);
   await page.locator('#dialogue-speed').click(); await expect(page.locator('#speech')).toHaveText(m.description); await page.locator('#next').click();
   await expect.poll(async () => (await state(page)).campaign.memories.length).toBe(i + 1);
@@ -21,7 +21,7 @@ for (let i = 0; i < 6; i++) test(`chapter ${i + 1}: original memory, reward and 
 });
 
 test('quiz and memory activities launch from actual 3D objects', async ({ page }) => {
-  await seed(page, { position: { x: -20, z: -10 }, doors: [true, true] }); await start(page);
+  await seed(page, { position: { x: -20, z: -8.9 }, doors: [true, true] }); await start(page);
   await expect(page.locator('#prompt')).toContainText('QUIZ'); await page.keyboard.press('e'); await page.getByRole('button', { name: 'Iniciar atividade' }).click();
   for (const q of questions) { await expect(page.locator('#story-content')).toContainText(q.question); await page.locator('#story-content').getByRole('button', { name: q.options[0], exact: true }).click(); }
   await expect(page.locator('#story-content')).toContainText('6 pontos'); expect((await state(page)).campaign.achievements.quiz).toBeTruthy();
@@ -29,14 +29,14 @@ test('quiz and memory activities launch from actual 3D objects', async ({ page }
 });
 
 test('matching cards, dialogue choices and Android album navigation', async ({ page, browser }) => {
-  await seed(page, { position: { x: 19, z: -10 }, doors: [true, true] }); await start(page); await expect(page.locator('#prompt')).toContainText('MEMÓRIA DE VOCÊS'); await page.keyboard.press('e'); await page.getByRole('button', { name: 'Iniciar atividade' }).click();
+  await seed(page, { position: { x: 19, z: -8.9 }, doors: [true, true] }); await start(page); await expect(page.locator('#prompt')).toContainText('MEMÓRIA DE VOCÊS'); await page.keyboard.press('e'); await page.getByRole('button', { name: 'Iniciar atividade' }).click();
   await page.locator('[data-card="0"]').click(); await expect(page.locator('[data-card="0"]')).not.toHaveText('?'); await page.locator('[data-card="1"]').click(); await expect(page.locator('#story-content')).toContainText('1 jogadas');
   await page.locator('#story-close').click(); await page.locator('#story-menu').click(); await page.locator('#story-content').getByRole('button', { name: 'Álbum', exact: true }).click(); await page.getByLabel('Filtrar por raridade').selectOption('LENDÁRIA'); await expect(page.locator('.album-grid article')).toHaveCount(2); await page.getByLabel('Filtrar por data').selectOption('31/03/2026'); await expect(page.locator('.album-grid article')).toHaveCount(1);
   const context = await browser.newContext({ viewport: { width: 844, height: 390 }, isMobile: true, hasTouch: true }); const mobile = await context.newPage(); await seed(mobile); await start(mobile); await mobile.locator('#story-menu').tap(); await mobile.getByRole('button', { name: 'Conquistas', exact: true }).tap(); await expect(mobile.locator('#story-content .story-card')).toHaveCount(20); await mobile.locator('#story-close').tap(); await expect(mobile.locator('#touch')).toBeVisible(); await context.close();
 });
 
 test('rhythm object accepts timed taps and cleans up when leaving', async ({ page }) => {
-  await seed(page, { position: { x: 30, z: -11 } }); await start(page); await expect(page.locator('#prompt')).toContainText('COMPASSO'); await page.keyboard.press('e'); await page.getByRole('button', { name: 'Iniciar atividade' }).click();
+  await seed(page, { position: { x: 30, z: -9.9 } }); await start(page); await expect(page.locator('#prompt')).toContainText('COMPASSO'); await page.keyboard.press('e'); await page.getByRole('button', { name: 'Iniciar atividade' }).click();
   await page.waitForFunction(() => window.readGame().rhythm > .46 && window.readGame().rhythm < .55);
   await page.keyboard.press('Space'); await expect(page.locator('.rhythm-status')).toContainText('PERFEITO');
   await page.locator('#story-close').click(); const before = await state(page); await page.keyboard.down('s'); await expect.poll(async () => (await state(page)).z).toBeGreaterThan(before.z); await page.keyboard.up('s');

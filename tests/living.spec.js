@@ -24,7 +24,7 @@ test('free exploration runs five NPC routines and Maria without altering campaig
 test('lost book: accept, find in library, return, gain friendship and persist', async ({ page }) => {
   await seed(page, { position: { x: -6, z: 18 } }); await start(page); await expect(page.locator('#prompt')).toContainText('Bia'); await page.keyboard.press('e');
   await choose(page, 'Ajudar: O Livro Perdido'); await next(page); expect((await state(page)).living.events['lost-book']).toBe('active');
-  await travel(page, 21, -15.8); await expect(page.locator('#prompt')).toContainText('Livro de Bia'); await page.keyboard.press('e'); await next(page);
+  await travel(page, 21, -16); await expect(page.locator('#prompt')).toContainText('Livro de Bia'); await page.keyboard.press('e'); await next(page);
   expect((await state(page)).living.events['lost-book']).toBe('found'); await travel(page, -6, 18); await page.keyboard.press('e'); await choose(page, 'Devolver o livro'); await next(page);
   const saved = await state(page); expect(saved.living.events['lost-book']).toBe('done'); expect(saved.living.reputation.bia).toBe(2); expect(saved.living.achievements['lost-book']).toBeTruthy();
   await page.keyboard.press('e'); await next(page); await expect(page.getByRole('button', { name: 'Conversa de amizade', exact: true })).toBeVisible(); await page.getByRole('button', { name: 'Conversa de amizade', exact: true }).click(); await choose(page, 'Prefiro conversar'); await next(page);
@@ -41,7 +41,7 @@ test('physics question offers real choices, explanation and a recoverable interr
 
 test('music encounter requires listening and returning to Davi', async ({ page }) => {
   await seed(page, { position: { x: 12, z: 19 } }); await start(page); await expect(page.locator('#prompt')).toContainText('Davi'); await page.keyboard.press('e'); await choose(page, 'Ajudar: Uma Música Conhecida'); await next(page);
-  await travel(page, 31, -12.5); await expect(page.locator('#prompt')).toContainText('Partitura'); await page.keyboard.press('e'); await next(page); await next(page);
+  await travel(page, 31, -13.05); await expect(page.locator('#prompt')).toContainText('Partitura'); await page.keyboard.press('e'); await next(page); await next(page);
   expect((await state(page)).living.events['familiar-music']).toBe('found'); await travel(page, 12, 19); await page.keyboard.press('e'); await choose(page, 'Compartilhar a partitura'); await next(page);
   expect((await state(page)).living.events['familiar-music']).toBe('done'); expect((await state(page)).living.reputation.davi).toBe(2);
   await page.locator('#story-menu').click(); await page.getByRole('button', { name: 'Histórico de conversas', exact: true }).click(); await expect(page.locator('#story-content')).toContainText('PARTITURA');

@@ -1,0 +1,7 @@
+[
+ {"id":"study-notebook","prop":"book","name":"Caderno de estudos","x":-23,"z":-9,"category":"escola","type":"talk"},
+ {"id":"science-book","prop":"book","name":"Livro de física","x":-25,"z":-15,"category":"filosofia","type":"talk"},
+ {"id":"music-headphones","prop":"headphones","name":"Fones de ouvido","x":32,"z":-14,"category":"música","type":"talk"},
+ {"id":"garden-letter","prop":"letter","name":"Carta do jardim","x":23,"z":20,"category":"memórias","type":"read"},
+ {"id":"reflection-seat","prop":"book","name":"Banco de reflexão","x":-24,"z":20,"category":"fé","type":"sit"}
+]

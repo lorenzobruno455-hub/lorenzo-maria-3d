@@ -11,8 +11,8 @@
     "provenance": "author-reported-memory",
     "environment": "Sala de história",
     "position": {
-      "x": -17,
-      "z": -7
+      "x": -14,
+      "z": -7.5
     },
     "quest": "chapter-1",
     "reward": "vale-1",
@@ -116,8 +116,8 @@
     "provenance": "author-reported-memory",
     "environment": "Biblioteca",
     "position": {
-      "x": 17,
-      "z": -7
+      "x": 14,
+      "z": -7.5
     },
     "quest": "chapter-6",
     "reward": "vale-6",

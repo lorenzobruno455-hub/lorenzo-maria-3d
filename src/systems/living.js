@@ -44,7 +44,7 @@ export class LivingSchool {
       for (const door of this.world.doors) if (Math.hypot(agent.position.x - door.x, agent.position.z + 6) < 3 && ((agent.position.z < -6) !== (target.z < -6))) door.open = true;
       if (dt > 0) agent.update(dt, { obstacles, planningObstacles, player, others: this.agents, speaking: dialogueOpen && this.speakingId === id, hold: !!relevantEvent && this.speakingId !== id,
         forcedGoal: id === 'maria' && required ? { x: 5, z: 5 } : null });
-      character.root.position.set(agent.position.x, .08, agent.position.z); character.root.rotation.y = agent.rotation;
+      character.root.position.set(agent.position.x, this.world.groundHeight(agent.position.x,agent.position.z), agent.position.z); character.root.rotation.y = agent.rotation;
       let pose = agent.state;
       if (dialogueOpen && this.speakingId === id) pose = speaker === definition.name.toUpperCase() ? 'talk' : 'observe';
       if (pose === 'talk' && !(dialogueOpen && this.speakingId === id)) {

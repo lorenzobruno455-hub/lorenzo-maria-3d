@@ -54,7 +54,7 @@ export class Character {
         if (cached) { m.geometry.dispose(); m.geometry = cached; } else resources.geometries.set(key, m.geometry);
       });
     }
-    this.gait = 0;
+    this.gait = 0;this.body.updateMatrixWorld(true);this.soleHeight=new THREE.Box3().setFromObject(this.body).min.y;
   }
   update(dt, speed = 0, talking = false, interacting = false, pose = {}) {
     this.time += dt;
@@ -68,7 +68,7 @@ export class Character {
     if (this.mixer) { this.mixer.update(dt); return; }
     this.gait += speed * dt * 2.7;
     const w = this.weights, stride = Math.sin(this.gait);
-    this.body.position.y = Math.sin(this.time * 2) * .006 * w.idle + Math.abs(stride) * (.025 * w.walk + .045 * w.run);
+    this.body.position.y = -this.soleHeight + Math.abs(stride) * (.012 * w.walk + .025 * w.run);
     this.body.position.y -= .5 * w.sit;
     this.body.rotation.x = -.06 * w.run - .08 * w.observe + .07 * w.react;
     this.joints.head.rotation.y = Math.sin(this.time * 1.4) * (.04 * w.idle + .12 * w.talk);
