@@ -106,3 +106,20 @@ footer b {color:var(--cb-sun);font-family:var(--cb-title);font-size:14px}
 @media(prefers-reduced-motion:reduce){
   button,.overlay,.welcome-content,.story-card{animation:none!important;transition:none!important}
 }
+
+/* One-second celebratory ink burst for discoveries; pointer-safe and accessible. */
+.colorbeat-burst{position:fixed;z-index:6;left:50%;top:27%;transform:translate(-50%,-50%);
+  width:min(320px,80vw);height:94px;pointer-events:none;display:grid;place-items:center;
+  animation:colorbeat-pop 1s both}
+.colorbeat-burst::before,.colorbeat-burst::after{content:"";position:absolute;inset:5px 20px;
+  background:var(--cb-coral);border:3px solid var(--cb-ink);transform:rotate(-7deg);
+  clip-path:polygon(0% 15%,8% 15%,7% 0%,94% 9%,97% 0%,100% 93%,90% 87%,87% 100%,0% 91%);box-shadow:5px 5px 0 #14182477}
+.colorbeat-burst::after{inset:14px 25px;background:var(--cb-sun);transform:rotate(3deg);box-shadow:none}
+.colorbeat-burst-label{position:relative;z-index:1;font:italic 800 clamp(22px,5vw,38px)/1 var(--cb-title);
+  color:var(--cb-ink);text-align:center;text-transform:uppercase;letter-spacing:1px;
+  text-shadow:1px 1px 0 var(--cb-paper)}
+@keyframes colorbeat-pop{0%{opacity:0;transform:translate(-50%,-40%) scale(.7) rotate(-4deg)}
+  18%{opacity:1;transform:translate(-50%,-50%) scale(1.04) rotate(2deg)}
+  74%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}
+  100%{opacity:0;transform:translate(-50%,-64%) scale(.97)}}
+@media(prefers-reduced-motion:reduce){.colorbeat-burst{animation:none;display:none}}
