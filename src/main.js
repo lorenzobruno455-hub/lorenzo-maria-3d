@@ -5,6 +5,7 @@ import { installPreferences } from './systems/preferences.js';
 import { updateAtmosphere } from './systems/atmosphere.js';
 import * as THREE from 'three';
 import './style.css';
+import './colorbeat.css';
 import { Story } from './systems/story.js';
 import { Dialogue } from './systems/dialogue.js';
 import { createWorld } from './systems/world.js';
