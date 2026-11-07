@@ -123,3 +123,7 @@ footer b {color:var(--cb-sun);font-family:var(--cb-title);font-size:14px}
   74%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}
   100%{opacity:0;transform:translate(-50%,-64%) scale(.97)}}
 @media(prefers-reduced-motion:reduce){.colorbeat-burst{animation:none;display:none}}
+
+/* Higher priority than legacy #welcome button rules from the prototype. */
+#welcome .welcome-content > #start {background:var(--cb-sun);color:var(--cb-ink);border:2px solid var(--cb-ink)}
+#welcome .welcome-content > #start:hover:not(:disabled) {background:#ffe47e}
