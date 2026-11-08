@@ -28,6 +28,7 @@ export class Story {
     document.getElementById('story-title').textContent = title; this.page = name;
     if (name === 'menu') {
       this.content.append(el('p', 'Explore a escola, converse com Maria e descubra as seis memórias relatadas pelo autor. As conversas criativas são identificadas separadamente.'));
+      if(this.adventure)this.content.append(button('Aventuras 0.7B',()=>this.adventure.show()));
       for (const [label, action] of [['Continuar', () => { this.close(); this.start(); }], ['Exploração livre', () => { this.living.setMode('free'); this.close(); this.start(); }], ['Retomar campanha', () => { this.living.setMode('campaign'); this.close(); this.start(); }], ['Colégio vivo', () => this.show('campus')], ['Histórico de conversas', () => this.show('history')], ['Nova campanha', () => this.newCampaign()], ['Capítulos', () => this.show('chapters')], ['Álbum', () => this.show('album')], ['Inventário', () => this.show('inventory')], ['Minijogos', () => this.show('games')], ['Conquistas', () => this.show('achievements')], ['Carta final', () => this.show('letter')], ['Configurações', () => { this.close(); this.start(); document.getElementById('pause-button').click(); }]]) this.content.append(button(label, action));
     } else if (name === 'chapters') {
       this.content.append(button('Prólogo · Primeiro sinal (três lembranças)', () => { this.close(); this.start(); this.tutorial(); }));
@@ -54,7 +55,7 @@ export class Story {
   }
   newCampaign() {
     this.content.replaceChildren(el('p', 'Iniciar uma nova campanha? O prólogo e suas configurações serão mantidos; memórias, conquistas e resultados desta campanha serão reiniciados.'));
-    this.content.append(button('Confirmar nova campanha', () => { this.getProgress().campaign = freshCampaign(); this.living.setMode('campaign'); this.changed(); this.close(); this.start(); }), button('Cancelar', () => this.show('menu')));
+    this.content.append(button('Confirmar nova campanha', () => { this.adventure?.reset(); this.getProgress().campaign = freshCampaign(); this.living.setMode('campaign'); this.changed(); this.close(); this.start(); }), button('Cancelar', () => this.show('menu')));
   }
   album() {
     const toolbar = el('div', undefined, 'album-filters'), rarity = el('select'), order = el('select'), date = el('select'); date.setAttribute('aria-label', 'Filtrar por data');
@@ -81,6 +82,7 @@ export class Story {
     this.dialogue.advance();
   }
   memory(m, replay = false, origin = null) {
+    if(!replay&&this.adventure?.current?.id==='first-encounter'){this.notify('Conclua a encenação de Primeiro Encontro para revelar esta memória.');return;}
     if (this.living.free && !replay) { this.notify('Retome a campanha para desbloquear novas memórias.'); return; }
     if (!replay && (this.getProgress().stage < 2 || currentChapter(this.c)?.id !== m.quest || nextStep(this.c)?.type !== 'memory')) { this.notify(this.getProgress().stage < 2 ? 'Conclua o prólogo das três lembranças primeiro.' : nextStep(this.c)?.label || 'Conclua o capítulo anterior.'); return; }
     this.focus = origin ? {x:origin.x,y:(origin.height||1.1)+.4,distance:1.8,yaw:0,pitch:.65,hidePlayer:true,z:origin.z} : { ...m.position, y: 1.1 }; this.audio.setMood?.('memory');

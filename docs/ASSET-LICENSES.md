@@ -34,3 +34,7 @@ blender --background --python scripts/blender/build_aurora.py
 ```
 
 O comando gera os **dois GLBs efetivamente usados pelo jogo**. Cores estão em `PALETTES`; em execução, `src/character-assets.js` permite substituir URL, altura e cores por nome de material. Não é necessário Blender no aparelho do jogador.
+
+## Atualização 0.7B
+
+Os mesmos dois GLBs foram efetivamente regenerados no Blender com 16 clips originais cada, incluindo Accelerate, Decelerate, Point, Pickup e OpenBook; Stand ganhou transição própria. Licença CC0 da arte original mantida. Mixamo não foi baixado nem necessário: o esqueleto permanece o mesmo. A nova fotografia cenográfica usa a geometria procedural original e é identificada como ambientação fictícia. Nenhum áudio externo foi adicionado; a aventura musical reutiliza a síntese e as melodias originais já presentes no projeto.

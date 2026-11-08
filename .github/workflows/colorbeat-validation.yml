@@ -1,12 +1,14 @@
-name: Colorbeat v0.6 validation
+name: Project Aurora validation
 
 on:
   push:
     branches:
       - feat/colorbeat-v06-foundation
+      - feat/aurora-07b
   pull_request:
     branches:
       - main
+      - feat/aurora-07a
 
 concurrency:
   group: colorbeat-${{ github.head_ref || github.ref_name }}
@@ -37,6 +39,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: colorbeat-screenshots
-          path: test-results/*.png
+          path: |
+            test-results/**/*.png
+            docs/captures/07b/*.png
           if-no-files-found: ignore
           retention-days: 5

@@ -132,14 +132,16 @@ def create_avatar(name):
   bone(f'upper_arm.{label}',(s*.226,0,1.39),(s*.268,0,1.10),'chest');bone(f'forearm.{label}',(s*.268,0,1.10),(s*.28,0,.87),f'upper_arm.{label}');bone(f'hand.{label}',(s*.28,0,.87),(s*.28,0,.77),f'forearm.{label}')
  bpy.ops.object.mode_set(mode='OBJECT');body.parent=rig;mod=body.modifiers.new('Aurora skin','ARMATURE');mod.object=rig
  rig.animation_data_create();scene=bpy.context.scene;scene.render.fps=24
- for clip,frames in [('Idle',48),('Walk',24),('Run',18),('Talk',48),('Interact',36),('Turn',36),('Sit',48),('Stand',36),('Wave',48),('Observe',48),('React',36)]:
+ for clip,frames in [('Idle',48),('Walk',24),('Run',18),('Talk',48),('Interact',36),('Turn',36),('Sit',48),('Stand',36),('Wave',48),('Observe',48),('React',36),('Accelerate',12),('Decelerate',12),('Point',36),('Pickup',36),('OpenBook',48)]:
   action=bpy.data.actions.new(clip);rig.animation_data.action=action
   for f in range(0,frames+1,3):
    phase=2*math.pi*f/frames
    for p in rig.pose.bones:p.rotation_mode='XYZ';p.rotation_euler=(0,0,0);p.location=(0,0,0)
    p=rig.pose.bones
-   if clip in ['Walk','Run']:
-    a=.52 if clip=='Walk' else .82
+   if clip in ['Walk','Run','Accelerate','Decelerate']:
+    a=.82 if clip=='Run' else .52
+    if clip=='Accelerate':a*=math.sin(math.pi*f/(2*frames))
+    if clip=='Decelerate':a*=math.cos(math.pi*f/(2*frames))
     for side,off in [('L',0),('R',math.pi)]:
      swing=math.sin(phase+off);p[f'thigh.{side}'].rotation_euler.x=swing*a;p[f'shin.{side}'].rotation_euler.x=-max(0,-swing)*a*1.3
      p[f'upper_arm.{side}'].rotation_euler.x=-swing*a*.65;p[f'forearm.{side}'].rotation_euler.x=-.12-(.65 if clip=='Run' else .1)
@@ -151,6 +153,20 @@ def create_avatar(name):
    elif clip=='Sit':
     p['hips'].location.y=-.48
     for side in ['L','R']:p[f'thigh.{side}'].rotation_euler.x=-1.45;p[f'shin.{side}'].rotation_euler.x=1.45
+   elif clip=='Point':
+    envelope=math.sin(math.pi*f/frames)**.5
+    p['upper_arm.R'].rotation_euler.x=-1.35*envelope;p['forearm.R'].rotation_euler.x=-.12*envelope;p['head'].rotation_euler.z=-.1*envelope
+   elif clip=='Pickup':
+    envelope=math.sin(math.pi*f/frames)**2
+    p['chest'].rotation_euler.x=.6*envelope;p['upper_arm.R'].rotation_euler.x=-.65*envelope;p['forearm.R'].rotation_euler.x=-.3*envelope
+    for side in ['L','R']:p[f'thigh.{side}'].rotation_euler.x=-.25*envelope;p[f'shin.{side}'].rotation_euler.x=.25*envelope
+   elif clip=='OpenBook':
+    envelope=math.sin(math.pi*f/frames)**.4
+    for side in ['L','R']:p[f'upper_arm.{side}'].rotation_euler.x=-.45*envelope;p[f'forearm.{side}'].rotation_euler.x=-1.05*envelope
+    p['head'].rotation_euler.x=.18*envelope
+   elif clip=='Stand':
+    envelope=(1-f/frames)**2;p['hips'].location.y=-.48*envelope
+    for side in ['L','R']:p[f'thigh.{side}'].rotation_euler.x=-1.45*envelope;p[f'shin.{side}'].rotation_euler.x=1.45*envelope
    elif clip=='Interact':p['upper_arm.L'].rotation_euler.x=-.7*math.sin(math.pi*f/frames)**2;p['forearm.L'].rotation_euler.x=-.45*math.sin(math.pi*f/frames)**2
    elif clip=='Turn':p['chest'].rotation_euler.z=.15*math.sin(phase)
    elif clip=='Observe':p['head'].rotation_euler.x=.12*math.sin(math.pi*f/frames)**2

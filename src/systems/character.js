@@ -1,12 +1,13 @@
 import * as THREE from 'three';
 import { batchMeshes } from './batching.js';
+import { AnimationController } from './animation-controller.js';
 
 // Neutral study mannequins: no claim about either person's actual appearance.
 // Named joint pivots support continuous blended procedural animation.
 export class Character {
   constructor(resources, uniform = '#d6d9d2', { simple = false } = {}) {
     this.root = new THREE.Group(); this.root.userData.inkActor=true; this.body = new THREE.Group(); this.root.add(this.body); this.body.name = 'body';
-    this.resources = resources; this.time = 0; this.state = 'idle'; this.weights = { idle: 1, walk: 0, run: 0, talk: 0, interact: 0, turn: 0, sit: 0, stand: 0, wave: 0, observe: 0, react: 0 };
+    this.resources = resources; this.time = 0; this.state = 'idle'; this.weights = { idle: 1, walk: 0, run: 0, talk: 0, interact: 0, turn: 0, sit: 0, stand: 0, wave: 0, observe: 0, react: 0, accelerate: 0, decelerate: 0, point: 0, pickup: 0, openbook: 0 };
     this.owned = []; this.joints = {}; this.custom = null; this.mixer = null; this.actions = {};
     const mesh = (kind, color, scale, parent, position = [0, 0, 0]) => {
       if (simple) { if (parent === this.body && color !== '#56656b') color = uniform; if (parent.name.startsWith('shoulder')) color = uniform; if (color === '#414c4d') color = '#56656b'; }
@@ -54,18 +55,34 @@ export class Character {
         if (cached) { m.geometry.dispose(); m.geometry = cached; } else resources.geometries.set(key, m.geometry);
       });
     }
-    this.gait = 0;this.body.updateMatrixWorld(true);this.soleHeight=new THREE.Box3().setFromObject(this.body).min.y;
+    this.heading=0;this.headingTarget=0;this.writtenHeading=0;this.gait = 0;this.body.updateMatrixWorld(true);this.soleHeight=new THREE.Box3().setFromObject(this.body).min.y;
   }
   update(dt, speed = 0, talking = false, interacting = false, pose = {}) {
+    pose = this.cutscenePose || pose;
+    if(this.requestedAction){this.requestedAction.remaining-=dt;if(this.requestedAction.remaining<0)this.requestedAction=null;}
+    pose = {...pose, state:pose.state || this.requestedAction?.state};
+    if(Number.isFinite(pose.heading))this.headingTarget=pose.heading;
+    else if(Math.abs(this.root.rotation.y-this.writtenHeading)>1e-7)this.headingTarget=this.root.rotation.y;
+    this.heading+=Math.atan2(Math.sin(this.headingTarget-this.heading),Math.cos(this.headingTarget-this.heading))*(1-Math.exp(-12*dt));
+    this.root.rotation.y=this.writtenHeading=this.heading;
     this.time += dt;
     const next = pose.state || (interacting ? 'interact' : talking ? 'talk' : speed > 4 ? 'run' : speed > .12 ? 'walk' : 'idle');
     if (this.state !== next) {
-      const previous = this.actions[this.state], action = this.actions[next] || this.actions.idle;
-      if (action && action !== previous) { action.reset().play(); if (previous) action.crossFadeFrom(previous, .22, false); }
       this.state = next;
     }
     for (const name in this.weights) this.weights[name] = THREE.MathUtils.damp(this.weights[name], name === next ? 1 : 0, 10, dt);
-    if (this.mixer) { this.mixer.update(dt); return; }
+    if (this.controller) {
+      this.controller.update(dt,{speed,talking,interacting,pose});
+      if(this.controller.pending)this.state=this.controller.state;
+      // Sit clip is authored with a .44m hip contact over the root floor.
+      // Root may already have been raised onto a seat by the host.
+      const seatWeight=this.controller.actions.sit?.getEffectiveWeight()||0;
+      const activeSeat=this.controller.state==='sit'||seatWeight>0&&this.controller.actions.sit?.isRunning();
+      const seatY=pose.seatAnchor?.y ?? pose.seatHeight;
+      const offset=activeSeat&&Number.isFinite(seatY)?seatY-this.root.position.y-.44:0;
+      this.custom.position.y=THREE.MathUtils.damp(this.custom.position.y,offset,12,dt);
+      return;
+    }
     this.gait += speed * dt * 2.7;
     const w = this.weights, stride = Math.sin(this.gait);
     this.body.position.y = -this.soleHeight + Math.abs(stride) * (.012 * w.walk + .025 * w.run);
@@ -77,10 +94,16 @@ export class Character {
       const swing = stride * side;
       this.joints[`hip${side}`].rotation.x = swing * (.5 * w.walk + .85 * w.run) - 1.45 * w.sit;
       this.joints[`knee${side}`].rotation.x = Math.max(0, -swing) * (.6 * w.walk + 1.1 * w.run) + 1.45 * w.sit;
-      this.joints[`shoulder${side}`].rotation.x = -swing * (.4 * w.walk + .7 * w.run) - (side === -1 ? .25 + Math.sin(this.time * 3) * .25 : .1) * w.talk - .9 * w.interact - (side === 1 ? 1.8 : .1) * w.wave - .25 * w.observe;
+      this.joints[`shoulder${side}`].rotation.x = -swing * (.4 * w.walk + .7 * w.run) - (side === -1 ? .25 + Math.sin(this.time * 3) * .25 : .1) * w.talk - .9 * (w.interact+w.point+w.pickup) - .45*w.openbook - (side === 1 ? 1.8 : .1) * w.wave - .25 * w.observe;
       this.joints[`shoulder${side}`].rotation.z = side * (.07 + .08 * w.talk + (side === 1 ? .3 + Math.sin(this.time * 5) * .12 : 0) * w.wave);
-      this.joints[`elbow${side}`].rotation.x = -.12 - .65 * w.run - (.5 + Math.sin(this.time * 2) * .12) * w.talk - .2 * w.interact - .8 * w.sit - .3 * w.react;
+      this.joints[`elbow${side}`].rotation.x = -.12 - .65 * w.run - (.5 + Math.sin(this.time * 2) * .12) * w.talk - .2 * w.interact - 1.05*w.openbook - .8 * w.sit - .3 * w.react;
     }
+  }
+  requestAction(name,{duration}={}) {
+    const state=String(name).toLowerCase().replace(/[ _-]/g,'');
+    if(this.controller)return this.controller.requestAction(state,{duration});
+    if(!['idle','walk','run','accelerate','decelerate','turn','sit','stand','wave','talk','point','pickup','openbook','react','interact','observe'].includes(state))return false;
+    this.requestedAction={state,remaining:Number.isFinite(duration)?Math.max(.05,duration):1.5};return true;
   }
   async loadGLB(url, clipNames = {}, pipeline, options = {}) {
     // A newer request always wins, including completion after teardown.
@@ -97,17 +120,15 @@ export class Character {
       lease = { model: gltf.scene, animations:gltf.animations, release:()=>{gltf.scene.removeFromParent();this.disposeModel(gltf.scene);} };
     }
     if (this.disposed || request !== this.loadRequest) { lease.release(); return {animations:[],superseded:true}; }
+    this.controller?.dispose();
     if(this.mixer) {this.mixer.stopAllAction();this.mixer.uncacheRoot(this.custom);}
     this.modelLease?.release();
     this.modelLease=lease;this.custom=lease.model;this.actions={};
     this.body.visible=false;this.root.add(this.custom);this.mixer=new THREE.AnimationMixer(this.custom);
-    for(const state of Object.keys(this.weights)) {
-      const clip=lease.animations.find(c=>c.name.toLowerCase()===(clipNames[state]||state).toLowerCase());
-      if(clip)this.actions[state]=this.mixer.clipAction(clip);
-    }
-    (this.actions[this.state]||this.actions.idle)?.play();
+    this.controller=new AnimationController(this.custom,lease.animations,clipNames);
+    this.mixer=this.controller.mixer;this.actions=this.controller.actions;
     return {animations:Object.keys(this.actions)};
   }
   disposeModel(model) { model.traverse(m => { if (m.isMesh) { m.geometry.dispose(); for (const mat of Array.isArray(m.material) ? m.material : [m.material]) { for (const value of Object.values(mat)) if (value?.isTexture) value.dispose(); mat.dispose(); } } }); }
-  dispose() { this.disposed = true; this.owned.forEach(g => g.dispose()); if (this.custom) { this.mixer?.stopAllAction(); this.mixer?.uncacheRoot(this.custom); this.modelLease?.release(); } }
+  dispose() { this.disposed = true; this.controller?.dispose(); this.owned.forEach(g => g.dispose()); if (this.custom) { this.mixer?.stopAllAction(); this.mixer?.uncacheRoot(this.custom); this.modelLease?.release(); } }
 }

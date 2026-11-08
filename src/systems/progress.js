@@ -1,3 +1,4 @@
+import {freshAdventure,validateAdventure} from './quest-director.js';
 import { freshLiving, validateLiving } from './social.js';
 import { freshCampaign, validateCampaign } from './quests.js';
 import { clamp } from './physics.js';
@@ -10,7 +11,7 @@ export const ITEMS = [
   { id: 'photo', name: 'Fotografia do jardim', x: 10, z: 22 },
 ];
 export const DEFAULT_SETTINGS = { quality: 'medium', sensitivity: 1, volume: .5, sound: false, shadows: true, adaptive: true, controlsSize: 1, controlsOpacity: .8, musicVolume: .5, effectsVolume: .5 };
-export function freshProgress() { return { stage: 0, collected: [], position: { x: 0, z: 19 }, yaw: 0, pitch: .38, interactions: {}, living: freshLiving(), campaign: freshCampaign(), doors: [false, false] }; }
+export function freshProgress() { return { stage: 0, collected: [], position: { x: 0, z: 19 }, yaw: 0, pitch: .38, interactions: {}, adventure:freshAdventure(), living: freshLiving(), campaign: freshCampaign(), doors: [false, false] }; }
 export function validateProgress(raw) {
   const p = freshProgress();
   if (!raw || typeof raw !== 'object') return p;
@@ -24,6 +25,7 @@ export function validateProgress(raw) {
   p.pitch = Number.isFinite(raw.pitch) ? clamp(raw.pitch, .08, 1.15) : .38;
   p.doors = [raw.doors?.[0] === true, raw.doors?.[1] === true];
   p.interactions=Object.fromEntries(Object.entries(raw.interactions||{}).filter(([k,v])=>typeof k==='string'&&k.length<100&&v===true).slice(0,100));
+  p.adventure=validateAdventure(raw.adventure);
   p.living = validateLiving(raw.living);
   p.campaign = validateCampaign(raw.campaign);
   return p;

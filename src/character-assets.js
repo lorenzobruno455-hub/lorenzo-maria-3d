@@ -2,6 +2,6 @@
 // Palette overrides use GLB material names: skin, shirt, accent, pants, hair, eye, shoe.
 // glTF forward direction is +Z; normalize external models before export.
 export const CHARACTER_ASSETS = {
-  lorenzo: { url: '/models/aurora/lorenzo.glb', height: 1.82, palette: {}, clips: { idle: 'Idle', walk: 'Walk', run: 'Run', talk: 'Talk', interact: 'Interact', turn: 'Turn', sit: 'Sit', stand: 'Stand', wave: 'Wave', observe: 'Observe', react: 'React' } },
-  maria: { url: '/models/aurora/maria.glb', height: 1.76, palette: {}, clips: { idle: 'Idle', walk: 'Walk', run: 'Run', talk: 'Talk', interact: 'Interact', turn: 'Turn', sit: 'Sit', stand: 'Stand', wave: 'Wave', observe: 'Observe', react: 'React' } },
+  lorenzo: { url: '/models/aurora/lorenzo.glb', height: 1.82, palette: {}, clips: { idle: 'Idle', walk: 'Walk', run: 'Run', talk: 'Talk', interact: 'Interact', turn: 'Turn', sit: 'Sit', stand: 'Stand', wave: 'Wave', observe: 'Observe', react: 'React', accelerate: 'Accelerate', decelerate: 'Decelerate', point: 'Point', pickup: 'Pickup', openbook: 'OpenBook' } },
+  maria: { url: '/models/aurora/maria.glb', height: 1.76, palette: {}, clips: { idle: 'Idle', walk: 'Walk', run: 'Run', talk: 'Talk', interact: 'Interact', turn: 'Turn', sit: 'Sit', stand: 'Stand', wave: 'Wave', observe: 'Observe', react: 'React', accelerate: 'Accelerate', decelerate: 'Decelerate', point: 'Point', pickup: 'Pickup', openbook: 'OpenBook' } },
 };

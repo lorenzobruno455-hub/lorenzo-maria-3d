@@ -84,6 +84,7 @@ export class LivingSchool {
     const npc = NPC_DATA.find(n => n.id === id); if (!npc) return;
     const event = EVENT_DATA.find(e => e.npc === id), state = event && this.state.events[event.id];
     const choices = [ { label: 'Como está o dia?', action: () => this.say(id, [line(npc.name.toUpperCase(), npc.lines[1])], { done: () => { befriend(this.state, id, `conversation:${id}`); this.changed('Conversa registrada.'); } }) } ];
+    if(this.adventure&&['bia','davi'].includes(id))choices.push({label:`Aventura: ${id==='bia'?'O Livro Perdido':'Uma Música Conhecida'}`,action:()=>this.adventure.start(id==='bia'?'lost-book':'familiar-music')});
     if (event) {
       if (!state) choices.push({ label: `Ajudar: ${event.title}`, action: () => this.beginEvent(event) });
       else if (state === 'found') choices.push({ label: event.id === 'lost-book' ? 'Devolver o livro' : 'Compartilhar a partitura', action: () => this.finishEvent(event) });

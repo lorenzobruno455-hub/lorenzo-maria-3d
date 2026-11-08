@@ -1,4 +1,4 @@
-# Lorenzo & Maria 3D — Project Aurora 0.7A
+# Lorenzo & Maria 3D — Project Aurora 0.7B
 
 Exploração em terceira pessoa no fictício Colégio Aurora, com Three.js, JavaScript e Vite. Interface e diálogos em português. O capítulo inicial continua completo: converse com Maria, encontre três lembranças e retorne ao pátio.
 
@@ -22,6 +22,10 @@ npm run dev
 ```
 
 Para testar no Android na mesma rede Wi-Fi, abra `http://IP-DO-COMPUTADOR:5173`. Vite já escuta em `0.0.0.0`. A porta precisa estar acessível na rede; no Chromebook pode ser necessário ativar o encaminhamento da porta 5173 nas configurações do Linux. Evite redes públicas para o servidor de desenvolvimento. LocalStorage funciona por navegador e endereço: mudar a URL ou porta usa outro salvamento.
+
+## Aventuras 0.7B
+
+Após o prólogo, abra **Álbum e história → Aventuras 0.7B**. Três aventuras com cenas puláveis, investigação física, escolhas, quebra-cabeça e ritmo. [Entrega 0.7B](docs/ENTREGA-07B.md) · [Missões](docs/MISSIONS-07B.md) · [Animações](docs/ANIMATION-SYSTEM.md) · [Cutscenes](docs/CUTSCENES-07B.md).
 
 ## Project Aurora 0.7A
 
