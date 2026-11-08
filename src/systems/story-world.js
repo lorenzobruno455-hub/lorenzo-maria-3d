@@ -4,6 +4,7 @@ import { batchMeshes } from './batching.js';
 import { PropLibrary } from './prop-library.js';
 import { surface, groundHeight } from './prop-placement.js';
 export function createStoryWorld(scene, world, memories, games) {
+ let disposed=false;
  const objects=[],resources=world.resources,owned=[],group=new THREE.Group(),library=new PropLibrary(resources);scene.add(group);
  const place=(kind,color,scale,x,y,z)=>{const m=resources.mesh(kind,color,scale);m.position.set(x,y,z);group.add(m);return m;};
  const bounds=(x,y,z,w,h,d)=>{const b={minX:x-w/2,maxX:x+w/2,minY:y-h/2,maxY:y+h/2,minZ:z-d/2,maxZ:z+d/2};world.solids.push(b);world.occluders.push(b);return b;};
@@ -20,6 +21,7 @@ export function createStoryWorld(scene, world, memories, games) {
  const add=(kind,id,name,x,z,color,model='book',support=null)=>{
   const s=support||supportMap.get(`${x},${z}`)||table(id,x,z);supportMap.set(`${x},${z}`,s);
   const mesh=library.place(group,model,s,{x,z,color});placed.push(mesh);
+  mesh.userData.inkDynamic=true;
   const item={kind,id,name,x,z,mesh,height:s.height+.05,beacon:null};objects.push(item);return item;
  };
  const album=add('album','album','Álbum de memórias',20,-7,'#aa8a64');
@@ -35,9 +37,10 @@ export function createStoryWorld(scene, world, memories, games) {
  const shelf=surface('memory-console',11.5,-15.5,4,.9,1.08,counter);world.surfaces.push(shelf);
  world.sign('BIBLIOTECA DAS MEMÓRIAS',11.5,2.8,-16.5,5.4);
  const books=memories.map((m,i)=>{const x=10.1+i*.56,o=add('memory-book',m.id,m.title,x,-15.5,['#836457','#6b8179','#8b7b91'][i%3],'memory-book',shelf);const lock=resources.mesh('box','#c4ad7a',[.045,.02,.08]);lock.position.set(.18,.082,0);o.mesh.add(lock);o.lock=lock;o.ignoreCollider=counterBounds;o.memory=m;o.order=i;
- const canvas=document.createElement('canvas');canvas.width=256;canvas.height=384;const ctx=canvas.getContext('2d');ctx.fillStyle=['#6a493c','#405a52','#5d4e65'][i%3];ctx.fillRect(0,0,256,384);ctx.strokeStyle='#c4ad7a';ctx.lineWidth=3;ctx.strokeRect(14,14,228,356);ctx.fillStyle='#f0e7ce';ctx.textAlign='center';ctx.font='18px serif';
- let line='',row=95;for(const word of m.title.split(' ')){if((line+' '+word).length>18){ctx.fillText(line.trim(),128,row,218);row+=27;line='';}line+=' '+word;}ctx.fillText(line.trim(),128,row,218);ctx.font='15px sans-serif';ctx.fillText(m.date,128,290);ctx.fillText(m.rarity,128,325);
- const map=new THREE.CanvasTexture(canvas);map.colorSpace=THREE.SRGBColorSpace;const mat=new THREE.MeshStandardMaterial({map,roughness:.9});const title=new THREE.Mesh(resources.geometry('box'),mat);title.scale.set(.39,.001,.54);title.position.set(.23,.007,0);title.rotation.y=Math.PI;o.mesh.userData.cover.add(title);owned.push(map,mat);
+ const canvas=document.createElement('canvas');canvas.width=256;canvas.height=384;const ctx=canvas.getContext('2d');
+ const drawCover=()=>{ctx.fillStyle=['#6a493c','#405a52','#5d4e65'][i%3];ctx.fillRect(0,0,256,384);ctx.strokeStyle='#c4ad7a';ctx.lineWidth=3;ctx.strokeRect(14,14,228,356);ctx.fillStyle='#fff5dc';ctx.textAlign='center';ctx.font='700 22px "Barlow Condensed",sans-serif';
+ let line='',row=95;for(const word of m.title.split(' ')){if((line+' '+word).length>18){ctx.fillText(line.trim(),128,row,218);row+=27;line='';}line+=' '+word;}ctx.fillText(line.trim(),128,row,218);ctx.font='15px "Atkinson Hyperlegible",sans-serif';ctx.fillText(m.date,128,290);ctx.fillText(m.rarity,128,325);};drawCover();
+ const map=new THREE.CanvasTexture(canvas);map.colorSpace=THREE.SRGBColorSpace;document.fonts?.ready.then(()=>{if(!disposed){drawCover();map.needsUpdate=true;}});const mat=new THREE.MeshToonMaterial({map,gradientMap:resources.toonRamp()});const title=new THREE.Mesh(resources.geometry('box'),mat);title.scale.set(.39,.001,.54);title.position.set(.23,.007,0);title.rotation.y=Math.PI;o.mesh.userData.cover.add(title);owned.push(map,mat);
  const label=world.sign(`${i+1} · ${m.date}`,x,.91,-15.02,.51);label.material.depthWrite=true;return o;});
  let selected=null,opening=null,openness=0;
  for(const n of narratives){if(n.id==='reflection-seat'){objects.push({id:n.id,kind:'seat',name:n.name,x:-24,z:19,mesh:null,height:.8});continue;}const existing=world.placed.find(p=>p.name==='desk'&&p.position.x===n.x&&p.position.z===n.z);const support=n.id==='music-headphones'?surface('piano-top',32,-14,3,1,1.2):existing?library.tableSurface(existing):null;const shared=n.id==='garden-letter'?supportMap.get(`${n.x},${n.z-.35}`):null;add('narrative',n.id,n.name,shared?n.x+.4:n.x,shared?n.z-.35:n.z,'#6b8179',n.prop,shared||support);}
@@ -54,5 +57,5 @@ export function createStoryWorld(scene, world, memories, games) {
  }
  const staticMeshes=[];for(const p of staticProps){p.userData.staticBounds=new THREE.Box3().setFromObject(p).clone();}for(const p of staticProps)p.traverse(m=>{if(m.isMesh)staticMeshes.push(m);});
  const dynamic=new Set(objects.filter(o=>o.mesh).map(o=>o.mesh));batchMeshes(group,[...group.children.filter(m=>m.isMesh&&!dynamic.has(m)),...staticMeshes],owned);
- return {narratives,objects,books,placed,highlight,openBook,update,album,dispose(){group.removeFromParent();owned.forEach(g=>g.dispose());}};
+ return {narratives,objects,books,placed,highlight,openBook,update,album,dispose(){disposed=true;group.removeFromParent();owned.forEach(g=>g.dispose());}};
 }

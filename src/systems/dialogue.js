@@ -1,6 +1,7 @@
 export class Dialogue {
   constructor({ root, speaker, speech, next, onState, onLine, reducedMotion = () => false }) {
     Object.assign(this, { root, speaker, speech, next, onState, onLine, reducedMotion });
+    root.classList.add('comic-panel');
     this.lines = []; this.index = 0; this.elapsed = 0; this.visible = 0; this.open = false;
     this.choices = document.createElement('div'); this.choices.className = 'dialogue-choices'; speech.after(this.choices);
     this.tag = document.createElement('small'); this.tag.className = 'dialogue-source'; speaker.after(this.tag);

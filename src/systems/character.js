@@ -5,7 +5,7 @@ import { batchMeshes } from './batching.js';
 // Named joint pivots support continuous blended procedural animation.
 export class Character {
   constructor(resources, uniform = '#d6d9d2', { simple = false } = {}) {
-    this.root = new THREE.Group(); this.body = new THREE.Group(); this.root.add(this.body); this.body.name = 'body';
+    this.root = new THREE.Group(); this.root.userData.inkActor=true; this.body = new THREE.Group(); this.root.add(this.body); this.body.name = 'body';
     this.resources = resources; this.time = 0; this.state = 'idle'; this.weights = { idle: 1, walk: 0, run: 0, talk: 0, interact: 0, turn: 0, sit: 0, stand: 0, wave: 0, observe: 0, react: 0 };
     this.owned = []; this.joints = {}; this.custom = null; this.mixer = null; this.actions = {};
     const mesh = (kind, color, scale, parent, position = [0, 0, 0]) => {
@@ -82,24 +82,32 @@ export class Character {
       this.joints[`elbow${side}`].rotation.x = -.12 - .65 * w.run - (.5 + Math.sin(this.time * 2) * .12) * w.talk - .2 * w.interact - .8 * w.sit - .3 * w.react;
     }
   }
-  async loadGLB(url, clipNames = {}) {
-    // Optional model adapter. On failure the playable procedural model stays visible.
-    const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
-    const gltf = await new GLTFLoader().loadAsync(url);
-    if (this.disposed) { this.disposeModel(gltf.scene); return { animations: [] }; }
-    const model = gltf.scene, bounds = new THREE.Box3().setFromObject(model), size = new THREE.Vector3(); bounds.getSize(size);
-    if (!Number.isFinite(size.y) || size.y < .01) { this.disposeModel(model); throw new Error('Modelo sem altura válida'); }
-    const scale = 1.82 / size.y; model.scale.multiplyScalar(scale);
-    model.position.set(-(bounds.min.x + bounds.max.x) / 2 * scale, -bounds.min.y * scale, -(bounds.min.z + bounds.max.z) / 2 * scale);
-    model.traverse(m => { if (m.isMesh) { m.castShadow = m.receiveShadow = true; } });
-    this.body.visible = false; this.root.add(model); this.custom = model; this.mixer = new THREE.AnimationMixer(model);
-    for (const state of Object.keys(this.weights)) {
-      const clip = gltf.animations.find(c => c.name.toLowerCase() === (clipNames[state] || state).toLowerCase());
-      if (clip) this.actions[state] = this.mixer.clipAction(clip);
+  async loadGLB(url, clipNames = {}, pipeline, options = {}) {
+    // A newer request always wins, including completion after teardown.
+    const request = this.loadRequest = (this.loadRequest || 0) + 1;
+    let lease;
+    if (pipeline) lease = await pipeline.acquire(url, options);
+    else {
+      const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
+      const gltf = await new GLTFLoader().loadAsync(url);
+      const bounds = new THREE.Box3().setFromObject(gltf.scene), height = bounds.max.y - bounds.min.y;
+      if (!Number.isFinite(height) || height < .01) { this.disposeModel(gltf.scene); throw new Error('Modelo sem altura válida'); }
+      const scale = 1.82 / height; gltf.scene.scale.multiplyScalar(scale);
+      gltf.scene.position.set(-(bounds.min.x+bounds.max.x)*scale/2,-bounds.min.y*scale,-(bounds.min.z+bounds.max.z)*scale/2);
+      lease = { model: gltf.scene, animations:gltf.animations, release:()=>{gltf.scene.removeFromParent();this.disposeModel(gltf.scene);} };
     }
-    (this.actions[this.state] || this.actions.idle)?.play();
-    return { animations: Object.keys(this.actions) };
+    if (this.disposed || request !== this.loadRequest) { lease.release(); return {animations:[],superseded:true}; }
+    if(this.mixer) {this.mixer.stopAllAction();this.mixer.uncacheRoot(this.custom);}
+    this.modelLease?.release();
+    this.modelLease=lease;this.custom=lease.model;this.actions={};
+    this.body.visible=false;this.root.add(this.custom);this.mixer=new THREE.AnimationMixer(this.custom);
+    for(const state of Object.keys(this.weights)) {
+      const clip=lease.animations.find(c=>c.name.toLowerCase()===(clipNames[state]||state).toLowerCase());
+      if(clip)this.actions[state]=this.mixer.clipAction(clip);
+    }
+    (this.actions[this.state]||this.actions.idle)?.play();
+    return {animations:Object.keys(this.actions)};
   }
   disposeModel(model) { model.traverse(m => { if (m.isMesh) { m.geometry.dispose(); for (const mat of Array.isArray(m.material) ? m.material : [m.material]) { for (const value of Object.values(mat)) if (value?.isTexture) value.dispose(); mat.dispose(); } } }); }
-  dispose() { this.disposed = true; this.owned.forEach(g => g.dispose()); if (this.custom) { this.mixer.stopAllAction(); this.mixer.uncacheRoot(this.custom); this.disposeModel(this.custom); } }
+  dispose() { this.disposed = true; this.owned.forEach(g => g.dispose()); if (this.custom) { this.mixer?.stopAllAction(); this.mixer?.uncacheRoot(this.custom); this.modelLease?.release(); } }
 }

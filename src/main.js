@@ -1,3 +1,5 @@
+import { GLBAssets } from './systems/asset-pipeline.js';
+import { InkOutlines } from './systems/ink-outlines.js';
 import { InteractionRegistry } from './systems/interaction-registry.js';
 import { EnvironmentValidator } from './systems/environment-validator.js';
 import { LivingSchool } from './systems/living.js';
@@ -5,7 +7,8 @@ import { installPreferences } from './systems/preferences.js';
 import { updateAtmosphere } from './systems/atmosphere.js';
 import * as THREE from 'three';
 import './style.css';
-import './colorbeat.css';
+import './comic.css';
+import './colorbeat-effects.css';
 import { Story } from './systems/story.js';
 import { Dialogue } from './systems/dialogue.js';
 import { createWorld } from './systems/world.js';
@@ -14,11 +17,10 @@ import { CHARACTER_ASSETS } from './character-assets.js';
 import { Controls } from './systems/controls.js';
 import { FollowCamera } from './systems/camera.js';
 import { Quality } from './systems/quality.js';
-import { OutlineManager } from './systems/outline-manager.js';
 import { VisualEffects } from './systems/visual-effects.js';
 import { registerStateReader } from './systems/diagnostics.js';
 import { Audio } from './systems/audio.js';
-import { blocked, relativeMovement, moveWithCollisions, clamp } from './systems/physics.js';
+import { blocked, resolveSpawn, relativeMovement, moveWithCollisions, clamp } from './systems/physics.js';
 import { loadSave, saveProgress, freshProgress, collect, objective, mariaDialogue } from './systems/progress.js';
 
 const $ = id => document.getElementById(id);
@@ -27,26 +29,28 @@ const saved = loadSave(storage), settings = saved.settings;
 let progress = saved.progress, started = false, paused = false, dialog = false, dialogDone = null, target = null;
 let living, story, dialogues, panelOpen = false, needsRender = true;
 let controls, frame = 0, disposed = false, interactionTime = 0, toastTime = 0, saveTimer = 0, lastHUD = '', lastTarget = '', lastLocation = '';
-const scene = new THREE.Scene(); scene.background = new THREE.Color('#cbdedc'); scene.fog = new THREE.Fog('#cbdedc', 48, 110);
+const scene = new THREE.Scene(); scene.background = new THREE.Color('#90d3eb'); scene.fog = new THREE.Fog('#90d3eb', 55, 115);
 let renderer;
 try { renderer = new THREE.WebGLRenderer({ canvas: $('game'), antialias: true, powerPreference: 'high-performance' }); }
 catch (error) { $('fatal').hidden = false; throw error; }
 renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.ACESFilmicToneMapping;
 const camera = new THREE.PerspectiveCamera(52, innerWidth / innerHeight, .06, 140);
-scene.add(new THREE.HemisphereLight('#e7f2ff', '#7c8862', 2.2));
-const sun = new THREE.DirectionalLight('#ffe5bc', 2.8); sun.position.set(-20, 35, 14); sun.shadow.bias = -.0004; sun.shadow.normalBias = .035;
+scene.add(new THREE.HemisphereLight('#f4f5ff', '#53638e', .95));
+const sun = new THREE.DirectionalLight('#fff0cf', 2.1); sun.position.set(-20, 35, 14); sun.shadow.bias = -.0004; sun.shadow.normalBias = .035;
 Object.assign(sun.shadow.camera, { left: -39, right: 39, top: 36, bottom: -36, near: 1, far: 90 }); scene.add(sun);
 const world = createWorld(scene);
+const assets = new GLBAssets(world.resources);
 const interactions=new InteractionRegistry(world,()=>progress),validator=new EnvironmentValidator(scene,world);
 world.restoreDoors(progress.doors);
 const lorenzo = new Character(world.resources, '#dbdbcf'), maria = new Character(world.resources, '#8faaa0');
 const player = lorenzo.root; player.position.set(progress.position.x, .08, progress.position.z); maria.root.position.set(5, .08, 5); maria.root.rotation.y = -.8; scene.add(player, maria.root);
 // Validate saved positions against current geometry after world and doors are restored.
-if (blocked(player.position.x, player.position.z, world.solids)) player.position.set(0, .08, 19);
+function recoverPlayerPosition(){const spawn=resolveSpawn(player.position,world.solids);player.position.set(spawn.x,world.groundHeight(spawn.x,spawn.z),spawn.z);}
+recoverPlayerPosition();
 world.collectibles.forEach(c => c.taken = progress.collected.includes(c.id));
+const motionPreference=matchMedia('(prefers-reduced-motion:reduce)');
 const follow = new FollowCamera(camera, world.occluders, progress.yaw, progress.pitch);
 const quality = new Quality(renderer, sun, settings), audio = new Audio(settings);
-const outlines = new OutlineManager(); outlines.attach(lorenzo); outlines.attach(maria); outlines.setQuality(settings.quality);
 const visualEffects = new VisualEffects();
 const active = () => started && !paused && !dialog && !panelOpen && !document.hidden;
 const markerPosition = new THREE.Vector3(), effect = new THREE.Group(); scene.add(effect);
@@ -62,6 +66,7 @@ function save() {
   $('save-status').textContent = ok ? 'Progresso salvo neste aparelho' : 'Salvamento indisponível neste navegador'; return ok;
 }
 function syncModal() {
+  document.body.classList.toggle('at-welcome',!started);
   document.body.classList.toggle('modal', !started || paused || dialog || panelOpen);
   $('touch').inert = !active(); $('mission').inert = !active();
   document.querySelector('header').inert = !started || paused || dialog || panelOpen;
@@ -130,14 +135,16 @@ $('pause-button').onclick = () => setPause(!paused); $('resume').onclick = () =>
 $('start').textContent = saved.exists ? 'Continuar a explorar →' : 'Começar a explorar →';
 $('start').onclick = () => { started = true; $('welcome').hidden = true; $('start').blur(); audio.unlock(); syncModal(); save(); };
 living = new LivingSchool({ scene, world, maria, player, getProgress: () => progress, settings, dialogue: dialogues, save, notify, audio });
-if (blocked(player.position.x, player.position.z, world.solids)) player.position.set(0, .08, 19);
+recoverPlayerPosition();
 installPreferences(settings, save, controls);
 story = new Story({ player, living, scene, world, getProgress: () => progress, save, notify, dialogue: dialogues, audio,
   start: () => { if (!started) $('start').click(); if (paused) setPause(false); },
   tutorial: () => { living.setMode('campaign'); const line = mariaDialogue(progress); speak('MARIA', line.text, () => { progress.stage = line.nextStage; updateHUD(); }); },
   onPanel: open => { panelOpen = open; if (open) { dialogues.close(); if (paused) setPause(false); } syncModal(); needsRender = true; },
 });
-if(blocked(player.position.x,player.position.z,world.solids))player.position.set(0,world.groundHeight(0,19),19);
+recoverPlayerPosition();
+lorenzo.player=true;
+const ink=new InkOutlines(scene,world.resources,[lorenzo,...living.actors.map(a=>a.character)]);
 $('help').onclick = () => speak('COMO JOGAR', 'Use WASD ou o joystick para andar. Arraste o mouse ou o lado direito da tela para olhar ao redor. Segure Shift ou Correr para correr. Aproxime-se de Maria, portas, placas ou lembranças e pressione E ou Interagir. As portas da sala e da biblioteca podem ser abertas. Use Esc ou ☰ para pausar.');
 function syncSettings() {
   $('quality').value = settings.quality; $('sensitivity').value = settings.sensitivity; $('volume').value = settings.volume;
@@ -148,7 +155,7 @@ $('sound').onclick = () => { audio.unlock(); settings.sound = !settings.sound; s
 for (const id of ['quality', 'sensitivity', 'volume', 'audio-enabled', 'shadows', 'adaptive']) $(id).addEventListener('input', () => {
   settings.quality = $('quality').value; settings.sensitivity = Number($('sensitivity').value); settings.volume = Number($('volume').value);
   settings.sound = $('audio-enabled').checked; settings.shadows = $('shadows').checked; settings.adaptive = $('adaptive').checked;
-  audio.unlock(); if (id === 'quality' || id === 'shadows') { quality.apply(); outlines.setQuality(settings.quality); } syncSettings(); save();
+  audio.unlock(); if (id === 'quality' || id === 'shadows') { quality.apply();  } syncSettings(); save();
 });
 $('restart').onclick = () => { $('reset-confirm').hidden = false; $('confirm-reset').focus(); };
 $('cancel-reset').onclick = () => { $('reset-confirm').hidden = true; $('restart').focus(); };
@@ -204,7 +211,23 @@ document.addEventListener('visibilitychange', () => {
 });
 for (const [name, character] of [['lorenzo', lorenzo], ['maria', maria]]) {
   const asset = CHARACTER_ASSETS[name];
-  if (asset.url) character.loadGLB(asset.url, asset.clips).catch(error => { console.warn(`Modelo ${name}:`, error.message); notify('Modelo externo indisponível; personagem provisório mantido.'); });
+  if (!asset.url) continue;
+  character.loadGLB(asset.url,asset.clips,assets,asset).then(result=>{
+    if(disposed||result.superseded)return;
+    ink.registerActor(character);ink.update(settings.quality,player.position);
+    // Full-detail procedural fallback geometry is no longer rendered once both
+    // heroes loaded. Simple NPC geometry has a separate cache namespace.
+    if(lorenzo.custom&&maria.custom) {
+      for(const [key,geometry] of world.resources.geometries) {
+        if(key.startsWith('humanoid:full:')){geometry.dispose();world.resources.geometries.delete(key);}
+      }
+    }
+    needsRender=true;
+  }).catch(error=>{
+    if(disposed)return;
+    console.warn(`Modelo ${name}:`,error.message);
+    notify('Modelo externo indisponível; personagem provisório mantido.');
+  });
 }
 let last = performance.now(), time = 0, hudTimer = 0;
 function animate(now) {
@@ -234,8 +257,10 @@ function animate(now) {
     if (effectTime > 0) { effectTime -= dt; particles.forEach((m, i) => { const t = .8 - effectTime; m.position.set(Math.cos(m.userData.angle) * t, t * (1.5 + i % 3 * .2), Math.sin(m.userData.angle) * t); m.scale.setScalar(.035 * Math.max(0, effectTime / .8)); }); if (effectTime <= 0) effect.visible = false; }
   }
   if (toastTime > 0) { toastTime -= dt; if (toastTime <= 0) $('toast').hidden = true; }
+  ink.update(settings.quality,player.position);
   updateAtmosphere(renderer, follow, player.position, settings.quality, dt, world);
   player.visible=!(dialog&&story?.focus?.hidePlayer);document.body.classList.toggle('reading-memory',!player.visible);
+  follow.reducedMotion=motionPreference.matches;
   follow.partner = living.partner?.agent.position;
   follow.focusObject = dialog ? story?.focus : null; follow.conversation = dialog && !story?.focus;
   follow.update(player.position, active() || dialog ? dt : 0); camera.updateMatrixWorld();
@@ -260,14 +285,15 @@ export function getGameState() {
     camera: { x: camera.position.x, y: camera.position.y, z: camera.position.z, distance: follow.actualDistance }, doors: world.doors.map(d => ({ open: d.open, angle: d.angle })),
     living: structuredClone(progress.living), npcs: living.actors.map(a => ({ id: a.definition.id, x: a.agent.position.x, z: a.agent.position.z, state: a.agent.state, distance: a.agent.distanceWalked, transitions: a.agent.transitions })),
     campaign: structuredClone(progress.campaign), storyPage: story?.page, rhythm: story?.game?.phase,
+    visual:{theme:'aurora-comic',edition:'0.7A',heroInk:ink.actorInk.filter(i=>i.actor.root===player&&i.mesh.isSkinnedMesh&&i.mesh.visible).length,fallbackInk:ink.actorInk.filter(i=>i.actor.root===player&&!i.mesh.isSkinnedMesh).length,models:{lorenzo:!!lorenzo.custom,maria:!!maria.custom},clips:{lorenzo:Object.keys(lorenzo.actions),maria:Object.keys(maria.actions)},toon:world.resources.material('#eadfc8').isMeshToonMaterial,outlineVertices:ink.staticInk.geometry.attributes.position?.count||0},
     spatial:validator.inspect(world.placed), memoryBooks:story.world.books.map(b=>({id:b.id,x:b.x,z:b.z,unlocked:b.unlocked,angle:b.mesh.userData.cover.rotation.z})),
-    quality: settings.quality, resolutionScale: quality.scale, outlines: outlines.shells.filter(s=>s.visible).length, fps: Math.round(quality.fps), drawCalls: renderer.info.render.calls, geometries: renderer.info.memory.geometries };
+    quality: settings.quality, resolutionScale: quality.scale, outlines: ink.actorInk.filter(s=>s.mesh.visible).length, fps: Math.round(quality.fps), drawCalls: renderer.info.render.calls, geometries: renderer.info.memory.geometries };
 }
 registerStateReader(getGameState);
 if(new URLSearchParams(location.search).has('debug')){addEventListener('keydown',e=>{if(e.code==='F3'){e.preventDefault();if(validator.visible)validator.clear();else validator.show([...world.placed,...story.world.placed],[player,...living.actors.map(a=>a.character.root)]);needsRender=true;}});}
 
 export function dispose() {
-  validator.dispose();interactions.dispose(); visualEffects.dispose(); outlines.dispose();
-  disposed = true; cancelAnimationFrame(frame); controls.clear(); save(); story?.dispose(); living?.dispose(); dialogues?.dispose(); lorenzo.dispose(); maria.dispose(); world.dispose(); audio.dispose(); renderer.dispose();
+  ink.dispose();validator.dispose();interactions.dispose();visualEffects.dispose();
+  disposed = true; cancelAnimationFrame(frame); controls.clear(); save(); story?.dispose(); living?.dispose(); dialogues?.dispose(); lorenzo.dispose(); maria.dispose(); assets.dispose(); world.dispose(); audio.dispose(); renderer.dispose();
 }
 if (import.meta.hot) import.meta.hot.dispose(dispose);

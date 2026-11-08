@@ -20,9 +20,14 @@ test('Colorbeat theme applies to menus and adjusts outline quality without affec
   await expect.poll(async () => page.evaluate(() => window.readColorbeat().outlines)).toBeGreaterThan(0);
   await page.screenshot({ path: 'test-results/v06-courtyard.png' });
   await page.locator('#pause-button').click();
+  const detailed=await page.evaluate(()=>window.readColorbeat().outlines);
   await page.locator('#quality').selectOption('low');
-  await expect.poll(async () => page.evaluate(() => window.readColorbeat().outlines)).toBe(0);
+  await page.locator('#resume').click();
+  await expect.poll(async()=>page.evaluate(()=>window.readColorbeat().outlines)).toBeLessThan(detailed);
+  await page.locator('#pause-button').click();
   await page.locator('#quality').selectOption('high');
+  await page.locator('#resume').click();
+  await page.locator('#pause-button').click();
   await expect.poll(async () => page.evaluate(() => window.readColorbeat().outlines)).toBeGreaterThan(0);
   await page.locator('#resume').click();
   expect(errors).toEqual([]);
