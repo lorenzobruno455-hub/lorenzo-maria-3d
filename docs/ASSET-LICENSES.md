@@ -87,3 +87,7 @@ Personagens, seis livros com capas e todos os objetos narrativos são instância
 ## São Jorge 0.8 M4
 
 Nenhum modelo, textura, fonte, áudio ou imagem externa foi adicionado. O polimento usa os mesmos assets já registrados. Política de apresentação, estilos e testes são código original sob a licença existente do projeto; capturas mostram o próprio jogo. Não foram usados serviços pagos nem geração por créditos.
+
+## Colorbeat 0.8.1 M1/M2
+
+`colorbeat-materials.js`: extensão original sobre os shaders e ShaderChunks do Three.js (MIT, dependência já existente). Faixas, projeção em mundo e realces são código próprio do Aurora, sem cópia de shaders de Hi-Fi RUSH. Mapas neutros procedurais 64×64 são arte original derivada dos mapas próprios já registrados, disponibilizada sob CC0-1.0; código segue a licença do projeto. Perfis de iluminação e contornos seletivos são próprios. GLBs, fontes e áudios mantêm suas proveniências anteriores; nenhum asset externo ou recurso pago novo. Capturas são do próprio jogo.
