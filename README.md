@@ -1,4 +1,4 @@
-# Lorenzo & Maria 3D — Project Aurora 0.7C
+# Lorenzo & Maria 3D — Project Aurora 0.8 M1
 
 Exploração em terceira pessoa no fictício Colégio Aurora, com Three.js, JavaScript e Vite. Interface e diálogos em português. O capítulo inicial continua completo: converse com Maria, encontre três lembranças e retorne ao pátio.
 
@@ -106,3 +106,9 @@ Para publicar em um subdiretório, configure `base` do Vite para esse caminho an
 ## Polimento 0.7C
 
 Biblioteca e pátio detalhados, cinco NPCs GLB originais, áudio e interface acessíveis; missões e progresso preservados. [Entrega](docs/ENTREGA-07C.md) · [Arte](docs/ART-DIRECTION-07C.md) · [Desempenho](docs/PERFORMANCE-07C.md) · [Licenças](docs/ASSET-LICENSES.md).
+
+## São Jorge 0.8 · M1 (entrega parcial)
+
+Na tela inicial, escolha **Visitar São Jorge · 0.8 M1**; durante a campanha, **Pausa → Visitar São Jorge**. Explore três pavimentos, use E/Interagir nos patamares e escolha Inspecionar andares para a vista por piso ou todos. **Voltar à campanha** restaura o campus anterior. As missões e os seis livros ainda estão no campus 0.7; o remapeamento é M3.
+
+[Auditoria](docs/AUDITORIA-08-M1.md) · [Entrega M1 e limitações](docs/ENTREGA-08.md) · [Matriz dos ambientes](docs/SAO_JORGE_ROOM_MATRIX.md) · [Licenças](docs/ASSET-LICENSES.md). Preparação dos assets: `python3 scripts/prepare-sao-jorge.py`. Nenhuma medida do jogo é apresentada como medida real da escola.

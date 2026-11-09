@@ -1,0 +1,65 @@
+{
+  "environment": "Chromium headless, SwiftShader, viewport1100x700/DPR1; no physical-device FPS measured",
+  "metrics": [
+    {
+      "view": "exploration-floor-1",
+      "quality": "low",
+      "drawCalls": 16,
+      "geometries": 77,
+      "textures": 16,
+      "triangles": 21800,
+      "drawingBuffer": {
+        "width": 1100,
+        "height": 700
+      }
+    },
+    {
+      "view": "0",
+      "quality": "low",
+      "drawCalls": 3,
+      "geometries": 77,
+      "textures": 16,
+      "triangles": 8580,
+      "drawingBuffer": {
+        "width": 1100,
+        "height": 700
+      }
+    },
+    {
+      "view": "1",
+      "quality": "low",
+      "drawCalls": 3,
+      "geometries": 80,
+      "textures": 16,
+      "triangles": 6588,
+      "drawingBuffer": {
+        "width": 1100,
+        "height": 700
+      }
+    },
+    {
+      "view": "2",
+      "quality": "low",
+      "drawCalls": 3,
+      "geometries": 83,
+      "textures": 16,
+      "triangles": 540,
+      "drawingBuffer": {
+        "width": 1100,
+        "height": 700
+      }
+    },
+    {
+      "view": "all",
+      "quality": "low",
+      "drawCalls": 9,
+      "geometries": 83,
+      "textures": 16,
+      "triangles": 15708,
+      "drawingBuffer": {
+        "width": 1100,
+        "height": 700
+      }
+    }
+  ]
+}

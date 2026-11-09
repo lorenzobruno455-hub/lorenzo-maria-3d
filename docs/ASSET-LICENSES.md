@@ -62,3 +62,13 @@ blender --background --python scripts/blender/build_aurora.py -- bia caio helena
 O comando sem nomes agora gera os sete personagens. A licença do Blender não é a licença dos modelos exportados.
 
 `public/favicon.svg`: monograma geométrico original LM, CC0-1.0.
+
+## Project Aurora 0.8 · pacote São Jorge / M1
+
+| Recurso | Origem e uso | Licença/proveniência registrada |
+| --- | --- | --- |
+| Quatro GLBs conceituais, dois croquis JPEG, imagem conceitual e visualizador | ZIP `Projeto_Aurora_V08_Pacote_Codex.zip` fornecido pelo usuário, preservado em `references/sao-jorge-v08/` | Material fornecido com autorização explícita de aproveitamento neste projeto; o pacote não declara uma licença pública independente. Não é presumido CC0 nem medição arquitetônica oficial. |
+| `public/models/sao-jorge/pavimento-{1,2,3}.glb` | Derivados dos GLBs fornecidos por `scripts/prepare-sao-jorge.py`, com SHA256 de origem nos metadados; três camadas, normais e cores por vértice | Mesma proveniência do pacote; alterações procedurais originais do projeto. Não se relicencia o material recebido. |
+| Código de navegação/visita, materiais do pool e UI M1 | Implementação própria nesta etapa, sobre Three.js e componentes existentes | Licenças de código/dependências existentes mantidas; não inclui assets de catálogos externos. |
+
+A ilustração conceitual de terceiro piso não foi usada como textura nem tomada como confirmação de palco, foyer ou depósito. Nenhuma fotografia de pessoa foi aplicada a modelos. Blender/serviços de geração não foram necessários no M1: a preparação foi feita com Python padrão, sem dependências pagas. Paleta é aproximação do guia fornecido, não identidade oficial certificada.
