@@ -78,8 +78,8 @@ function syncModal() {
   document.body.classList.toggle('at-welcome',!started);
   document.body.classList.toggle('modal', !started || paused || dialog || panelOpen || adventure?.busy || school?.loading);
   $('touch').inert = !active(); $('mission').inert = !active();
-  document.querySelector('header').inert = !started || paused || dialog || panelOpen || !!adventure?.busy;
-  document.querySelector('footer').inert = !started || paused || dialog || panelOpen || !!adventure?.busy;
+  document.querySelector('header').inert = !started || paused || dialog || panelOpen || !!adventure?.busy || !!school?.loading;
+  document.querySelector('footer').inert = !started || paused || dialog || panelOpen || !!adventure?.busy || !!school?.loading;
   $('dialog').inert = paused || panelOpen;
   $('pause').inert = panelOpen; $('welcome').inert = panelOpen;
   if (!active()) controls?.clear();
@@ -162,7 +162,7 @@ lorenzo.player=true;
 const ink=new InkOutlines(scene,world.resources,[lorenzo,...living.actors.map(a=>a.character)]);
 const legacyRoots=scene.children.filter(node=>node!==player&&node!==sun&&!node.isHemisphereLight&&!node.isCamera);
 school=new SchoolVisit({scene,legacyRoots,player,follow,pool:assets,layout:schoolLayout,getState:()=>progress.schoolVisit,onStatus:notify,onChange:()=>{controls.clear();lastHUD='';lastLocation='';lastTarget='';syncSchoolUI();syncModal();needsRender=true;if(!school?.loading)save();}});
-function syncSchoolUI(){if(!school)return;document.body.classList.toggle('school-visit',school.active);$('school-toolbar').hidden=!school.active&&!school.loading;$('school-floor-title').textContent=school.loading?'Carregando São Jorge…':school.inspecting?'Inspeção · coordenadas de jogo':`${school.navigation.floor(school.floor).label} · São Jorge`;$('school-inspect').textContent=school.inspecting?'Voltar a explorar':'Inspecionar andares';$('school-inspect').disabled=school.loading;$('school-floor-view').hidden=!school.inspecting;$('school-floor-view').value=String(school.view);$('school-floor-view').disabled=school.loading;$('story-menu').disabled=school.active;document.querySelectorAll('[data-story]').forEach(b=>b.disabled=school.active);$('restart').disabled=school.active;interactions.world=school.active?{occluders:school.navigation.obstacles(school.floor)}:world;}
+function syncSchoolUI(){if(!school)return;document.body.classList.toggle('school-visit',school.active);$('school-toolbar').hidden=!school.active&&!school.loading;$('school-floor-title').textContent=school.loading?'Carregando São Jorge…':school.inspecting?'Inspeção · coordenadas de jogo':`${school.navigation.floor(school.floor).label} · São Jorge`;$('school-inspect').textContent=school.inspecting?'Voltar a explorar':'Inspecionar andares';$('school-inspect').disabled=school.loading;$('school-floor-view').hidden=!school.inspecting;$('school-floor-view').value=String(school.view);$('school-floor-view').disabled=school.loading;$('story-menu').disabled=school.active||school.loading;document.querySelectorAll('[data-story]').forEach(b=>b.disabled=school.active||school.loading);$('restart').disabled=school.active||school.loading;interactions.world=school.active?{occluders:school.navigation.obstacles(school.floor)}:world;}
 async function openSchool(){if(school.active||school.loading)return;if(dialog||panelOpen||adventure?.busy||story?.seat){notify('Conclua a interação atual antes de visitar São Jorge.');return;}if(!started){started=true;$('welcome').hidden=true;audio.unlock();}if(paused)setPause(false);await school.enter();syncSchoolUI();syncModal();save();}
 $('visit-school').onclick=openSchool;$('visit-school-paused').onclick=openSchool;
 $('school-exit').onclick=()=>school.exit();$('school-inspect').onclick=()=>{if(school.inspecting)school.explore();else void school.inspect(school.floor);};$('school-floor-view').onchange=event=>void school.inspect(event.target.value);
@@ -285,7 +285,7 @@ function animate(now) {
     lorenzo.update(adventure?.cutscenes.paused?0:dt, speed, dialog && $('speaker').textContent === 'LORENZO', interactionTime > 0,story?.seat?{state:'sit',seatHeight:.8}:{});
 
     if(!school?.active){world.quality=settings.quality;world.update(dt, time, player.position);}
-    if (effectTime > 0) { effectTime -= dt; particles.forEach((m, i) => { const t = .8 - effectTime; m.position.set(Math.cos(m.userData.angle) * t, t * (1.5 + i % 3 * .2), Math.sin(m.userData.angle) * t); m.scale.setScalar(.035 * Math.max(0, effectTime / .8)); }); if (effectTime <= 0) effect.visible = false; }
+    if (effectTime > 0 && !school?.active) { effectTime -= dt; particles.forEach((m, i) => { const t = .8 - effectTime; m.position.set(Math.cos(m.userData.angle) * t, t * (1.5 + i % 3 * .2), Math.sin(m.userData.angle) * t); m.scale.setScalar(.035 * Math.max(0, effectTime / .8)); }); if (effectTime <= 0) effect.visible = false; }
   }
   if (toastTime > 0) { toastTime -= dt; if (toastTime <= 0) $('toast').hidden = true; }
   ink.update(settings.quality,player.position);
@@ -311,7 +311,7 @@ function animate(now) {
 
 addEventListener('resize', () => needsRender = true);
 $('pause').addEventListener('input', () => needsRender = true);
-world.update(0, 0, player.position); follow.update(player.position, 0, true); updateHUD(); syncSettings(); syncModal(); frame = requestAnimationFrame(animate);
+world.quality=settings.quality;world.update(0,0,player.position);living.update(0,{player:player.position,active:false,dialogueOpen:false,speaker:'',playerSpeed:0});follow.update(player.position,0,true);updateHUD(); syncSettings(); syncModal(); frame = requestAnimationFrame(animate);
 
 // Read-only diagnostic API; no production teleport or mission mutation hooks.
 export function getGameState() {
