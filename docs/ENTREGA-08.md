@@ -1,5 +1,7 @@
 # Project Aurora 0.8 · entrega parcial M1 — São Jorge
 
+> Estado consolidado em 09/11/2026: integração de M1–M4 e das bases 0.7A/B/C na `main`, por solicitação expressa do usuário. Os registros abaixo preservam o histórico de cada marco. Validação em aparelhos físicos e publicação da hospedagem continuam pendentes.
+
 **Esta entrega conclui apenas a auditoria e o M1. A versão 0.8 completa não está concluída.** M2 (detalhamento), M3 (remapeamento narrativo) e M4 completo dependem da validação desta etapa.
 
 Base: 0.7C `ef5a7414c6223e66679edf1f35f934c809740f33`, contendo 0.7A/B/C. Branch `feat/aurora-08-sao-jorge`; PR empilhado sobre `feat/aurora-07c`, pois os anteriores ainda estão abertos. Nenhuma alteração direta na main. Ver [auditoria](AUDITORIA-08-M1.md) e [plano](superpowers/plans/2026-11-08-sao-jorge-m1.md).
@@ -107,3 +109,7 @@ A integração narrativa foi implementada em branch própria sobre M2. Veja [ENT
 ## Fechamento técnico M4
 
 HUD móvel, orçamento de apresentação dos NPCs e revisão automatizada implementados em branch própria sobre M3. Veja [ENTREGA-08-M4.md](ENTREGA-08-M4.md) e [PERFORMANCE-08-M4.md](PERFORMANCE-08-M4.md). Preservadas as etapas M1/M2/M3. Validação em aparelhos físicos e integração/publicação da hospedagem permanecem pendentes; nenhum merge automático na main.
+
+## Integração da versão completa na main
+
+O PR final consolida toda a cadeia de desenvolvimento, preservando o histórico e as branches. A main anterior era `06a21652c1c3ac0dac212a198ff849f0dde5b6f4`; ela é ancestral da versão M4 validada, sem commits divergentes. Para esta integração, somente README e este registro foram atualizados; código, modelos e configuração de produção são os mesmos já testados no M4. Não foi repetida a suíte de testes por não haver mudanças no conteúdo executável.

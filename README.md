@@ -1,10 +1,10 @@
-# Lorenzo & Maria 3D — Project Aurora 0.8 M4
+# Lorenzo & Maria 3D — Project Aurora 0.8
 
 Exploração em terceira pessoa no fictício Colégio Aurora, com Three.js, JavaScript e Vite. Interface e diálogos em português. O capítulo inicial continua completo: converse com Maria, encontre três lembranças e retorne ao pátio.
 
 M2 acrescentou acabamento dos três pavimentos: madeira, azulejo, tecido, mobiliário refinado, janelas conceituais, sinalização e iluminação por ambiente. A campanha anterior permanece disponível. M3 integra as três aventuras, capítulos, seis livros, NPCs e minijogos em São Jorge, com progresso compartilhado e retorno ao campus anterior.
 
-M4 melhora o HUD móvel, limita sombras/animação de NPCs distantes e corrige sua orientação nas conversas. Branch desta etapa: `feat/aurora-08-sao-jorge-m4` (PR sobre M3, sem alterar a main). Veja [entrega M4](docs/ENTREGA-08-M4.md), [medições](docs/PERFORMANCE-08-M4.md) e [integração M3](docs/ENTREGA-08-M3.md). Validação em aparelhos físicos e publicação na hospedagem continuam pendentes.
+M4 melhora o HUD móvel, limita sombras/animação de NPCs distantes e corrige sua orientação nas conversas. A versão 0.8 reúne M1–M4 e as bases 0.7A/B/C na `main`. As branches de desenvolvimento foram preservadas. Veja [entrega M4](docs/ENTREGA-08-M4.md), [medições](docs/PERFORMANCE-08-M4.md) e [integração M3](docs/ENTREGA-08-M3.md). Validação em aparelhos físicos e publicação na hospedagem continuam pendentes.
 
 ## Executar no computador ou Chromebook Linux
 
@@ -17,10 +17,12 @@ npm ci
 npm run dev
 ```
 
-Abra `http://localhost:5173` e mantenha o terminal aberto. Para atualizar uma cópia existente depois que a versão estiver na sua branch:
+Abra `http://localhost:5173` e mantenha o terminal aberto. Para atualizar uma cópia existente para a versão completa na `main`:
 
 ```sh
-git pull --ff-only
+git fetch origin
+git switch main
+git pull --ff-only origin main
 npm ci
 npm run dev
 ```
