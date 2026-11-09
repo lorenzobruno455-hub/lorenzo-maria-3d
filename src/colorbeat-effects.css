@@ -64,3 +64,5 @@
  .settings-panel p,.settings-panel label,#dialog p{color:var(--cb-ink)}
 }
 @media(forced-colors:active){#school-toolbar,#cinematic,.story-card{border-color:CanvasText;box-shadow:none}#school-toolbar :focus-visible{outline-color:Highlight}}
+/* Inert blocks input, but does not hide a high-z toolbar over reading panels. */
+#school-toolbar[inert]{visibility:hidden}
