@@ -42,7 +42,7 @@ Durante M3: 11 testes unitários focados (materiais, shaders, propriedade de rec
 
 Na revisão M4, um alvo legado sem altura explícita foi corrigido para herdar a posição mundial do objeto apoiado: o teste de suporte no andar superior passou. Os três casos finais de navegador passaram, incluindo coleta com o destaque, pausa, alto contraste e retorno aos menus. A build final passou (84 módulos). O smoke de produção passou: três GLBs HTTP 200, seis livros, inspeção/retorno, cena superior com pausa/salto, recompensa e posições dos seis atores persistentes; nenhum erro de runtime/shader observado.
 
-Regressão completa final: executada uma única vez pelo workflow do PR (`npm run test:unit`, `npm run build`, `npm test`); resultado conclusivo publicado nos checks do PR. Testes focados e smoke de produção têm registros separados nesta entrega. Não se atribui o resultado anterior M1/M2 aos commits novos.
+Regressão completa final: executada pelo workflow do PR: `npm run test:unit` e `npm run build` uma vez; `npm test` particionado em dois shards disjuntos, cada teste em apenas um lote; resultado conclusivo publicado nos checks do PR. Testes focados e smoke de produção têm registros separados nesta entrega. Não se atribui o resultado anterior M1/M2 aos commits novos. Uma tentativa em um único runner atingiu o limite de 18 minutos sem conclusão; a divisão preserva todos os casos, limites e asserts e adiciona relatório por teste/JSON, evitando apenas o gargalo de duração por runner.
 
 Dados narrativos e modelos não foram alterados. Física, controles, navegação escolar, dados das missões e esquema de salvamento não foram reescritos. Não se implementou a integração física São Jorge–campus da 0.9.
 

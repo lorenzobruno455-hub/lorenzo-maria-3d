@@ -30,16 +30,44 @@ jobs:
       - run: npm ci
       - run: npm run test:unit
       - run: npm run build
-      - run: npx playwright install --with-deps chromium
-      - run: npm test
       - name: Attach screenshots for visual review
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: colorbeat-screenshots
+          name: colorbeat-reference-captures
           path: |
-            test-results/**/*.png
             docs/captures/07b/*.png
             docs/captures/081/*.png
+          if-no-files-found: ignore
+          retention-days: 5
+
+  browser:
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      # Each spec belongs to exactly one shard; workers/timeouts/assertions stay intact.
+      - run: npm test -- --shard=${{ matrix.shard }}/2 --reporter=line,json
+        env:
+          PLAYWRIGHT_JSON_OUTPUT_NAME: test-results/report.json
+      - name: Attach browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: colorbeat-browser-${{ matrix.shard }}
+          path: |
+            test-results/
+            docs/captures/07b/*.png
           if-no-files-found: ignore
           retention-days: 5
