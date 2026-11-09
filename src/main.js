@@ -289,7 +289,7 @@ function animate(now) {
   }
   if (toastTime > 0) { toastTime -= dt; if (toastTime <= 0) $('toast').hidden = true; }
   ink.update(settings.quality,player.position);
-  if(school?.active){follow.interiorDistance=4.2;renderer.toneMappingExposure=1.12;}else updateAtmosphere(renderer, follow, player.position, settings.quality, dt, world);
+  if(school?.active){school.update(paused?0:dt,settings.quality);follow.interiorDistance=4.2;renderer.toneMappingExposure=1.05;}else updateAtmosphere(renderer, follow, player.position, settings.quality, dt, world);
   player.visible=!school?.inspecting&&!(dialog&&story?.focus?.hidePlayer);document.body.classList.toggle('reading-memory',!player.visible);
   follow.reducedMotion=motionPreference.matches;
   follow.partner = living.partner?.agent.position;
