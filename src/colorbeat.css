@@ -1,6 +1,6 @@
 /* COLORBEAT v0.6: original comic-inspired visual language.
    No third-party artwork or fonts are bundled. All gameplay controls remain accessible. */
-@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,800&display=swap');
+/* Fonts are self-hosted in public/fonts and declared by comic.css. */
 :root {
   --cb-ink:#141824;--cb-paper:#fff5dc;--cb-sun:#ffd43b;--cb-coral:#ea5a49;
   --cb-aurora:#138a91;--cb-notebook:#4d63b8;--cb-line:3px;

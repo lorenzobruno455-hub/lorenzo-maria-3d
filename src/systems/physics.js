@@ -22,6 +22,17 @@ export function blocked(x, z, obstacles, radius = PLAYER_RADIUS) {
     x > b.minX - radius && x < b.maxX + radius && z > b.minZ - radius && z < b.maxZ + radius);
 }
 
+// Recover a save displaced by newly furnished rooms before falling back to the
+// courtyard. Search a bounded neighborhood, keeping clear saves exactly intact.
+export function resolveSpawn(position,obstacles,fallback={x:0,z:19}) {
+  if(!blocked(position.x,position.z,obstacles))return {x:position.x,z:position.z};
+  for(let radius=.25;radius<=2.5;radius+=.25)for(let i=0;i<16;i++) {
+    const angle=i*Math.PI/8,x=position.x+Math.sin(angle)*radius,z=position.z-Math.cos(angle)*radius;
+    if(!blocked(x,z,obstacles))return {x,z};
+  }
+  return {...fallback};
+}
+
 // Small steps prevent tunnelling through thin walls, even on slow frames.
 export function moveWithCollisions(position, delta, obstacles) {
   const steps = Math.max(1, Math.ceil(Math.hypot(delta.x, delta.z) / .12));

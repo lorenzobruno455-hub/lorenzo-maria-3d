@@ -1,3 +1,4 @@
+import { createClassroomDetails } from './classroom.js';
 import * as THREE from 'three';
 import { PropLibrary } from './prop-library.js';
 import { placeOn, surface, groundHeight } from './prop-placement.js';
@@ -8,6 +9,7 @@ import { segmentHit } from './physics.js';
 
 export function createWorld(scene) {
   const resources = new Resources(), solids = [], occluders = [], roofs = [], doors = [], signs = [], water = [], interiorLights = [];
+  let disposed=false;
   const box3 = new THREE.Box3();
   const library = new PropLibrary(resources), placed = [], surfaces = [];
   const support = (id,x,z,w,d,h) => {const s=surface(id,x,z,w,d,h);surfaces.push(s);return s;};
@@ -24,9 +26,10 @@ export function createWorld(scene) {
   function sphere(x, y, z, r, color) { const m = resources.mesh('sphere', color, [r, r, r]); m.position.set(x, y, z); scene.add(m); return m; }
   function sign(text, x, y, z, width = 5) {
     const c = document.createElement('canvas'); c.width = 768; c.height = 128;
-    const ctx = c.getContext('2d'); ctx.fillStyle = '#234c42'; ctx.fillRect(0, 0, 768, 128); ctx.strokeStyle = '#d7ba80'; ctx.strokeRect(9, 9, 750, 110);
-    ctx.fillStyle = '#fff4d7'; ctx.font = '500 31px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(text, 384, 77, 720);
+    const ctx = c.getContext('2d');
+    const draw=()=>{ctx.fillStyle='#202b43';ctx.fillRect(0,0,768,128);ctx.strokeStyle='#ffd43b';ctx.lineWidth=3;ctx.strokeRect(9,9,750,110);ctx.fillStyle='#fff5dc';ctx.font='700 38px "Barlow Condensed",sans-serif';ctx.textAlign='center';ctx.fillText(text,384,78,720);};draw();
     const map = new THREE.CanvasTexture(c); map.colorSpace = THREE.SRGBColorSpace;
+    document.fonts?.ready.then(()=>{if(!disposed){draw();map.needsUpdate=true;}});
     const material = new THREE.MeshBasicMaterial({ map, side: THREE.DoubleSide });
     const mesh = new THREE.Mesh(resources.geometry('box'), material); mesh.scale.set(width, width / 6, .04); mesh.position.set(x, y, z); scene.add(mesh); if(z>10||text.startsWith('RECADOS')){for(const dx of [-width*.38,width*.38])box(x+dx,y/2,z,.06,y,.06,'#586b68');} signs.push({ mesh, map }); return mesh;
   }
@@ -58,15 +61,15 @@ export function createWorld(scene) {
     for (const x of [cx - 10.5, cx + 10.5]) box(x, 1.75, -3.5, .3, 3.5, .3, '#e6ddc7', true);
     for (const x of [cx - 6.25, cx + 6.25]) box(x, .65, -5.7, 9.5, 1.3, .12, '#557b73', false, 'tile');
     for (let x = -6; x <= 6; x += 6) for (let z = -13; z <= -9; z += 4) {
-      const desk=prop('desk',support(`desk-${cx+x}-${z}`,cx+x,z,2.5,1.2,.12));
+      const desk=prop('desk',support(`desk-${cx+x}-${z}`,cx+x,z,2.5,1.2,.12),cx<0?{yaw:Math.PI/2}:{});
       library.collider(desk,{solids,occluders});
       const top=library.tableSurface(desk);surfaces.push(top);
-      const chair=prop('chair',support(`chair-${cx+x}-${z}`,cx+x,z+1.1,.54,.58,.12),{yaw:0});
+      const chair=prop('chair',support(`chair-${cx+x}-${z}`,cx+x+(cx<0?1.1:0),z+(cx<0?0:1.1),.54,.58,.12),{yaw:cx<0?Math.PI/2:0});
       library.collider(chair,{solids,occluders});
-      if(cx<0){prop('book',top,{x:cx+x-.5,z,color:'#6b8179'});prop('letter',top,{x:cx+x+.45,z});}
+      if(cx<0){prop('book',top,{x:cx+x,z:z-.4,color:'#6b8179'});prop('letter',top,{x:cx+x,z:z+.4});}
       else {prop('lamp',top,{x:cx+x-.8,z});prop('book',top,{x:cx+x+.4,z,color:'#836457'});}
     }
-    if(cx<0){box(cx,2.2,-16.6,6,1.7,.12,'#31564a');box(cx,1.35,-16.4,6.1,.08,.25,'#987953',false,'wood');}
+    if(cx<0){ /* Teaching board now sits on the solid western wall. */ }
     else sign('LEITURA · ESTUDO · MEMÓRIAS',cx,3.9,-16.6,5);
     sign(label, cx, 4.25, -5.65); door(cx, label);
     // Indoor fill avoids black interiors without extra shadow maps.
@@ -95,7 +98,7 @@ export function createWorld(scene) {
   // Foliage is one instanced draw, rather than a mesh for every cluster.
   const canopy = new THREE.InstancedMesh(resources.geometry('leaf'), resources.material('#698756'), leaves.length);
   const dummy = new THREE.Object3D();
-  leaves.forEach((leaf, i) => { dummy.position.set(leaf.x, leaf.y, leaf.z); dummy.scale.set(leaf.size, leaf.size * .75, leaf.size); dummy.rotation.set(i, i * .3, 0); dummy.updateMatrix(); canopy.setMatrixAt(i, dummy.matrix); canopy.setColorAt(i, new THREE.Color().setHSL(.23 + (i % 4) * .013, .23, .36 + (i % 5) * .035)); });
+  leaves.forEach((leaf, i) => { dummy.position.set(leaf.x, leaf.y, leaf.z); dummy.scale.set(leaf.size, leaf.size * .75, leaf.size); dummy.rotation.set(i, i * .3, 0); dummy.updateMatrix(); canopy.setMatrixAt(i, dummy.matrix); canopy.setColorAt(i, new THREE.Color().setHSL(.23 + (i % 4) * .013, .52, .4 + (i % 5) * .035)); });
   canopy.castShadow = canopy.receiveShadow = true; scene.add(canopy);
   for (const x of [-10, 10]) {
     box(x, .25, 5, 4, .5, 5, '#8b9980', true, 'plaster');
@@ -118,6 +121,7 @@ export function createWorld(scene) {
     const stand=prop('desk',support(`tutorial-${c.id}`,c.x,c.z,2.5,1.2,groundHeight(c.x,c.z)));
     library.collider(stand,{solids,occluders});
     const mesh=prop(c.id==='photo'?'photo':'book',library.tableSurface(stand),{x:c.x,z:c.z,color:'#b09a6c'});
+    mesh.userData.inkDynamic=true;
     const light = sphere(c.x, 1.6, c.z, .1, '#ffe4a0');
     const ring = new THREE.Mesh(new THREE.TorusGeometry(.38, .018, 5, 24), new THREE.MeshBasicMaterial({ color: '#f0c779' }));
     ring.rotation.x = -Math.PI / 2; ring.position.set(c.x, .22, c.z); scene.add(ring);
@@ -160,14 +164,16 @@ export function createWorld(scene) {
   function lineOfSight(a, b) {
     return !occluders.some(o => o.enabled !== false && segmentHit({ x: a.x, y: 1.5, z: a.z }, { x: b.x, y: 1.5, z: b.z }, o) !== null);
   }
+  const classroom = createClassroomDetails(scene,resources);
+  solids.push(...classroom.colliders);occluders.push(...classroom.colliders);
   const batched = [];
   const dynamic = new Set([...water, ...roofs.map(r => r.mesh), ...signs.map(s => s.mesh), ...collectibles.flatMap(c => [c.mesh, c.light, c.ring]), canopy]);
   batchMeshes(scene, scene.children.filter(m => m.isMesh && !dynamic.has(m)), batched);
   const propMeshes=[];for(const p of placed) if(!collectibles.some(c=>c.mesh===p)){p.userData.staticBounds=new THREE.Box3().setFromObject(p).clone();p.traverse(m=>{if(m.isMesh)propMeshes.push(m);});}
   batchMeshes(scene,propMeshes,batched);
-  const api = { library, placed, surfaces, support, groundHeight, interiorLights, resources, solids, occluders, doors, collectibles, points, update, sign, toggleDoor, lineOfSight,
+  const api = { classroom, library, placed, surfaces, support, groundHeight, interiorLights, resources, solids, occluders, doors, collectibles, points, update, sign, toggleDoor, lineOfSight,
     restoreDoors(states) { doors.forEach((d, i) => { d.open = !!states[i]; d.angle = d.open ? Math.PI / 2 : 0; d.pivot.rotation.y = d.angle; updateDoorBounds(d); }); },
-    dispose() { signs.forEach(({ mesh, map }) => { map.dispose(); mesh.material.dispose(); }); collectibles.forEach(c => { c.ring.geometry.dispose(); c.ring.material.dispose(); }); canopy.dispose(); batched.forEach(g => g.dispose()); resources.dispose(); },
+    dispose() { disposed=true; classroom.dispose(); signs.forEach(({ mesh, map }) => { map.dispose(); mesh.material.dispose(); }); collectibles.forEach(c => { c.ring.geometry.dispose(); c.ring.material.dispose(); }); canopy.dispose(); batched.forEach(g => g.dispose()); resources.dispose(); },
   };
   return api;
 }

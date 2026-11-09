@@ -1,0 +1,168 @@
+{
+  "environment": "Chromium headless / SwiftShader; contadores renderer.info, sem garantia de incluir passes de sombra; sem FPS de aparelho físico",
+  "presets": [
+    {
+      "quality": "low",
+      "drawCalls": 38,
+      "geometries": 101,
+      "textures": 21,
+      "triangles": 65810
+    },
+    {
+      "quality": "medium",
+      "drawCalls": 39,
+      "geometries": 108,
+      "textures": 22,
+      "triangles": 65810
+    },
+    {
+      "quality": "high",
+      "drawCalls": 39,
+      "geometries": 108,
+      "textures": 22,
+      "triangles": 65810
+    }
+  ],
+  "captures": [
+    {
+      "scene": "classroom",
+      "quality": "medium",
+      "drawCalls": 38,
+      "geometries": 140,
+      "textures": 45,
+      "triangles": 65066,
+      "school": {
+        "active": true,
+        "loading": false,
+        "inspect": false,
+        "view": 0,
+        "floor": 0,
+        "loaded": [
+          0
+        ],
+        "room": "Sala de aula A",
+        "style": "M2",
+        "details": {
+          "furniture": {
+            "sourceBoxes": 581,
+            "roundedFaces": 143,
+            "details": 162,
+            "meshCount": 17,
+            "triangles": 50100
+          },
+          "architecture": {
+            "windows": 10,
+            "fixtures": 15,
+            "signs": 15
+          },
+          "supports": 22
+        }
+      }
+    },
+    {
+      "scene": "library",
+      "quality": "medium",
+      "drawCalls": 38,
+      "geometries": 140,
+      "textures": 45,
+      "triangles": 67082,
+      "school": {
+        "active": true,
+        "loading": false,
+        "inspect": false,
+        "view": 0,
+        "floor": 0,
+        "loaded": [
+          0
+        ],
+        "room": "Biblioteca",
+        "style": "M2",
+        "details": {
+          "furniture": {
+            "sourceBoxes": 581,
+            "roundedFaces": 143,
+            "details": 162,
+            "meshCount": 17,
+            "triangles": 50100
+          },
+          "architecture": {
+            "windows": 10,
+            "fixtures": 15,
+            "signs": 15
+          },
+          "supports": 22
+        }
+      }
+    },
+    {
+      "scene": "science",
+      "quality": "medium",
+      "drawCalls": 41,
+      "geometries": 142,
+      "textures": 45,
+      "triangles": 60194,
+      "school": {
+        "active": true,
+        "loading": false,
+        "inspect": false,
+        "view": 1,
+        "floor": 1,
+        "loaded": [
+          1
+        ],
+        "room": "Sala de ciências",
+        "style": "M2",
+        "details": {
+          "furniture": {
+            "sourceBoxes": 419,
+            "roundedFaces": 129,
+            "details": 21,
+            "meshCount": 19,
+            "triangles": 42576
+          },
+          "architecture": {
+            "windows": 10,
+            "fixtures": 14,
+            "signs": 15
+          },
+          "supports": 21
+        }
+      }
+    },
+    {
+      "scene": "hall",
+      "quality": "medium",
+      "drawCalls": 29,
+      "geometries": 124,
+      "textures": 45,
+      "triangles": 17668,
+      "school": {
+        "active": true,
+        "loading": false,
+        "inspect": false,
+        "view": 2,
+        "floor": 2,
+        "loaded": [
+          2
+        ],
+        "room": "Salão multiuso",
+        "style": "M2",
+        "details": {
+          "furniture": {
+            "sourceBoxes": 6,
+            "roundedFaces": 6,
+            "details": 0,
+            "meshCount": 2,
+            "triangles": 2088
+          },
+          "architecture": {
+            "windows": 10,
+            "fixtures": 8,
+            "signs": 4
+          },
+          "supports": 0
+        }
+      }
+    }
+  ]
+}

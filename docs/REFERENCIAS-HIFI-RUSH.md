@@ -2,7 +2,7 @@
 
 Pesquisa: **7 de novembro de 2026**. Base do projeto: versão 0.5, Three.js r181, JavaScript e Vite.
 
-**Estado:** pesquisa e proposta de direção artística, anteriores à implementação. Os componentes descritos abaixo ainda não foram aplicados ao jogo. Os números de cores, tamanhos e durações são escolhas propostas para Lorenzo & Maria, não especificações oficiais de Hi-Fi RUSH.
+**Estado:** pesquisa feita antes da implementação e aprovada pelo usuário. A direção integrada foi aplicada na edição **Aurora Comic**; veja [entrega e limites efetivos](ENTREGA-VISUAL-COMIC.md). As seções de proposta registram as decisões que orientaram o trabalho. Os números de cores, tamanhos e durações são escolhas propostas para Lorenzo & Maria, não especificações oficiais de Hi-Fi RUSH.
 
 ## Objetivo e identidade
 
@@ -180,7 +180,7 @@ A leitura do projeto confirmou que os materiais principais passam por `Resources
 1. **Recomendado: estilo integrado com toon shading direto, contornos seletivos e UI gráfica.** Aproveita Three.js e os recursos atuais, preserva controles e permite reduzir detalhes por qualidade. Exige revisão artística de cada ambiente e testes de legibilidade; não garante resultado equivalente ao renderer do original.
 2. **Alternativa: shader de iluminação próprio e contornos em pós-processamento.** Permite maior controle das bandas e do desenho em tela, com custo e complexidade maiores, especialmente em resolução móvel e transparências. Requer medir GPU antes de adotá-lo amplamente.
 
-A recomendação é uma decisão técnica proposta, ainda não aprovada pelo usuário. A fidelidade deve ser avaliada pelo conjunto visual; reconstruir o renderer UE4 do original não é necessário para obter influência reconhecível neste jogo.
+O usuário aprovou a direção integrada e a execução do caminho recomendado nesta conversa. A fidelidade deve ser avaliada pelo conjunto visual; reconstruir o renderer UE4 do original não é necessário para obter influência reconhecível neste jogo.
 
 ## Ordem e critérios de aceitação propostos
 
@@ -197,4 +197,4 @@ A qualidade Baixa mantém a direção de cor e sombreamento; reduz contornos dis
 
 ## Limites e pendências
 
-Este documento conclui a pesquisa pedida e apresenta uma adaptação concreta; não declara o novo visual implementado ou aprovado. Não há nova geração de mídia, cópia de assets de Hi-Fi RUSH, fonte oficial identificada ou benchmark de celular neste trabalho de pesquisa. Um material toon aplicado aos modelos provisórios não substitui a futura revisão de silhuetas, rostos autorizados e animação.
+Este documento registra a pesquisa e a adaptação aprovadas; a entrega vinculada distingue o que foi implementado dos limites remanescentes. Não há nova geração de mídia, cópia de assets de Hi-Fi RUSH, fonte oficial identificada ou benchmark de celular neste trabalho de pesquisa. Um material toon aplicado aos modelos provisórios não substitui a futura revisão de silhuetas, rostos autorizados e animação.

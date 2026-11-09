@@ -1,4 +1,5 @@
 import { Character } from './character.js';
+import { NPC_CHARACTER_ASSETS } from '../character-assets.js';
 import { RoutineAgent } from './npcs.js';
 import { NPC_DATA, EVENT_DATA, FRIEND_ACTIVITIES, solveFriendActivity, befriend, rememberLine } from './social.js';
 import { eventAction, eventObjective } from './events.js';
@@ -17,6 +18,31 @@ export class LivingSchool {
     this.actors.forEach(actor => { if (actor.character !== maria) scene.add(actor.character.root); });
     this.syncOccupants();
   }
+  // Progressive sequential loads avoid competing with the two protagonists.
+  // The shared GLB pool owns materials/geometry; each actor owns its mixer/rig.
+  async loadNPCAssets(assets, onLoaded = () => {}) {
+    const failures = [];
+    for (const actor of this.actors.slice(1)) {
+      if (this.disposed) break;
+      const asset = NPC_CHARACTER_ASSETS[actor.definition.id];
+      if (!asset) continue;
+      try {
+        const result = await actor.character.loadGLB(asset.url, asset.clips, assets, asset);
+        if (this.disposed || result.superseded) break;
+        onLoaded(actor.character, actor.definition.id);
+      } catch (error) {
+        failures.push(actor.definition.id);
+        console.warn(`Modelo ${actor.definition.id}:`, error.message);
+      }
+    }
+    if (!this.disposed && this.actors.slice(1).every(a => a.character.custom)) {
+      // No fallback uses this namespace after all five models are available.
+      for (const [key, geometry] of this.world.resources.geometries) {
+        if (key.startsWith('humanoid:npc:')) { geometry.dispose(); this.world.resources.geometries.delete(key); }
+      }
+    }
+    return { failures };
+  }
   get state() { return this.getProgress().living; }
   get mariaPosition() { return this.actors[0].agent.position; }
   get partner() { return this.actors.find(a => a.definition.id === this.speakingId); }
@@ -31,6 +57,7 @@ export class LivingSchool {
   say(id, lines, options = {}) { this.speakingId = id; this.dialogue.start(lines, options); }
   changed(message = '') { this.save(); if (message) this.notify(message); }
   update(dt, { player, active, dialogueOpen, speaker, playerSpeed = 0 }) {
+    if(this.location){this.state.actorClock=(this.state.actorClock+dt)%86400;this.location.updateActors(dt,{player,active,dialogueOpen,speaker,playerSpeed});return;}
     this.time += dt; this.state.actorClock = (this.state.actorClock + dt) % 86400;
     this.campus.update(dt, this.time, this.state, this.settings.quality);
     const required = !this.free && (this.getProgress().stage < 2 || nextStep(this.getProgress().campaign)?.type === 'talk');
@@ -70,6 +97,7 @@ export class LivingSchool {
   interaction(target) {
     if (target.kind === 'npc') return this.npc(target.id);
     if (target.id === 'canteen') return this.canteen();
+    if (target.id === 'ball'&&this.location){this.location.kick();return;}
     if (target.id === 'ball') { this.campus.kick(this.player.position); this.actors.forEach(a => { if (Math.hypot(a.agent.position.x - target.x, a.agent.position.z - target.z) < 5) a.reaction = .9; }); this.audio.play('ball'); this.notify('Bola em jogo! Caio aprova a iniciativa.'); return; }
     if (target.id === 'note') { this.say(null, [line('BILHETE FICTÍCIO', 'Se encontrar minha concentração, favor devolver antes da prova. Assinado: alguém que veio só buscar um lápis.')]); return; }
     if (target.id === 'lost-book') {
@@ -84,6 +112,7 @@ export class LivingSchool {
     const npc = NPC_DATA.find(n => n.id === id); if (!npc) return;
     const event = EVENT_DATA.find(e => e.npc === id), state = event && this.state.events[event.id];
     const choices = [ { label: 'Como está o dia?', action: () => this.say(id, [line(npc.name.toUpperCase(), npc.lines[1])], { done: () => { befriend(this.state, id, `conversation:${id}`); this.changed('Conversa registrada.'); } }) } ];
+    if(this.adventure&&['bia','davi'].includes(id))choices.push({label:`Aventura: ${id==='bia'?'O Livro Perdido':'Uma Música Conhecida'}`,action:()=>this.adventure.start(id==='bia'?'lost-book':'familiar-music')});
     if (event) {
       if (!state) choices.push({ label: `Ajudar: ${event.title}`, action: () => this.beginEvent(event) });
       else if (state === 'found') choices.push({ label: event.id === 'lost-book' ? 'Devolver o livro' : 'Compartilhar a partitura', action: () => this.finishEvent(event) });
@@ -139,6 +168,7 @@ export class LivingSchool {
   }
   activity(id) { const npc = { mem: 'bia', quiz: 'helena', rit: 'davi' }[id]; if (npc) befriend(this.state, npc, `activity:${id}`); this.save(); }
   goal() {
+    if(this.location)return this.location.eventGoal();
     const e = eventObjective(this.state); if (!e) return null;
     const actor = this.actors.find(a => a.definition.id === e.npc);
     return { ...(e.returnToNPC || e.id === 'physics-question' ? actor.agent.position : e.position), name: e.label };
@@ -154,5 +184,5 @@ export class LivingSchool {
     } else if (page === 'achievements') for (const event of EVENT_DATA) { const article = element('article', ''); article.className = 'story-card'; article.append(element('h3', `${this.state.achievements[event.id] ? '★' : '☆'} ${event.achievement}`), element('p', event.description)); content.append(article); }
     else if (page === 'inventory') { content.append(element('h3', 'Cantina e encontros')); for (const id of this.state.snacks) content.append(element('p', { water: 'Água virtual', fruit: 'Fruta virtual', bread: 'Pão de queijo virtual' }[id])); }
   }
-  dispose() { this.campus.dispose(); for (const a of this.actors.slice(1)) { a.character.root.removeFromParent(); a.character.dispose(); } }
+  dispose() { this.disposed = true; this.campus.dispose(); for (const a of this.actors.slice(1)) { a.character.root.removeFromParent(); a.character.dispose(); } }
 }

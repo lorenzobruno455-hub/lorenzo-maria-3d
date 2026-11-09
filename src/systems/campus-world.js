@@ -1,3 +1,4 @@
+import { addGardenDetails } from './library-garden07c.js';
 import { PropLibrary } from './prop-library.js';
 import { surface, groundHeight } from './prop-placement.js';
 import * as THREE from 'three';
@@ -15,7 +16,7 @@ export function createCampusWorld(scene, world) {
   box(0, 3.6, -22, 10.5, .18, 7.4, '#64766b');
   for (const x of [-4.7, 4.7]) box(x, 1.8, -24.7, .25, 3.6, .25, '#eadfc8', true);
   box(0, .65, -24.5, 8, 1.3, .9, '#557b73', true, 'tile'); box(0, 1.35, -24.5, 8.3, .15, 1.1, '#eadfc8');
-  for (let i = 0; i < 6; i++) { mesh('sphere', ['#b69059', '#ca8d63', '#b0a16d'][i % 3], [.13, .12, .13], -2 + i * .55, 1.6, -24.4); }
+  for (let i = 0; i < 6; i++) { mesh('sphere', ['#b69059', '#ca8d63', '#b0a16d'][i % 3], [.13, .12, .13], -2 + i * .55, 1.545, -24.0); }
   world.sign('CANTINA · PAUSA PARA O RECREIO', 0, 3.1, -24.6, 6);
   for (const x of [-3, 3]) { box(x, .8, -20, 1.8, .14, 1, '#bc9a63', true, 'wood'); for (const dx of [-.6, .6]) box(x + dx, .4, -20, .08, .8, .08, '#586b68'); }
   // A compact court fits west of the school without expanding traversal bounds.
@@ -36,7 +37,7 @@ export function createCampusWorld(scene, world) {
     const fan = new THREE.Group(); fan.position.set(x, 3.8, -16.3); group.add(fan); fans.push(fan);
     for (let i = 0; i < 3; i++) { const blade = resources.mesh('box', '#8eaaa7', [.65, .08, .06]); blade.rotation.z = i * Math.PI / 3; fan.add(blade); }
   }
-  world.sign('CLUBE DE CIÊNCIAS · PERGUNTE À HELENA', -20, 2.5, -16.45, 4);
+  world.sign('CLUBE DE CIÊNCIAS · PERGUNTE À HELENA', -21, 3.3, -6.35, 4).rotation.y=Math.PI;
   world.sign('RECADOS · O RECREIO TAMBÉM É APRENDIZADO', 7, 2.3, -2.5, 4);
   const clockFace = mesh('cylinder', '#eee8db', [.42, .05, .42], 0, 2.7, -24.3); clockFace.rotation.x = Math.PI / 2;
   const clock = box(0, 2.7, -24.22, .025, .35, .025, '#31564a'); dynamic.add(clock);
@@ -44,7 +45,7 @@ export function createCampusWorld(scene, world) {
   const addObject = (id, name, x, z, color, kind = 'campus') => {
     const floor=surface(`${id}:floor`,x,z,2.5,1.2,groundHeight(x,z));const stand=props.place(group,'desk',floor);
     props.collider(stand,world);
-    const m=props.place(group,id==='note'||id==='familiar-music'?'letter':'book',props.tableSurface(stand),{x,z,color});dynamic.add(m);
+    const m=props.place(group,id==='note'||id==='familiar-music'?'letter':'book',props.tableSurface(stand),{x,z,color});dynamic.add(m);m.userData.inkDynamic=true;
 
     const o = { id, name, x, z, kind, mesh: m }; objects.push(o); return o;
   };
@@ -56,6 +57,7 @@ export function createCampusWorld(scene, world) {
   const ball = { id: 'ball', name: 'Bola da quadra', x: -33, z: 5, kind: 'campus', mesh: ballMesh, vx: 0, vz: 0 }; objects.push(ball);
   const flowers = new THREE.InstancedMesh(resources.geometry('leaf'), resources.material('#bca573'), 42), transform = new THREE.Object3D();
   for (let i = 0; i < 42; i++) { const side = i % 2 ? -1 : 1; const fx=side*(8.5+(i%3)*1.2),fz=3.4+(i%7)*.5;mesh('cylinder','#698756',[.012,.36,.012],fx,.68,fz);transform.position.set(fx,.88,fz); transform.scale.set(.09, .14, .09); transform.updateMatrix(); flowers.setMatrixAt(i, transform.matrix); flowers.setColorAt(i, new THREE.Color(['#d4a78b', '#d2c884', '#b4a9c5'][i % 3])); } group.add(flowers);
+  addGardenDetails(mesh);
   const staticMeshes=[];group.traverse(m=>{if(m.isMesh&&!dynamic.has(m)&&m!==flowers&&!fans.some(f=>m.parent===f)&&!objects.some(o=>{let p=m;while(p){if(p===o.mesh)return true;p=p.parent;}return false;}))staticMeshes.push(m);});batchMeshes(group,staticMeshes,owned);
   function update(dt, time, living, quality) {
     lostBook.mesh.visible = living.events['lost-book'] === 'active'; score.mesh.visible = living.events['familiar-music'] === 'active';

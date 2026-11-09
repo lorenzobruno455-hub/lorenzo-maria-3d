@@ -1,0 +1,8 @@
+// npm run build && npm run preview -- --port 4173
+import{chromium,expect}from'@playwright/test';
+const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH||undefined,args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+try{const page=await browser.newPage({viewport:{width:844,height:500}}),errors=[],floors=new Map();page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(`${m.text()} [${m.location().url}]`);});page.on('response',r=>{if(/models\/sao-jorge\/.*\.glb$/.test(r.url()))floors.set(r.url(),r.status());});
+ await page.goto(process.env.SMOKE_URL||'http://localhost:4173');await page.locator('#visit-school').click();await expect(page.locator('#school-floor-title')).toContainText('1º andar');await expect(page.locator('#school-inspect')).toBeEnabled();expect(floors.size).toBe(1);
+ await page.locator('#school-inspect').click();await page.locator('#school-floor-view').selectOption('all');await expect.poll(()=>floors.size).toBe(3);await expect(page.locator('#school-inspect')).toBeEnabled();expect([...floors.values()]).toEqual([200,200,200]);
+ const alpha=await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>{const c=document.querySelector('#game'),gl=c.getContext('webgl2'),p=new Uint8Array(4);gl.readPixels(1,1,1,1,gl.RGBA,gl.UNSIGNED_BYTE,p);resolve(p[3]);})));expect(alpha).toBe(255);await page.locator('#school-inspect').click();await page.locator('#school-exit').click();await expect(page.locator('#school-toolbar')).toBeHidden();expect(errors).toEqual([]);console.log('Production M1 PASS: three prepared GLBs HTTP 200, progressive loading, inspection, canvas and campaign return.');
+}finally{await browser.close();}

@@ -7,7 +7,7 @@ test('memory library books open original text, animate and return camera without
  await expect(page.locator('#dialog')).toBeVisible();await page.locator('#dialogue-speed').click();await expect(page.locator('#speech')).toContainText('19/08/2024');
  await expect.poll(async()=>(await state(page)).memoryBooks[0].angle).toBeGreaterThan(.5);
  await page.locator('#next').click();await page.locator('#dialogue-speed').click();await expect(page.locator('#speech')).toContainText('Aula de história.');
- await page.screenshot({path:'docs/captures/v05/narrative-book.png'});await page.locator('#next').click();await expect(page.locator('#dialog')).toBeHidden();
+ await page.screenshot({path:'test-results/v05-narrative-book.png'});await page.locator('#next').click();await expect(page.locator('#dialog')).toBeHidden();
  await expect.poll(async()=>(await state(page)).memoryBooks[0].angle).toBeLessThan(.05);expect((await state(page)).campaign.vouchers).toEqual(before.campaign.vouchers);
  expect((await state(page)).memoryBooks).toHaveLength(6);expect((await state(page)).spatial.every(p=>p.ok)).toBe(true);
 });

@@ -17,6 +17,6 @@ export function batchMeshes(parent, meshes, owned) {
     const merged = mergeGeometries(geometries, false);
     geometries.forEach(g => g.dispose());
     if (!merged) throw new Error('Geometrias estáticas incompatíveis');
-    const mesh = new THREE.Mesh(merged, material); mesh.castShadow = mesh.receiveShadow = true; parent.add(mesh); owned.push(merged);
+    const mesh = new THREE.Mesh(merged, material); mesh.userData.inkStatic = true; mesh.castShadow = mesh.receiveShadow = true; parent.add(mesh); owned.push(merged);
   }
 }

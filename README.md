@@ -1,6 +1,10 @@
-# Lorenzo & Maria 3D — 0.5 · Biblioteca das Memórias
+# Lorenzo & Maria 3D — Project Aurora 0.8
 
 Exploração em terceira pessoa no fictício Colégio Aurora, com Three.js, JavaScript e Vite. Interface e diálogos em português. O capítulo inicial continua completo: converse com Maria, encontre três lembranças e retorne ao pátio.
+
+M2 acrescentou acabamento dos três pavimentos: madeira, azulejo, tecido, mobiliário refinado, janelas conceituais, sinalização e iluminação por ambiente. A campanha anterior permanece disponível. M3 integra as três aventuras, capítulos, seis livros, NPCs e minijogos em São Jorge, com progresso compartilhado e retorno ao campus anterior.
+
+M4 melhora o HUD móvel, limita sombras/animação de NPCs distantes e corrige sua orientação nas conversas. A versão 0.8 reúne M1–M4 e as bases 0.7A/B/C na `main`. As branches de desenvolvimento foram preservadas. Veja [entrega M4](docs/ENTREGA-08-M4.md), [medições](docs/PERFORMANCE-08-M4.md) e [integração M3](docs/ENTREGA-08-M3.md). Validação em aparelhos físicos e publicação na hospedagem continuam pendentes.
 
 ## Executar no computador ou Chromebook Linux
 
@@ -13,21 +17,37 @@ npm ci
 npm run dev
 ```
 
-Abra `http://localhost:5173` e mantenha o terminal aberto. Para atualizar uma cópia existente depois que a versão estiver na sua branch:
+Abra `http://localhost:5173` e mantenha o terminal aberto. Para atualizar uma cópia existente para a versão completa na `main`:
 
 ```sh
-git pull --ff-only
+git fetch origin
+git switch main
+git pull --ff-only origin main
 npm ci
 npm run dev
 ```
 
 Para testar no Android na mesma rede Wi-Fi, abra `http://IP-DO-COMPUTADOR:5173`. Vite já escuta em `0.0.0.0`. A porta precisa estar acessível na rede; no Chromebook pode ser necessário ativar o encaminhamento da porta 5173 nas configurações do Linux. Evite redes públicas para o servidor de desenvolvimento. LocalStorage funciona por navegador e endereço: mudar a URL ou porta usa outro salvamento.
 
+## Aventuras 0.7B
+
+Após o prólogo, abra **Álbum e história → Aventuras 0.7B**. Três aventuras com cenas puláveis, investigação física, escolhas, quebra-cabeça e ritmo. [Entrega 0.7B](docs/ENTREGA-07B.md) · [Missões](docs/MISSIONS-07B.md) · [Animações](docs/ANIMATION-SYSTEM.md) · [Cutscenes](docs/CUTSCENES-07B.md).
+
+## Project Aurora 0.7A
+
+[Entrega e capturas comparativas](docs/ENTREGA-07A.md) · [Auditoria](docs/AUDITORIA-07A.md) · [Assets e licenças](docs/ASSET-LICENSES.md). Para regenerar os modelos: `blender -b --python scripts/blender/build_aurora.py`. O jogador precisa apenas do navegador.
+
+## Direção visual Aurora Comic
+
+Influência de Hi-Fi RUSH em painéis angulares, tipografia expressiva, cores fortes, materiais toon, contornos e enquadramentos de leitura. Os personagens, a escola e as memórias continuam próprios de Lorenzo & Maria. Fontes Barlow Condensed e Atkinson Hyperlegible ficam hospedadas localmente com licenças OFL.
+
+Veja [as referências verificadas](docs/REFERENCIAS-HIFI-RUSH.md), [a entrega visual e limitações](docs/ENTREGA-VISUAL-COMIC.md) e [as capturas reais](docs/captures/comic). Os avatares são fictícios personalizáveis; não foram copiadas aparências, imagens ou músicas de Hi-Fi RUSH.
+
 ## Biblioteca das Memórias · 0.5
 
 Seis livros físicos na biblioteca permitem revisitar as memórias desbloqueadas, com capas individuais, abertura animada e enquadramento da câmera. Os ambientes recebem móveis reconstruídos, superfícies de apoio e colisões coerentes. Caderno, livro de física, carta e fones iniciam conversas no mundo. Pressione E perto do banco de reflexão para sentar; mova para levantar.
 
-Leia [a entrega 0.5](docs/ENTREGA-05.md) e [a auditoria visual](docs/AUDITORIA-05.md). Para visualizar apoios, caixas e colisões, abra `http://localhost:5173/?debug` e pressione F3. Modelos permanecem procedurais provisórios; os saves v04 continuam compatíveis.
+Leia [a entrega 0.5](docs/ENTREGA-05.md) e [a auditoria visual](docs/AUDITORIA-05.md). Para visualizar apoios, caixas e colisões, abra `http://localhost:5173/?debug` e pressione F3. Lorenzo e Maria agora usam GLBs fictícios originais com esqueleto; NPCs continuam procedurais. Os saves v04 continuam compatíveis.
 
 ## O Colégio Vivo · 0.4
 
@@ -71,7 +91,7 @@ Esses são mecanismos para buscar fluidez, não uma garantia de 30/60 FPS. Ainda
 
 ## Arte provisória e modelos próprios
 
-Os personagens não representam aparência real de Lorenzo ou Maria. São manequins de estudo com proporções humanas e roupas neutras, sem cabelo/traços pessoais definidos. A arte humana semirrealista final ainda precisa de modelos e referências. Não há vozes nem trilha musical; o áudio atual usa efeitos sintetizados. A escola usa materiais Standard físicos, sem efeitos de pós-processamento pesados.
+Lorenzo e Maria usam avatares fictícios estilizados em GLB, com cabelo, rosto, mãos, roupas e animações originais. Não representam a aparência real de pessoas. NPCs secundários mantêm manequins de estudo. Referências autorizadas são necessárias para personalização fiel. Não há vozes gravadas; o áudio usa síntese procedural. A escola usa materiais toon com três faixas de luz e materiais físicos para vidro e metal, sem pós-processamento pesado.
 
 Veja [integração de GLB](docs/MODELOS-GLB.md), [análise da base e da branch experimental](docs/ANALISE-02.md) e [entrega e validação](docs/ENTREGA-02.md).
 
@@ -88,3 +108,13 @@ npm test
 `dist/` contém a build estática. Testes de lógica cobrem entrada, movimento, colisão, câmera, capítulo e salvamento. Playwright usa Chromium, teclado/mouse e toques reais via protocolo do navegador para cobrir controles, portas, diálogos, coleta, persistência, pausa e orientação. Não são testes nos aparelhos Samsung físicos.
 
 Para publicar em um subdiretório, configure `base` do Vite para esse caminho antes da build. Os arquivos GLB devem usar URLs compatíveis com esse caminho.
+
+## Polimento 0.7C
+
+Biblioteca e pátio detalhados, cinco NPCs GLB originais, áudio e interface acessíveis; missões e progresso preservados. [Entrega](docs/ENTREGA-07C.md) · [Arte](docs/ART-DIRECTION-07C.md) · [Desempenho](docs/PERFORMANCE-07C.md) · [Licenças](docs/ASSET-LICENSES.md).
+
+## São Jorge 0.8 · M1 (entrega parcial)
+
+Na tela inicial, escolha **Visitar São Jorge · 0.8 M1**; durante a campanha, **Pausa → Visitar São Jorge**. Explore três pavimentos, use E/Interagir nos patamares e escolha Inspecionar andares para a vista por piso ou todos. **Voltar à campanha** restaura o campus anterior. As missões e os seis livros ainda estão no campus 0.7; o remapeamento é M3.
+
+[Auditoria](docs/AUDITORIA-08-M1.md) · [Entrega M1 e limitações](docs/ENTREGA-08.md) · [Matriz dos ambientes](docs/SAO_JORGE_ROOM_MATRIX.md) · [Licenças](docs/ASSET-LICENSES.md). Preparação dos assets: `python3 scripts/prepare-sao-jorge.py`. Nenhuma medida do jogo é apresentada como medida real da escola.
