@@ -83,3 +83,7 @@ A ilustração conceitual de terceiro piso não foi usada como textura nem tomad
 ## São Jorge 0.8 M3
 
 Personagens, seis livros com capas e todos os objetos narrativos são instâncias dos recursos existentes, emprestadas durante a visita e restauradas ao sair. Suas licenças e proveniências anteriores permanecem. Não foram adicionadas imagens, áudio ou modelos de catálogos externos. O pequeno teclado de dez teclas no salão é geometria procedural original, com materiais compartilhados; arte original CC0-1.0, código sob a licença do projeto. Nenhum serviço pago foi utilizado.
+
+## São Jorge 0.8 M4
+
+Nenhum modelo, textura, fonte, áudio ou imagem externa foi adicionado. O polimento usa os mesmos assets já registrados. Política de apresentação, estilos e testes são código original sob a licença existente do projeto; capturas mostram o próprio jogo. Não foram usados serviços pagos nem geração por créditos.

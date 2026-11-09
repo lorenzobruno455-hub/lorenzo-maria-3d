@@ -103,3 +103,7 @@ A versão completa 0.8 continua pendente. O próximo passo é validar este M1 em
 ## Continuação M3
 
 A integração narrativa foi implementada em branch própria sobre M2. Veja [ENTREGA-08-M3.md](ENTREGA-08-M3.md) e [NARRATIVE-08-M3.md](NARRATIVE-08-M3.md). M4 permanece pendente; esta atualização não declara a 0.8 inteira concluída.
+
+## Fechamento técnico M4
+
+HUD móvel, orçamento de apresentação dos NPCs e revisão automatizada implementados em branch própria sobre M3. Veja [ENTREGA-08-M4.md](ENTREGA-08-M4.md) e [PERFORMANCE-08-M4.md](PERFORMANCE-08-M4.md). Preservadas as etapas M1/M2/M3. Validação em aparelhos físicos e integração/publicação da hospedagem permanecem pendentes; nenhum merge automático na main.

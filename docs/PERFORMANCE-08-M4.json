@@ -1,0 +1,1137 @@
+{
+  "environment": "Chromium headless / SwiftShader; renderer.info counters; not a physical device FPS benchmark",
+  "scope": "M3 versus M4, same viewport/game points; counters do not certify all shadow passes or physical-device FPS",
+  "before": [
+    {
+      "name": "corridor-landscape",
+      "floor": 0,
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "presets": [
+        {
+          "quality": "low",
+          "drawCalls": 119,
+          "triangles": 114794,
+          "geometries": 155,
+          "textures": 45,
+          "drawingBuffer": {
+            "width": 844,
+            "height": 390
+          },
+          "npcs": [
+            {
+              "id": "maria",
+              "visible": true,
+              "floor": 0
+            },
+            {
+              "id": "bia",
+              "visible": true,
+              "floor": 0
+            },
+            {
+              "id": "caio",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "helena",
+              "visible": false,
+              "floor": 1
+            },
+            {
+              "id": "davi",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "lia",
+              "visible": true,
+              "floor": 0
+            }
+          ]
+        },
+        {
+          "quality": "high",
+          "drawCalls": 124,
+          "triangles": 121962,
+          "geometries": 155,
+          "textures": 46,
+          "drawingBuffer": {
+            "width": 844,
+            "height": 390
+          },
+          "npcs": [
+            {
+              "id": "maria",
+              "visible": true,
+              "floor": 0
+            },
+            {
+              "id": "bia",
+              "visible": true,
+              "floor": 0
+            },
+            {
+              "id": "caio",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "helena",
+              "visible": false,
+              "floor": 1
+            },
+            {
+              "id": "davi",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "lia",
+              "visible": true,
+              "floor": 0
+            }
+          ]
+        },
+        {
+          "quality": "medium",
+          "drawCalls": 124,
+          "triangles": 121962,
+          "geometries": 155,
+          "textures": 46,
+          "drawingBuffer": {
+            "width": 844,
+            "height": 390
+          },
+          "npcs": [
+            {
+              "id": "maria",
+              "visible": true,
+              "floor": 0
+            },
+            {
+              "id": "bia",
+              "visible": true,
+              "floor": 0
+            },
+            {
+              "id": "caio",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "helena",
+              "visible": false,
+              "floor": 1
+            },
+            {
+              "id": "davi",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "lia",
+              "visible": true,
+              "floor": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "library-portrait",
+      "floor": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "presets": [
+        {
+          "quality": "low",
+          "drawCalls": 74,
+          "triangles": 112982,
+          "geometries": 155,
+          "textures": 23,
+          "drawingBuffer": {
+            "width": 390,
+            "height": 844
+          },
+          "npcs": [
+            {
+              "id": "maria",
+              "visible": true,
+              "floor": 0
+            },
+            {
+              "id": "bia",
+              "visible": true,
+              "floor": 0
+            },
+            {
+              "id": "caio",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "helena",
+              "visible": false,
+              "floor": 1
+            },
+            {
+              "id": "davi",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "lia",
+              "visible": true,
+              "floor": 0
+            }
+          ]
+        },
+        {
+          "quality": "high",
+          "drawCalls": 83,
+          "triangles": 128050,
+          "geometries": 155,
+          "textures": 24,
+          "drawingBuffer": {
+            "width": 390,
+            "height": 844
+          },
+          "npcs": [
+            {
+              "id": "maria",
+              "visible": true,
+              "floor": 0
+            },
+            {
+              "id": "bia",
+              "visible": true,
+              "floor": 0
+            },
+            {
+              "id": "caio",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "helena",
+              "visible": false,
+              "floor": 1
+            },
+            {
+              "id": "davi",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "lia",
+              "visible": true,
+              "floor": 0
+            }
+          ]
+        },
+        {
+          "quality": "medium",
+          "drawCalls": 83,
+          "triangles": 128050,
+          "geometries": 155,
+          "textures": 24,
+          "drawingBuffer": {
+            "width": 390,
+            "height": 844
+          },
+          "npcs": [
+            {
+              "id": "maria",
+              "visible": true,
+              "floor": 0
+            },
+            {
+              "id": "bia",
+              "visible": true,
+              "floor": 0
+            },
+            {
+              "id": "caio",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "helena",
+              "visible": false,
+              "floor": 1
+            },
+            {
+              "id": "davi",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "lia",
+              "visible": true,
+              "floor": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "science",
+      "floor": 1,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "presets": [
+        {
+          "quality": "low",
+          "drawCalls": 53,
+          "triangles": 76378,
+          "geometries": 154,
+          "textures": 41,
+          "drawingBuffer": {
+            "width": 960,
+            "height": 600
+          },
+          "npcs": [
+            {
+              "id": "maria",
+              "visible": false,
+              "floor": 0
+            },
+            {
+              "id": "bia",
+              "visible": false,
+              "floor": 0
+            },
+            {
+              "id": "caio",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "helena",
+              "visible": true,
+              "floor": 1
+            },
+            {
+              "id": "davi",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "lia",
+              "visible": false,
+              "floor": 0
+            }
+          ]
+        },
+        {
+          "quality": "high",
+          "drawCalls": 58,
+          "triangles": 83926,
+          "geometries": 154,
+          "textures": 42,
+          "drawingBuffer": {
+            "width": 960,
+            "height": 600
+          },
+          "npcs": [
+            {
+              "id": "maria",
+              "visible": false,
+              "floor": 0
+            },
+            {
+              "id": "bia",
+              "visible": false,
+              "floor": 0
+            },
+            {
+              "id": "caio",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "helena",
+              "visible": true,
+              "floor": 1
+            },
+            {
+              "id": "davi",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "lia",
+              "visible": false,
+              "floor": 0
+            }
+          ]
+        },
+        {
+          "quality": "medium",
+          "drawCalls": 58,
+          "triangles": 83926,
+          "geometries": 154,
+          "textures": 42,
+          "drawingBuffer": {
+            "width": 960,
+            "height": 600
+          },
+          "npcs": [
+            {
+              "id": "maria",
+              "visible": false,
+              "floor": 0
+            },
+            {
+              "id": "bia",
+              "visible": false,
+              "floor": 0
+            },
+            {
+              "id": "caio",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "helena",
+              "visible": true,
+              "floor": 1
+            },
+            {
+              "id": "davi",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "lia",
+              "visible": false,
+              "floor": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "hall",
+      "floor": 2,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "presets": [
+        {
+          "quality": "low",
+          "drawCalls": 48,
+          "triangles": 41104,
+          "geometries": 139,
+          "textures": 44,
+          "drawingBuffer": {
+            "width": 960,
+            "height": 600
+          },
+          "npcs": [
+            {
+              "id": "maria",
+              "visible": false,
+              "floor": 0
+            },
+            {
+              "id": "bia",
+              "visible": false,
+              "floor": 0
+            },
+            {
+              "id": "caio",
+              "visible": true,
+              "floor": 2
+            },
+            {
+              "id": "helena",
+              "visible": false,
+              "floor": 1
+            },
+            {
+              "id": "davi",
+              "visible": true,
+              "floor": 2
+            },
+            {
+              "id": "lia",
+              "visible": false,
+              "floor": 0
+            }
+          ]
+        },
+        {
+          "quality": "high",
+          "drawCalls": 57,
+          "triangles": 48088,
+          "geometries": 139,
+          "textures": 45,
+          "drawingBuffer": {
+            "width": 960,
+            "height": 600
+          },
+          "npcs": [
+            {
+              "id": "maria",
+              "visible": false,
+              "floor": 0
+            },
+            {
+              "id": "bia",
+              "visible": false,
+              "floor": 0
+            },
+            {
+              "id": "caio",
+              "visible": true,
+              "floor": 2
+            },
+            {
+              "id": "helena",
+              "visible": false,
+              "floor": 1
+            },
+            {
+              "id": "davi",
+              "visible": true,
+              "floor": 2
+            },
+            {
+              "id": "lia",
+              "visible": false,
+              "floor": 0
+            }
+          ]
+        },
+        {
+          "quality": "medium",
+          "drawCalls": 57,
+          "triangles": 48088,
+          "geometries": 139,
+          "textures": 45,
+          "drawingBuffer": {
+            "width": 960,
+            "height": 600
+          },
+          "npcs": [
+            {
+              "id": "maria",
+              "visible": false,
+              "floor": 0
+            },
+            {
+              "id": "bia",
+              "visible": false,
+              "floor": 0
+            },
+            {
+              "id": "caio",
+              "visible": true,
+              "floor": 2
+            },
+            {
+              "id": "helena",
+              "visible": false,
+              "floor": 1
+            },
+            {
+              "id": "davi",
+              "visible": true,
+              "floor": 2
+            },
+            {
+              "id": "lia",
+              "visible": false,
+              "floor": 0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "after": [
+    {
+      "name": "corridor-landscape",
+      "floor": 0,
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "presets": [
+        {
+          "quality": "low",
+          "drawCalls": 101,
+          "triangles": 83966,
+          "geometries": 155,
+          "textures": 45,
+          "drawingBuffer": {
+            "width": 844,
+            "height": 390
+          },
+          "npcs": [
+            {
+              "id": "maria",
+              "visible": true,
+              "floor": 0
+            },
+            {
+              "id": "bia",
+              "visible": false,
+              "floor": 0
+            },
+            {
+              "id": "caio",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "helena",
+              "visible": false,
+              "floor": 1
+            },
+            {
+              "id": "davi",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "lia",
+              "visible": false,
+              "floor": 0
+            }
+          ]
+        },
+        {
+          "quality": "high",
+          "drawCalls": 124,
+          "triangles": 121962,
+          "geometries": 155,
+          "textures": 46,
+          "drawingBuffer": {
+            "width": 844,
+            "height": 390
+          },
+          "npcs": [
+            {
+              "id": "maria",
+              "visible": true,
+              "floor": 0
+            },
+            {
+              "id": "bia",
+              "visible": true,
+              "floor": 0
+            },
+            {
+              "id": "caio",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "helena",
+              "visible": false,
+              "floor": 1
+            },
+            {
+              "id": "davi",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "lia",
+              "visible": true,
+              "floor": 0
+            }
+          ]
+        },
+        {
+          "quality": "medium",
+          "drawCalls": 124,
+          "triangles": 121962,
+          "geometries": 155,
+          "textures": 46,
+          "drawingBuffer": {
+            "width": 844,
+            "height": 390
+          },
+          "npcs": [
+            {
+              "id": "maria",
+              "visible": true,
+              "floor": 0
+            },
+            {
+              "id": "bia",
+              "visible": true,
+              "floor": 0
+            },
+            {
+              "id": "caio",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "helena",
+              "visible": false,
+              "floor": 1
+            },
+            {
+              "id": "davi",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "lia",
+              "visible": true,
+              "floor": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "library-portrait",
+      "floor": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "presets": [
+        {
+          "quality": "low",
+          "drawCalls": 74,
+          "triangles": 112982,
+          "geometries": 155,
+          "textures": 23,
+          "drawingBuffer": {
+            "width": 390,
+            "height": 844
+          },
+          "npcs": [
+            {
+              "id": "maria",
+              "visible": true,
+              "floor": 0
+            },
+            {
+              "id": "bia",
+              "visible": true,
+              "floor": 0
+            },
+            {
+              "id": "caio",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "helena",
+              "visible": false,
+              "floor": 1
+            },
+            {
+              "id": "davi",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "lia",
+              "visible": true,
+              "floor": 0
+            }
+          ]
+        },
+        {
+          "quality": "high",
+          "drawCalls": 83,
+          "triangles": 128050,
+          "geometries": 155,
+          "textures": 24,
+          "drawingBuffer": {
+            "width": 390,
+            "height": 844
+          },
+          "npcs": [
+            {
+              "id": "maria",
+              "visible": true,
+              "floor": 0
+            },
+            {
+              "id": "bia",
+              "visible": true,
+              "floor": 0
+            },
+            {
+              "id": "caio",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "helena",
+              "visible": false,
+              "floor": 1
+            },
+            {
+              "id": "davi",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "lia",
+              "visible": true,
+              "floor": 0
+            }
+          ]
+        },
+        {
+          "quality": "medium",
+          "drawCalls": 83,
+          "triangles": 128050,
+          "geometries": 155,
+          "textures": 24,
+          "drawingBuffer": {
+            "width": 390,
+            "height": 844
+          },
+          "npcs": [
+            {
+              "id": "maria",
+              "visible": true,
+              "floor": 0
+            },
+            {
+              "id": "bia",
+              "visible": true,
+              "floor": 0
+            },
+            {
+              "id": "caio",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "helena",
+              "visible": false,
+              "floor": 1
+            },
+            {
+              "id": "davi",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "lia",
+              "visible": true,
+              "floor": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "science",
+      "floor": 1,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "presets": [
+        {
+          "quality": "low",
+          "drawCalls": 53,
+          "triangles": 76378,
+          "geometries": 157,
+          "textures": 44,
+          "drawingBuffer": {
+            "width": 960,
+            "height": 600
+          },
+          "npcs": [
+            {
+              "id": "maria",
+              "visible": false,
+              "floor": 0
+            },
+            {
+              "id": "bia",
+              "visible": false,
+              "floor": 0
+            },
+            {
+              "id": "caio",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "helena",
+              "visible": true,
+              "floor": 1
+            },
+            {
+              "id": "davi",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "lia",
+              "visible": false,
+              "floor": 0
+            }
+          ]
+        },
+        {
+          "quality": "high",
+          "drawCalls": 58,
+          "triangles": 83926,
+          "geometries": 157,
+          "textures": 45,
+          "drawingBuffer": {
+            "width": 960,
+            "height": 600
+          },
+          "npcs": [
+            {
+              "id": "maria",
+              "visible": false,
+              "floor": 0
+            },
+            {
+              "id": "bia",
+              "visible": false,
+              "floor": 0
+            },
+            {
+              "id": "caio",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "helena",
+              "visible": true,
+              "floor": 1
+            },
+            {
+              "id": "davi",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "lia",
+              "visible": false,
+              "floor": 0
+            }
+          ]
+        },
+        {
+          "quality": "medium",
+          "drawCalls": 58,
+          "triangles": 83926,
+          "geometries": 157,
+          "textures": 45,
+          "drawingBuffer": {
+            "width": 960,
+            "height": 600
+          },
+          "npcs": [
+            {
+              "id": "maria",
+              "visible": false,
+              "floor": 0
+            },
+            {
+              "id": "bia",
+              "visible": false,
+              "floor": 0
+            },
+            {
+              "id": "caio",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "helena",
+              "visible": true,
+              "floor": 1
+            },
+            {
+              "id": "davi",
+              "visible": false,
+              "floor": 2
+            },
+            {
+              "id": "lia",
+              "visible": false,
+              "floor": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "hall",
+      "floor": 2,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "presets": [
+        {
+          "quality": "low",
+          "drawCalls": 48,
+          "triangles": 41104,
+          "geometries": 139,
+          "textures": 44,
+          "drawingBuffer": {
+            "width": 960,
+            "height": 600
+          },
+          "npcs": [
+            {
+              "id": "maria",
+              "visible": false,
+              "floor": 0
+            },
+            {
+              "id": "bia",
+              "visible": false,
+              "floor": 0
+            },
+            {
+              "id": "caio",
+              "visible": true,
+              "floor": 2
+            },
+            {
+              "id": "helena",
+              "visible": false,
+              "floor": 1
+            },
+            {
+              "id": "davi",
+              "visible": true,
+              "floor": 2
+            },
+            {
+              "id": "lia",
+              "visible": false,
+              "floor": 0
+            }
+          ]
+        },
+        {
+          "quality": "high",
+          "drawCalls": 57,
+          "triangles": 48088,
+          "geometries": 139,
+          "textures": 45,
+          "drawingBuffer": {
+            "width": 960,
+            "height": 600
+          },
+          "npcs": [
+            {
+              "id": "maria",
+              "visible": false,
+              "floor": 0
+            },
+            {
+              "id": "bia",
+              "visible": false,
+              "floor": 0
+            },
+            {
+              "id": "caio",
+              "visible": true,
+              "floor": 2
+            },
+            {
+              "id": "helena",
+              "visible": false,
+              "floor": 1
+            },
+            {
+              "id": "davi",
+              "visible": true,
+              "floor": 2
+            },
+            {
+              "id": "lia",
+              "visible": false,
+              "floor": 0
+            }
+          ]
+        },
+        {
+          "quality": "medium",
+          "drawCalls": 57,
+          "triangles": 48088,
+          "geometries": 139,
+          "textures": 45,
+          "drawingBuffer": {
+            "width": 960,
+            "height": 600
+          },
+          "npcs": [
+            {
+              "id": "maria",
+              "visible": false,
+              "floor": 0
+            },
+            {
+              "id": "bia",
+              "visible": false,
+              "floor": 0
+            },
+            {
+              "id": "caio",
+              "visible": true,
+              "floor": 2
+            },
+            {
+              "id": "helena",
+              "visible": false,
+              "floor": 1
+            },
+            {
+              "id": "davi",
+              "visible": true,
+              "floor": 2
+            },
+            {
+              "id": "lia",
+              "visible": false,
+              "floor": 0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "visitCycles": [
+    {
+      "cycle": 1,
+      "geometries": 166,
+      "textures": 29
+    },
+    {
+      "cycle": 2,
+      "geometries": 166,
+      "textures": 29
+    },
+    {
+      "cycle": 3,
+      "geometries": 166,
+      "textures": 29
+    }
+  ]
+}
