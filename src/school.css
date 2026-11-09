@@ -8,3 +8,40 @@
 @media(max-height:500px) and (min-width:600px){.school-visit #mission{max-width:280px;font-size:12px}.school-visit #objective-marker{max-width:210px}}
 
 body.school-visit:has(#cinematic:not([hidden])) #school-toolbar,body.school-visit:has(#cinematic:not([hidden])) #toast,body.school-visit:has(#cinematic:not([hidden])) #objective-marker{visibility:hidden}
+
+/* M4: leave the center and the touch controls clear during exploration. */
+.school-visit #toast{top:auto;bottom:22px;max-width:min(460px,80vw);padding:10px 16px;font-size:12px;pointer-events:none}
+.school-visit #objective-marker small{white-space:normal;max-width:min(240px,55vw);overflow-wrap:anywhere;line-height:1.3}
+body.school-inspecting #mission,body.school-inspecting #objective-marker,body.school-inspecting #toast,body.school-inspecting #location,body.school-inspecting #touch{visibility:hidden}
+@media(max-width:600px),(max-height:500px){
+ .school-visit #school-toolbar{max-width:310px;padding:6px 8px}
+ .school-visit #school-toolbar strong{font-size:17px;line-height:1.3}
+ .school-visit #school-toolbar small{display:none}
+ .school-visit #school-toolbar .school-actions{gap:6px;margin-top:5px}
+ .school-visit #school-toolbar button,.school-visit #school-toolbar select{min-height:44px;font-size:12px;padding:6px 10px}
+ .school-visit #mission #save-status{display:none}
+ .school-visit #mission .progress{margin:6px 0}
+ .school-visit #location{left:50%;right:auto;transform:translateX(-50%);text-align:center;max-width:48vw;width:max-content;bottom:78px;font-size:10px;line-height:1.25;padding:5px 8px}
+ .school-visit #location span{display:none}
+ .school-visit #prompt{bottom:14px;max-width:44vw;padding:9px 12px;font-size:13px}
+ .school-visit #toast{bottom:132px;max-width:44vw;font-size:11px;padding:8px 12px}
+}
+@media(max-width:600px){
+ .school-visit header #story-menu{font-size:0;white-space:nowrap;min-height:44px}
+ .school-visit header #story-menu::after{content:'Álbum';font-size:12px}
+ .school-visit #school-toolbar{left:12px;right:12px;top:68px;max-width:none}
+ .school-visit #school-toolbar button{flex:1}
+ .school-visit #mission{left:12px;right:12px;top:162px;width:auto;max-width:none;padding:8px 12px}
+ .school-visit #mission p{margin:4px 0;line-height:1.35;font-size:12px}
+ .school-visit #location{bottom:185px;max-width:calc(100vw - 28px)}
+ .school-visit #prompt{bottom:222px;max-width:calc(100vw - 32px)}
+ .school-visit #toast{bottom:285px;max-width:calc(100vw - 32px)}
+}
+@media(max-height:500px) and (min-width:600px){
+ .school-visit #mission{left:12px;right:auto;width:210px;max-width:27vw;font-size:11px}
+ .school-visit #mission p{font-size:11px;line-height:1.3;margin:5px 0}
+ .school-visit #school-toolbar{right:10px;top:64px}
+}
+
+.school-visit:has(#toast:not([hidden])) #objective-marker{visibility:hidden}
+@media(max-width:600px){.school-visit #location{bottom:196px}.school-visit #prompt{bottom:230px}}

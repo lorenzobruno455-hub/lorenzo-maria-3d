@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {schoolActorPresentation} from './school-presentation.js';
 import {NARRATIVE_POINTS as points,ACTOR_ROUTES,bookPoint,sameFloor,narrativeWaypoint} from './school-narrative-map.js';
 import {nextStep,currentChapter,memories} from './quests.js';
 import {eventObjective} from './events.js';
@@ -27,7 +28,7 @@ export class SchoolNarrative {
   mesh.position.x+=p.x-center.x;mesh.position.z+=p.z-center.z;mesh.position.y+=this.school.navigation.floor(p.floor).baseY+(p.top??0)-bounds.min.y;
  }
  enter(){
-  if(this.active)return;this.active=true;this.group.visible=true;this.borrowed=[];this.actorSnapshots=[];
+  if(this.active)return;this.active=true;this.shadowStates=new WeakMap();this.group.visible=true;this.borrowed=[];this.actorSnapshots=[];
   this.oldTracked=this.story.tracked;this.story.tracked=null;this.story.location=this;this.living.location=this;this.adventure.location=this;
   try{
    for(const o of this.story.world.objects){const p=o.kind==='memory-book'?bookPoint(this.bookObjects().indexOf(o)):points[o.id];if(p)this.moveObject(o,p,o.kind==='memory-book'?.54:.6);}
@@ -58,27 +59,30 @@ export class SchoolNarrative {
   this.instrument?.mesh.removeFromParent();this.instrument=null;this.group.visible=false;this.borrowed=[];this.actorSnapshots=[];
  }
  updateObjects(){
-  if(!this.active)return;const p=this.getProgress(),c=p.campaign;
+  if(!this.active)return;const p=this.getProgress(),c=p.campaign,current=this.adventure.current;
   for(const {object:o} of this.borrowed){if(!o.mesh)continue;let visible=sameFloor(o,this.floor)&&!this.school.inspecting;
    if(this.world.collectibles.includes(o)){o.taken=p.collected.includes(o.id);visible&&=p.stage===1&&!o.taken;}
    if(o.kind==='memory')visible&&=p.stage===2&&memories.findIndex(m=>m.id===o.id)<=c.memories.length;
    if(this.living.campus.objects.includes(o)&&['lost-book','familiar-music'].includes(o.id)){
     const quest=o.id==='lost-book'?'lost-book':'familiar-music',node=o.id==='lost-book'?5:3;
-    visible&&=this.adventure.current?.id===quest?this.adventure.current.node<node:p.living.events[o.id]==='active';
+    visible&&=current?.id===quest?current.node<node:p.living.events[o.id]==='active';
    }
    o.mesh.visible=visible;
   }
   if(this.instrument)this.instrument.mesh.visible=this.floor===2&&!this.school.inspecting;
  }
  updateActors(dt,{dialogueOpen=false,speaker='',active=false,playerSpeed=0}={}){
-  if(!this.active)return;const p=this.getProgress(),player=this.school.player||this.living.player;
+  if(!this.active)return;const p=this.getProgress(),player=(this.school.player||this.living.player).position,current=this.adventure.current,obstacles=this.school.navigation.movementObstacles(this.floor),others=this.living.actors.filter(a=>ACTOR_ROUTES[a.definition.id]?.floor===this.floor).map(a=>a.agent);this.shadowStates ||= new WeakMap();
   for(const {actor} of this.actorSnapshots){const id=actor.definition.id,floor=ACTOR_ROUTES[id].floor,shown=floor===this.floor&&!this.school.inspecting,agent=actor.agent,root=actor.character.root;
-   root.visible=shown;if(!shown)continue;
+   const view=schoolActorPresentation({id,floor,currentFloor:this.floor,distance:Math.hypot(agent.position.x-player.x,agent.position.z-player.z),quality:this.school.quality,inspection:this.school.inspecting});
+   root.visible=view.visible;const model=actor.character.custom||actor.character.body||root,previous=this.shadowStates.get(actor);
+   if(previous?.model!==model||previous?.castShadow!==view.castShadow){root.traverse(m=>{if(m.isMesh)m.castShadow=view.castShadow&&!m.userData.inkShell;});this.shadowStates.set(actor,{model,castShadow:view.castShadow});}
+   if(!shown)continue;
    const required=id==='maria'&&(p.stage<2||nextStep(p.campaign)?.type==='talk');
-   const hold=required||this.adventure.current?.step?.target===id||!!Object.entries(p.living.events).find(([key,state])=>state!=='done'&&({ 'lost-book':'bia','familiar-music':'davi','physics-question':'helena'}[key]===id));
-   if(dt>0)agent.update(dt,{obstacles:this.school.navigation.movementObstacles(floor),player,others:this.living.actors.filter(a=>ACTOR_ROUTES[a.definition.id]?.floor===floor).map(a=>a.agent),speaking:dialogueOpen&&this.living.speakingId===id,hold});
+   const hold=required||current?.step?.target===id||!!Object.entries(p.living.events).find(([key,state])=>state!=='done'&&({ 'lost-book':'bia','familiar-music':'davi','physics-question':'helena'}[key]===id));
+   if(dt>0)agent.update(dt,{obstacles,player,others,speaking:dialogueOpen&&this.living.speakingId===id,hold});
    if(!this.adventure.cutscenes?.active){root.position.set(agent.position.x,this.school.navigation.floor(floor).walkY,agent.position.z);root.rotation.y=agent.rotation;}
-   if(!this.adventure.cutscenes?.active){let pose=dialogueOpen&&this.living.speakingId===id?(speaker===actor.definition.name.toUpperCase()?'talk':'observe'):agent.state;if(actor.reaction>0){actor.reaction-=dt;pose='react';}actor.character.update(dt,agent.speed,pose==='talk',false,{state:pose});}
+   if(view.visible&&!this.adventure.cutscenes?.active){let pose=dialogueOpen&&this.living.speakingId===id?(speaker===actor.definition.name.toUpperCase()?'talk':'observe'):agent.state;if(actor.reaction>0){actor.reaction-=dt;pose='react';}actor.character.update(dt,agent.speed,pose==='talk',false,{state:pose});}
   }
   if(active&&playerSpeed>.15){this.living.lastStepSound+=dt*playerSpeed;if(this.living.lastStepSound>1.4){this.living.lastStepSound=0;this.living.audio.play('step');}}
  }

@@ -27,7 +27,7 @@ test('borrows the same actors and books, persists only local actor state and res
  const mesh=resources.mesh('box','#123456',[.4,.1,.5]);mesh.position.set(20,1,-7);legacy.add(mesh);
  const book={id:'memory-1',kind:'memory-book',name:'Original',x:20,z:-7,height:1,mesh};
  const actor={definition:{id:'maria'},agent:{position:{x:5,z:5},rotation:0,index:0,path:[],definition:{route:[{x:5,z:5}]},timer:0},character:{root:new THREE.Group(),update(){}}};scene.add(actor.character.root);actor.character.root.position.set(5,.08,5);
- const nav=new SchoolNavigation(structuredClone(layout)),state={actors:{}},school={group:new THREE.Group(),navigation:nav,floor:0,active:true,inspect:false,getState:()=>state,legacy:{visibility:[[actor.character.root,true]]}};scene.add(school.group);
+ const nav=new SchoolNavigation(structuredClone(layout)),state={actors:{}},school={player:{position:new THREE.Vector3(0,.03,14.5)},group:new THREE.Group(),navigation:nav,floor:0,active:true,inspect:false,getState:()=>state,legacy:{visibility:[[actor.character.root,true]]}};scene.add(school.group);
  const story={world:{objects:[book]},tracked:null},living={actors:[actor],campus:{objects:[]}},adventure={photo:null};
  const n=new SchoolNarrative({school,world:{resources,collectibles:[]},story,living,adventure,getProgress:()=>({collected:[],stage:2,campaign:{memories:[],steps:{}},living:{events:{}}})});
  n.enter();assert.equal(story.location,n);assert.equal(book.mesh,mesh);assert.equal(mesh.parent,n.group);assert.equal(book.floor,0);assert.equal(actor.agent.position.floor,0);assert.notEqual(actor.agent.position.x,5);

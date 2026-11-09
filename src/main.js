@@ -170,7 +170,7 @@ const ink=new InkOutlines(scene,world.resources,[lorenzo,...living.actors.map(a=
 const legacyRoots=scene.children.filter(node=>node!==player&&node!==sun&&!node.isHemisphereLight&&!node.isCamera);
 school=new SchoolVisit({scene,legacyRoots,player,follow,pool:assets,layout:schoolLayout,getState:()=>progress.schoolVisit,onStatus:notify,onChange:()=>{controls.clear();lastHUD='';lastLocation='';lastTarget='';syncSchoolUI();syncModal();needsRender=true;if(!school?.loading)save();}});
 school.narrative=new SchoolNarrative({school,world,story,living,adventure,getProgress:()=>progress});
-function syncSchoolUI(){if(!school)return;document.body.classList.toggle('school-visit',school.active);$('school-toolbar').hidden=!school.active&&!school.loading;$('school-floor-title').textContent=school.loading?'Carregando São Jorge…':school.inspecting?'Inspeção · coordenadas de jogo':`${school.navigation.floor(school.floor).label} · São Jorge`;$('school-inspect').textContent=school.inspecting?'Voltar a explorar':'Inspecionar andares';$('school-inspect').disabled=school.loading;$('school-floor-view').hidden=!school.inspecting;$('school-floor-view').value=String(school.view);$('school-floor-view').disabled=school.loading;$('story-menu').disabled=school.loading;document.querySelectorAll('[data-story]').forEach(b=>b.disabled=school.loading);$('restart').disabled=school.active||school.loading;interactions.world=school.active?{occluders:school.navigation.obstacles(school.floor)}:world;}
+function syncSchoolUI(){if(!school)return;document.body.classList.toggle('school-visit',school.active);document.body.classList.toggle('school-inspecting',school.active&&school.inspecting);$('school-toolbar').hidden=!school.active&&!school.loading;$('school-floor-title').textContent=school.loading?'Carregando São Jorge…':school.inspecting?'Inspeção · coordenadas de jogo':`${school.navigation.floor(school.floor).label} · São Jorge`;$('school-inspect').textContent=school.inspecting?'Explorar':'Andares';$('school-inspect').disabled=school.loading;$('school-floor-view').hidden=!school.inspecting;$('school-floor-view').value=String(school.view);$('school-floor-view').disabled=school.loading;$('story-menu').disabled=school.loading;document.querySelectorAll('[data-story]').forEach(b=>b.disabled=school.loading);$('restart').disabled=school.active||school.loading;interactions.world=school.active?{occluders:school.navigation.obstacles(school.floor)}:world;}
 async function openSchool(){if(school.active||school.loading)return;if(dialog||panelOpen||adventure?.busy||story?.seat){notify('Conclua a interação atual antes de visitar São Jorge.');return;}if(!started){started=true;$('welcome').hidden=true;audio.unlock();}if(paused)setPause(false);await school.enter();syncSchoolUI();syncModal();save();}
 $('visit-school').onclick=openSchool;$('visit-school-paused').onclick=openSchool;
 $('school-exit').onclick=()=>school.exit();$('school-inspect').onclick=()=>{if(school.inspecting)school.explore();else void school.inspect(school.floor);};$('school-floor-view').onchange=event=>void school.inspect(event.target.value);
@@ -220,7 +220,8 @@ function updateMarker() {
   const label = adventure?.goal()||story?.goal() ? next.name : next.name === 'MARIA' ? 'MARIA' : next.id === 'notebook' ? 'SALA 01' : next.id === 'card' ? 'BIBLIOTECA' : 'JARDIM';
   $('objective-marker').querySelector('small').textContent = `${behind ? '↻ ' : ''}${label} · ${Math.round(Math.hypot(next.x - player.position.x, next.z - player.position.z))} m`;
   const markerWidth = $('objective-marker').offsetWidth;
-  $('objective-marker').style.transform = `translate(${clamp(behind ? innerWidth - markerWidth - 12 : x, 12, innerWidth - markerWidth - 12)}px,${behind ? 75 : y}px)`;
+  const minY=school?.active?(innerWidth<600?264:innerHeight<500?176:224):65,maxY=Math.max(minY,innerHeight-(school?.active?(innerWidth<600?400:210):170));
+  $('objective-marker').style.transform = `translate(${clamp(behind ? innerWidth - markerWidth - 12 : x, 12, innerWidth - markerWidth - 12)}px,${clamp(behind?minY:y,minY,maxY)}px)`;
 }
 function updateTarget() {
   target = active() ? nearestTarget() : null;
@@ -285,6 +286,7 @@ function animate(now) {
   }
   dialogues.update(adventure?.cutscenes.paused?0:dt);
   if(!school?.loading&&!school?.inspecting)story?.update(paused || document.hidden ? 0 : dt, player.position, active());
+  if(school?.active)school.quality=settings.quality;
   if (!paused && started) {
     if(!school?.loading&&!school?.inspecting&&!adventure?.cutscenes.active)living.update(panelOpen ? 0 : dt, { player: player.position, active: active(), dialogueOpen: dialog, speaker: $('speaker').textContent, playerSpeed: speed });
     if(adventure?.cutscenes.active)for(const a of living.actors)a.character.update(adventure.cutscenes.paused?0:dt,0,false,false,a.character.cutscenePose||{});
@@ -327,7 +329,7 @@ export function getGameState() {
     yaw: follow.yaw, pitch: follow.pitch, analog: { ...controls.analog }, running: controls.runPointers.size > 0 || controls.keys.has('shift'), animation: lorenzo.state,
     school:school?.state(), y:player.position.y,
     camera: { x: camera.position.x, y: camera.position.y, z: camera.position.z, distance: follow.actualDistance }, doors: world.doors.map(d => ({ open: d.open, angle: d.angle })),
-    living: structuredClone(progress.living), npcs: living.actors.map(a => ({ id: a.definition.id, floor:a.agent.position.floor, y:a.character.root.position.y, visible:a.character.root.visible, x: a.agent.position.x, z: a.agent.position.z, state: a.agent.state, model:!!a.character.custom, animation:a.character.state, distance: a.agent.distanceWalked, transitions: a.agent.transitions })),
+    living: structuredClone(progress.living), npcs: living.actors.map(a => ({ id: a.definition.id, rotation:a.agent.rotation,renderRotation:a.character.root.rotation.y,floor:a.agent.position.floor, y:a.character.root.position.y, visible:a.character.root.visible, x: a.agent.position.x, z: a.agent.position.z, state: a.agent.state, model:!!a.character.custom, animation:a.character.state, distance: a.agent.distanceWalked, transitions: a.agent.transitions })),
     adventure:adventure?.director.snapshot(),cinematic:{active:!!adventure?.cutscenes.active,paused:!!adventure?.cutscenes.paused,id:adventure?.cutscenes.scene?.id||null},physicalAction:adventure?.actions.active?.kind||null,adventureRhythm:adventure?.activityState?.phase,
     campaign: structuredClone(progress.campaign), storyPage: story?.page, rhythm: story?.game?.phase,
     visual:{theme:'aurora-comic',edition:'0.7C',heroInk:ink.actorInk.filter(i=>i.actor.root===player&&i.mesh.isSkinnedMesh&&i.mesh.visible).length,fallbackInk:ink.actorInk.filter(i=>i.actor.root===player&&!i.mesh.isSkinnedMesh).length,models:{lorenzo:!!lorenzo.custom,maria:!!maria.custom},clips:{lorenzo:Object.keys(lorenzo.actions),maria:Object.keys(maria.actions)},toon:world.resources.material('#eadfc8').isMeshToonMaterial,outlineVertices:ink.staticInk.geometry.attributes.position?.count||0},
