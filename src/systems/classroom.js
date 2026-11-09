@@ -1,3 +1,4 @@
+import {environmentFinish} from './colorbeat-materials.js';
 import * as THREE from 'three';
 
 // Original metric classroom dressing. Static geometry is batched by createWorld.
@@ -7,7 +8,7 @@ export function createClassroomDetails(scene,resources) {
   let disposed=false;
   const metrics={desks:6,posters:0,windows:5};
   const ink='#202b43',wood='#b99b70',paper='#dbdbcf',teal='#557b73';
-  const mesh=(kind,color,scale,pos,material='plain')=>{const m=resources.mesh(kind,color,scale,material);m.position.set(...pos);scene.add(m);objects.push(m);return m;};
+  const mesh=(kind,color,scale,pos,material='plain')=>{const m=resources.mesh(kind,color,scale,environmentFinish(color,material));m.position.set(...pos);scene.add(m);objects.push(m);return m;};
   const box=(c,s,p,kind)=>mesh('box',c,s,p,kind);
   const cylinder=(c,s,p)=>mesh('cylinder',c,s,p);
   const solid=(x,z,w,h,d)=>colliders.push({minX:x-w/2,maxX:x+w/2,minY:.12,maxY:.12+h,minZ:z-d/2,maxZ:z+d/2,enabled:true});

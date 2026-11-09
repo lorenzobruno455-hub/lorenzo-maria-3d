@@ -1,29 +1,13 @@
 import * as THREE from 'three';
+import {ColorbeatMaterials} from './colorbeat-materials.js';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 
-// Original, deterministic 64px neutral maps; tint remains the supplied palette.
+// Compatibility facade; the actual game borrows the campus' Colorbeat owner.
 export class SchoolMaterials {
- constructor(resources){this.resources=resources;this.materials=new Map();this.textures=new Map();this.disposed=false;}
- texture(kind){
-  if(this.textures.has(kind))return this.textures.get(kind);
-  const size=64,data=new Uint8Array(size*size*4);
-  for(let y=0;y<size;y++)for(let x=0;x<size;x++){
-   const noise=((x*37+y*67+x*y*3)%17)/17;let v=250-noise*5;
-   if(kind==='wood')v=244+Math.sin(y*.72+Math.sin(x*.12)*1.4)*5-noise*4-(y%32===0?12:0);
-   if(kind==='tile')v=(x%32===0||y%32===0)?220:250-noise*3;
-   if(kind==='cloth')v=246-((x+y)%3===0?7:0)-noise*3;
-   const i=(y*size+x)*4;data[i]=data[i+1]=data[i+2]=v;data[i+3]=255;
-  }
-  const texture=new THREE.DataTexture(data,size,size,THREE.RGBAFormat);texture.colorSpace=THREE.SRGBColorSpace;texture.wrapS=texture.wrapT=THREE.RepeatWrapping;texture.magFilter=THREE.LinearFilter;texture.minFilter=THREE.LinearMipmapLinearFilter;texture.generateMipmaps=true;texture.needsUpdate=true;this.textures.set(kind,texture);return texture;
- }
- get(color,kind='plain',vertexColors=false){
-  const key=`${String(color).toLowerCase()}:${kind}:${vertexColors}`;if(this.materials.has(key))return this.materials.get(key);
-  let m;if(kind==='glass')m=new THREE.MeshStandardMaterial({color,transparent:true,opacity:.45,roughness:.3,metalness:0,depthWrite:false});
-  else if(kind==='emissive')m=new THREE.MeshBasicMaterial({color,toneMapped:false});
-  else m=new THREE.MeshToonMaterial({color,vertexColors,gradientMap:this.resources.toonRamp(),map:['wood','tile','cloth','plaster'].includes(kind)?this.texture(kind):null});
-  this.materials.set(key,m);return m;
- }
- dispose(){if(this.disposed)return;this.disposed=true;this.materials.forEach(m=>m.dispose());this.textures.forEach(t=>t.dispose());this.materials.clear();this.textures.clear();}
+ constructor(resources){this.library=resources.colorbeat||new ColorbeatMaterials({gradient:resources.toonRamp()});this.ownsLibrary=!resources.colorbeat;this.materials=new Map();this.textures=new Map();this.disposed=false;}
+ texture(kind){const map=this.library.texture(kind);this.textures.set(kind,map);return map;}
+ get(color,kind='plain',vertexColors=false){if(this.disposed)throw Error('School materials disposed');const material=this.library.get(color,kind,{vertexColors});this.materials.set(`${color}:${kind}:${vertexColors}`,material);return material;}
+ dispose(){if(this.disposed)return;this.disposed=true;if(this.ownsLibrary)this.library.dispose();this.materials.clear();this.textures.clear();}
 }
 function projectedUV(geometry,scale=1.8){
  const p=geometry.getAttribute('position'),n=geometry.getAttribute('normal'),uv=new Float32Array(p.count*2);

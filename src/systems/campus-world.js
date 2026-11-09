@@ -1,3 +1,4 @@
+import {environmentFinish} from './colorbeat-materials.js';
 import { addGardenDetails } from './library-garden07c.js';
 import { PropLibrary } from './prop-library.js';
 import { surface, groundHeight } from './prop-placement.js';
@@ -6,7 +7,7 @@ import { batchMeshes } from './batching.js';
 export function createCampusWorld(scene, world) {
   const props=new PropLibrary(world.resources);
   const group = new THREE.Group(); scene.add(group); const resources = world.resources, owned = [], dynamic = new Set(), objects = [], fans = [];
-  function mesh(kind, color, scale, x, y, z, texture = 'plain') { const m = resources.mesh(kind, color, scale, texture); m.position.set(x, y, z); group.add(m); return m; }
+  function mesh(kind, color, scale, x, y, z, texture = 'plain') { const m = resources.mesh(kind, color, scale, environmentFinish(color,texture)); m.position.set(x, y, z); group.add(m); return m; }
   function box(x, y, z, w, h, d, color, solid = false, texture = 'plain', seatFor = '') {
     const m = mesh('box', color, [w, h, d], x, y, z, texture);
     if (solid) { const b = { minX: x - w / 2, maxX: x + w / 2, minY: y - h / 2, maxY: y + h / 2, minZ: z - d / 2, maxZ: z + d / 2, seatFor }; world.solids.push(b); world.occluders.push(b); } return m;

@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {COLORBEAT_STYLE} from './colorbeat-materials.js';
 import { batchMeshes } from './batching.js';
 
 // M1 GLBs encode independent, axis-aligned boxes as 12 flat triangles each.
@@ -29,7 +30,7 @@ export function createSchoolFurniture({ resources, materials, floor, source }) {
   if (!boxes) return null;
   const group = new THREE.Group(); group.name = 'school-furniture-detail';
   group.position.copy(source.position); group.quaternion.copy(source.quaternion); group.scale.copy(source.scale);
-  const owned = [], supports = [], colliders = [];
+  const owned = [], supports = [], colliders = [], edgePositions=[];let edges;
   const stats = { sourceBoxes: boxes.length, roundedFaces: 0, details: 0, meshCount: 0, triangles: 0 };
   const add = (kind, center, size, color, finish = 'plain') => {
     const mesh = new THREE.Mesh(resources.geometry(kind), materials.get(color, finish));
@@ -54,7 +55,11 @@ export function createSchoolFurniture({ resources, materials, floor, source }) {
       const back = d < .09 && w > .45 && h > .3 && h < .8;
       const woodColors = new Set(['#8b6a4e', '#c49b70', '#a98262', '#7a5a3d', '#b57f59', '#684534', '#c0a17a']);
       const metalColors = new Set(['#5b616b', '#586b68', '#737982']);
-      const finish = woodColors.has(b.color) ? 'wood' : metalColors.has(b.color) ? 'metal' : 'plain';
+      const finish = woodColors.has(b.color) ? 'wood' : metalColors.has(b.color) ? 'metal' : ['#2d5fa8','#2f5d9a'].includes(b.color)?'plastic':'plain';
+      if((top&&b.max[1]>.4&&b.max[1]<1.4)||back||(floor.index===2&&h>.8&&w>1&&d>.4)){
+        const a=b.min,c=b.max,v=back?[[a[0]+.008,a[1]+.008,c[2]+.003],[c[0]-.008,a[1]+.008,c[2]+.003],[c[0]-.008,c[1]-.008,c[2]+.003],[a[0]+.008,c[1]-.008,c[2]+.003]]:[[a[0]+.008,c[1]+.003,a[2]+.008],[c[0]-.008,c[1]+.003,a[2]+.008],[c[0]-.008,c[1]+.003,c[2]-.008],[a[0]+.008,c[1]+.003,c[2]-.008]];
+        for(let i=0;i<4;i++)edgePositions.push(...v[i],...v[(i+1)%4]);
+      }
       if (floor.index === 2 && h > .8 && w > 1 && d > .4) {
         add('rounded', [x,b.max[1]-.06,z], [w,.12,d], b.color, 'wood');
         for (const dx of [-1,1]) for (const dz of [-1,1]) {
@@ -106,7 +111,9 @@ export function createSchoolFurniture({ resources, materials, floor, source }) {
   } catch (error) {
     owned.forEach(g => g.dispose()); group.clear(); throw error;
   }
+  if(edgePositions.length){const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(edgePositions,3));const material=new THREE.LineBasicMaterial({color:COLORBEAT_STYLE.ink,transparent:true,opacity:COLORBEAT_STYLE.environmentInkOpacity,depthWrite:false});edges=new THREE.LineSegments(geometry,material);edges.name='Colorbeat selective furniture ink';group.add(edges);owned.push(geometry,material);}
+  stats.outlineSegments=edgePositions.length/6;
   const originalVisible = source.visible; source.visible = false;
   let disposed = false;
-  return { group, supports, colliders, stats, dispose() { if (disposed) return; disposed = true; group.removeFromParent(); group.clear(); owned.forEach(g => g.dispose()); source.visible = originalVisible; } };
+  return { group, supports, colliders, stats, edges, updateQuality(quality){if(edges)edges.visible=quality!=='low';}, dispose() { if (disposed) return; disposed = true; group.removeFromParent(); group.clear(); owned.forEach(g => g.dispose()); source.visible = originalVisible; } };
 }

@@ -36,11 +36,12 @@ export class GLBAssets {
       if (!mesh.isMesh) return;
       const convert = material => {
         const color = palette[material.name] || `#${material.color?.getHexString() || 'ffffff'}`;
-        const kind = /metal|glass/i.test(material.name) ? material.name.toLowerCase().includes('glass') ? 'glass':'metal' : 'plain';
+        const kind = /^(shirt|pants|fabric|cloth)$/i.test(material.name) ? 'fabric' : /metal|glass/i.test(material.name) ? material.name.toLowerCase().includes('glass') ? 'glass':'metal' : 'plain';
         const colored = vertexColors && mesh.geometry.hasAttribute('color');
         const key = `${color}:${kind}:${colored}`;
         if(!this.materials.has(key)) {
-          if(colored){const m=new THREE.MeshToonMaterial({color,vertexColors:true,gradientMap:this.resources.toonRamp()});this.materials.set(key,m);this.ownedMaterials.add(m);}
+          if(colored&&this.resources.colorbeat)this.materials.set(key,this.resources.material(color,kind,{vertexColors:true}));
+          else if(colored){const m=new THREE.MeshToonMaterial({color,vertexColors:true,gradientMap:this.resources.toonRamp()});this.materials.set(key,m);this.ownedMaterials.add(m);}
           else this.materials.set(key,this.resources.material(color,kind));
         }
         return this.materials.get(key);
@@ -48,7 +49,7 @@ export class GLBAssets {
       const original=Array.isArray(mesh.material)?mesh.material:[mesh.material];
       mesh.userData.inkGroups=original.map(m=>/^(hair|shirt|pants|shoe)$/i.test(m.name));
       mesh.material = Array.isArray(mesh.material) ? mesh.material.map(convert) : convert(mesh.material);
-      mesh.castShadow = true; mesh.receiveShadow = preserveTransform;
+      mesh.castShadow=!(Array.isArray(mesh.material)?mesh.material.every(m=>m.userData.colorbeatKind==='glass'):mesh.material.userData.colorbeatKind==='glass');mesh.receiveShadow=preserveTransform;
       if(mesh.isSkinnedMesh) mesh.frustumCulled = false;
     });
     model.add(normalized); model.userData.assetURL = url; model.userData.height = preserveTransform ? size.y : height;

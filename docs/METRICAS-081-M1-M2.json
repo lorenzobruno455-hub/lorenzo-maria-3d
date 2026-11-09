@@ -1,0 +1,512 @@
+{
+  "environment": "Chromium headless / SwiftShader, preset Medium, shadows enabled, adaptive resolution disabled; no physical-device FPS benchmark",
+  "base": "f05e1c007605316e7a8763085138884afd8bcaee",
+  "before": [
+    {
+      "name": "campus",
+      "floor": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 0,
+        "y": 0.025,
+        "z": 18
+      },
+      "camera": {
+        "x": 0,
+        "y": 4.041443285890879,
+        "z": 24.500652449035574,
+        "distance": 7
+      },
+      "quality": "medium",
+      "drawCalls": 250,
+      "triangles": 247996,
+      "geometries": 124,
+      "textures": 40
+    },
+    {
+      "name": "campus-classroom",
+      "floor": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": -20,
+        "y": 0.12,
+        "z": -11
+      },
+      "camera": {
+        "x": -18.297932841616078,
+        "y": 2.487684538335513,
+        "z": -9.346927524489871,
+        "distance": 2.554953464378266
+      },
+      "quality": "medium",
+      "drawCalls": 126,
+      "triangles": 228744,
+      "geometries": 124,
+      "textures": 18
+    },
+    {
+      "name": "school-classroom",
+      "floor": 0,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": -6.5,
+        "y": 0.03,
+        "z": 15.5
+      },
+      "camera": {
+        "x": -2.6942969386177498,
+        "y": 3.0078659715345273,
+        "z": 16.35421181408393,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 73,
+      "triangles": 118050,
+      "geometries": 155,
+      "textures": 27
+    },
+    {
+      "name": "school-corridor",
+      "floor": 0,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 0,
+        "y": 0.03,
+        "z": 14.5
+      },
+      "camera": {
+        "x": 0,
+        "y": 3.0078659715345273,
+        "z": 18.400391469421344,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 124,
+      "triangles": 121962,
+      "geometries": 155,
+      "textures": 45
+    },
+    {
+      "name": "library",
+      "floor": 0,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": -5,
+        "y": 0.03,
+        "z": -14
+      },
+      "camera": {
+        "x": -5,
+        "y": 3.0078659715345273,
+        "z": -10.099608530578656,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 92,
+      "triangles": 128194,
+      "geometries": 155,
+      "textures": 45
+    },
+    {
+      "name": "laboratory",
+      "floor": 1,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 6.5,
+        "y": 3.63,
+        "z": -7
+      },
+      "camera": {
+        "x": 3.023942415330862,
+        "y": 6.607865971534527,
+        "z": -5.230797557429071,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 47,
+      "triangles": 76174,
+      "geometries": 157,
+      "textures": 28
+    },
+    {
+      "name": "hall",
+      "floor": 2,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 0,
+        "y": 7.23,
+        "z": 5
+      },
+      "camera": {
+        "x": 1.4702861922452555,
+        "y": 10.28284016174155,
+        "z": 8.043723784096045,
+        "distance": 3.7539529771662252
+      },
+      "quality": "medium",
+      "drawCalls": 57,
+      "triangles": 48088,
+      "geometries": 139,
+      "textures": 34
+    },
+    {
+      "name": "character-close",
+      "floor": 0,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": -3.8,
+        "y": 0.03,
+        "z": 16
+      },
+      "camera": {
+        "x": -2.450228275416167,
+        "y": 1.8477896962852483,
+        "z": 16.302963981913287,
+        "distance": 1.4394122152092075
+      },
+      "quality": "medium",
+      "drawCalls": 73,
+      "triangles": 118050,
+      "geometries": 153,
+      "textures": 25
+    },
+    {
+      "name": "android-ui",
+      "floor": 0,
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "position": {
+        "x": -5,
+        "y": 0.03,
+        "z": -14
+      },
+      "camera": {
+        "x": -5,
+        "y": 3.0078659715345273,
+        "z": -10.099608530578656,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 93,
+      "triangles": 128206,
+      "geometries": 155,
+      "textures": 46
+    }
+  ],
+  "after": [
+    {
+      "name": "campus",
+      "floor": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 0,
+        "y": 0.025,
+        "z": 18
+      },
+      "camera": {
+        "x": 0,
+        "y": 4.041443285890879,
+        "z": 24.500652449035574,
+        "distance": 7
+      },
+      "quality": "medium",
+      "drawCalls": 245,
+      "triangles": 247996,
+      "geometries": 119,
+      "textures": 40,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 136,
+        "textures": 5,
+        "programs": 16
+      }
+    },
+    {
+      "name": "campus-classroom",
+      "floor": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": -20,
+        "y": 0.12,
+        "z": -11
+      },
+      "camera": {
+        "x": -18.29273647935992,
+        "y": 2.490577792072003,
+        "z": -9.34188074159642,
+        "distance": 2.5627536640843354
+      },
+      "quality": "medium",
+      "drawCalls": 123,
+      "triangles": 228768,
+      "geometries": 119,
+      "textures": 18,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 136,
+        "textures": 5,
+        "programs": 17
+      }
+    },
+    {
+      "name": "school-classroom",
+      "floor": 0,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": -6.5,
+        "y": 0.03,
+        "z": 15.5
+      },
+      "camera": {
+        "x": -2.6942969386177498,
+        "y": 3.0078659715345273,
+        "z": 16.35421181408393,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 75,
+      "triangles": 118050,
+      "geometries": 152,
+      "textures": 23,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 163,
+        "textures": 5,
+        "programs": 25
+      }
+    },
+    {
+      "name": "school-corridor",
+      "floor": 0,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 0,
+        "y": 0.03,
+        "z": 14.5
+      },
+      "camera": {
+        "x": 0,
+        "y": 3.0078659715345273,
+        "z": 18.400391469421344,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 126,
+      "triangles": 121962,
+      "geometries": 152,
+      "textures": 41,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 163,
+        "textures": 5,
+        "programs": 27
+      }
+    },
+    {
+      "name": "library",
+      "floor": 0,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": -5,
+        "y": 0.03,
+        "z": -14
+      },
+      "camera": {
+        "x": -5,
+        "y": 3.0078659715345273,
+        "z": -10.099608530578656,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 94,
+      "triangles": 128194,
+      "geometries": 152,
+      "textures": 41,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 163,
+        "textures": 5,
+        "programs": 26
+      }
+    },
+    {
+      "name": "laboratory",
+      "floor": 1,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 6.5,
+        "y": 3.63,
+        "z": -7
+      },
+      "camera": {
+        "x": 3.023942415330862,
+        "y": 6.607865971534527,
+        "z": -5.230797557429071,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 49,
+      "triangles": 76174,
+      "geometries": 152,
+      "textures": 25,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 165,
+        "textures": 5,
+        "programs": 25
+      }
+    },
+    {
+      "name": "hall",
+      "floor": 2,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 0,
+        "y": 7.23,
+        "z": 5
+      },
+      "camera": {
+        "x": 1.4663450315382622,
+        "y": 10.278463268644003,
+        "z": 8.035564961246392,
+        "distance": 3.74389035667265
+      },
+      "quality": "medium",
+      "drawCalls": 58,
+      "triangles": 48088,
+      "geometries": 135,
+      "textures": 30,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 151,
+        "textures": 5,
+        "programs": 26
+      }
+    },
+    {
+      "name": "character-close",
+      "floor": 0,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": -3.8,
+        "y": 0.03,
+        "z": 16
+      },
+      "camera": {
+        "x": -2.4509811795340983,
+        "y": 1.8475678087653447,
+        "z": 16.302794988278723,
+        "distance": 1.438609309529311
+      },
+      "quality": "medium",
+      "drawCalls": 75,
+      "triangles": 118050,
+      "geometries": 152,
+      "textures": 23,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 163,
+        "textures": 5,
+        "programs": 25
+      }
+    },
+    {
+      "name": "android-ui",
+      "floor": 0,
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "position": {
+        "x": -5,
+        "y": 0.03,
+        "z": -14
+      },
+      "camera": {
+        "x": -5,
+        "y": 3.0078659715345273,
+        "z": -10.099608530578656,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 95,
+      "triangles": 128206,
+      "geometries": 152,
+      "textures": 42,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 163,
+        "textures": 5,
+        "programs": 26
+      }
+    }
+  ]
+}
