@@ -79,3 +79,7 @@ A ilustração conceitual de terceiro piso não foi usada como textura nem tomad
 - `school-furniture.js` e `school-architecture.js`: refinamentos geométricos, cadernos, objetos escolares, cortinas, luminárias, placas e atlas tipográfico originais. Acréscimos artísticos originais CC0-1.0; volumes derivados dos GLBs mantêm a proveniência/autorização do pacote M1, sem relicenciamento do material recebido.
 - Fontes Barlow Condensed e Atkinson Hyperlegible já incluídas no projeto, com suas licenças registradas nas seções anteriores; nenhuma fonte comercial adicionada.
 - Nenhum catálogo externo, serviço pago ou geração por créditos foi utilizado no M2. As capturas são do próprio jogo.
+
+## São Jorge 0.8 M3
+
+Personagens, seis livros com capas e todos os objetos narrativos são instâncias dos recursos existentes, emprestadas durante a visita e restauradas ao sair. Suas licenças e proveniências anteriores permanecem. Não foram adicionadas imagens, áudio ou modelos de catálogos externos. O pequeno teclado de dez teclas no salão é geometria procedural original, com materiais compartilhados; arte original CC0-1.0, código sob a licença do projeto. Nenhum serviço pago foi utilizado.

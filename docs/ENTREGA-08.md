@@ -99,3 +99,7 @@ Com o servidor ativo, abrir http://localhost:5173 no Chromebook. Na tela inicial
 Para repetir em outro ambiente: `npm ci`, `npx playwright install chromium`, `npm run test:unit`, `npm test`, `npm run build`. O override local de Chromium não é necessário quando os browsers padrão do Playwright estão instalados. Para verificar a build, subir `npm run preview` e executar o smoke, com `SMOKE_URL` se a porta não for 4173.
 
 A versão completa 0.8 continua pendente. O próximo passo é validar este M1 em Chrome no Chromebook e no Android antes de iniciar M2. Nenhum merge foi feito.
+
+## Continuação M3
+
+A integração narrativa foi implementada em branch própria sobre M2. Veja [ENTREGA-08-M3.md](ENTREGA-08-M3.md) e [NARRATIVE-08-M3.md](NARRATIVE-08-M3.md). M4 permanece pendente; esta atualização não declara a 0.8 inteira concluída.

@@ -1,10 +1,10 @@
-# Lorenzo & Maria 3D — Project Aurora 0.8 M2
+# Lorenzo & Maria 3D — Project Aurora 0.8 M3
 
 Exploração em terceira pessoa no fictício Colégio Aurora, com Three.js, JavaScript e Vite. Interface e diálogos em português. O capítulo inicial continua completo: converse com Maria, encontre três lembranças e retorne ao pátio.
 
-M2 acrescenta acabamento dos três pavimentos: madeira, azulejo, tecido, mobiliário refinado, janelas conceituais, sinalização e iluminação por ambiente. A campanha anterior permanece disponível. Migração narrativa para São Jorge fica para M3.
+M2 acrescentou acabamento dos três pavimentos: madeira, azulejo, tecido, mobiliário refinado, janelas conceituais, sinalização e iluminação por ambiente. A campanha anterior permanece disponível. M3 integra as três aventuras, capítulos, seis livros, NPCs e minijogos em São Jorge, com progresso compartilhado e retorno ao campus anterior.
 
-Branch desta etapa: `feat/aurora-08-sao-jorge-m2` (PR sobre o M1, sem alterar a main). Veja [entrega e comparativos](docs/ENTREGA-08-M2.md).
+Branch desta etapa: `feat/aurora-08-sao-jorge-m3` (PR sobre M2, sem alterar a main). Veja [entrega M3](docs/ENTREGA-08-M3.md) e [comparativos M2](docs/ENTREGA-08-M2.md).
 
 ## Executar no computador ou Chromebook Linux
 
