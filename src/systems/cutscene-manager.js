@@ -27,6 +27,7 @@ export class CutsceneManager {
     this.shot = shot;
     if (shot.camera && this.camera) {
       if (vector(shot.camera.from)) this.camera.position.fromArray(shot.camera.from);
+      if (vector(shot.camera.lookFrom)) this.camera.lookAt(...shot.camera.lookFrom);
       this.cameraFrom = this.camera.position.clone();
       this.cameraTo = vector(shot.camera.to) ? new Vector3(...shot.camera.to) : this.cameraFrom.clone();
       this.cameraRotation = this.camera.quaternion.clone();

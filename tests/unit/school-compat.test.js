@@ -6,7 +6,7 @@ import { freshProgress, freshSchoolVisit, validateSchoolVisit, validateProgress,
 const memory = () => { const data = new Map(); return { getItem: k => data.get(k) ?? null, setItem: (k,v) => data.set(k,v) }; };
 test('school visit validates independently and preserves legacy progress', () => {
   const p = validateProgress(freshProgress()); p.campaign.talks=7; p.adventure.active='first-encounter'; p.adventure.quests['first-encounter'].status='active'; p.stage=1; p.collected=['card']; p.position={x:20,z:24}; p.doors=[true,false]; p.interactions={'mission-old':true};
-  p.schoolVisit={active:true,floor:2,position:{x:2,z:12},yaw:1,pitch:.5};
+  p.schoolVisit={active:true,floor:2,position:{x:2,z:12},yaw:1,pitch:.5,actors:{}};
   const valid=validateProgress(p); assert.deepEqual(valid,p); assert.deepEqual(validateSchoolVisit({active:1,floor:8,position:{x:99,z:12},yaw:NaN,pitch:Infinity}),freshSchoolVisit());
   assert.equal(validateSchoolVisit({floor:1.5}).floor,0); assert.deepEqual(validateSchoolVisit({position:{x:0,z:NaN}}).position,{x:0,z:14.5});
   assert.notEqual(freshProgress().schoolVisit.position,freshProgress().schoolVisit.position);

@@ -27,7 +27,7 @@ export const NARRATIVE_POINTS={
  'science-book':point(1,-8.9,-10,'Livro de física',.925,{x:-7.7,z:-10}),
  'music-headphones':point(2,9.35,-7,'Fones de ouvido',.9,{x:7.8,z:-7}),
  'garden-letter':point(1,9.65,17.45,'Carta do jardim · leitura',.81,{x:8.5,z:17.45}),
- 'reflection-seat':point(0,-6.5,13.83,'Cadeira de reflexão',.46,{x:-5.5,z:14.2}),
+ 'reflection-seat':point(0,-6.5,12.5,'Cadeira de reflexão',.4825,{x:-5.5,z:12.5}),
  moon:point(2,-9.35,7,'Pequena lua',.9,{x:-7.8,z:7}),
  canteen:point(0,4.3,-12.3,'Lanches virtuais · ponto de encontro',.81,{x:5.5,z:-12.3}),
  note:point(0,9.65,10.45,'Bilhete da turma',.81,{x:8.5,z:10.45}),
@@ -50,3 +50,5 @@ export function narrativeWaypoint(navigation,floor,target){
  const stair=navigation.targets(floor).find(s=>s.destination===destination);
  return stair?{...stair,kind:'school-stair',floor,name:`${stair.label} · objetivo no ${target.floor+1}º andar`}:null;
 }
+
+export function narrativePriority(kind){return {adventure:3,item:1.25,memory:1.5,'memory-book':1}[kind]||0;}

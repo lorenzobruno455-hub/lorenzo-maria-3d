@@ -48,7 +48,7 @@ export class Adventure {
   content.append(node('p','Encenações fictícias e atividades da escola. As memórias originais continuam identificadas e preservadas.'));
   for(const d of ADVENTURES){const c=this.director.current(d.id),card=node('article');card.className='story-card';card.append(node('h3',d.title),node('p',c.status==='completed'?'✓ Aventura concluída':c.status==='active'?c.step.title:'Uma aventura de exploração, escolhas e descobertas.'),button(c.status==='completed'?'Rever conclusão':c.status==='active'?`Retomar: ${d.title}`:`Iniciar: ${d.title}`,()=>c.status==='completed'?this.replay(d.id):this.start(d.id)));content.append(card);}
  }
- replay(id){this.story.close();this.startGame();this.replaying=true;this.playScene({'first-encounter':'first-finale','lost-book':'book-finale','familiar-music':'music-finale'}[id]);}
+ replay(id){this.story.close();this.startGame();const sceneId={'first-encounter':'first-finale','lost-book':'book-finale','familiar-music':'music-finale'}[id],point=this.location?.scenePoint(sceneId);if(point&&point.floor!==this.location.floor){this.story.tracked={...point,name:'Rever conclusão · volte ao ambiente da cena'};this.notify(`Vá ao ${point.floor+1}º andar e selecione Rever conclusão novamente.`);return;}this.replaying=true;this.playScene(sceneId);}
  reward({questId,reward}){
   const p=this.getProgress();
   if(reward.memoryId&&!p.campaign.memories.includes(reward.memoryId)){questEvent(p.campaign,'visit');questEvent(p.campaign,'talk');unlockMemory(p.campaign,reward.memoryId);}
@@ -56,8 +56,8 @@ export class Adventure {
   this.audio.setMood('completion');this.notify(`★ ${ADVENTURES.find(d=>d.id===questId).title} · aventura concluída`);this.save();
  }
  reconcile(){for(const d of ADVENTURES)if(this.director.current(d.id)?.status==='completed')this.reward({questId:d.id,reward:d.reward});}
- goal(){const c=this.current;if(!c?.step)return null;const s=c.step,target=this.target(s);return {...(target||s.position),name:`${c.title} · ${s.title}`};}
- target(step=this.current?.step){if(!step)return null;const id=step.target;
+ goal(){const c=this.current;if(!c?.step)return null;const s=c.step,target=this.target(s);return {...(target||this.location?.scenePoint(s.target)||s.position),name:`${c.title} · ${s.title}`};}
+ target(step=this.current?.step){if(this.location)return this.location.adventureTarget(step);if(!step)return null;const id=step.target;
   if(['maria','bia','davi'].includes(id)){const a=this.actor(id);return {id,x:a.agent.position.x,z:a.agent.position.z,name:a.definition.name,kind:'adventure',height:1.5};}
   if(id==='classroom')return {id,x:-17,z:-7,name:'Sala de história'};
   if(id==='study-notebook')return {...this.notebook(),id,kind:'adventure',name:'Caderno de estudos · aventura'};
@@ -109,6 +109,7 @@ export class Adventure {
  completeActivity(id){this.activityId=null;this.story.close();this.director.emit('activity',id,{completed:true});this.audio.play('confirm');this.notify('Atividade concluída · a descoberta ganhou um novo sentido.');}
  updateSceneCaption(){const c=this.current;$('scene-title').textContent=c?.title||'Revisitar conclusão';$('scene-subtitle').textContent='Encenação fictícia · você pode pausar ou pular a cena';$('scene-pause').textContent='Pausar cena';}
  playScene(id){
+  if(this.location){const scene=this.location.scene(id);if(!scene){this.autoKey='';return false;}this.cutscenes.play(scene);this.updateSceneCaption();return true;}
   const c=this.current,first=id.startsWith('first'),t=first?{x:-20,z:-11}:id==='book-finale'?this.actor('bia').agent.position:this.actor('davi').agent.position;
   const actor=first?'maria':id==='book-finale'?'bia':'davi';
   const staged=first?[{id:'lorenzo',state:'observe',position:[t.x,this.world.groundHeight(t.x,t.z),t.z],lookAt:[t.x-1.2,this.world.groundHeight(t.x,t.z),t.z]},{id:'maria',state:'talk',position:[t.x-1.2,this.world.groundHeight(t.x-1.2,t.z),t.z],lookAt:[t.x,this.world.groundHeight(t.x-1.2,t.z),t.z]}]:[{id:'lorenzo',state:'react'}];
@@ -117,16 +118,16 @@ export class Adventure {
   this.cutscenes.play({id,shots});this.updateSceneCaption();
  }
  update(dt,{active,paused}){
-  if(this.photo)this.photo.mesh.visible=Math.hypot(this.player.position.x-this.photo.x,this.player.position.z-this.photo.z)<(this.living.settings.quality==='low'?20:55);
+  if(this.photo&&!this.location)this.photo.mesh.visible=Math.hypot(this.player.position.x-this.photo.x,this.player.position.z-this.photo.z)<(this.living.settings.quality==='low'?20:55);
   if(paused)return;this.elapsed+=dt;this.actions.update(dt);this.cutscenes.update(dt);
   const c=this.current;
-  if(c?.id==='lost-book'&&c.node<5&&!this.actions.active){const o=this.living.campus.objects.find(o=>o.id==='lost-book');if(o)o.mesh.visible=true;}
-  if(c?.id==='familiar-music'&&c.node<3&&!this.actions.active){const o=this.living.campus.objects.find(o=>o.id==='familiar-music');if(o)o.mesh.visible=true;}
+  if(!this.location&&c?.id==='lost-book'&&c.node<5&&!this.actions.active){const o=this.living.campus.objects.find(o=>o.id==='lost-book');if(o)o.mesh.visible=true;}
+  if(!this.location&&c?.id==='familiar-music'&&c.node<3&&!this.actions.active){const o=this.living.campus.objects.find(o=>o.id==='familiar-music');if(o)o.mesh.visible=true;}
   if(!c||this.busy||this.dialogue.open||this.story.open)return;
   const s=c.step,key=`${c.id}:${c.node}`;
   if(s.type==='scene'&&this.autoKey!==key){this.autoKey=key;this.playScene(s.target);return;}
-  if(s.type==='choice'&&this.autoKey!==key){this.autoKey=key;this.dialogue.start([fiction('ESCOLHA DA AVENTURA',s.title)],{instant:true,choices:s.choices.map(option=>({label:option.label,action:()=>this.director.choose(option.id)}))});this.dialogue.advance();return;}
-  if(s.type==='visit'&&active){const t=this.target(s);if(Math.hypot(this.player.position.x-t.x,this.player.position.z-t.z)<2.5)this.director.emit('visit',s.target);}
+  if(s.type==='choice'&&this.autoKey!==key&&(!this.location||this.target(s)?.floor===this.location.floor)){this.autoKey=key;this.dialogue.start([fiction('ESCOLHA DA AVENTURA',s.title)],{instant:true,choices:s.choices.map(option=>({label:option.label,action:()=>this.director.choose(option.id)}))});this.dialogue.advance();return;}
+  if(s.type==='visit'&&active){const t=this.target(s);if((!this.location||t.floor===this.location.floor)&&Math.hypot(this.player.position.x-t.x,this.player.position.z-t.z)<2.5)this.director.emit('visit',s.target);}
  }
  updateActivity(dt){if(this.activityId!=='music-rhythm'||!this.story.open||this.story.page!=='adventure-activity')return;const s=this.activityState;s.time+=dt;s.phase=(s.time%1.6)/1.6;const round=Math.floor(s.time/1.6);if(round!==s.round){s.round=round;s.pressed=false;}const mark=$('adventure-note');if(mark)mark.style.left=`${s.phase*94}%`;const status=$('adventure-rhythm-status');if(status)status.textContent=`${s.hits}/4 notas · compasso ${round%8+1}/8`;if(round>=8){s.time=0;s.round=-1;s.hits=0;s.attempts=0;this.drawActivity('Vamos ensaiar novamente. A partitura continua com você.');}}
  dispose(){this.cutscenes.dispose();this.actions.dispose();document.removeEventListener('keydown',this.key);this.owned.forEach(o=>o.removeFromParent());this.photoMaterial?.dispose();this.photoMap?.dispose();}

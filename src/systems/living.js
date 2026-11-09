@@ -57,6 +57,7 @@ export class LivingSchool {
   say(id, lines, options = {}) { this.speakingId = id; this.dialogue.start(lines, options); }
   changed(message = '') { this.save(); if (message) this.notify(message); }
   update(dt, { player, active, dialogueOpen, speaker, playerSpeed = 0 }) {
+    if(this.location){this.state.actorClock=(this.state.actorClock+dt)%86400;this.location.updateActors(dt,{player,active,dialogueOpen,speaker,playerSpeed});return;}
     this.time += dt; this.state.actorClock = (this.state.actorClock + dt) % 86400;
     this.campus.update(dt, this.time, this.state, this.settings.quality);
     const required = !this.free && (this.getProgress().stage < 2 || nextStep(this.getProgress().campaign)?.type === 'talk');
@@ -96,6 +97,7 @@ export class LivingSchool {
   interaction(target) {
     if (target.kind === 'npc') return this.npc(target.id);
     if (target.id === 'canteen') return this.canteen();
+    if (target.id === 'ball'&&this.location){this.location.kick();return;}
     if (target.id === 'ball') { this.campus.kick(this.player.position); this.actors.forEach(a => { if (Math.hypot(a.agent.position.x - target.x, a.agent.position.z - target.z) < 5) a.reaction = .9; }); this.audio.play('ball'); this.notify('Bola em jogo! Caio aprova a iniciativa.'); return; }
     if (target.id === 'note') { this.say(null, [line('BILHETE FICTÍCIO', 'Se encontrar minha concentração, favor devolver antes da prova. Assinado: alguém que veio só buscar um lápis.')]); return; }
     if (target.id === 'lost-book') {
@@ -166,6 +168,7 @@ export class LivingSchool {
   }
   activity(id) { const npc = { mem: 'bia', quiz: 'helena', rit: 'davi' }[id]; if (npc) befriend(this.state, npc, `activity:${id}`); this.save(); }
   goal() {
+    if(this.location)return this.location.eventGoal();
     const e = eventObjective(this.state); if (!e) return null;
     const actor = this.actors.find(a => a.definition.id === e.npc);
     return { ...(e.returnToNPC || e.id === 'physics-question' ? actor.agent.position : e.position), name: e.label };

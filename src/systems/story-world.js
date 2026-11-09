@@ -53,7 +53,7 @@ export function createStoryWorld(scene, world, memories, games) {
   openness=THREE.MathUtils.damp(openness,focus&&opening?1:0,9,dt);
   for(const b of books){const unlocked=campaign.memories.includes(b.id);b.unlocked=unlocked;b.lock.visible=!unlocked;b.mesh.userData.cover.rotation.z=b===opening?openness*1.9:0;
    // Small brass index tab appears only near the selected object, no permanent beacon.
-   b.mesh.scale.setScalar(selected===b?1.025:1);
+   b.mesh.scale.setScalar((b.displayScale??1)*(selected===b?1.025:1));
   }
  }
  addLibraryDetails(place);
