@@ -16,7 +16,8 @@ test('Colorbeat surfaces use an efficient shared three-band toon ramp', () => {
   assert.equal(paper.gradientMap.image.width, 3);
   assert.equal(paper.gradientMap.image.height, 1);
   assert.equal(paper.gradientMap.magFilter, THREE.NearestFilter);
-  assert(metal instanceof THREE.MeshStandardMaterial);
+  assert(metal instanceof THREE.MeshToonMaterial);
+  assert(metal.userData.colorbeat.specular>0);
   resources.dispose();
   assert.equal(resources.toonGradient, null);
 });

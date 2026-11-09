@@ -11,6 +11,7 @@ import { InteractionRegistry } from './systems/interaction-registry.js';
 import { EnvironmentValidator } from './systems/environment-validator.js';
 import { LivingSchool } from './systems/living.js';
 import { installPreferences } from './systems/preferences.js';
+import {updateColorbeatLighting} from './systems/colorbeat-lighting.js';
 import { updateAtmosphere } from './systems/atmosphere.js';
 import * as THREE from 'three';
 import './style.css';
@@ -44,7 +45,7 @@ try { renderer = new THREE.WebGLRenderer({ canvas: $('game'), antialias: true, p
 catch (error) { $('fatal').hidden = false; throw error; }
 renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.ACESFilmicToneMapping;
 const camera = new THREE.PerspectiveCamera(52, innerWidth / innerHeight, .06, 140);
-scene.add(new THREE.HemisphereLight('#f4f5ff', '#53638e', .95));
+const hemisphere=new THREE.HemisphereLight('#fff3df','#536080',.86);scene.add(hemisphere);
 const sun = new THREE.DirectionalLight('#fff0cf', 2.1); sun.position.set(-20, 35, 14); sun.shadow.bias = -.0004; sun.shadow.normalBias = .035;
 Object.assign(sun.shadow.camera, { left: -39, right: 39, top: 36, bottom: -36, near: 1, far: 90 }); scene.add(sun);
 const world = createWorld(scene);
@@ -299,7 +300,9 @@ function animate(now) {
   }
   if (toastTime > 0) { toastTime -= dt; if (toastTime <= 0) $('toast').hidden = true; }
   ink.update(settings.quality,player.position);
-  if(school?.active){school.narrative.updateObjects();if(!paused&&!school.inspecting)school.narrative.updateBall(dt);school.update(paused?0:dt,settings.quality);follow.interiorDistance=4.2;renderer.toneMappingExposure=1.05;}else updateAtmosphere(renderer, follow, player.position, settings.quality, dt, world);
+  let indoors=!!school?.active;
+  if(school?.active){school.narrative.updateObjects();if(!paused&&!school.inspecting)school.narrative.updateBall(dt);school.update(paused?0:dt,settings.quality);follow.interiorDistance=4.2;}else indoors=updateAtmosphere(renderer,follow,player.position,settings.quality,dt,world);
+  updateColorbeatLighting({renderer,sun,hemisphere,indoors,dt:paused?0:dt,cinematic:!!adventure?.cutscenes.active});
   player.visible=!school?.inspecting&&!(dialog&&story?.focus?.hidePlayer);document.body.classList.toggle('reading-memory',!player.visible);
   follow.reducedMotion=motionPreference.matches;
   follow.partner = living.partner?.agent.position;
@@ -334,6 +337,7 @@ export function getGameState() {
     campaign: structuredClone(progress.campaign), storyPage: story?.page, rhythm: story?.game?.phase,
     visual:{theme:'aurora-comic',edition:'0.7C',heroInk:ink.actorInk.filter(i=>i.actor.root===player&&i.mesh.isSkinnedMesh&&i.mesh.visible).length,fallbackInk:ink.actorInk.filter(i=>i.actor.root===player&&!i.mesh.isSkinnedMesh).length,models:{lorenzo:!!lorenzo.custom,maria:!!maria.custom},clips:{lorenzo:Object.keys(lorenzo.actions),maria:Object.keys(maria.actions)},toon:world.resources.material('#eadfc8').isMeshToonMaterial,outlineVertices:ink.staticInk.geometry.attributes.position?.count||0},
     spatial:validator.inspect(world.placed), memoryBooks:story.world.books.map(b=>({id:b.id,x:b.x,z:b.z,unlocked:b.unlocked,angle:b.mesh.userData.cover.rotation.z})),
+    colorbeat:{style:'aurora-colorbeat-081',exposure:renderer.toneMappingExposure,sharedLibrary:school?.materials?.library===world.resources.colorbeat,materials:world.resources.materials.size,textures:world.resources.textures.size,programs:renderer.info.programs?.length},
     quality: settings.quality, resolutionScale: quality.scale, outlines: ink.actorInk.filter(s=>s.mesh.visible).length, fps: Math.round(quality.fps), drawCalls: renderer.info.render.calls, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures, triangles: renderer.info.render.triangles, drawingBuffer:{width:renderer.domElement.width,height:renderer.domElement.height} };
 }
 registerStateReader(getGameState);
