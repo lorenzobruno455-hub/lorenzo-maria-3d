@@ -72,3 +72,10 @@ O comando sem nomes agora gera os sete personagens. A licença do Blender não �
 | Código de navegação/visita, materiais do pool e UI M1 | Implementação própria nesta etapa, sobre Three.js e componentes existentes | Licenças de código/dependências existentes mantidas; não inclui assets de catálogos externos. |
 
 A ilustração conceitual de terceiro piso não foi usada como textura nem tomada como confirmação de palco, foyer ou depósito. Nenhuma fotografia de pessoa foi aplicada a modelos. Blender/serviços de geração não foram necessários no M1: a preparação foi feita com Python padrão, sem dependências pagas. Paleta é aproximação do guia fornecido, não identidade oficial certificada.
+
+## São Jorge 0.8 M2
+
+- `school-materials.js`: mapas de madeira, tecido, reboco e piso produzidos por código neste projeto (64×64), sem imagens externas. Arte procedural original disponibilizada sob CC0-1.0; código segue a licença do projeto.
+- `school-furniture.js` e `school-architecture.js`: refinamentos geométricos, cadernos, objetos escolares, cortinas, luminárias, placas e atlas tipográfico originais. Acréscimos artísticos originais CC0-1.0; volumes derivados dos GLBs mantêm a proveniência/autorização do pacote M1, sem relicenciamento do material recebido.
+- Fontes Barlow Condensed e Atkinson Hyperlegible já incluídas no projeto, com suas licenças registradas nas seções anteriores; nenhuma fonte comercial adicionada.
+- Nenhum catálogo externo, serviço pago ou geração por créditos foi utilizado no M2. As capturas são do próprio jogo.
