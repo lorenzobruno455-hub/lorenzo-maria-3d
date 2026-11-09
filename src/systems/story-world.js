@@ -1,3 +1,4 @@
+import {environmentFinish} from './colorbeat-materials.js';
 import narratives from '../data/interactions.json' with { type: 'json' };
 import * as THREE from 'three';
 import { addLibraryDetails } from './library-garden07c.js';
@@ -7,7 +8,7 @@ import { surface, groundHeight } from './prop-placement.js';
 export function createStoryWorld(scene, world, memories, games) {
  let disposed=false;
  const objects=[],resources=world.resources,owned=[],group=new THREE.Group(),library=new PropLibrary(resources);scene.add(group);
- const place=(kind,color,scale,x,y,z)=>{const m=resources.mesh(kind,color,scale);m.position.set(x,y,z);group.add(m);return m;};
+ const place=(kind,color,scale,x,y,z)=>{const m=resources.mesh(kind,color,scale,environmentFinish(color));m.position.set(x,y,z);group.add(m);return m;};
  const bounds=(x,y,z,w,h,d)=>{const b={minX:x-w/2,maxX:x+w/2,minY:y-h/2,maxY:y+h/2,minZ:z-d/2,maxZ:z+d/2};world.solids.push(b);world.occluders.push(b);return b;};
  place('box','#b9b3a0',[8,.1,10],32,.05,-11);place('box','#74877b',[8.5,.2,10],32,3.6,-11);
  for(const x of [28.5,35.5]){place('box','#d9d2bd',[.22,3.5,.22],x,1.75,-7);bounds(x,1.75,-7,.22,3.5,.22);}

@@ -58,7 +58,12 @@ test('real blue chair backs and wooden post fixture retain their source hues',()
   const used=[];
   const result=createSchoolFurniture({resources,materials:{get(color,finish){used.push({color,finish});return materials.get(color,finish);}},floor:floors[0],source});
   const postResult=createSchoolFurniture({resources,materials:{get(color,finish){used.push({color,finish});return materials.get(color,finish);}},floor:floors[0],source:post});
-  assert.ok(used.some(m=>m.color===blueBack.color && m.finish==='plain'));
+  assert.ok(used.some(m=>m.color===blueBack.color && m.finish==='plastic'));
   assert.ok(used.some(m=>m.color===woodPost.color && m.finish==='wood'));
   result.dispose();postResult.dispose();postGeometry.dispose();
+});
+
+test('selective furniture contours use a single owned batch and are disabled on Low',()=>{
+ const source=sourceFor(floors[0]),result=createSchoolFurniture({resources,materials,floor:floors[0],source});assert(result.edges?.isLineSegments);assert(result.stats.outlineSegments>0);result.updateQuality('low');assert.equal(result.edges.visible,false);result.updateQuality('high');assert.equal(result.edges.visible,true);
+ let disposed=0;result.edges.geometry.addEventListener('dispose',()=>disposed++);result.dispose();result.dispose();assert.equal(disposed,1);
 });

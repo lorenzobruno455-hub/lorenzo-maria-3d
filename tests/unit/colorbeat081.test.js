@@ -21,3 +21,14 @@ test('lighting shares exposure across locations, transitions smoothly and yields
  updateColorbeatLighting({renderer,sun,hemisphere,indoors:true,dt:10});const indoor=renderer.toneMappingExposure;updateColorbeatLighting({renderer,sun,hemisphere,indoors:false,dt:10});assert(Math.abs(renderer.toneMappingExposure-indoor)<.001);
  sun.intensity=.3;updateColorbeatLighting({renderer,sun,hemisphere,indoors:true,dt:1,cinematic:true});assert.equal(sun.intensity,.3);
 });
+
+test('environment wood/paint resolve coherently without reclassifying character materials',async()=>{
+ const {environmentFinish}=await import('../../src/systems/colorbeat-materials.js');const r=new Resources(),s=new SchoolMaterials(r);
+ assert.equal(environmentFinish('#b99b70'),'wood');assert.equal(environmentFinish('#586b68'),'metal');assert.equal(environmentFinish('#586b68','cloth'),'cloth');
+ assert.equal(r.material('#b99b70','wood'),s.get('#c49b70','wood'));assert.equal(r.material('#b99b70').userData.colorbeatKind,'plain');assert.equal(r.material('#eadfc8','plaster').color.getHexString(),'f4f0e7');s.dispose();r.dispose();
+});
+
+test('school glass uses the shared transparent material without casting opaque panel shadows',async()=>{
+ const fs=await import('node:fs'),{createSchoolArchitecture}=await import('../../src/systems/school-architecture.js'),floor=JSON.parse(fs.readFileSync('src/data/sao-jorge.json')).floors[0],r=new Resources(),s=new SchoolMaterials(r),a=createSchoolArchitecture({resources:r,materials:s,floor});
+ const glass=a.group.children.filter(m=>m.material?.userData.colorbeatKind==='glass');assert(glass.length);assert(glass.every(m=>m.material.transparent&&!m.material.depthWrite&&!m.castShadow));a.dispose();s.dispose();r.dispose();
+});

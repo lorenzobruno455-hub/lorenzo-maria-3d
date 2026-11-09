@@ -28,14 +28,14 @@ export class SchoolVisit {
       surfaces=finishSchoolSurfaces({model:lease.model,materials:this.materials});
       const source=lease.model.getObjectByName('furniture');
       furniture=createSchoolFurniture({resources:this.pool.resources,materials:this.materials,floor,source});
-      if(furniture)source.parent.add(furniture.group);
+      if(furniture){source.parent.add(furniture.group);furniture.updateQuality(this.quality);}
       architecture=createSchoolArchitecture({resources:this.pool.resources,materials:this.materials,floor,structure:lease.model.getObjectByName('structure')});
       lease.model.add(architecture.group);architecture.updateQuality(this.quality);
       this.details.set(floor.index,{surfaces,furniture,architecture});
       floor.colliders.push(...(furniture?.colliders||[]),...architecture.colliders);
     }catch(error){furniture?.dispose();architecture?.dispose();surfaces?.dispose();console.warn('Acabamento São Jorge:',error.message);this.onStatus('Alguns detalhes não carregaram; a navegação continua disponível.');}
   }
-  update(dt,quality=this.quality){this.quality=quality;if(!this.active)return;for(const detail of this.details.values())detail.architecture.updateQuality(quality);this.lighting.update(this.navigation.floor(this.floor),this.player.position,quality,dt,this.inspecting);}
+  update(dt,quality=this.quality){this.quality=quality;if(!this.active)return;for(const detail of this.details.values()){detail.architecture.updateQuality(quality);detail.furniture?.updateQuality(quality);}this.lighting.update(this.navigation.floor(this.floor),this.player.position,quality,dt,this.inspecting);}
   async enter(){
     if(this.disposed||this.active||this.loading)return false;
     const token=++this.token,state=this.getState();this.loading=true;this.onStatus('Carregando São Jorge…');this.onChange();

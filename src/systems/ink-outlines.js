@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {COLORBEAT_STYLE} from './colorbeat-materials.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 
 // Selected architectural edges share one draw. Actor shells reuse the animated
@@ -23,7 +24,7 @@ export class InkOutlines {
     });
     const geometry = parts.length ? mergeGeometries(parts, false) : new THREE.BufferGeometry();
     parts.forEach(g => g.dispose());
-    this.staticInk = new THREE.LineSegments(geometry, new THREE.LineBasicMaterial({ color: '#141824', transparent: true, opacity: .72, depthWrite: false }));
+    this.staticInk = new THREE.LineSegments(geometry, new THREE.LineBasicMaterial({ color: COLORBEAT_STYLE.ink, transparent: true, opacity: COLORBEAT_STYLE.environmentInkOpacity, depthWrite: false }));
     this.staticInk.name = 'Aurora architectural ink'; scene.add(this.staticInk);
     this.skinnedMaterial = new THREE.MeshBasicMaterial({color:'#141824',side:THREE.BackSide,depthWrite:false});
     this.skinnedMaterial.onBeforeCompile = shader => {

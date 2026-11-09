@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {COLORBEAT_STYLE} from './colorbeat-materials.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 
 // Original atmospheric panels: these do not purport to reconstruct real windows.
@@ -73,7 +74,7 @@ export function createSchoolArchitecture({ resources, materials, floor, structur
   }
   for(const [material, geometries] of batches) {
     const geometry=mergeGeometries(geometries,false); geometries.forEach(g=>g.dispose()); owned.push(geometry);
-    const mesh=new THREE.Mesh(geometry,material); mesh.name='architecture-batch'; mesh.castShadow=true; mesh.receiveShadow=true; group.add(mesh);
+    const mesh=new THREE.Mesh(geometry,material); mesh.name='architecture-batch'; mesh.castShadow=material.userData.colorbeatKind!=='glass'; mesh.receiveShadow=true; group.add(mesh);
   }
   let texture, signMaterial;
   if (typeof document !== 'undefined') {
@@ -102,7 +103,7 @@ export function createSchoolArchitecture({ resources, materials, floor, structur
     g.translate((c.minX+c.maxX)/2,(c.minY+c.maxY)/2-floor.baseY,(c.minZ+c.maxZ)/2);
     const e=new THREE.EdgesGeometry(g);g.dispose();edgeGeometries.push(e);
   }
-  const edgeMaterial=new THREE.LineBasicMaterial({color:'#4B5158',transparent:true,opacity:.22});
+  const edgeMaterial=new THREE.LineBasicMaterial({color:COLORBEAT_STYLE.ink,transparent:true,opacity:COLORBEAT_STYLE.environmentInkOpacity});
   let edges;
   if(edgeGeometries.length){const geometry=mergeGeometries(edgeGeometries,false);edgeGeometries.forEach(g=>g.dispose());owned.push(geometry);edges=new THREE.LineSegments(geometry,edgeMaterial);edges.name='selective-wall-edges';group.add(edges);}
   // Kept separate so inspection reveals rooms without changing static batches.

@@ -1,3 +1,4 @@
+import {environmentFinish} from './colorbeat-materials.js';
 import { createClassroomDetails } from './classroom.js';
 import * as THREE from 'three';
 import { PropLibrary } from './prop-library.js';
@@ -20,7 +21,7 @@ export function createWorld(scene) {
     if (collision) solids.push(b); if (camera) occluders.push(b); return b;
   }
   function box(x, y, z, w, h, d, color, collision = false, texture = 'plain', camera = collision) {
-    const mesh = resources.mesh('box', color, [w, h, d], texture); mesh.position.set(x, y, z); scene.add(mesh); collider(mesh, collision, camera); return mesh;
+    const mesh = resources.mesh('box', color, [w, h, d], environmentFinish(color,texture)); mesh.position.set(x, y, z); scene.add(mesh); collider(mesh, collision, camera); return mesh;
   }
   function cylinder(x, y, z, r, h, color) { const m = resources.mesh('cylinder', color, [r, h, r]); m.position.set(x, y, z); scene.add(m); return m; }
   function sphere(x, y, z, r, color) { const m = resources.mesh('sphere', color, [r, r, r]); m.position.set(x, y, z); scene.add(m); return m; }
