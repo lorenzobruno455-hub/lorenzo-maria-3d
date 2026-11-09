@@ -5,7 +5,7 @@ export const COLORBEAT_STYLE=Object.freeze({id:'aurora-colorbeat-081',ink:'#1418
 const PALETTE={ '#eadfc8':'#fff1ce','#c9c1ad':'#e4ca88','#b8b0a0':'#e7d9ac','#557b73':'#138a91','#31564a':'#175d68','#64766b':'#40577b','#b99b70':'#d49c4b','#bc9a63':'#dfa24e','#8d6e52':'#9f633d','#62867a':'#228e90','#698756':'#74a942','#7b684f':'#a87643','#dbdbcf':'#fff5dc','#8faaa0':'#50adb4','#56656b':'#344966','#414c4d':'#202b43' };
 const SURFACE_PALETTE={wood:{'#b99b70':'#c49b70','#8d6e52':'#8b6a4e','#bc9a63':'#c49b70'},plaster:{'#eadfc8':'#f4f0e7'}};
 export function environmentFinish(color,kind='plain'){if(kind!=='plain')return kind;const c=String(color).toLowerCase();return ['#b99b70','#8d6e52','#bc9a63','#8b6a4e','#c49b70','#7a5a3d'].includes(c)?'wood':['#586b68','#5b616b','#737982'].includes(c)?'metal':['#2d5fa8','#2f5d9a'].includes(c)?'plastic':'plain';}
-const PROFILES={plain:{specular:0},wood:{specular:0,period:1.4},tile:{specular:0,period:1.2},plaster:{specular:0,period:2.4},concrete:{specular:0,period:1.8},cloth:{specular:0,period:.25},plastic:{specular:.055},metal:{specular:.22},glass:{},emissive:{}};
+const PROFILES={fabric:{specular:0},plain:{specular:0},wood:{specular:0,period:1.4},tile:{specular:0,period:1.2},plaster:{specular:0,period:2.4},concrete:{specular:0,period:1.8},cloth:{specular:0,period:.25},plastic:{specular:.055},metal:{specular:.22},glass:{},emissive:{}};
 const GRADIENT=/* glsl */`
 #ifdef USE_GRADIENTMAP
  uniform sampler2D gradientMap;

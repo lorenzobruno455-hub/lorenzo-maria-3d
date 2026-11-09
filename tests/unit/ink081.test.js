@@ -1,0 +1,12 @@
+import test from 'node:test';import assert from 'node:assert/strict';import * as THREE from 'three';
+import {InkOutlines} from '../../src/systems/ink-outlines.js';import {Resources} from '../../src/systems/resources.js';import {GLBAssets} from '../../src/systems/asset-pipeline.js';
+test('actor ink projects after skinning and follows viewport without replacing borrowed geometry',()=>{
+ const scene=new THREE.Scene(),root=new THREE.Group(),body=new THREE.Group();root.add(body);scene.add(root);const source=new THREE.Mesh(new THREE.BoxGeometry(),new THREE.MeshBasicMaterial());body.add(source);const actor={root,body,player:true},ink=new InkOutlines(scene,{},[actor]);
+ const shader={uniforms:{},vertexShader:THREE.ShaderLib.basic.vertexShader};ink.actorMaterial.onBeforeCompile(shader);
+ assert.ok(shader.uniforms.cbInkViewport);assert.ok(shader.vertexShader.indexOf('cbInkOffset')>shader.vertexShader.indexOf('#include <skinning_vertex>'));assert.match(shader.vertexShader,/objectNormal/);assert.match(shader.vertexShader,/cbInkWorldLimit/);
+ const camera=new THREE.PerspectiveCamera(50,2,.1,100);camera.position.set(0,2,5);ink.update('high',root.position,camera,{width:844,height:390});assert.equal(ink.actorMaterial.userData.inkUniforms.cbInkViewport.value.y,390);
+ ink.registerActor(actor);assert.equal(source.children.filter(c=>c.userData.inkShell).length,1);assert.equal(ink.actorInk[0].mesh.geometry,source.geometry);let disposed=0;source.geometry.addEventListener('dispose',()=>disposed++);ink.dispose();assert.equal(disposed,0);source.geometry.dispose();source.material.dispose();
+});
+test('GLB fabric and skin retain authored colors and share the Colorbeat owner without altering clips',async()=>{
+ const r=new Resources(),g=new THREE.Group();for(const name of ['shirt','pants','skin','hair','eye']){const m=new THREE.Mesh(new THREE.BoxGeometry(),new THREE.MeshStandardMaterial({color:'#be8870'}));m.material.name=name;g.add(m);}const clip=new THREE.AnimationClip('Idle',1,[]),pool=new GLBAssets(r,{load:async()=>({scene:g,animations:[clip]})}),lease=await pool.acquire('fixture');const meshes=[];lease.model.traverse(m=>{if(m.isMesh)meshes.push(m);});assert.equal(meshes[0].material.userData.colorbeatKind,'fabric');assert.equal(meshes[2].material.userData.colorbeatKind,'plain');assert.equal(meshes[0].material.color.getHexString(),'be8870');assert.equal(meshes[0].material.map,null);assert.equal(lease.animations[0],clip);lease.release();pool.dispose();r.dispose();
+});

@@ -1,0 +1,13 @@
+import {test,expect} from '@playwright/test';import {seed,start,state} from './helpers.js';
+test('081 final ink compiles on seven animated GLBs and stays bounded across presets and viewport',async({page})=>{
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});await seed(page,{stage:2,collected:['notebook','card','photo']},{quality:'medium'});await start(page);await expect.poll(async()=>(await state(page)).npcs.every(n=>n.model),{timeout:45000}).toBe(true);await expect.poll(async()=>(await state(page)).visual.heroInk).toBeGreaterThan(0);
+ expect((await state(page)).colorbeat.inkPixels).toBe(1.15);await page.keyboard.down('w');await expect.poll(async()=>(await state(page)).animation).not.toBe('idle');await page.keyboard.up('w');await page.setViewportSize({width:1280,height:720});await page.locator('#pause-button').click();await page.locator('#quality').selectOption('low');await page.locator('#resume').click();await expect.poll(async()=>(await state(page)).colorbeat.inkPixels).toBe(.9);expect(errors).toEqual([]);
+});
+test('081 São Jorge Android uses the same Colorbeat controls and preserves secondary pages',async({browser})=>{
+ const context=await browser.newContext({viewport:{width:844,height:390},isMobile:true,hasTouch:true,reducedMotion:'reduce'}),page=await context.newPage();await seed(page,{stage:2,collected:['notebook','card','photo'],schoolVisit:{active:true,floor:0,position:{x:0,z:14}}});await start(page);await expect.poll(async()=>(await state(page)).school.active).toBe(true);
+ await expect(page.locator('#school-toolbar')).toHaveCSS('background-color','rgb(20, 24, 36)');await expect(page.locator('#school-toolbar')).toHaveCSS('border-left-color','rgb(19, 138, 145)');
+ for(const id of ['#school-inspect','#school-exit','#interact']){const box=await page.locator(id).boundingBox();expect(box.height).toBeGreaterThanOrEqual(44);expect(box.x+box.width).toBeLessThanOrEqual(844);}
+ await page.locator('#pause-button').tap();await expect(page.locator('.settings-panel')).toHaveCSS('border-radius','0px');await page.locator('#resume').tap();await page.locator('#story-menu').tap();
+ for(const name of ['Inventário','Álbum','Conquistas','Minijogos']){await page.getByRole('button',{name,exact:true}).tap();await expect(page.locator('.story-window')).toBeVisible();await page.locator('#story-close').tap();await page.locator('#story-menu').tap();}
+ await page.setViewportSize({width:390,height:844});await expect(page.locator('.story-window')).toHaveCSS('animation-name','none');expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBe(390);await context.close();
+});

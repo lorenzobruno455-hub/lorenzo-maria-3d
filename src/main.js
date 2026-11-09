@@ -6,6 +6,7 @@ import {SchoolVisit} from './systems/school-visit.js';
 import {Adventure} from './systems/adventure.js';
 import './adventure.css';
 import { GLBAssets } from './systems/asset-pipeline.js';
+import {InteractionAccent} from './systems/interaction-accent.js';
 import { InkOutlines } from './systems/ink-outlines.js';
 import { InteractionRegistry } from './systems/interaction-registry.js';
 import { EnvironmentValidator } from './systems/environment-validator.js';
@@ -62,6 +63,7 @@ const motionPreference=matchMedia('(prefers-reduced-motion:reduce)');
 const follow = new FollowCamera(camera, world.occluders, progress.yaw, progress.pitch);
 const quality = new Quality(renderer, sun, settings), audio = new Audio(settings);
 const visualEffects = new VisualEffects();
+const interactionAccent=new InteractionAccent(scene);
 const active = () => started && !paused && !dialog && !panelOpen && !document.hidden && !adventure?.busy && !school?.loading;
 const markerPosition = new THREE.Vector3(), effect = new THREE.Group(); scene.add(effect);
 const particles = Array.from({ length: 12 }, (_, i) => {
@@ -299,7 +301,6 @@ function animate(now) {
     if (effectTime > 0) { effectTime -= dt; particles.forEach((m, i) => { const t = .8 - effectTime; m.position.set(Math.cos(m.userData.angle) * t, t * (1.5 + i % 3 * .2), Math.sin(m.userData.angle) * t); m.scale.setScalar(.035 * Math.max(0, effectTime / .8)); }); if (effectTime <= 0) effect.visible = false; }
   }
   if (toastTime > 0) { toastTime -= dt; if (toastTime <= 0) $('toast').hidden = true; }
-  ink.update(settings.quality,player.position);
   let indoors=!!school?.active;
   if(school?.active){school.narrative.updateObjects();if(!paused&&!school.inspecting)school.narrative.updateBall(dt);school.update(paused?0:dt,settings.quality);follow.interiorDistance=4.2;}else indoors=updateAtmosphere(renderer,follow,player.position,settings.quality,dt,world);
   updateColorbeatLighting({renderer,sun,hemisphere,indoors,dt:paused?0:dt,cinematic:!!adventure?.cutscenes.active});
@@ -311,7 +312,9 @@ function animate(now) {
   if(started&&!school?.loading&&!school?.inspecting)adventure?.update(paused?0:dt,{active:active(),paused});
   if(!paused&&!school?.loading&&!school?.inspecting)adventure?.updateActivity(dt);
   if(previousBusy!==!!adventure?.busy){previousBusy=!!adventure?.busy;controls.clear();syncModal();}
+  interactionAccent.update(active()&&!school?.inspecting?target:null,time,{reducedMotion:motionPreference.matches,floorY:player.position.y});
   camera.updateMatrixWorld();
+  ink.update(settings.quality,player.position,camera,{width:innerWidth,height:innerHeight});
   hudTimer += dt; if (hudTimer > .08) {
     updateHUD(); updateTarget(); updateMarker();
     const zone = school?.active ? `${school.navigation.floor(school.floor).label} · ${school.room()?.name||'Corredor'} · SÃO JORGE` : player.position.z < -18 && Math.abs(player.position.x) < 6 ? 'CANTINA' : player.position.x < -28 && player.position.z < 10 ? 'QUADRA' : player.position.x > 28 && player.position.z < -6 ? 'SALA DE MÚSICA' : player.position.z < -6 && Math.abs(player.position.x) > 6 ? (player.position.x < 0 ? 'SALA DE LITERATURA' : 'BIBLIOTECA') : player.position.z > 17 ? 'JARDIM DA ESCOLA' : 'PÁTIO CENTRAL';
@@ -337,14 +340,14 @@ export function getGameState() {
     campaign: structuredClone(progress.campaign), storyPage: story?.page, rhythm: story?.game?.phase,
     visual:{theme:'aurora-comic',edition:'0.7C',heroInk:ink.actorInk.filter(i=>i.actor.root===player&&i.mesh.isSkinnedMesh&&i.mesh.visible).length,fallbackInk:ink.actorInk.filter(i=>i.actor.root===player&&!i.mesh.isSkinnedMesh).length,models:{lorenzo:!!lorenzo.custom,maria:!!maria.custom},clips:{lorenzo:Object.keys(lorenzo.actions),maria:Object.keys(maria.actions)},toon:world.resources.material('#eadfc8').isMeshToonMaterial,outlineVertices:ink.staticInk.geometry.attributes.position?.count||0},
     spatial:validator.inspect(world.placed), memoryBooks:story.world.books.map(b=>({id:b.id,x:b.x,z:b.z,unlocked:b.unlocked,angle:b.mesh.userData.cover.rotation.z})),
-    colorbeat:{style:'aurora-colorbeat-081',exposure:renderer.toneMappingExposure,sharedLibrary:school?.materials?.library===world.resources.colorbeat,materials:world.resources.materials.size,textures:world.resources.textures.size,programs:renderer.info.programs?.length},
+    colorbeat:{style:'aurora-colorbeat-081',inkPixels:ink.actorMaterial.userData.inkUniforms.cbInkPixels.value,accent:interactionAccent.mesh.visible,exposure:renderer.toneMappingExposure,sharedLibrary:school?.materials?.library===world.resources.colorbeat,materials:world.resources.materials.size,textures:world.resources.textures.size,programs:renderer.info.programs?.length},
     quality: settings.quality, resolutionScale: quality.scale, outlines: ink.actorInk.filter(s=>s.mesh.visible).length, fps: Math.round(quality.fps), drawCalls: renderer.info.render.calls, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures, triangles: renderer.info.render.triangles, drawingBuffer:{width:renderer.domElement.width,height:renderer.domElement.height} };
 }
 registerStateReader(getGameState);
 if(new URLSearchParams(location.search).has('debug')){addEventListener('keydown',e=>{if(e.code==='F3'){e.preventDefault();if(validator.visible)validator.clear();else validator.show([...world.placed,...story.world.placed],[player,...living.actors.map(a=>a.character.root)]);needsRender=true;}});}
 
 export function dispose() {
-  document.removeEventListener('click',uiSound);school?.narrative?.dispose();school?.dispose();adventure?.dispose();ink.dispose();validator.dispose();interactions.dispose();visualEffects.dispose();
+  document.removeEventListener('click',uiSound);school?.narrative?.dispose();school?.dispose();adventure?.dispose();ink.dispose();interactionAccent.dispose();validator.dispose();interactions.dispose();visualEffects.dispose();
   disposed = true; cancelAnimationFrame(frame); controls.clear(); save(); story?.dispose(); living?.dispose(); dialogues?.dispose(); lorenzo.dispose(); maria.dispose(); assets.dispose(); world.dispose(); audio.dispose(); renderer.dispose();
 }
 if (import.meta.hot) import.meta.hot.dispose(dispose);

@@ -38,3 +38,29 @@
 @media(prefers-contrast:more){:root{--cb-paper:#fff;--cb-ink:#080b14}.story-card{background:#101827;border-color:#fff}.settings-panel,.story-window,#dialog{border-color:#fff;box-shadow:none}.story-card small,.settings-panel p{color:#fff}button:disabled{opacity:1;text-decoration:line-through}.colorbeat-burst-label{text-shadow:none}}
 @media(forced-colors:active){:where(.story-card,.settings-panel,.story-window,#dialog,button){border:2px solid CanvasText}:focus-visible{outline-color:Highlight}.colorbeat-burst{display:none}}
 @media(prefers-reduced-motion:reduce){:where(.story-card,.story-window,.settings-panel,#dialog,#toast,#objective-marker,#cinematic){animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* 0.8.1: one component language across campus and São Jorge. Layout and
+   interaction targets remain owned by their existing responsive styles. */
+:root{--cb-panel:#25314a;--cb-muted:#bfeaf0;--cb-line:3px;--cb-offset:4px 4px 0 var(--cb-ink)}
+#school-toolbar{background:var(--cb-ink);color:var(--cb-paper);border:var(--cb-line) solid var(--cb-ink);border-left:5px solid var(--aurora);box-shadow:var(--cb-offset)}
+#school-toolbar strong{font-family:var(--cb-title);color:var(--cb-sun);letter-spacing:.4px}
+#school-toolbar small{font-family:'Atkinson Hyperlegible',sans-serif;color:var(--cb-muted)}
+#school-toolbar button,#school-toolbar select{border:2px solid var(--cb-paper);border-radius:0;background:var(--cb-ink);color:var(--cb-paper);font-family:var(--cb-title);letter-spacing:.3px}
+#school-toolbar button:hover,#school-toolbar button:focus-visible{background:var(--cb-sun);color:var(--cb-ink);border-color:var(--cb-ink)}
+#school-toolbar :focus-visible{outline-color:var(--cb-sun)}
+.settings-panel,.story-window,#dialog{border-radius:0}
+.story-card{background:var(--cb-panel);border-radius:0}
+.story-card small{color:var(--cb-muted)}
+#cinematic{border-color:var(--cb-ink);color:var(--cb-paper)}
+#cinematic button{background:var(--cb-sun);color:var(--cb-ink);border-color:var(--cb-ink);box-shadow:var(--cb-offset)}
+#cinematic button:hover,#cinematic button:focus-visible{background:var(--cb-paper);color:var(--cb-ink)}
+#touch-actions button:focus-visible{outline:3px solid var(--cb-sun);outline-offset:5px}
+.colorbeat-burst::before{border-color:var(--cb-ink)}
+@media(prefers-contrast:more){
+ :root{--cb-ink:#080b14;--cb-paper:#fff;--cb-muted:#fff;--cb-panel:#101827}
+ #school-toolbar,.story-card,.settings-panel,.story-window,#dialog{border-color:var(--cb-paper);box-shadow:none}
+ #school-toolbar button,#school-toolbar select{border-color:var(--cb-paper)}
+ #school-toolbar button:hover,#school-toolbar button:focus-visible{color:#080b14;background:#ffd43b}
+ .settings-panel p,.settings-panel label,#dialog p{color:var(--cb-ink)}
+}
+@media(forced-colors:active){#school-toolbar,#cinematic,.story-card{border-color:CanvasText;box-shadow:none}#school-toolbar :focus-visible{outline-color:Highlight}}
