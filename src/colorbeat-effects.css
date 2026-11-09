@@ -16,3 +16,25 @@
   74%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}
   100%{opacity:0;transform:translate(-50%,-64%) scale(.97)}}
 @media(prefers-reduced-motion:reduce){.colorbeat-burst{animation:none;display:none}}
+
+/* Aurora 0.7C: quiet ink feedback; never a screen flash. */
+.colorbeat-burst[data-kind=memory]::before{background:#b4a2ff}
+.colorbeat-burst[data-kind=quest]::before{background:#82cbb3}
+.colorbeat-burst[data-kind=chapter]::before{background:#83bce0}
+.colorbeat-burst-label{overflow-wrap:anywhere;max-width:90%;font-size:clamp(20px,4vw,32px)}
+:where(.settings-panel,.story-window,#dialog){border-radius:2px}
+:where(.story-card,.dialogue-choices button,.settings-actions button,#story-content>button){border-radius:2px;border-width:2px}
+:where(.story-card,.settings-panel,.story-window){scrollbar-color:var(--cb-sun) #1c2537;scrollbar-width:thin}
+:where(button,select,input):focus-visible{outline:3px solid #ffd45c;outline-offset:4px}
+:where(.story-card,.settings-panel) :where(p,small){line-height:1.5}
+.story-card[aria-current=true],.story-card:focus-within{border-color:var(--cb-sun)}
+:where(.dialogue-choices,.settings-actions){gap:10px}
+:where(#story-content,.settings-actions,.dialogue-choices) button{min-height:48px;white-space:normal;overflow-wrap:anywhere}
+:where(.story-heading,.settings-panel) select{min-height:48px;max-width:100%}
+:where(.story-heading,.settings-panel) input[type=range]{min-height:48px}
+:where(#dialog,.settings-panel,.story-window){overscroll-behavior:contain}
+@media(pointer:coarse){button,select{min-height:48px;min-width:48px}.settings-panel label{min-height:48px}.settings-panel input[type=checkbox]{width:24px;height:24px}#touch-actions button{min-height:56px}}
+@media(max-width:700px){.story-heading{gap:10px;flex-wrap:wrap}#story-content{overflow-wrap:anywhere}.settings-panel{max-width:calc(100vw - 24px)}.dialogue-choices{display:grid;grid-template-columns:1fr}}
+@media(prefers-contrast:more){:root{--cb-paper:#fff;--cb-ink:#080b14}.story-card{background:#101827;border-color:#fff}.settings-panel,.story-window,#dialog{border-color:#fff;box-shadow:none}.story-card small,.settings-panel p{color:#fff}button:disabled{opacity:1;text-decoration:line-through}.colorbeat-burst-label{text-shadow:none}}
+@media(forced-colors:active){:where(.story-card,.settings-panel,.story-window,#dialog,button){border:2px solid CanvasText}:focus-visible{outline-color:Highlight}.colorbeat-burst{display:none}}
+@media(prefers-reduced-motion:reduce){:where(.story-card,.story-window,.settings-panel,#dialog,#toast,#objective-marker,#cinematic){animation:none!important;transition:none!important;scroll-behavior:auto!important}}

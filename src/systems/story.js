@@ -8,8 +8,8 @@ import { MatchingGame, QuizGame, RhythmGame } from './minigames.js';
 const el = (tag, text, className) => { const node = document.createElement(tag); if (text !== undefined) node.textContent = text; if (className) node.className = className; return node; };
 const button = (label, action) => { const b = el('button', label); b.onclick = action; return b; };
 export class Story {
-  constructor({ player, scene, world, getProgress, save, notify, dialogue, onPanel, audio, start, tutorial, living }) {
-    Object.assign(this, { player, getProgress, save, notify, dialogue, onPanel, audio, start, tutorial, living });
+  constructor({ player, scene, world, getProgress, save, notify, dialogue, onPanel, audio, start, tutorial, living, effects }) {
+    Object.assign(this, { player, getProgress, save, notify, dialogue, onPanel, audio, start, tutorial, living, effects });
     this.world = createStoryWorld(scene, world, memories, catalogue); this.panel = document.getElementById('story-panel'); this.content = document.getElementById('story-content');
     this.open = false; this.game = null; this.time = 0; this.finishedGame = false; this.dialogueData = null;
     this.reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
@@ -85,7 +85,7 @@ export class Story {
     if(!replay&&this.adventure?.current?.id==='first-encounter'){this.notify('Conclua a encenação de Primeiro Encontro para revelar esta memória.');return;}
     if (this.living.free && !replay) { this.notify('Retome a campanha para desbloquear novas memórias.'); return; }
     if (!replay && (this.getProgress().stage < 2 || currentChapter(this.c)?.id !== m.quest || nextStep(this.c)?.type !== 'memory')) { this.notify(this.getProgress().stage < 2 ? 'Conclua o prólogo das três lembranças primeiro.' : nextStep(this.c)?.label || 'Conclua o capítulo anterior.'); return; }
-    this.focus = origin ? {x:origin.x,y:(origin.height||1.1)+.4,distance:1.8,yaw:0,pitch:.65,hidePlayer:true,z:origin.z} : { ...m.position, y: 1.1 }; this.audio.setMood?.('memory');
+    this.focus = origin ? {x:origin.x,y:(origin.height||1.1)+.4,distance:1.8,yaw:0,pitch:.65,hidePlayer:true,z:origin.z} : { ...m.position, y: 1.1 }; this.audio.setMood?.('memory'); this.audio.play(origin ? 'book' : 'chapter'); this.effects?.chapter(m.title);
     this.dialogue.start([{ speaker: 'MEMÓRIA', text: `${m.date} · ${m.title}`, provenance: 'author-reported-memory' }, { speaker: 'LORENZO', text: m.description, provenance: 'author-reported-memory' }], { done: () => {
       if (!replay && unlockMemory(this.c, m.id)) { this.changed(); this.audio.play('collect'); this.audio.setMood?.('completion'); this.notify(`◇ ${m.title} · carta desbloqueada${this.c.letter ? ' · Carta final disponível!' : ''}`); }
       this.focus = null;

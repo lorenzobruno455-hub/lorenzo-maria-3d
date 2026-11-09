@@ -1,4 +1,4 @@
-# Lorenzo & Maria 3D — Project Aurora 0.7B
+# Lorenzo & Maria 3D — Project Aurora 0.7C
 
 Exploração em terceira pessoa no fictício Colégio Aurora, com Three.js, JavaScript e Vite. Interface e diálogos em português. O capítulo inicial continua completo: converse com Maria, encontre três lembranças e retorne ao pátio.
 
@@ -102,3 +102,7 @@ npm test
 `dist/` contém a build estática. Testes de lógica cobrem entrada, movimento, colisão, câmera, capítulo e salvamento. Playwright usa Chromium, teclado/mouse e toques reais via protocolo do navegador para cobrir controles, portas, diálogos, coleta, persistência, pausa e orientação. Não são testes nos aparelhos Samsung físicos.
 
 Para publicar em um subdiretório, configure `base` do Vite para esse caminho antes da build. Os arquivos GLB devem usar URLs compatíveis com esse caminho.
+
+## Polimento 0.7C
+
+Biblioteca e pátio detalhados, cinco NPCs GLB originais, áudio e interface acessíveis; missões e progresso preservados. [Entrega](docs/ENTREGA-07C.md) · [Arte](docs/ART-DIRECTION-07C.md) · [Desempenho](docs/PERFORMANCE-07C.md) · [Licenças](docs/ASSET-LICENSES.md).

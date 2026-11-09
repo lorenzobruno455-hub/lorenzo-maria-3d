@@ -3,13 +3,42 @@ export class Audio {
   constructor(settings) { this.settings = settings; this.context = null; this.mood = 'exploration'; this.step = 0; this.nextNote = 0; this.nodes = new Set(); }
   unlock() { if (!this.context) this.context = new AudioContext(); if (!this.musicGain) { this.musicGain = this.context.createGain(); this.musicGain.gain.value = 0; this.musicGain.connect(this.context.destination); } this.context.resume().catch(() => {}); }
   play(kind = 'collect') {
-    if (!this.settings.sound || !this.context || this.context.state !== 'running') return;
-    const ctx = this.context, oscillator = ctx.createOscillator(), gain = ctx.createGain();
-    oscillator.connect(gain); gain.connect(ctx.destination);
-    oscillator.type = 'sine'; oscillator.frequency.setValueAtTime(({ collect: 660, door: 160, step: 85, ball: 120, confirm: 440 })[kind] || 160, ctx.currentTime);
-    oscillator.frequency.exponentialRampToValueAtTime(({ collect: 990, door: 90, step: 45, ball: 65, confirm: 660 })[kind] || 90, ctx.currentTime + .15);
-    gain.gain.setValueAtTime(Math.max(.0001, this.settings.volume * (this.settings.effectsVolume ?? .5) * .12), ctx.currentTime); gain.gain.exponentialRampToValueAtTime(.0001, ctx.currentTime + .32);
-    oscillator.start(); oscillator.stop(ctx.currentTime + .33); oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); };
+    const ctx = this.context;
+    if (!this.settings.sound || !ctx || ctx.state !== 'running' || globalThis.document?.hidden) return false;
+    const now = ctx.currentTime;
+    this.lastCue ??= new Map();
+    if (now - (this.lastCue.get(kind) ?? -Infinity) < .075 || this.nodes.size >= 24) return false;
+    this.lastCue.set(kind, now);
+    // Original synthesized motifs; no external samples.
+    const cues = {
+      collect: [[660, 990, 0, .21, 'sine'], [990, 1320, .08, .23, 'triangle']],
+      discover: [[523, 659, 0, .2, 'triangle'], [784, 1047, .12, .3, 'sine']],
+      memory: [[392, 523, 0, .4, 'sine'], [659, 784, .14, .45, 'sine']],
+      quest: [[523, 523, 0, .15, 'triangle'], [659, 659, .1, .15, 'triangle'], [784, 1047, .2, .3, 'sine']],
+      chapter: [[392, 523, 0, .3, 'triangle'], [659, 784, .16, .4, 'sine'], [1047, 1047, .3, .45, 'sine']],
+      book: [[380, 720, 0, .09, 'triangle'], [620, 430, .055, .12, 'triangle']],
+      object: [[320, 190, 0, .16, 'triangle']],
+      door: [[160, 72, 0, .28, 'triangle'], [230, 110, .035, .17, 'sine']],
+      step: [[85, 45, 0, .1, 'sine']], ball: [[120, 65, 0, .18, 'sine']],
+      ui: [[620, 760, 0, .075, 'sine']],
+      confirm: [[440, 660, 0, .18, 'sine'], [880, 880, .08, .18, 'sine']],
+    };
+    const volume = Math.max(0, Math.min(1, Number(this.settings.volume) || 0));
+    const effects = Math.max(0, Math.min(1, Number(this.settings.effectsVolume ?? .5) || 0));
+    if (!volume || !effects) return false;
+    for (const [from, to, delay, duration, type] of cues[kind] || cues.object) {
+      const oscillator = ctx.createOscillator(), gain = ctx.createGain(), start = now + delay;
+      oscillator.connect(gain); gain.connect(ctx.destination); oscillator.type = type;
+      oscillator.frequency.setValueAtTime(from, start);
+      oscillator.frequency.exponentialRampToValueAtTime(to, start + duration);
+      gain.gain.setValueAtTime(.0001, start);
+      gain.gain.linearRampToValueAtTime(volume * effects * .085, start + .008);
+      gain.gain.exponentialRampToValueAtTime(.0001, start + duration);
+      this.nodes.add(oscillator);
+      oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); this.nodes.delete(oscillator); };
+      oscillator.start(start); oscillator.stop(start + duration + .01);
+    }
+    return true;
   }
   setMood(mood) { if (this.mood === mood) return; this.mood = mood; this.step = 0; this.nextNote = this.context?.currentTime || 0; if (this.musicGain) { this.musicGain.gain.cancelScheduledValues(this.context.currentTime); this.musicGain.gain.setValueAtTime(0, this.context.currentTime); } }
   update() {
@@ -38,7 +67,7 @@ export class Audio {
     const ctx = this.context; if (!ctx || !this.settings.sound) return;
     if (!this.windBuffer) { this.windBuffer = ctx.createBuffer(1, Math.floor(ctx.sampleRate * .8), ctx.sampleRate); const values = this.windBuffer.getChannelData(0); for (let i = 0; i < values.length; i++) values[i] = Math.random() * 2 - 1; }
     const source = ctx.createBufferSource(), filter = ctx.createBiquadFilter(), gain = ctx.createGain(); source.buffer = this.windBuffer; filter.type = 'bandpass'; filter.frequency.value = 320; filter.Q.value = .7;
-    gain.gain.setValueAtTime(.0001, ctx.currentTime); gain.gain.linearRampToValueAtTime(Math.max(.0001, this.settings.volume * this.settings.effectsVolume * .035), ctx.currentTime + .2); gain.gain.exponentialRampToValueAtTime(.0001, ctx.currentTime + .75);
+    gain.gain.setValueAtTime(.0001, ctx.currentTime); gain.gain.linearRampToValueAtTime(Math.max(.0001, this.settings.volume * (this.settings.effectsVolume ?? .5) * .035), ctx.currentTime + .2); gain.gain.exponentialRampToValueAtTime(.0001, ctx.currentTime + .75);
     source.connect(filter); filter.connect(gain); gain.connect(ctx.destination); this.nodes.add(source); source.start(); source.onended = () => { source.disconnect(); filter.disconnect(); gain.disconnect(); this.nodes.delete(source); };
   }
   dispose() { for (const node of this.nodes) { try { node.stop(); } catch {} node.disconnect(); } this.nodes.clear(); this.musicGain?.disconnect(); this.context?.close(); }

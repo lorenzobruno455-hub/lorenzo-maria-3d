@@ -5,3 +5,9 @@ export const CHARACTER_ASSETS = {
   lorenzo: { url: '/models/aurora/lorenzo.glb', height: 1.82, palette: {}, clips: { idle: 'Idle', walk: 'Walk', run: 'Run', talk: 'Talk', interact: 'Interact', turn: 'Turn', sit: 'Sit', stand: 'Stand', wave: 'Wave', observe: 'Observe', react: 'React', accelerate: 'Accelerate', decelerate: 'Decelerate', point: 'Point', pickup: 'Pickup', openbook: 'OpenBook' } },
   maria: { url: '/models/aurora/maria.glb', height: 1.76, palette: {}, clips: { idle: 'Idle', walk: 'Walk', run: 'Run', talk: 'Talk', interact: 'Interact', turn: 'Turn', sit: 'Sit', stand: 'Stand', wave: 'Wave', observe: 'Observe', react: 'React', accelerate: 'Accelerate', decelerate: 'Decelerate', point: 'Point', pickup: 'Pickup', openbook: 'OpenBook' } },
 };
+
+// Original fictional school cast. Identity is authored for the game, not a portrait.
+const npcClips = CHARACTER_ASSETS.maria.clips;
+export const NPC_CHARACTER_ASSETS = Object.freeze(Object.fromEntries([
+  ['bia', 1.68], ['caio', 1.84], ['helena', 1.79], ['davi', 1.75], ['lia', 1.71],
+].map(([id, height]) => [id, Object.freeze({ url: `/models/aurora/${id}.glb`, height, palette: {}, clips: npcClips })])));

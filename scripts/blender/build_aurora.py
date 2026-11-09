@@ -8,6 +8,11 @@ from mathutils import Vector
 ROOT=Path(__file__).resolve().parents[2]
 PALETTES={
  'lorenzo':dict(skin='#b98b6d',shirt='#f3ead2',accent='#e6a52e',pants='#304b68',hair='#303540',eye='#243947',shoe='#253040'),
+ 'bia':dict(skin='#bd8a68',shirt='#b04b50',accent='#f5d184',pants='#39465d',hair='#342a32',eye='#554638',shoe='#533f48'),
+ 'caio':dict(skin='#925c43',shirt='#368b9c',accent='#f0ce67',pants='#243e57',hair='#241e29',eye='#362b29',shoe='#eee2c9'),
+ 'helena':dict(skin='#d4a482',shirt='#79649d',accent='#e5c995',pants='#393848',hair='#555265',eye='#3b454a',shoe='#34303d'),
+ 'davi':dict(skin='#c38a66',shirt='#d3943e',accent='#43475b',pants='#3e5265',hair='#462d26',eye='#3b444b',shoe='#533d32'),
+ 'lia':dict(skin='#a56a4d',shirt='#63846b',accent='#f0dbc0',pants='#434356',hair='#30282e',eye='#413934',shoe='#39343f'),
  'maria':dict(skin='#ca967f',shirt='#198e98',accent='#f4cf58',pants='#35445c',hair='#543e50',eye='#304b58',shoe='#253040')}
 
 def material(name,hexcolor):
@@ -74,7 +79,7 @@ def create_avatar(name):
  sphere((0,-.101,1.591),(.026,.006,.005),'skin','jaw')
  # Original hair: a fitted cap with sculpted locks, contrasting silhouettes.
  mesh_rings('Hair cap',[(1.73,.126,.116,0,.006),(1.78,.127,.118,0,.012),(1.825,.092,.091,0,.018),(1.852,.02,.025,0,.02)],'hair','head',24)
- if name=='lorenzo':
+ if name in ['lorenzo','caio','davi']:
   mesh_rings('Swept quiff',[(1.755,.095,.024,0,-.099),(1.80,.12,.04,-.005,-.067),(1.845,.085,.048,-.023,-.015),(1.863,.025,.022,-.045,.005)],'hair','head',20)
   for s in [-1,1]:mesh_rings('Sideburn',[(1.67,.012,.018,s*.119,.005),(1.76,.017,.05,s*.115,.005)],'hair','head',8)
  else:
@@ -86,6 +91,37 @@ def create_avatar(name):
   for i in range(5):
    lock=sphere((-.085+i*.032,-.078,1.778),(.033,.049,.079-i*.006),'hair');lock.rotation_euler[1]=-.55
   curve([(-.12,-.008,1.744),(-.102,-.077,1.795),(.01,-.095,1.823),(.108,-.038,1.78)],.008,'accent')
+ # Fictional NPC identity silhouettes and practical accessories, attached to rig bones.
+ if name=='bia':
+  sphere((.105,.10,1.77),(.075,.07,.08),'hair')
+  # Cross-body book satchel, warm cover and brass clasp.
+  box((.18,.09,1.02),(.15,.09,.21),'accent','hips',.018)
+  curve([(-.17,-.09,1.4),(0,-.12,1.2),(.18,.03,1.04)],.013,'hair','chest')
+ elif name=='caio':
+  for x in [-.085,-.04,0,.04,.085]:sphere((x,.005,1.838),(.035,.065,.04),'hair')
+  # Athletic chest stripe and sweatband.
+  box((0,-.11,1.28),(.36,.012,.045),'accent','chest',.003)
+  mesh_rings('Headband',[(1.752,.127,.119,0,.005),(1.776,.128,.12,0,.005)],'accent','head',24)
+ elif name=='helena':
+  sphere((0,.115,1.79),(.078,.069,.077),'hair')
+  # Large round glasses remain readable from dialogue distance.
+  for side in [-1,1]:
+   points=[(side*.051+.038*math.cos(i*2*math.pi/16),-.125,1.685+.029*math.sin(i*2*math.pi/16)) for i in range(17)]
+   curve(points,.004,'ink')
+  curve([(-.014,-.126,1.691),(0,-.13,1.699),(.014,-.126,1.691)],.004,'ink')
+  mesh_rings('Long cardigan',[(.82,.19,.12,0,.018),(1.05,.175,.115,0,.018),(1.3,.205,.113,0,.018)],'shirt','chest')
+ elif name=='davi':
+  # Over-ear headphones with a high, unmistakable arch.
+  curve([(-.146,0,1.68),(-.14,0,1.84),(0,0,1.9),(.14,0,1.84),(.146,0,1.68)],.017,'accent')
+  for side in [-1,1]:sphere((side*.145,0,1.68),(.028,.048,.057),'accent')
+  box((0,.127,1.16),(.25,.13,.35),'accent','chest',.035)
+  for side in [-1,1]:curve([(side*.12,-.08,1.4),(side*.15,-.11,1.23),(side*.12,-.09,1.02)],.014,'accent','chest')
+ elif name=='lia':
+  sphere((0,.10,1.80),(.07,.07,.09),'hair')
+  # Soft work apron, front pocket and tied waist.
+  box((0,-.116,1.08),(.31,.022,.40),'accent','chest',.01)
+  box((0,-.134,1.08),(.15,.018,.11),'shirt','chest',.008)
+  curve([(-.17,-.03,1.24),(0,-.126,1.23),(.17,-.03,1.24)],.011,'accent','chest')
  # Collar, piping, placket and stitched pocket.
  for s in [-1,1]:
   collar=box((s*.052,-.082,1.426),(.08,.022,.069),'accent',bevel=.006);collar.rotation_euler[1]=s*.32
@@ -182,4 +218,6 @@ def create_avatar(name):
  bpy.ops.object.select_all(action='DESELECT');rig.select_set(True);body.select_set(True);bpy.context.view_layer.objects.active=rig
  bpy.ops.export_scene.gltf(filepath=str(out/f'{name}.glb'),export_format='GLB',use_selection=True,export_animations=True,export_animation_mode='NLA_TRACKS',export_skins=True,export_extras=True,export_force_sampling=True,export_materials='EXPORT')
  print('AURORA_GENERATED',name,len(body.data.vertices),len(body.data.polygons))
-for character in PALETTES:create_avatar(character)
+import sys
+selected=sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else list(PALETTES)
+for character in selected:create_avatar(character)

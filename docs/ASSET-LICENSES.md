@@ -38,3 +38,27 @@ O comando gera os **dois GLBs efetivamente usados pelo jogo**. Cores estão em `
 ## Atualização 0.7B
 
 Os mesmos dois GLBs foram efetivamente regenerados no Blender com 16 clips originais cada, incluindo Accelerate, Decelerate, Point, Pickup e OpenBook; Stand ganhou transição própria. Licença CC0 da arte original mantida. Mixamo não foi baixado nem necessário: o esqueleto permanece o mesmo. A nova fotografia cenográfica usa a geometria procedural original e é identificada como ambientação fictícia. Nenhum áudio externo foi adicionado; a aventura musical reutiliza a síntese e as melodias originais já presentes no projeto.
+
+## Atualização 0.7C
+
+| Asset integrado | Origem | Licença |
+| --- | --- | --- |
+| `public/models/aurora/bia.glb` — 865.044 bytes | Gerador original `scripts/blender/build_aurora.py`, Blender 4.3.2 | CC0-1.0 |
+| `public/models/aurora/caio.glb` — 733.912 bytes | Mesmo gerador original; faixa e roupa esportiva | CC0-1.0 |
+| `public/models/aurora/helena.glb` — 892.036 bytes | Mesmo gerador original; óculos, coque e casaco | CC0-1.0 |
+| `public/models/aurora/davi.glb` — 704.908 bytes | Mesmo gerador original; fones e mochila | CC0-1.0 |
+| `public/models/aurora/lia.glb` — 869.756 bytes | Mesmo gerador original; avental e coque | CC0-1.0 |
+| Estantes, livros, jardim, cantina e fachada | `library-garden07c.js`, geometria procedural original | CC0-1.0 |
+| Novos efeitos e áudio | `visual-effects.js`, `colorbeat-effects.css`, `audio.js`; formas próprias e síntese WebAudio | CC0-1.0 |
+
+Os cinco modelos foram gerados e efetivamente carregados pelo jogo, com 18 ossos e 16 animações cada; não são apenas scripts ou promessas de importação. São personagens fictícios, não retratos reais. Nenhum recurso externo, amostra comercial, API paga ou crédito de IA foi necessário. Fontes e narrativas mantêm as licenças anteriores. Dedicação da arte original: https://creativecommons.org/publicdomain/zero/1.0/ .
+
+Para gerar apenas os NPCs:
+
+```sh
+blender --background --python scripts/blender/build_aurora.py -- bia caio helena davi lia
+```
+
+O comando sem nomes agora gera os sete personagens. A licença do Blender não é a licença dos modelos exportados.
+
+`public/favicon.svg`: monograma geométrico original LM, CC0-1.0.

@@ -1,5 +1,6 @@
 import narratives from '../data/interactions.json' with { type: 'json' };
 import * as THREE from 'three';
+import { addLibraryDetails } from './library-garden07c.js';
 import { batchMeshes } from './batching.js';
 import { PropLibrary } from './prop-library.js';
 import { surface, groundHeight } from './prop-placement.js';
@@ -55,7 +56,16 @@ export function createStoryWorld(scene, world, memories, games) {
    b.mesh.scale.setScalar(selected===b?1.025:1);
   }
  }
+ addLibraryDetails(place);
+ for(const z of [-14,-10,-7.5])bounds(27.3,1.52,z,.62,2.9,2.3);
  const staticMeshes=[];for(const p of staticProps){p.userData.staticBounds=new THREE.Box3().setFromObject(p).clone();}for(const p of staticProps)p.traverse(m=>{if(m.isMesh)staticMeshes.push(m);});
  const dynamic=new Set(objects.filter(o=>o.mesh).map(o=>o.mesh));batchMeshes(group,[...group.children.filter(m=>m.isMesh&&!dynamic.has(m)),...staticMeshes],owned);
+ // Keep all interactive/placed/actor descendants independent when consolidating scenery.
+ const scenery=scene.children.flatMap(node=>node.isMesh?[node]:node.children).filter(m=>{
+  if(!m.isMesh||!m.userData.inkStatic)return false;
+  for(let p=m;p;p=p.parent)if(p.userData.inkDynamic||p.userData.placement||p.userData.inkActor)return false;
+  return true;
+ });
+ batchMeshes(group,scenery,owned);
  return {narratives,objects,books,placed,highlight,openBook,update,album,dispose(){disposed=true;group.removeFromParent();owned.forEach(g=>g.dispose());}};
 }

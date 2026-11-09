@@ -62,7 +62,7 @@ const particles = Array.from({ length: 12 }, (_, i) => {
 });
 effect.visible = false; let effectTime = 0;
 
-function notify(message) { $('toast').textContent = message; $('toast').hidden = false; toastTime = 3; if (message.startsWith('◇')) visualEffects.burst('MEMÓRIA!'); else if (message.startsWith('★')) visualEffects.burst('CONQUISTA!'); }
+function notify(message) { $('toast').textContent = message; $('toast').hidden = false; toastTime = 3; if (message.startsWith('◇')) (visualEffects.memory(), audio.play('memory')); else if (message.startsWith('★')) (visualEffects.quest(), audio.play('quest')); }
 function save() {
   progress.position = { x: player.position.x, z: player.position.z }; progress.yaw = follow.yaw; progress.pitch = follow.pitch; progress.doors = world.doors.map(d => d.open);
   const ok = saveProgress(storage, progress, settings);
@@ -122,8 +122,8 @@ function handleInteraction(target) {
     else notify('Dê um passo para trás para movimentar a porta.');
   } else if (target.kind === 'point') speak(target.name.toUpperCase(), target.text);
   else if (collect(progress, target.id)) {
-    const c = target.ref; c.taken = true; interactionTime = .6; effect.position.set(c.x, 1, c.z); effectTime = .8; effect.visible = true;
-    audio.play('collect'); notify(`${c.name} encontrado!`); visualEffects.burst('DESCOBERTA!'); updateHUD(); save();
+    const c = target.ref; c.taken = true; interactionTime = .6; effect.position.set(c.x, 1, c.z); effectTime = motionPreference.matches ? 0 : .8; effect.visible = !motionPreference.matches;
+    audio.play('discover'); notify(`${c.name} encontrado!`); visualEffects.burst('DESCOBERTA!'); updateHUD(); save();
   }
 }
 function interact(){if(!active())return;const t=nearestTarget();if(t)interactions.activate(t.interactionId,player.position);}
@@ -143,7 +143,7 @@ $('start').onclick = () => { started = true; $('welcome').hidden = true; $('star
 living = new LivingSchool({ scene, world, maria, player, getProgress: () => progress, settings, dialogue: dialogues, save, notify, audio });
 recoverPlayerPosition();
 installPreferences(settings, save, controls);
-story = new Story({ player, living, scene, world, getProgress: () => progress, save, notify, dialogue: dialogues, audio,
+story = new Story({ player, living, scene, world, getProgress: () => progress, save, notify, dialogue: dialogues, audio, effects: visualEffects,
   start: () => { if (!started) $('start').click(); if (paused) setPause(false); },
   tutorial: () => { living.setMode('campaign'); const line = mariaDialogue(progress); speak('MARIA', line.text, () => { progress.stage = line.nextStage; updateHUD(); }); },
   onPanel: open => { panelOpen = open; if (open) { dialogues.close(); if (paused) setPause(false); } syncModal(); needsRender = true; },
@@ -214,13 +214,13 @@ addEventListener('resize', resize);
 addEventListener('pagehide', save);
 addEventListener('blur', () => { if (started && !paused) setPause(true); });
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden) { save(); controls.clear(); if (started) setPause(true); cancelAnimationFrame(frame); frame = 0; }
+  if (document.hidden) { save(); controls.clear(); if (started) setPause(true); quality.resetSample(); cancelAnimationFrame(frame); frame = 0; }
   else if (!frame && !disposed) { last = performance.now(); frame = requestAnimationFrame(animate); }
 });
-for (const [name, character] of [['lorenzo', lorenzo], ['maria', maria]]) {
+const heroLoads = [['lorenzo', lorenzo], ['maria', maria]].map(([name, character]) => {
   const asset = CHARACTER_ASSETS[name];
-  if (!asset.url) continue;
-  character.loadGLB(asset.url,asset.clips,assets,asset).then(result=>{
+  if (!asset.url) return Promise.resolve();
+  return character.loadGLB(asset.url,asset.clips,assets,asset).then(result=>{
     if(disposed||result.superseded)return;
     ink.registerActor(character);ink.update(settings.quality,player.position);
     // Full-detail procedural fallback geometry is no longer rendered once both
@@ -236,7 +236,13 @@ for (const [name, character] of [['lorenzo', lorenzo], ['maria', maria]]) {
     console.warn(`Modelo ${name}:`,error.message);
     notify('Modelo externo indisponível; personagem provisório mantido.');
   });
-}
+});
+Promise.allSettled(heroLoads).then(() => {
+  if(disposed)return;
+  return living.loadNPCAssets(assets, character => {ink.registerActor(character);ink.update(settings.quality,player.position);needsRender=true;});
+});
+function uiSound(event){if(event.target.closest?.('button,select')&&!event.target.closest('[disabled]'))audio.play('ui');}
+document.addEventListener('click',uiSound);
 let last = performance.now(), time = 0, hudTimer = 0;
 function animate(now) {
   if (disposed || document.hidden) { frame = 0; return; }
@@ -296,18 +302,18 @@ export function getGameState() {
   return { x: player.position.x, z: player.position.z, stage: progress.stage, collected: progress.collected.length, items: [...progress.collected], started, paused, dialog,
     yaw: follow.yaw, pitch: follow.pitch, analog: { ...controls.analog }, running: controls.runPointers.size > 0 || controls.keys.has('shift'), animation: lorenzo.state,
     camera: { x: camera.position.x, y: camera.position.y, z: camera.position.z, distance: follow.actualDistance }, doors: world.doors.map(d => ({ open: d.open, angle: d.angle })),
-    living: structuredClone(progress.living), npcs: living.actors.map(a => ({ id: a.definition.id, x: a.agent.position.x, z: a.agent.position.z, state: a.agent.state, distance: a.agent.distanceWalked, transitions: a.agent.transitions })),
+    living: structuredClone(progress.living), npcs: living.actors.map(a => ({ id: a.definition.id, x: a.agent.position.x, z: a.agent.position.z, state: a.agent.state, model:!!a.character.custom, animation:a.character.state, distance: a.agent.distanceWalked, transitions: a.agent.transitions })),
     adventure:adventure?.director.snapshot(),cinematic:{active:!!adventure?.cutscenes.active,paused:!!adventure?.cutscenes.paused,id:adventure?.cutscenes.scene?.id||null},physicalAction:adventure?.actions.active?.kind||null,adventureRhythm:adventure?.activityState?.phase,
     campaign: structuredClone(progress.campaign), storyPage: story?.page, rhythm: story?.game?.phase,
-    visual:{theme:'aurora-comic',edition:'0.7B',heroInk:ink.actorInk.filter(i=>i.actor.root===player&&i.mesh.isSkinnedMesh&&i.mesh.visible).length,fallbackInk:ink.actorInk.filter(i=>i.actor.root===player&&!i.mesh.isSkinnedMesh).length,models:{lorenzo:!!lorenzo.custom,maria:!!maria.custom},clips:{lorenzo:Object.keys(lorenzo.actions),maria:Object.keys(maria.actions)},toon:world.resources.material('#eadfc8').isMeshToonMaterial,outlineVertices:ink.staticInk.geometry.attributes.position?.count||0},
+    visual:{theme:'aurora-comic',edition:'0.7C',heroInk:ink.actorInk.filter(i=>i.actor.root===player&&i.mesh.isSkinnedMesh&&i.mesh.visible).length,fallbackInk:ink.actorInk.filter(i=>i.actor.root===player&&!i.mesh.isSkinnedMesh).length,models:{lorenzo:!!lorenzo.custom,maria:!!maria.custom},clips:{lorenzo:Object.keys(lorenzo.actions),maria:Object.keys(maria.actions)},toon:world.resources.material('#eadfc8').isMeshToonMaterial,outlineVertices:ink.staticInk.geometry.attributes.position?.count||0},
     spatial:validator.inspect(world.placed), memoryBooks:story.world.books.map(b=>({id:b.id,x:b.x,z:b.z,unlocked:b.unlocked,angle:b.mesh.userData.cover.rotation.z})),
-    quality: settings.quality, resolutionScale: quality.scale, outlines: ink.actorInk.filter(s=>s.mesh.visible).length, fps: Math.round(quality.fps), drawCalls: renderer.info.render.calls, geometries: renderer.info.memory.geometries };
+    quality: settings.quality, resolutionScale: quality.scale, outlines: ink.actorInk.filter(s=>s.mesh.visible).length, fps: Math.round(quality.fps), drawCalls: renderer.info.render.calls, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures, triangles: renderer.info.render.triangles, drawingBuffer:{width:renderer.domElement.width,height:renderer.domElement.height} };
 }
 registerStateReader(getGameState);
 if(new URLSearchParams(location.search).has('debug')){addEventListener('keydown',e=>{if(e.code==='F3'){e.preventDefault();if(validator.visible)validator.clear();else validator.show([...world.placed,...story.world.placed],[player,...living.actors.map(a=>a.character.root)]);needsRender=true;}});}
 
 export function dispose() {
-  adventure?.dispose();ink.dispose();validator.dispose();interactions.dispose();visualEffects.dispose();
+  document.removeEventListener('click',uiSound);adventure?.dispose();ink.dispose();validator.dispose();interactions.dispose();visualEffects.dispose();
   disposed = true; cancelAnimationFrame(frame); controls.clear(); save(); story?.dispose(); living?.dispose(); dialogues?.dispose(); lorenzo.dispose(); maria.dispose(); assets.dispose(); world.dispose(); audio.dispose(); renderer.dispose();
 }
 if (import.meta.hot) import.meta.hot.dispose(dispose);

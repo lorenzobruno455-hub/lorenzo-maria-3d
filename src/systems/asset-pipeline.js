@@ -1,12 +1,11 @@
 import * as THREE from 'three';
-import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 import {clone} from 'three/addons/utils/SkeletonUtils.js';
 
 // Template owns GPU data; leases own only cloned skeletons. No consumer may
 // dispose shared geometries/materials. A disposed pool also cleans late loads.
 export class GLBAssets {
-  constructor(resources, {load = url => new GLTFLoader().loadAsync(url)} = {}) {
+  constructor(resources, {load = async url => { const {GLTFLoader} = await import('three/addons/loaders/GLTFLoader.js'); return new GLTFLoader().loadAsync(url); }} = {}) {
     this.resources = resources; this.load = load; this.entries = new Map(); this.templates = new Set(); this.materials = new Map(); this.disposed = false;
   }
   async acquire(url, {height = 1.82, palette = {}} = {}) {
