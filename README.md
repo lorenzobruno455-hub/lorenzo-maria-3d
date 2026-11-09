@@ -1,4 +1,4 @@
-# Lorenzo & Maria 3D — Colorbeat 0.8.1 M1 + M2
+# Lorenzo & Maria 3D — Colorbeat 0.8.1
 
 Exploração em terceira pessoa no fictício Colégio Aurora, com Three.js, JavaScript e Vite. Interface e diálogos em português. O capítulo inicial continua completo: converse com Maria, encontre três lembranças e retorne ao pátio.
 
@@ -6,7 +6,7 @@ M2 acrescentou acabamento dos três pavimentos: madeira, azulejo, tecido, mobili
 
 M4 melhora o HUD móvel, limita sombras/animação de NPCs distantes e corrige sua orientação nas conversas. A versão 0.8 reúne M1–M4 e as bases 0.7A/B/C na `main`. As branches de desenvolvimento foram preservadas. Veja [entrega M4](docs/ENTREGA-08-M4.md), [medições](docs/PERFORMANCE-08-M4.md) e [integração M3](docs/ENTREGA-08-M3.md). Validação em aparelhos físicos e publicação na hospedagem continuam pendentes.
 
-Esta branch unifica a biblioteca de materiais, shader toon, mapas, luz e traço de cenário entre o campus e o São Jorge. M1/M2 da 0.8.1: [entrega, comparativos e testes](docs/ENTREGA-081-M1-M2.md). M3/M4 da 0.8.1 continuam pendentes; a main permanece na 0.8 completa.
+Esta branch unifica a biblioteca de materiais, shader toon, mapas, luz e traço de cenário entre o campus e o São Jorge. M1/M2 da 0.8.1: [entrega, comparativos e testes](docs/ENTREGA-081-M1-M2.md). M3/M4 da 0.8.1 acrescentam traço adaptativo para personagens, acabamento fosco de roupas, destaque contextual e interface compartilhada. Veja [entrega final](docs/ENTREGA-081-M3-M4.md) e [medições reproduzíveis](docs/PERFORMANCE-081.md). A main permanece na 0.8 completa até a revisão do PR #9.
 
 ## Executar no computador ou Chromebook Linux
 
@@ -19,7 +19,7 @@ npm ci
 npm run dev
 ```
 
-Abra `http://localhost:5173` e mantenha o terminal aberto. Para testar M1/M2 da 0.8.1 em uma cópia existente:
+Abra `http://localhost:5173` e mantenha o terminal aberto. Para testar a 0.8.1 em uma cópia existente:
 
 ```sh
 git fetch origin

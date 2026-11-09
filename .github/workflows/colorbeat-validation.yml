@@ -40,5 +40,6 @@ jobs:
           path: |
             test-results/**/*.png
             docs/captures/07b/*.png
+            docs/captures/081/*.png
           if-no-files-found: ignore
           retention-days: 5

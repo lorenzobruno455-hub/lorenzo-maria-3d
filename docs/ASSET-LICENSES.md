@@ -91,3 +91,7 @@ Nenhum modelo, textura, fonte, áudio ou imagem externa foi adicionado. O polime
 ## Colorbeat 0.8.1 M1/M2
 
 `colorbeat-materials.js`: extensão original sobre os shaders e ShaderChunks do Three.js (MIT, dependência já existente). Faixas, projeção em mundo e realces são código próprio do Aurora, sem cópia de shaders de Hi-Fi RUSH. Mapas neutros procedurais 64×64 são arte original derivada dos mapas próprios já registrados, disponibilizada sob CC0-1.0; código segue a licença do projeto. Perfis de iluminação e contornos seletivos são próprios. GLBs, fontes e áudios mantêm suas proveniências anteriores; nenhum asset externo ou recurso pago novo. Capturas são do próprio jogo.
+
+## Colorbeat 0.8.1 M3/M4
+
+`actor-ink-material.js`: extensão original dos ShaderChunks MeshBasic do Three.js (MIT, já dependência do projeto), mantendo morph/skinning e projetando o contorno na câmera. `interaction-accent.js`: geometria de colchetes e feedback originais; arte procedural CC0-1.0, código sob a licença do projeto. Não há texturas novas para roupas: o perfil fosco preserva as cores dos GLBs existentes. Fontes locais Barlow Condensed/Atkinson e GLBs mantêm as licenças documentadas acima. Capturas comparativas são renderizações reais do próprio jogo. Nenhum asset de Hi-Fi RUSH, serviço pago, crédito de geração ou dependência adicional foi usado.
