@@ -1,0 +1,303 @@
+{
+  "titulo": "Colégio São Jorge no Lorenzo & Maria 3D v0.8",
+  "objetivo": "Inspirar cenário ficcional reconhecível, não mapear instalações operacionais de escola real.",
+  "origem": "Croquis do usuário, descrições fornecidas e maquete 3D conceitual criada na conversa",
+  "observacoes": [
+    "Somente a existência de três pavimentos e uso do terceiro como salão foram confirmados pelo usuário.",
+    "Posicionamento geral de ambientes dos pavimentos 1 e 2 se baseia nos croquis desenhados.",
+    "Números de salas, coordenadas, dimensões (22 x 40m), portas e mobiliário minucioso NÃO foram medidos nem confirmados.",
+    "O palco, foyer e depósito são conceitos visuais opcionais, não infraestrutura comprovada.",
+    "Evitar detalhes de segurança e reproduções operacionais precisas de acessos, circulação restrita e vulnerabilidades de escola real."
+  ],
+  "escala": "aproximada e editável",
+  "cores_hipoteses": {
+    "parede_branco": "#F4F4F1",
+    "azul_institucional": "#2F5D9A",
+    "cadeiras_azuis": "#2D5FA8",
+    "metal": "#5B616B",
+    "piso_madeira": "#8B6A4E",
+    "piso_corredor": "#D9D7D2",
+    "vermelho_fachada": "#B9413B",
+    "portas": "#7A5A3D",
+    "lousa": "#2F4B3C",
+    "cortinas": "#D8D3C8"
+  },
+  "ambientes": [
+    {
+      "id": "SJ-F1-01",
+      "andar": 1,
+      "ambiente": "Sala de aula A",
+      "classe_uso": "class",
+      "referencia": "croqui_usuario",
+      "localizacao_conceitual": "esquerda",
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    },
+    {
+      "id": "SJ-F1-02",
+      "andar": 1,
+      "ambiente": "Banheiro masculino",
+      "classe_uso": "bath",
+      "referencia": "croqui_usuario",
+      "localizacao_conceitual": "esquerda",
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    },
+    {
+      "id": "SJ-F1-03",
+      "andar": 1,
+      "ambiente": "Banheiro feminino",
+      "classe_uso": "bath",
+      "referencia": "croqui_usuario",
+      "localizacao_conceitual": "esquerda",
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    },
+    {
+      "id": "SJ-F1-04",
+      "andar": 1,
+      "ambiente": "Escadas",
+      "classe_uso": "stair",
+      "referencia": "croqui_usuario",
+      "localizacao_conceitual": "esquerda",
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    },
+    {
+      "id": "SJ-F1-05",
+      "andar": 1,
+      "ambiente": "Sala dos professores",
+      "classe_uso": "teachers",
+      "referencia": "croqui_usuario",
+      "localizacao_conceitual": "esquerda",
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    },
+    {
+      "id": "SJ-F1-06",
+      "andar": 1,
+      "ambiente": "Biblioteca",
+      "classe_uso": "library",
+      "referencia": "croqui_usuario",
+      "localizacao_conceitual": "esquerda",
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    },
+    {
+      "id": "SJ-F1-07",
+      "andar": 1,
+      "ambiente": "Sala de aula B",
+      "classe_uso": "class",
+      "referencia": "croqui_usuario",
+      "localizacao_conceitual": "direita",
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    },
+    {
+      "id": "SJ-F1-08",
+      "andar": 1,
+      "ambiente": "Sala de aula C",
+      "classe_uso": "class",
+      "referencia": "croqui_usuario",
+      "localizacao_conceitual": "direita",
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    },
+    {
+      "id": "SJ-F1-09",
+      "andar": 1,
+      "ambiente": "Sala de cinema",
+      "classe_uso": "cinema",
+      "referencia": "croqui_usuario",
+      "localizacao_conceitual": "direita",
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    },
+    {
+      "id": "SJ-F1-10",
+      "andar": 1,
+      "ambiente": "Recepção",
+      "classe_uso": "reception",
+      "referencia": "croqui_usuario",
+      "localizacao_conceitual": "direita",
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    },
+    {
+      "id": "SJ-F1-11",
+      "andar": 1,
+      "ambiente": "Secretaria",
+      "classe_uso": "secretaria",
+      "referencia": "croqui_usuario",
+      "localizacao_conceitual": "direita",
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    },
+    {
+      "id": "SJ-F1-12",
+      "andar": 1,
+      "ambiente": "Direção",
+      "classe_uso": "office",
+      "referencia": "croqui_usuario_sala_diretor",
+      "localizacao_conceitual": null,
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    },
+    {
+      "id": "SJ-F2-13",
+      "andar": 2,
+      "ambiente": "Sala 201",
+      "classe_uso": "class",
+      "referencia": "croqui_usuario",
+      "localizacao_conceitual": "esquerda",
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    },
+    {
+      "id": "SJ-F2-14",
+      "andar": 2,
+      "ambiente": "Sala 202",
+      "classe_uso": "class",
+      "referencia": "croqui_usuario",
+      "localizacao_conceitual": "esquerda",
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    },
+    {
+      "id": "SJ-F2-15",
+      "andar": 2,
+      "ambiente": "Banheiro masculino",
+      "classe_uso": "bath",
+      "referencia": "croqui_usuario",
+      "localizacao_conceitual": "esquerda",
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    },
+    {
+      "id": "SJ-F2-16",
+      "andar": 2,
+      "ambiente": "Banheiro feminino",
+      "classe_uso": "bath",
+      "referencia": "croqui_usuario",
+      "localizacao_conceitual": "esquerda",
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    },
+    {
+      "id": "SJ-F2-17",
+      "andar": 2,
+      "ambiente": "Escadas",
+      "classe_uso": "stair",
+      "referencia": "croqui_usuario",
+      "localizacao_conceitual": "esquerda",
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    },
+    {
+      "id": "SJ-F2-18",
+      "andar": 2,
+      "ambiente": "Sala de ciências",
+      "classe_uso": "science",
+      "referencia": "croqui_usuario",
+      "localizacao_conceitual": "esquerda",
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    },
+    {
+      "id": "SJ-F2-19",
+      "andar": 2,
+      "ambiente": "Sala 205",
+      "classe_uso": "class",
+      "referencia": "croqui_usuario",
+      "localizacao_conceitual": "direita",
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    },
+    {
+      "id": "SJ-F2-20",
+      "andar": 2,
+      "ambiente": "Sala 206",
+      "classe_uso": "class",
+      "referencia": "croqui_usuario",
+      "localizacao_conceitual": "direita",
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    },
+    {
+      "id": "SJ-F2-21",
+      "andar": 2,
+      "ambiente": "Coordenação",
+      "classe_uso": "coord",
+      "referencia": "croqui_usuario",
+      "localizacao_conceitual": "direita",
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    },
+    {
+      "id": "SJ-F2-22",
+      "andar": 2,
+      "ambiente": "Laboratório",
+      "classe_uso": "lab",
+      "referencia": "croqui_usuario",
+      "localizacao_conceitual": "direita",
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    },
+    {
+      "id": "SJ-F2-23",
+      "andar": 2,
+      "ambiente": "Sala 204",
+      "classe_uso": "class",
+      "referencia": "croqui_usuario",
+      "localizacao_conceitual": "direita",
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    },
+    {
+      "id": "SJ-F3-24",
+      "andar": 3,
+      "ambiente": "Salão multiuso",
+      "classe_uso": "hall",
+      "referencia": "salão_confirmado_demais_hipóteses",
+      "localizacao_conceitual": null,
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    },
+    {
+      "id": "SJ-F3-25",
+      "andar": 3,
+      "ambiente": "Palco",
+      "classe_uso": "stage",
+      "referencia": "salão_confirmado_demais_hipóteses",
+      "localizacao_conceitual": null,
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    },
+    {
+      "id": "SJ-F3-26",
+      "andar": 3,
+      "ambiente": "Foyer",
+      "classe_uso": "foyer",
+      "referencia": "salão_confirmado_demais_hipóteses",
+      "localizacao_conceitual": "direita",
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    },
+    {
+      "id": "SJ-F3-27",
+      "andar": 3,
+      "ambiente": "Escada",
+      "classe_uso": "stair",
+      "referencia": "salão_confirmado_demais_hipóteses",
+      "localizacao_conceitual": "esquerda",
+      "medidas_reais_confirmadas": false,
+      "status_modelagem": "maquete_conceitual_existente"
+    }
+  ],
+  "prioridade_fontes": [
+    "croquis fornecidos pelo usuário",
+    "descrições diretas fornecidas pelo usuário",
+    "fotografias apenas quando fornecidas e autorizadas",
+    "maquetes/ilustrações conceituais como base geométrica, nunca como comprovação factual"
+  ]
+}
