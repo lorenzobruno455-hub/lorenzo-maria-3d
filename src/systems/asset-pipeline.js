@@ -6,9 +6,9 @@ import {clone} from 'three/addons/utils/SkeletonUtils.js';
 // dispose shared geometries/materials. A disposed pool also cleans late loads.
 export class GLBAssets {
   constructor(resources, {load = async url => { const {GLTFLoader} = await import('three/addons/loaders/GLTFLoader.js'); return new GLTFLoader().loadAsync(url); }} = {}) {
-    this.resources = resources; this.load = load; this.entries = new Map(); this.templates = new Set(); this.materials = new Map(); this.disposed = false;
+    this.resources = resources; this.load = load; this.entries = new Map(); this.templates = new Set(); this.materials = new Map(); this.disposed = false; this.ownedMaterials = new Set();
   }
-  async acquire(url, {height = 1.82, palette = {}} = {}) {
+  async acquire(url, {height = 1.82, palette = {}, preserveTransform = false, vertexColors = false} = {}) {
     if (this.disposed) throw new Error('Asset cache disposed');
     if (!Number.isFinite(height) || height < .1 || height > 10) throw new Error('Altura alvo inválida');
     if (!this.entries.has(url)) {
@@ -28,26 +28,30 @@ export class GLBAssets {
     const entry = await this.entries.get(url);
     if (this.disposed) throw new Error('Asset cache disposed');
     const model = new THREE.Group(); model.name = 'Aurora normalized asset';
-    const instance = clone(entry.template), size = entry.bounds.getSize(new THREE.Vector3()), scale = height / size.y;
+    const instance = clone(entry.template), size = entry.bounds.getSize(new THREE.Vector3()), scale = preserveTransform ? 1 : height / size.y;
     const normalized=new THREE.Group();normalized.scale.setScalar(scale);
-    normalized.position.set(-(entry.bounds.min.x+entry.bounds.max.x)*scale/2,-entry.bounds.min.y*scale,-(entry.bounds.min.z+entry.bounds.max.z)*scale/2);
+    if(!preserveTransform) normalized.position.set(-(entry.bounds.min.x+entry.bounds.max.x)*scale/2,-entry.bounds.min.y*scale,-(entry.bounds.min.z+entry.bounds.max.z)*scale/2);
     normalized.add(instance);
     instance.traverse(mesh => {
       if (!mesh.isMesh) return;
       const convert = material => {
         const color = palette[material.name] || `#${material.color?.getHexString() || 'ffffff'}`;
         const kind = /metal|glass/i.test(material.name) ? material.name.toLowerCase().includes('glass') ? 'glass':'metal' : 'plain';
-        const key = `${color}:${kind}`;
-        if(!this.materials.has(key))this.materials.set(key,this.resources.material(color,kind));
+        const colored = vertexColors && mesh.geometry.hasAttribute('color');
+        const key = `${color}:${kind}:${colored}`;
+        if(!this.materials.has(key)) {
+          if(colored){const m=new THREE.MeshToonMaterial({color,vertexColors:true,gradientMap:this.resources.toonRamp()});this.materials.set(key,m);this.ownedMaterials.add(m);}
+          else this.materials.set(key,this.resources.material(color,kind));
+        }
         return this.materials.get(key);
       };
       const original=Array.isArray(mesh.material)?mesh.material:[mesh.material];
       mesh.userData.inkGroups=original.map(m=>/^(hair|shirt|pants|shoe)$/i.test(m.name));
       mesh.material = Array.isArray(mesh.material) ? mesh.material.map(convert) : convert(mesh.material);
-      mesh.castShadow = true; mesh.receiveShadow = false;
+      mesh.castShadow = true; mesh.receiveShadow = preserveTransform;
       if(mesh.isSkinnedMesh) mesh.frustumCulled = false;
     });
-    model.add(normalized); model.userData.assetURL = url; model.userData.height = height;
+    model.add(normalized); model.userData.assetURL = url; model.userData.height = preserveTransform ? size.y : height;
     let released = false;
     return {model, animations:entry.animations, release() {
       if (released) return; released = true; model.removeFromParent();
@@ -80,7 +84,7 @@ export class GLBAssets {
   dispose() {
     if(this.disposed)return;this.disposed=true;
     for(const template of this.templates)this.disposeTemplate(template);
-    this.templates.clear();this.materials.clear();
+    this.templates.clear();this.ownedMaterials.forEach(m=>m.dispose());this.ownedMaterials.clear();this.materials.clear();
     this.entries.clear();
   }
 }

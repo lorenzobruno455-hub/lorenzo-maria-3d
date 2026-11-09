@@ -9,8 +9,10 @@ export class FollowCamera {
   rotate(x, y) { this.yaw = (this.yaw + x) % (Math.PI * 2); this.pitch = clamp(this.pitch + y, .08, 1.15); }
   update(player, dt, snap = false) {
     snap=!!(snap||(this.reducedMotion&&(this.focusObject||this.conversation||this.wasNarrative)));
-    const target = new THREE.Vector3(this.focusObject?.x ?? player.x, this.focusObject?.y ?? 1.42, this.focusObject?.z ?? player.z);
-    if (this.conversation && this.partner) target.set((player.x + this.partner.x) / 2, 1.5, (player.z + this.partner.z) / 2);
+    const floorY = Number.isFinite(player.y) ? player.y : 0;
+    const focusY = Number.isFinite(this.focusObject?.y) ? this.focusObject.y : floorY + 1.42;
+    const target = new THREE.Vector3(this.focusObject?.x ?? player.x, focusY, this.focusObject?.z ?? player.z);
+    if (this.conversation && this.partner) target.set((player.x + this.partner.x) / 2, Number.isFinite(this.focusObject?.y) ? this.focusObject.y : floorY + 1.5, (player.z + this.partner.z) / 2);
     if (!this.initialized || snap) this.focus.copy(target); else this.focus.lerp(target, 1 - Math.exp(-dt * 12));
     // Never interpolate the focus through a wall when the player turns a corner.
     if (cameraFraction(target, this.focus, this.obstacles, .08) < 1) this.focus.copy(target);

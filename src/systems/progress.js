@@ -1,8 +1,11 @@
+import { freshSchoolVisit, validateSchoolVisit } from './school-progress.js';
+export { freshSchoolVisit, validateSchoolVisit };
 import {freshAdventure,validateAdventure} from './quest-director.js';
 import { freshLiving, validateLiving } from './social.js';
 import { freshCampaign, validateCampaign } from './quests.js';
 import { clamp } from './physics.js';
 export const SAVE_KEY = 'lorenzo-maria-v04';
+export const PRE08_SAVE_KEY = 'lorenzo-maria-v04-pre08';
 export const PREVIOUS_SAVE_KEY = 'lorenzo-maria-v03';
 export const LEGACY_SAVE_KEY = 'lorenzo-maria-v02';
 export const ITEMS = [
@@ -11,7 +14,7 @@ export const ITEMS = [
   { id: 'photo', name: 'Fotografia do jardim', x: 10, z: 22 },
 ];
 export const DEFAULT_SETTINGS = { quality: 'medium', sensitivity: 1, volume: .5, sound: false, shadows: true, adaptive: true, controlsSize: 1, controlsOpacity: .8, musicVolume: .5, effectsVolume: .5 };
-export function freshProgress() { return { stage: 0, collected: [], position: { x: 0, z: 19 }, yaw: 0, pitch: .38, interactions: {}, adventure:freshAdventure(), living: freshLiving(), campaign: freshCampaign(), doors: [false, false] }; }
+export function freshProgress() { return { schoolVisit: freshSchoolVisit(), stage: 0, collected: [], position: { x: 0, z: 19 }, yaw: 0, pitch: .38, interactions: {}, adventure:freshAdventure(), living: freshLiving(), campaign: freshCampaign(), doors: [false, false] }; }
 export function validateProgress(raw) {
   const p = freshProgress();
   if (!raw || typeof raw !== 'object') return p;
@@ -26,6 +29,7 @@ export function validateProgress(raw) {
   p.doors = [raw.doors?.[0] === true, raw.doors?.[1] === true];
   p.interactions=Object.fromEntries(Object.entries(raw.interactions||{}).filter(([k,v])=>typeof k==='string'&&k.length<100&&v===true).slice(0,100));
   p.adventure=validateAdventure(raw.adventure);
+  p.schoolVisit = validateSchoolVisit(raw.schoolVisit);
   p.living = validateLiving(raw.living);
   p.campaign = validateCampaign(raw.campaign);
   return p;
@@ -42,14 +46,24 @@ export function validateSettings(raw = {}) {
   return s;
 }
 export function loadSave(storage) {
-  for (const key of [SAVE_KEY, PREVIOUS_SAVE_KEY, LEGACY_SAVE_KEY]) {
+  for (const key of [SAVE_KEY, PRE08_SAVE_KEY, PREVIOUS_SAVE_KEY, LEGACY_SAVE_KEY]) {
     try { const raw = JSON.parse(storage?.getItem(key) || 'null'); if (raw?.progress && typeof raw.progress === 'object') return { progress: validateProgress(raw.progress), settings: validateSettings(raw.settings || {}), exists: true }; }
     catch { /* Try the untouched legacy backup if the new record is corrupt. */ }
   }
   return { progress: freshProgress(), settings: { ...DEFAULT_SETTINGS }, exists: false };
 }
 export function saveProgress(storage, progress, settings) {
-  try { storage.setItem(SAVE_KEY, JSON.stringify({ version: 4, progress: validateProgress(progress), settings: validateSettings(settings) })); return true; }
+  try {
+    // Minimal write-only test adapters have no readable record to preserve. Real
+    // Storage reads must succeed, and the original must be secured before writing.
+    if (typeof storage?.getItem === 'function') {
+      const original = storage.getItem(SAVE_KEY);
+      if (original !== null && original !== undefined && storage.getItem(PRE08_SAVE_KEY) == null) {
+        storage.setItem(PRE08_SAVE_KEY, original);
+        if (storage.getItem(PRE08_SAVE_KEY) !== original) return false;
+      }
+    }
+    storage.setItem(SAVE_KEY, JSON.stringify({ version: 4, progress: validateProgress(progress), settings: validateSettings(settings) })); return true; }
   catch { return false; }
 }
 export function collect(progress, id) {
