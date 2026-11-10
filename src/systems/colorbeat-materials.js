@@ -65,7 +65,7 @@ function configureToon(material,profile){
 
 // One owner for GPU materials/maps. School and GLB consumers only borrow them.
 export class ColorbeatMaterials {
- constructor({gradient=null}={}){this.materials=new Map();this.textures=new Map();this.gradientMap=gradient;this.borrowedGradient=!!gradient;this.disposed=false;}
+ constructor({gradient=null,decorate=null}={}){this.decorate=decorate;this.materials=new Map();this.textures=new Map();this.gradientMap=gradient;this.borrowedGradient=!!gradient;this.disposed=false;}
  gradient(){
   if(this.disposed)throw Error('Colorbeat resources disposed');
   if(!this.gradientMap){const ramp=new THREE.DataTexture(new Uint8Array([64,64,64,255,148,148,148,255,255,255,255,255]),3,1,THREE.RGBAFormat);ramp.minFilter=ramp.magFilter=THREE.NearestFilter;ramp.generateMipmaps=false;ramp.needsUpdate=true;this.gradientMap=ramp;this.textures.set('toon-ramp',ramp);}
@@ -91,7 +91,7 @@ export class ColorbeatMaterials {
   if(kind==='glass')material=new THREE.MeshStandardMaterial({color:tint,vertexColors,transparent:true,opacity:.42,roughness:.3,metalness:0,depthWrite:false});
   else if(kind==='emissive')material=new THREE.MeshBasicMaterial({color:tint,vertexColors,toneMapped:false});
   else{material=new THREE.MeshToonMaterial({color:tint,vertexColors,gradientMap:this.gradient(),map:PROFILES[kind].period?this.texture(kind):null});configureToon(material,PROFILES[kind]);}
-  material.name=`Colorbeat ${kind}`;material.userData.colorbeatKind=kind;this.materials.set(key,material);return material;
+  material.name=`Colorbeat ${kind}`;material.userData.colorbeatKind=kind;this.decorate?.(material);this.materials.set(key,material);return material;
  }
  dispose(){if(this.disposed)return;this.disposed=true;this.materials.forEach(m=>m.dispose());this.textures.forEach(t=>t.dispose());this.materials.clear();this.textures.clear();this.gradientMap=null;}
 }
