@@ -26,5 +26,5 @@ export function createComicCanopies(scene,resources,owned){
   flowerColors.push({mesh:m,colors:m.instanceColor.array.slice()});
   for(let i=0;i<m.count;i++)m.setColorAt(i,new THREE.Color(['#ff5a4b','#ff3d9a','#9655f5','#ffe238'][i%4]));m.instanceColor.needsUpdate=true;
  });
- return{saved,trees,restore(){for(const f of flowerColors){f.mesh.instanceColor.array.set(f.colors);f.mesh.instanceColor.needsUpdate=true;}for(const s of saved)s.mesh.count=s.count;for(const g of groups)g.removeFromParent();}};
+ return{saved,trees,setInspection(active){for(const g of groups)g.children[0].visible=!active;},restore(){for(const f of flowerColors){f.mesh.instanceColor.array.set(f.colors);f.mesh.instanceColor.needsUpdate=true;}for(const s of saved)s.mesh.count=s.count;for(const g of groups)g.removeFromParent();}};
 }

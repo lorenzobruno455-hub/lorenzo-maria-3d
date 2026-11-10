@@ -27,6 +27,7 @@ test('comic crowns retain the original visibility parent and restore counts with
  let disposed=0;source.geometry.addEventListener('dispose',()=>disposed++);source.material.addEventListener('dispose',()=>disposed++);
  const crowns=createComicCanopies(scene,r,owned);assert.equal(source.count,0);assert.equal(crowns.trees,2);assert.equal(source.children[0].parent,source);
  const fill=source.children[0].children[1];assert.equal(fill.count,6);assert.equal(fill.geometry,source.geometry);assert.equal(fill.frustumCulled,true);
+ crowns.setInspection(true);assert.equal(source.children[0].children[0].visible,false);assert.equal(fill.visible,true);crowns.setInspection(false);assert.equal(source.children[0].children[0].visible,true);
  const restored=source.instanceMatrix.array.slice();crowns.restore();owned.forEach(o=>o.dispose());assert.equal(source.count,36);assert.deepEqual(source.instanceMatrix.array,restored);assert.equal(source.children.length,0);assert.equal(disposed,0);
  source.dispose();r.dispose();
 });
