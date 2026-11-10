@@ -40,7 +40,7 @@ test('M3 Música uses the third-floor instrument, four real rhythm hits, animate
 });
 
 test('M3 six original chapters unlock in order, then all six library books replay without duplicating rewards',async({page})=>{
- test.setTimeout(240000);await boot(page);
+ test.setTimeout(300000);await boot(page);
  for(let i=1;i<=6;i++){
   const p=points[`memory-${i}`];await relocate(page,p);await expect.poll(async()=>(await state(page)).campaign.steps[`chapter-${i}`]||[]).toContain('visit');
   if([1,2,6].includes(i)){await actorApproach(page,'maria');await interact(page,'Maria');await page.getByRole('button',{name:'Escola',exact:true}).click();await finishDialog(page);await expect.poll(async()=>(await state(page)).campaign.steps[`chapter-${i}`]).toContain('talk');await relocate(page,p);}
@@ -77,5 +77,5 @@ test('M3 upper-floor cinematic frames visible actors immediately and skips safel
  await expect(page.locator('#cinematic')).toBeVisible();await page.locator('#scene-pause').click();expect((await state(page)).camera.y).toBeGreaterThan(8);await page.screenshot({path:'docs/captures/08-m3/music-finale.png'});await page.locator('#scene-skip').click();await nodeAt(page,'familiar-music',7);
 });
 
-// Walking replaces instant visits; budget includes the actual route.
-test.setTimeout(240000);
+// Complete quest replays plus a physical return need five minutes in SwiftShader.
+test.setTimeout(300000);
