@@ -1,6 +1,8 @@
-# Lorenzo & Maria 3D — Project Aurora 0.8.2
+# Lorenzo & Maria 3D — Project Aurora 0.9
 
 Exploração em terceira pessoa no fictício Colégio Aurora, com Three.js, JavaScript e Vite. Interface e diálogos em português. O capítulo inicial continua completo: converse com Maria, encontre três lembranças e retorne ao pátio.
+
+A 0.9 conecta fisicamente o campus ao São Jorge pela lateral leste: siga o caminho até a porta e entre ou saia andando. Preserva os três pavimentos e seus patamares interativos, a arte 0.8.2 e os saves v04. [Entrega, localização, transformação, capturas e testes](docs/ENTREGA-09.md). O PR não realiza merge nem atualiza automaticamente a hospedagem.
 
 M2 acrescentou acabamento dos três pavimentos: madeira, azulejo, tecido, mobiliário refinado, janelas conceituais, sinalização e iluminação por ambiente. A campanha anterior permanece disponível. M3 integra as três aventuras, capítulos, seis livros, NPCs e minijogos em São Jorge, com progresso compartilhado e retorno ao campus anterior.
 
@@ -13,18 +15,18 @@ Esta branch unifica a biblioteca de materiais, shader toon, mapas, luz e traço 
 Requer Node.js 20.19+ ou 22.12+ e Git.
 
 ```sh
-git clone --branch feat/aurora-081-colorbeat-unified https://github.com/lorenzobruno455-hub/lorenzo-maria-3d.git
+git clone --branch feat/aurora-09-continuous-world https://github.com/lorenzobruno455-hub/lorenzo-maria-3d.git
 cd lorenzo-maria-3d
 npm ci
 npm run dev
 ```
 
-Abra `http://localhost:5173` e mantenha o terminal aberto. Para testar a 0.8.1 em uma cópia existente:
+Abra `http://localhost:5173` e mantenha o terminal aberto. Para testar a 0.9 em uma cópia existente:
 
 ```sh
 git fetch origin
-git switch feat/aurora-081-colorbeat-unified
-git pull --ff-only origin feat/aurora-081-colorbeat-unified
+git switch feat/aurora-09-continuous-world
+git pull --ff-only origin feat/aurora-09-continuous-world
 npm ci
 npm run dev
 ```
@@ -115,14 +117,14 @@ Para publicar em um subdiretório, configure `base` do Vite para esse caminho an
 
 Biblioteca e pátio detalhados, cinco NPCs GLB originais, áudio e interface acessíveis; missões e progresso preservados. [Entrega](docs/ENTREGA-07C.md) · [Arte](docs/ART-DIRECTION-07C.md) · [Desempenho](docs/PERFORMANCE-07C.md) · [Licenças](docs/ASSET-LICENSES.md).
 
-## São Jorge 0.8 · M1 (entrega parcial)
+## São Jorge — acesso e documentação estrutural
 
-Na tela inicial, escolha **Visitar São Jorge · 0.8 M1**; durante a campanha, **Pausa → Visitar São Jorge**. Explore três pavimentos, use E/Interagir nos patamares e escolha Inspecionar andares para a vista por piso ou todos. **Voltar à campanha** restaura o campus anterior. As missões e os seis livros ainda estão no campus 0.7; o remapeamento é M3.
+Na 0.9, caminhe pela lateral leste do campus até a entrada São Jorge. Os botões de viagem usados na M1 foram removidos. Explore os três pavimentos com E/Interagir nos patamares; **Andares** conserva a inspeção. Para voltar, desça ao térreo e atravesse a porta. Missões, capítulos e seis livros permanecem integrados pela M3.
 
 [Auditoria](docs/AUDITORIA-08-M1.md) · [Entrega M1 e limitações](docs/ENTREGA-08.md) · [Matriz dos ambientes](docs/SAO_JORGE_ROOM_MATRIX.md) · [Licenças](docs/ASSET-LICENSES.md). Preparação dos assets: `python3 scripts/prepare-sao-jorge.py`. Nenhuma medida do jogo é apresentada como medida real da escola.
 
 ## Living School 0.8.2 — M1 a M4
 
-Decoração das oito salas, placas/quadros corrigidos, corredores, biblioteca, ambientes especializados e composição reversível no salão. Preserva a campanha, os sete personagens, as memórias e os saves. [Entrega M1/M2](docs/ENTREGA-082-M1-M2.md) · [M3](docs/ENTREGA-082-M3.md) · [Entrega final e métricas](docs/ENTREGA-082-M4.md). Sem integração física da 0.9 ou merge automático.
+Decoração das oito salas, placas/quadros corrigidos, corredores, biblioteca, ambientes especializados e composição reversível no salão. Preserva a campanha, os sete personagens, as memórias e os saves. [Entrega M1/M2](docs/ENTREGA-082-M1-M2.md) · [M3](docs/ENTREGA-082-M3.md) · [Entrega final e métricas](docs/ENTREGA-082-M4.md). Essa é a base artística preservada pela integração física da 0.9. Sem merge automático.
 
 A configuração PWA já publicada na hospedagem 0.8.1 foi preservada nesta fonte: manifesto com fullscreen/landscape, ícones originais 192/512 e acesso autenticado ao manifesto. No Chrome Android atualizado, abra o endereço HTTPS, escolha **Instalar aplicativo** e inicie pelo ícone instalado. Somente criar um atalho não confirma instalação. Não há cache offline; o Android pode exibir barras temporariamente e o suporte final depende do navegador/sistema. Use o mesmo endereço e não limpe os dados do site para manter acesso aos saves locais.
