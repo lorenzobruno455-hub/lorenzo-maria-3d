@@ -1,3 +1,4 @@
+import{walkIntoSchool,walkOut}from'./continuous-helpers.js';
 import{test,expect}from'@playwright/test';import{seed,start,state}from'./helpers.js';
 test('Living School keeps classroom dressing, corridor signs and narrative books through save/reload',async({page})=>{
  const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error'&&/Shader Error|VALIDATE_STATUS/.test(m.text()))errors.push(m.text());});
@@ -10,5 +11,8 @@ test('Living School keeps classroom dressing, corridor signs and narrative books
  await expect.poll(async()=>(await state(page)).school.active).toBe(true);
  expect((await state(page)).campaign).toEqual(before.campaign);
  await page.locator('#school-inspect').click();await page.locator('#school-floor-view').selectOption('all');await expect.poll(async()=>(await state(page)).school.loaded.length).toBe(3);
- await page.locator('#school-inspect').click();await page.locator('#school-exit').click();expect((await state(page)).school.active).toBe(false);expect((await state(page)).campaign).toEqual(before.campaign);expect(errors).toEqual([]);
+ await page.locator('#school-inspect').click();await walkOut(page);expect((await state(page)).school.active).toBe(false);expect((await state(page)).campaign).toEqual(before.campaign);expect(errors).toEqual([]);
 });
+
+// Walking replaces instant visits; budget includes the actual route.
+test.setTimeout(240000);

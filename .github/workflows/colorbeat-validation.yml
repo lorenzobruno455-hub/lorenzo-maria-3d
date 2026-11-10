@@ -10,6 +10,7 @@ on:
       - main
       - feat/aurora-07a
       - feat/aurora-081-colorbeat-unified
+      - feat/aurora-082-living-school
 
 concurrency:
   group: colorbeat-${{ github.head_ref || github.ref_name }}
@@ -50,7 +51,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2]
+        shard: [1, 2, 3, 4]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -59,8 +60,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      # Each spec belongs to exactly one shard; workers/timeouts/assertions stay intact.
-      - run: npm test -- --shard=${{ matrix.shard }}/2 --reporter=line,json
+      # Real walking adds travel time. Four disjoint test shards retain one worker each.
+      - run: npm test -- --shard=${{ matrix.shard }}/4 --reporter=line,json
         env:
           PLAYWRIGHT_JSON_OUTPUT_NAME: test-results/report.json
       - name: Attach browser evidence

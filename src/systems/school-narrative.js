@@ -24,7 +24,7 @@ export class SchoolNarrative {
  moveObject(o,p,scale=.7){
   if(!p)return;this.remember(o);Object.assign(o,{x:p.x,z:p.z,floor:p.floor,height:this.school.navigation.floor(p.floor).baseY+(p.top??1)+.16,ignoreCollider:null});
   if(!o.mesh)return;const mesh=o.mesh;this.group.add(mesh);mesh.scale.multiplyScalar(scale);if(o.kind==='memory-book')o.displayScale=scale;mesh.position.set(p.x,0,p.z);mesh.updateWorldMatrix(true,true);
-  const bounds=new THREE.Box3().setFromObject(mesh),center=bounds.getCenter(new THREE.Vector3());
+  const bounds=new THREE.Box3().setFromObject(mesh),center=this.group.worldToLocal(bounds.getCenter(new THREE.Vector3()));
   mesh.position.x+=p.x-center.x;mesh.position.z+=p.z-center.z;mesh.position.y+=this.school.navigation.floor(p.floor).baseY+(p.top??0)-bounds.min.y;
  }
  enter(){

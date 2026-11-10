@@ -3,3 +3,6 @@
 let reader = () => ({});
 export function registerStateReader(read) { reader = read; }
 export function getGameState() { return reader(); }
+let navigationReader=()=>null;
+export function registerNavigationReader(read){navigationReader=read;}
+export function getNavigationState(){return navigationReader();}

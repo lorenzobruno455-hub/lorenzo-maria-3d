@@ -1,3 +1,4 @@
+import{walkIntoSchool,walkOut}from'./continuous-helpers.js';
 import {test,expect} from '@playwright/test';
 import {mkdirSync} from 'node:fs';
 import {seed,start,state} from './helpers.js';
@@ -22,7 +23,7 @@ test('M3 Primeiro Encontro completes in the school with cutscene, physical props
  await relocate(page,points['classroom-photo']);await interact(page,'Fotografia');await finishDialog(page);await nodeAt(page,'first-encounter',4);
  await actorApproach(page,'maria');await interact(page,'Maria');await finishDialog(page);await page.getByRole('button',{name:'Ouvir com atenção',exact:true}).click();await nodeAt(page,'first-encounter',6);
  await relocate(page,points['school-exercise']);await interact(page,'Atividade');await page.getByRole('button',{name:'O relato original',exact:false}).click();await expect(page.locator('#cinematic')).toBeVisible();await page.locator('#scene-skip').click();await nodeAt(page,'first-encounter',8);
- await page.screenshot({path:'docs/captures/08-m3/first-complete.png'});await relocate(page,points.classroom);expect((await state(page)).campaign.memories).toContain('memory-1');expect((await state(page)).campaign.vouchers.filter(v=>v==='vale-1')).toHaveLength(1);await page.locator('#school-exit').click();expect((await state(page)).school.active).toBe(false);expect((await state(page)).campaign.memories).toContain('memory-1');expect(errors).toEqual([]);
+ await page.screenshot({path:'docs/captures/08-m3/first-complete.png'});await relocate(page,points.classroom);expect((await state(page)).campaign.memories).toContain('memory-1');expect((await state(page)).campaign.vouchers.filter(v=>v==='vale-1')).toHaveLength(1);await walkOut(page);expect((await state(page)).school.active).toBe(false);expect((await state(page)).campaign.memories).toContain('memory-1');expect(errors).toEqual([]);
 });
 
 test('M3 Livro Perdido completes with clue, puzzle retry, pickup, Bia and persistent reward',async({page})=>{
@@ -49,7 +50,7 @@ test('M3 six original chapters unlock in order, then all six library books repla
  for(let i=0;i<6;i++){
   await relocate(page,{floor:0,x:-7.3+i*.32,z:-12.7});await interact(page,'Ler');await expect(page.locator('#speech')).toContainText(['19/08/2024','19/05/2025','17/08/2025','31/03/2026','05/09/2026','21/09/2026'][i]);await finishDialog(page);
  }
- expect((await state(page)).campaign.memories).toEqual(original.memories);expect((await state(page)).campaign.vouchers).toEqual(original.vouchers);await page.locator('#school-exit').click();expect((await state(page)).campaign.letter).toBe(true);
+ expect((await state(page)).campaign.memories).toEqual(original.memories);expect((await state(page)).campaign.vouchers).toEqual(original.vouchers);await walkOut(page);expect((await state(page)).campaign.letter).toBe(true);
 });
 
 test('M3 Android reads a locked book, follows a quiz across floors and uses touch interactions',async({browser})=>{
@@ -58,13 +59,13 @@ test('M3 Android reads a locked book, follows a quiz across floors and uses touc
  await page.locator('#story-menu').tap();await page.getByRole('button',{name:'Minijogos',exact:true}).tap();await page.locator('.story-card').filter({has:page.getByRole('heading',{name:'QUIZ: QUEM CONHECE MAIS',exact:true})}).getByRole('button',{name:'Localizar na escola'}).tap();await expect(page.locator('#objective')).toContainText('2º');
  // A real landing interaction, not a floor mutation hook.
  await relocate(page,{floor:0,x:-6.5,z:2.5});await expect(page.locator('#prompt')).toContainText('2º');await page.locator('#interact').tap();await expect.poll(async()=>(await state(page)).school.floor).toBe(1);
- await relocate(page,points.quiz);await expect(page.locator('#prompt')).toContainText('Jogar');await page.locator('#interact').tap();await page.getByRole('button',{name:'Iniciar atividade',exact:true}).tap();await expect(page.locator('#story-content')).toContainText('Pergunta 1/6');await page.screenshot({path:'docs/captures/08-m3/android-quiz.png'});await page.locator('#story-close').tap();await page.setViewportSize({width:390,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBe(390);await page.locator('#school-exit').tap();await context.close();
+ await relocate(page,points.quiz);await expect(page.locator('#prompt')).toContainText('Jogar');await page.locator('#interact').tap();await page.getByRole('button',{name:'Iniciar atividade',exact:true}).tap();await expect(page.locator('#story-content')).toContainText('Pergunta 1/6');await page.screenshot({path:'docs/captures/08-m3/android-quiz.png'});await page.locator('#story-close').tap();await page.setViewportSize({width:390,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBe(390);await walkOut(page);await context.close();
 });
 
 test('M3 prologue collects all three objects across floors and returns to Maria without changing legacy spawn',async({page})=>{
  await boot(page,{stage:0,collected:[],position:{x:0,z:19},schoolVisit:{active:true,floor:0,position:{x:-3.8,z:16},yaw:0,pitch:.38}});await interact(page,'Maria');await finishDialog(page);await expect.poll(async()=>(await state(page)).stage).toBe(1);
  for(const id of ['notebook','card','photo']){await relocate(page,points[id]);await interact(page,'Recolher');await expect.poll(async()=>(await state(page)).items).toContain(id);}
- await actorApproach(page,'maria');await interact(page,'Maria');await finishDialog(page);await expect.poll(async()=>(await state(page)).stage).toBe(2);await page.locator('#school-exit').click();expect((await state(page)).z).toBe(19);expect((await state(page)).collected).toBe(3);
+ await actorApproach(page,'maria');await interact(page,'Maria');await finishDialog(page);await expect.poll(async()=>(await state(page)).stage).toBe(2);await walkOut(page);expect(Math.abs((await state(page)).worldPosition.z-19)).toBeLessThan(.3);expect((await state(page)).collected).toBe(3);
 });
 
 test('M3 matching and rhythm activities launch from their relocated props',async({page})=>{
@@ -75,3 +76,6 @@ test('M3 upper-floor cinematic frames visible actors immediately and skips safel
  await boot(page,{schoolVisit:{active:true,floor:2,position:{x:6.9,z:0},yaw:0,pitch:.38},adventure:{...firstComplete,active:'familiar-music',quests:{...firstComplete.quests,'familiar-music':{status:'active',node:6,choices:{music:'practice'},receipts:[],rewarded:false}}}});
  await expect(page.locator('#cinematic')).toBeVisible();await page.locator('#scene-pause').click();expect((await state(page)).camera.y).toBeGreaterThan(8);await page.screenshot({path:'docs/captures/08-m3/music-finale.png'});await page.locator('#scene-skip').click();await nodeAt(page,'familiar-music',7);
 });
+
+// Walking replaces instant visits; budget includes the actual route.
+test.setTimeout(240000);
