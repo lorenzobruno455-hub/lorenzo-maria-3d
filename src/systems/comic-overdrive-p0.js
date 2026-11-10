@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {SCHOOL_ORIGIN} from './world-coordinates.js';
+import {createComicCanopies} from './comic-overdrive-nature.js';
 export const P0_PALETTE=Object.freeze({sky:'#02B9FF',cobalt:'#2352FF',sun:'#FFE238',orange:'#FF8A28',coral:'#FF5A4B',pink:'#FF3D9A',violet:'#9655F5',lime:'#75E83D',emerald:'#22CC79',turquoise:'#18D6CC',night:'#19264D',ink:'#131A2A',paper:'#FFF3D7',light:'#FFFDF3'});
 export function createP0Areas(layout){
  const f=layout.floors[0],room=f.rooms.find(r=>r.id==='sj-f1-01'),top=layout.floors.at(-1).baseY+3.8;
@@ -40,17 +41,19 @@ function worldVarying(shader){
  #endif
  cbWorldPosition=(modelMatrix*coWorld).xyz;`);
 }
-export function decorateOverdriveMaterial(material,areas){
- if(!material.isMeshToonMaterial&&!material.isMeshBasicMaterial&&!material.isLineBasicMaterial)return()=>{};
+export function decorateOverdriveMaterial(material,areas,{global=false}={}){
+ if(!material.isMeshToonMaterial&&!material.isMeshBasicMaterial&&!material.isLineBasicMaterial&&!(global&&material.isMeshStandardMaterial))return()=>{};
  const oldCompile=material.onBeforeCompile,oldKey=material.customProgramCacheKey;
  const kind=material.userData.colorbeatKind,family={wood:1,tile:2,concrete:2,plaster:3,fabric:4,cloth:4}[kind]||0;
- material.customProgramCacheKey=()=>oldKey.call(material)+':comic-overdrive-p0-v1';
+ material.customProgramCacheKey=()=>oldKey.call(material)+(global?':comic-overdrive-global-v1':':comic-overdrive-p0-v1');
  material.onBeforeCompile=shader=>{
   oldCompile.call(material,shader);worldVarying(shader);
   Object.assign(shader.uniforms,{coAreaMin:{value:areas.map(a=>a.min)},coAreaMax:{value:areas.map(a=>a.max)},coFamily:{value:family}});
   for(const name of['Lime','Emerald','Turquoise','Sun','Orange','Cobalt','Violet','Paper','Ink'])shader.uniforms['co'+name]={value:color(name.toLowerCase())};
   if(!shader.fragmentShader.includes('varying vec3 cbWorldPosition;'))shader.fragmentShader='varying vec3 cbWorldPosition;\n'+shader.fragmentShader;
-  shader.fragmentShader=GLSL+'\n'+shader.fragmentShader;
+  let profile=GLSL;
+  if(global)profile=profile.replace('uniform vec3 coAreaMin[3];uniform vec3 coAreaMax[3];','').replace(/float coScope\(vec3 p\)\{.*?return mask;\}/,'float coScope(vec3 p){return 1.;}').replace('step(.46,fract(sin(dot(floor(p.xz/3.),vec2(17.13,7.91)))*231.17))','mod(floor(p.x/3.)+floor(p.z/3.),2.)').replace('base.g>base.r*1.15&&base.g>base.b*1.06','base.g>base.r*1.04&&base.g>base.b*1.12');
+  shader.fragmentShader=profile+'\n'+shader.fragmentShader;
   const effect=material.isMeshToonMaterial?/* glsl */`
    float coMask=coScope(cbWorldPosition);
    if(coMask>.001){
@@ -70,13 +73,17 @@ export function decorateOverdriveMaterial(material,areas){
     }
     outgoingLight=mix(outgoingLight,graphic,coMask*smoothstep(.008,.045,coLum));
    }
+  `:material.isMeshStandardMaterial?/* glsl */`
+   // Graphic glazing keeps its existing alpha, depth and sorting semantics.
+   float coRim=step(.65,1.-abs(dot(normalize(vViewPosition),normal)));
+   outgoingLight=mix(coTurquoise*.58,coPaper*.9,coRim);
   `:material.isLineBasicMaterial?/* glsl */`
    diffuseColor.a=mix(diffuseColor.a,.95,coScope(cbWorldPosition));
   `:/* glsl */`
    float coMask=coScope(cbWorldPosition);float coLum=dot(diffuseColor.rgb,vec3(.2126,.7152,.0722));
    if(coMask>.001){vec3 c=diffuseColor.rgb;
     if(coLum>.72)c=coPaper;
-    else if(c.b>c.r*1.3&&c.b>.12)c=coCobalt;
+    else if(c.b>c.r*1.3&&c.b>.12)c=${global?'mix(c,coCobalt,.25)':'coCobalt'};
     else if(c.r>c.b*1.5&&c.g>c.b*1.5)c=coSun;
     diffuseColor.rgb=mix(diffuseColor.rgb,c,coMask);
     outgoingLight=diffuseColor.rgb;
@@ -121,11 +128,11 @@ function makeSampleTree(scene,resources,owned){
  const shadowGeo=new THREE.CircleGeometry(2.5,14),shadowMat=new THREE.MeshBasicMaterial({color:P0_PALETTE.cobalt,transparent:true,opacity:.38,depthWrite:false,toneMapped:false}),shadow=new THREE.Mesh(shadowGeo,shadowMat);shadow.rotation.x=-Math.PI/2;shadow.position.set(10,.008,13);shadow.scale.set(1,.65,1);scene.add(shadow);owned.push(shadowGeo,shadowMat);
  return{group,shadow,saved,restore(){for(const s of saved){s.mesh.setMatrixAt(s.index,s.matrix);s.mesh.instanceMatrix.needsUpdate=true;}group.removeFromParent();shadow.removeFromParent();}};
 }
-export function createComicOverdriveP0({scene,resources,school,ink}){
- const areas=createP0Areas(school.layout),owned=[],restores=[],seen=new WeakSet(),models=new WeakSet(),oldDecorator=resources.colorbeat.decorate,oldFog=scene.fog.color.clone(),oldInkLimit=ink.actorMaterial.userData.inkUniforms.cbInkWorldLimit.value;
- const decorate=m=>{if(!m||seen.has(m)||m.userData.inkUniforms)return;seen.add(m);restores.push(decorateOverdriveMaterial(m,areas));};
+export function createComicOverdriveP0({scene,resources,school,ink,global=false}){
+ const areas=global?[]:createP0Areas(school.layout),owned=[],restores=[],seen=new WeakSet(),models=new WeakSet(),oldDecorator=resources.colorbeat.decorate,oldFog=scene.fog.color.clone(),oldInkLimit=ink.actorMaterial.userData.inkUniforms.cbInkWorldLimit.value;
+ const decorate=m=>{if(!m||seen.has(m)||m.userData.inkUniforms)return;seen.add(m);restores.push(decorateOverdriveMaterial(m,areas,{global}));};
  const scan=root=>root.traverse(o=>{if(o.material)for(const m of Array.isArray(o.material)?o.material:[o.material])decorate(m);});
  resources.colorbeat.decorate=m=>{oldDecorator?.(m);decorate(m);};resources.colorbeat.materials.forEach(decorate);scan(scene);
- const tree=makeSampleTree(scene,resources,owned),sky=makeSky(scene,resources,owned),worldPosition=new THREE.Vector3();scene.fog.color.set(P0_PALETTE.sky);document.body.classList.add('comic-overdrive-p0');let disposed=false;
- return{areas,update(camera){if(disposed)return;sky.position.copy(camera.getWorldPosition(worldPosition));for(const[,lease]of school.leases)if(!models.has(lease.model)){models.add(lease.model);scan(lease.model);}const u=ink.actorMaterial.userData.inkUniforms;u.cbInkPixels.value=1.8;u.cbInkWorldLimit.value=.032;},state(){return{id:'comic-overdrive-p0',areas:areas.map(a=>a.id),treeInstancesReplaced:tree.saved.length,cloudCards:13,shadowBands:3};},dispose(){if(disposed)return;disposed=true;resources.colorbeat.decorate=oldDecorator;restores.reverse().forEach(fn=>fn());tree.restore();sky.removeFromParent();owned.forEach(r=>r.dispose());scene.fog.color.copy(oldFog);ink.actorMaterial.userData.inkUniforms.cbInkWorldLimit.value=oldInkLimit;document.body.classList.remove('comic-overdrive-p0');}};
+ const tree=global?createComicCanopies(scene,resources,owned):makeSampleTree(scene,resources,owned),sky=makeSky(scene,resources,owned),worldPosition=new THREE.Vector3();scene.fog.color.set(P0_PALETTE.sky);if(!global)document.body.classList.add('comic-overdrive-p0');let disposed=false;
+ return{areas,update(camera){if(disposed)return;sky.position.copy(camera.getWorldPosition(worldPosition));if(global){const all=school.inspecting&&school.view==='all';sky.visible=!all;tree.setInspection(all);}for(const[,lease]of school.leases)if(!models.has(lease.model)){models.add(lease.model);scan(lease.model);}if(!global){const u=ink.actorMaterial.userData.inkUniforms;u.cbInkPixels.value=1.8;u.cbInkWorldLimit.value=.032;}},state(){return{id:global?'comic-overdrive-p1-p2':'comic-overdrive-p0',areas:global?['all-exteriors','all-school-floors']:areas.map(a=>a.id),treeInstancesReplaced:global?tree.saved.reduce((n,s)=>n+s.count,0):tree.saved.length,trees:tree.trees??1,cloudCards:13,shadowBands:3};},dispose(){if(disposed)return;disposed=true;resources.colorbeat.decorate=oldDecorator;restores.reverse().forEach(fn=>fn());tree.restore();sky.removeFromParent();owned.forEach(r=>r.dispose());scene.fog.color.copy(oldFog);ink.actorMaterial.userData.inkUniforms.cbInkWorldLimit.value=oldInkLimit;document.body.classList.remove('comic-overdrive-p0');}};
 }

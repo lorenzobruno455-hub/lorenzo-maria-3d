@@ -7,9 +7,11 @@ export function createCampusConnection(scene,world,layout){
  part(route,'box','#9cae7d',62,-.22,0,42,.4,70,'plaster');
  part(route,'box','#c9c1ad',33,.005,20,54,.05,3,'tile');
  part(route,'box','#c9c1ad',60,.005,19,3,.05,3,'tile');
+ const foliage=new THREE.InstancedMesh(r.geometry('leaf'),r.material('#698756'),6),leafTransform=new THREE.Object3D();
+ foliage.userData.comicTreeCenters=[42,51,73].map(x=>({x,y:3.3,z:24,scale:.62}));props.add(foliage);let leafIndex=0;
  for(const x of [42,51,73]){
   part(props,'cylinder','#7d6b50',x,1.5,24,.18,3,.18,'wood');
-  for(const dx of [-.5,.5])part(props,'leaf','#698756',x+dx,3.1,24,.9,.8,.9);
+  for(const dx of [-.5,.5]){leafTransform.position.set(x+dx,3.1,24);leafTransform.scale.set(.9,.8,.9);leafTransform.updateMatrix();foliage.setMatrixAt(leafIndex++,leafTransform.matrix);}
   colliders.push({minX:x-.18,maxX:x+.18,minZ:23.82,maxZ:24.18,minY:0,maxY:3});
  }
  for(const x of [44,69]){
@@ -21,7 +23,7 @@ export function createCampusConnection(scene,world,layout){
   part(props,'cylinder','#5b616b',x,1.7,17.5,.045,3.4,.045,'metal');part(props,'box','#eee9dd',x,3.4,17.5,.40,.08,.30,'plain');
   colliders.push({minX:x-.05,maxX:x+.05,minZ:17.45,maxZ:17.55,minY:0,maxY:3.45});
  }
- batchMeshes(route,route.children.filter(m=>m.isMesh),owned);batchMeshes(props,[...props.children],owned);
+ batchMeshes(route,route.children.filter(m=>m.isMesh),owned);batchMeshes(props,props.children.filter(m=>m!==foliage),owned);
  for(const floor of layout.floors){
   const g=new THREE.Group();g.name=`São Jorge exterior proxy ${floor.index}`;g.position.set(SCHOOL_ORIGIN.x,floor.baseY,SCHOOL_ORIGIN.z);group.add(g);proxies.push(g);
   for(const side of [-1,1])part(g,'box','#F4F4F1',side*11,1.8,0,.24,3.6,38,'plain');
@@ -44,5 +46,5 @@ export function createCampusConnection(scene,world,layout){
  const labelMaterial=new THREE.MeshBasicMaterial({map:texture,color:texture?'#ffffff':'#ffd43b'}),label=new THREE.Mesh(labelGeometry,labelMaterial);label.position.set(60,2.95,19.14);group.add(label);
  const proxyBounds=proxies.map(g=>new THREE.Box3().setFromObject(g)),frustum=new THREE.Frustum(),projection=new THREE.Matrix4();
  let disposed=false;
- return{group,door,seal,proxies,perimeter,installFloor(boxes){installed.push(...boxes);for(const list of[world.solids,world.occluders]){for(const b of perimeter){const i=list.indexOf(b);if(i>=0)list.splice(i,1);}list.push(...(list===world.solids?boxes.filter(b=>b.minY<layout.floors[0].walkY+1.8&&b.maxY>layout.floors[0].walkY):boxes));}seal.enabled=false;},update(active,loaded,inspecting,showDetail,distance=0){props.visible=active||distance<35;proxies.forEach((g,i)=>g.visible=g.userData.allowed=!inspecting&&!(loaded.includes(i)&&showDetail));},cull(camera){camera.updateMatrixWorld(true);frustum.setFromProjectionMatrix(projection.multiplyMatrices(camera.projectionMatrix,camera.matrixWorldInverse));proxies.forEach((g,i)=>g.visible=g.userData.allowed!==false&&frustum.intersectsBox(proxyBounds[i]));},dispose(){if(disposed)return;disposed=true;group.removeFromParent();owned.forEach(g=>g.dispose());texture?.dispose();labelMaterial.dispose();world.groundHeight=oldGround;for(const a of[world.solids,world.occluders])for(const b of[...colliders,seal,...perimeter,...installed,door.bounds]){const i=a.indexOf(b);if(i>=0)a.splice(i,1);}const i=world.doors.indexOf(door);if(i>=0)world.doors.splice(i,1);}};
+ return{group,door,seal,proxies,perimeter,installFloor(boxes){installed.push(...boxes);for(const list of[world.solids,world.occluders]){for(const b of perimeter){const i=list.indexOf(b);if(i>=0)list.splice(i,1);}list.push(...(list===world.solids?boxes.filter(b=>b.minY<layout.floors[0].walkY+1.8&&b.maxY>layout.floors[0].walkY):boxes));}seal.enabled=false;},update(active,loaded,inspecting,showDetail,distance=0){props.visible=active||distance<35;proxies.forEach((g,i)=>g.visible=g.userData.allowed=!inspecting&&!(loaded.includes(i)&&showDetail));},cull(camera){camera.updateMatrixWorld(true);frustum.setFromProjectionMatrix(projection.multiplyMatrices(camera.projectionMatrix,camera.matrixWorldInverse));proxies.forEach((g,i)=>g.visible=g.userData.allowed!==false&&frustum.intersectsBox(proxyBounds[i]));},dispose(){if(disposed)return;disposed=true;group.removeFromParent();foliage.dispose();owned.forEach(g=>g.dispose());texture?.dispose();labelMaterial.dispose();world.groundHeight=oldGround;for(const a of[world.solids,world.occluders])for(const b of[...colliders,seal,...perimeter,...installed,door.bounds]){const i=a.indexOf(b);if(i>=0)a.splice(i,1);}const i=world.doors.indexOf(door);if(i>=0)world.doors.splice(i,1);}};
 }

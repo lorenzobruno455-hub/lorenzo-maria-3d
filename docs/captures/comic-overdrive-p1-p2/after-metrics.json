@@ -1,0 +1,438 @@
+{
+  "source": "b05196b9976ee160dfc01a5aad56126b4a8e41da",
+  "method": "Chromium/SwiftShader; 960×600; Medium; shadows on; adaptive off; reduced motion; same saved positions/camera and morning clock. Timing: 8 active rAF intervals after models/fonts and 6 settling frames. Screenshots freeze via pause with only its overlay hidden. No physical-device FPS claim.",
+  "samples": [
+    {
+      "name": "campus",
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "worldPosition": {
+        "x": 4,
+        "y": 0.025,
+        "z": 20
+      },
+      "camera": {
+        "x": 0.3879223484935568,
+        "y": 2.560227446299722,
+        "z": 25.891448275467376
+      },
+      "yaw": -0.55,
+      "pitch": 0.16,
+      "quality": "medium",
+      "exposure": 1,
+      "clock": "08:15",
+      "drawCalls": 217,
+      "triangles": 240006,
+      "geometries": 129,
+      "textures": 34,
+      "programs": 19,
+      "overdrive": {
+        "id": "comic-overdrive-p1-p2",
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "frames": 8,
+        "meanMs": 595.8125,
+        "p50Ms": 516.6000000000004,
+        "p95Ms": 1066.6000000000004,
+        "samplesMs": [
+          1066.6000000000004,
+          16.69999999999891,
+          516.7000000000007,
+          516.6000000000004,
+          1033.2999999999993,
+          433.2999999999993,
+          816.6000000000004,
+          366.7000000000007
+        ]
+      }
+    },
+    {
+      "name": "connection",
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "worldPosition": {
+        "x": 60,
+        "y": -0.02,
+        "z": 22
+      },
+      "camera": {
+        "x": 60,
+        "y": 2.515227446299722,
+        "z": 28.91059098362939
+      },
+      "yaw": 0,
+      "pitch": 0.16,
+      "quality": "medium",
+      "exposure": 1,
+      "clock": "08:15",
+      "drawCalls": 117,
+      "triangles": 202830,
+      "geometries": 117,
+      "textures": 13,
+      "programs": 30,
+      "overdrive": {
+        "id": "comic-overdrive-p1-p2",
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "frames": 8,
+        "meanMs": 752.05,
+        "p50Ms": 750,
+        "p95Ms": 1616.7000000000007,
+        "samplesMs": [
+          1399.8999999999996,
+          750,
+          666.7000000000007,
+          766.6000000000004,
+          16.600000000000364,
+          1616.7000000000007,
+          783.1999999999971,
+          16.700000000000728
+        ]
+      }
+    },
+    {
+      "name": "class-a",
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "worldPosition": {
+        "x": 53.5,
+        "y": 0.03,
+        "z": 15.5
+      },
+      "camera": {
+        "x": 53.5,
+        "y": 2.3880169789516614,
+        "z": 12.467646112812766
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.3,
+      "quality": "medium",
+      "exposure": 1,
+      "clock": "08:15",
+      "drawCalls": 88,
+      "triangles": 122762,
+      "geometries": 159,
+      "textures": 20,
+      "programs": 29,
+      "overdrive": {
+        "id": "comic-overdrive-p1-p2",
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "frames": 8,
+        "meanMs": 577.0625,
+        "p50Ms": 533.3000000000011,
+        "p95Ms": 1066.6999999999998,
+        "samplesMs": [
+          683.3000000000002,
+          1066.6999999999998,
+          50,
+          499.89999999999964,
+          533.3000000000011,
+          516.6999999999989,
+          649.8999999999996,
+          616.7000000000007
+        ]
+      }
+    },
+    {
+      "name": "corridor-2",
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "worldPosition": {
+        "x": 60,
+        "y": 3.63,
+        "z": 8
+      },
+      "camera": {
+        "x": 60,
+        "y": 6.607865971534527,
+        "z": 11.900391469421344
+      },
+      "yaw": 0,
+      "pitch": 0.38,
+      "quality": "medium",
+      "exposure": 1,
+      "clock": "08:15",
+      "drawCalls": 86,
+      "triangles": 90722,
+      "geometries": 167,
+      "textures": 40,
+      "programs": 32,
+      "overdrive": {
+        "id": "comic-overdrive-p1-p2",
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "frames": 8,
+        "meanMs": 839.5625,
+        "p50Ms": 800,
+        "p95Ms": 1716.5999999999985,
+        "samplesMs": [
+          800,
+          783.2999999999993,
+          800,
+          816.6000000000004,
+          866.6999999999989,
+          799.9000000000015,
+          1716.5999999999985,
+          133.40000000000146
+        ]
+      }
+    },
+    {
+      "name": "library",
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "worldPosition": {
+        "x": 55,
+        "y": 0.03,
+        "z": -14
+      },
+      "camera": {
+        "x": 55,
+        "y": 3.0078659715345273,
+        "z": -10.099608530578656
+      },
+      "yaw": 0,
+      "pitch": 0.38,
+      "quality": "medium",
+      "exposure": 1,
+      "clock": "08:15",
+      "drawCalls": 101,
+      "triangles": 137224,
+      "geometries": 165,
+      "textures": 42,
+      "programs": 31,
+      "overdrive": {
+        "id": "comic-overdrive-p1-p2",
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "frames": 8,
+        "meanMs": 724.9749999999999,
+        "p50Ms": 616.5999999999985,
+        "p95Ms": 1333.2000000000007,
+        "samplesMs": [
+          566.6000000000004,
+          600,
+          616.5999999999985,
+          566.7000000000007,
+          700,
+          1333.2000000000007,
+          700,
+          716.6999999999989
+        ]
+      }
+    },
+    {
+      "name": "laboratory",
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "worldPosition": {
+        "x": 66.5,
+        "y": 3.63,
+        "z": -7
+      },
+      "camera": {
+        "x": 63.023942415330865,
+        "y": 6.607865971534527,
+        "z": -5.230797557429071
+      },
+      "yaw": -1.1,
+      "pitch": 0.38,
+      "quality": "medium",
+      "exposure": 1,
+      "clock": "08:15",
+      "drawCalls": 66,
+      "triangles": 95450,
+      "geometries": 169,
+      "textures": 27,
+      "programs": 30,
+      "overdrive": {
+        "id": "comic-overdrive-p1-p2",
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "frames": 8,
+        "meanMs": 641.6375,
+        "p50Ms": 583.2999999999993,
+        "p95Ms": 1149.8999999999996,
+        "samplesMs": [
+          666.6000000000004,
+          733.2999999999993,
+          683.3000000000011,
+          550,
+          583.2999999999993,
+          566.7000000000007,
+          1149.8999999999996,
+          200
+        ]
+      }
+    },
+    {
+      "name": "reception",
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "worldPosition": {
+        "x": 66.5,
+        "y": 0.03,
+        "z": -5
+      },
+      "camera": {
+        "x": 66.5,
+        "y": 2.4692931459776606,
+        "z": -2.448020327772594
+      },
+      "yaw": 0,
+      "pitch": 0.38,
+      "quality": "medium",
+      "exposure": 1,
+      "clock": "08:15",
+      "drawCalls": 87,
+      "triangles": 129636,
+      "geometries": 162,
+      "textures": 39,
+      "programs": 33,
+      "overdrive": {
+        "id": "comic-overdrive-p1-p2",
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "frames": 8,
+        "meanMs": 743.7374999999997,
+        "p50Ms": 716.5999999999985,
+        "p95Ms": 1500,
+        "samplesMs": [
+          1500,
+          783.2999999999993,
+          800,
+          716.5999999999985,
+          16.700000000000728,
+          666.6000000000022,
+          1433.2999999999993,
+          33.39999999999782
+        ]
+      }
+    },
+    {
+      "name": "hall",
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "worldPosition": {
+        "x": 60,
+        "y": 7.23,
+        "z": 5
+      },
+      "camera": {
+        "x": 61.47074095027621,
+        "y": 10.283345197550721,
+        "z": 8.044665204781431
+      },
+      "yaw": 0.45,
+      "pitch": 0.45,
+      "quality": "medium",
+      "exposure": 1,
+      "clock": "08:15",
+      "drawCalls": 73,
+      "triangles": 55810,
+      "geometries": 145,
+      "textures": 31,
+      "programs": 32,
+      "overdrive": {
+        "id": "comic-overdrive-p1-p2",
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "frames": 8,
+        "meanMs": 610.4000000000001,
+        "p50Ms": 583.3999999999996,
+        "p95Ms": 1250,
+        "samplesMs": [
+          1250,
+          733.2999999999993,
+          466.60000000000036,
+          1150,
+          666.6000000000004,
+          16.600000000000364,
+          583.3999999999996,
+          16.700000000000728
+        ]
+      }
+    }
+  ]
+}

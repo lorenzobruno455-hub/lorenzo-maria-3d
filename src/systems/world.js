@@ -100,6 +100,7 @@ export function createWorld(scene) {
   const canopy = new THREE.InstancedMesh(resources.geometry('leaf'), resources.material('#698756'), leaves.length);
   const dummy = new THREE.Object3D();
   leaves.forEach((leaf, i) => { dummy.position.set(leaf.x, leaf.y, leaf.z); dummy.scale.set(leaf.size, leaf.size * .75, leaf.size); dummy.rotation.set(i, i * .3, 0); dummy.updateMatrix(); canopy.setMatrixAt(i, dummy.matrix); canopy.setColorAt(i, new THREE.Color().setHSL(.23 + (i % 4) * .013, .52, .4 + (i % 5) * .035)); });
+  canopy.userData.comicTreeCenters = [-32,-10,10,32].flatMap(x=>[13,24].map(z=>({x,y:4.5,z})));
   canopy.castShadow = canopy.receiveShadow = true; scene.add(canopy);
   for (const x of [-10, 10]) {
     box(x, .25, 5, 4, .5, 5, '#8b9980', true, 'plaster');
