@@ -3,6 +3,7 @@ export { freshSchoolVisit, validateSchoolVisit };
 import {freshAdventure,validateAdventure} from './quest-director.js';
 import { freshLiving, validateLiving } from './social.js';
 import { freshCampaign, validateCampaign } from './quests.js';
+import {BOUNDS} from './physics.js';
 import { clamp } from './physics.js';
 export const SAVE_KEY = 'lorenzo-maria-v04';
 export const PRE08_SAVE_KEY = 'lorenzo-maria-v04-pre08';
@@ -22,7 +23,7 @@ export function validateProgress(raw) {
   p.stage = raw.stage === 2 && p.collected.length === 3 ? 2 : raw.stage >= 1 ? 1 : 0;
   if (!p.stage) p.collected = [];
   if (Number.isFinite(raw.position?.x) && Number.isFinite(raw.position?.z)) {
-    p.position = { x: clamp(raw.position.x, -38, 38), z: clamp(raw.position.z, -27, 29) };
+    p.position = { x: clamp(raw.position.x, BOUNDS.minX, BOUNDS.maxX), z: clamp(raw.position.z, BOUNDS.minZ, BOUNDS.maxZ) };
   }
   p.yaw = Number.isFinite(raw.yaw) ? raw.yaw % (2 * Math.PI) : 0;
   p.pitch = Number.isFinite(raw.pitch) ? clamp(raw.pitch, .08, 1.15) : .38;

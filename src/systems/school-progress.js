@@ -11,7 +11,7 @@ export function validateSchoolVisit(raw) {
   visit.floor = Number.isInteger(raw.floor) && raw.floor >= 0 && raw.floor <= 2 ? raw.floor : 0;
   const { x, z } = raw.position || {};
   // Invalid coordinates return to the corridor; clamping could place a player inside a wall.
-  if (Number.isFinite(x) && Number.isFinite(z) && Math.abs(x) <= 10.8 && Math.abs(z) <= 18.8) visit.position = { x, z };
+  if (Number.isFinite(x) && Number.isFinite(z) && Math.abs(x) <= 10.8 && Math.abs(z) <= 19.4) visit.position = { x, z };
   visit.yaw = Number.isFinite(raw.yaw) ? raw.yaw % (2 * Math.PI) : 0;
   visit.pitch = Number.isFinite(raw.pitch) ? clamp(raw.pitch, .08, 1.15) : .38;
   const floors={maria:0,bia:0,helena:1,davi:2,caio:2,lia:0};

@@ -36,13 +36,13 @@ export function createWorld(scene) {
   }
   box(0, -.22, 0, 82, .4, 70, '#9cae7d', false, 'plaster');
   box(0, .005, 7, 12, .04, 46, '#c9c1ad', false, 'tile'); box(0, .025, 0, 58, .04, 12, '#c9c1ad', false, 'tile');
-  function door(cx, name) {
-    const pivot = new THREE.Group(); pivot.position.set(cx - 1.5, 0, -6); scene.add(pivot);
-    const panel = resources.mesh('box', '#8b6f50', [3, 3.3, .16], 'wood'); panel.position.set(1.5, 1.65, 0); pivot.add(panel);
-    const glass = resources.mesh('box', '#8eaaa7', [.8, .8, .18], 'glass'); glass.position.set(1.5, 2.2, 0); pivot.add(glass);
-    const handle = resources.mesh('sphere', '#b9b79b', [.07, .07, .12], 'metal'); handle.position.set(2.65, 1.3, .14); pivot.add(handle);
+  function door(cx, name, { z=-6, width=3, height=3.3, transient=false }={}) {
+    const pivot = new THREE.Group(); pivot.position.set(cx - width/2, 0, z); scene.add(pivot);
+    const panel = resources.mesh('box', '#8b6f50', [width, height, .16], 'wood'); panel.position.set(width/2, height/2, 0); pivot.add(panel);
+    const glass = resources.mesh('box', '#8eaaa7', [.8, .8, .18], 'glass'); glass.position.set(width/2, height*2/3, 0); pivot.add(glass);
+    const handle = resources.mesh('sphere', '#b9b79b', [.07, .07, .12], 'metal'); handle.position.set(width-.35, height*1.3/3.3, .14); pivot.add(handle);
     const bounds = collider(panel, true, true);
-    const d = { id: doors.length, name, x: cx, z: -5.5, pivot, panel, bounds, open: false, angle: 0 };
+    const d = { id: doors.length, name, x: cx, z:z+.5, hingeZ:z, width, transient, pivot, panel, bounds, open: false, angle: 0 };
     doors.push(d); return d;
   }
   function wing(cx, label) {
@@ -138,7 +138,7 @@ export function createWorld(scene) {
   }
   function toggleDoor(d, player) {
     // Prevent closing into an occupied doorway or sweeping through the player.
-    if (Math.hypot(player.x - d.x, player.z + 6) < 1.85) return false;
+    if (Math.hypot(player.x - d.x, player.z - (d.hingeZ??-6)) < (d.width??3)/2+.35) return false;
     d.open = !d.open; return true;
   }
   function update(dt, time, player) {
@@ -172,7 +172,7 @@ export function createWorld(scene) {
   batchMeshes(scene, scene.children.filter(m => m.isMesh && !dynamic.has(m)), batched);
   const propMeshes=[];for(const p of placed) if(!collectibles.some(c=>c.mesh===p)){p.userData.staticBounds=new THREE.Box3().setFromObject(p).clone();p.traverse(m=>{if(m.isMesh)propMeshes.push(m);});}
   batchMeshes(scene,propMeshes,batched);
-  const api = { classroom, library, placed, surfaces, support, groundHeight, interiorLights, resources, solids, occluders, doors, collectibles, points, update, sign, toggleDoor, lineOfSight,
+  const api = { classroom, library, placed, surfaces, support, groundHeight, interiorLights, resources, solids, occluders, doors, collectibles, points, update, sign, addDoor:door, toggleDoor, lineOfSight,
     restoreDoors(states) { doors.forEach((d, i) => { d.open = !!states[i]; d.angle = d.open ? Math.PI / 2 : 0; d.pivot.rotation.y = d.angle; updateDoorBounds(d); }); },
     dispose() { disposed=true; classroom.dispose(); signs.forEach(({ mesh, map }) => { map.dispose(); mesh.material.dispose(); }); collectibles.forEach(c => { c.ring.geometry.dispose(); c.ring.material.dispose(); }); canopy.dispose(); batched.forEach(g => g.dispose()); resources.dispose(); },
   };

@@ -1,0 +1,28 @@
+import test from'node:test';import assert from'node:assert/strict';import fs from'node:fs';import * as THREE from'three';
+import{changeFrame,SCHOOL_ORIGIN,shiftedBox}from'../../src/systems/world-coordinates.js';import{splitEntranceBox,openSchoolEntrance}from'../../src/systems/school-entrance.js';
+const layout=JSON.parse(fs.readFileSync('src/data/sao-jorge.json'));
+test('changing coordinate frame preserves world poses and camera follow state both ways',()=>{
+ const scene=new THREE.Scene(),group=new THREE.Group();group.position.set(60,0,0);scene.add(group);const player=new THREE.Object3D(),camera=new THREE.PerspectiveCamera();scene.add(player,camera);player.position.set(60,.03,18.8);camera.position.set(60,2,22);const follow={camera,focus:new THREE.Vector3(60,1.45,18.8),desired:camera.position.clone(),position:camera.position.clone(),probe:camera.position.clone()},before=player.getWorldPosition(new THREE.Vector3()),cam=camera.getWorldPosition(new THREE.Vector3());changeFrame(player,group,follow,SCHOOL_ORIGIN);assert.ok(player.getWorldPosition(new THREE.Vector3()).distanceTo(before)<1e-9);assert.ok(camera.getWorldPosition(new THREE.Vector3()).distanceTo(cam)<1e-9);assert.equal(player.position.x,0);assert.equal(follow.focus.x,0);changeFrame(player,scene,follow,{x:-60,z:0});assert.ok(player.position.distanceTo(before)<1e-9);assert.ok(camera.position.distanceTo(cam)<1e-9);assert.equal(follow.focus.x,60);
+});
+test('front entrance opens only a 2.6-wide aperture, with remaining walls and lintel preserved',()=>{
+ const walls=layout.floors[0].colliders.flatMap(splitEntranceBox),at=(x,y,z)=>walls.some(b=>x>b.minX&&x<b.maxX&&y>b.minY&&y<b.maxY&&z>b.minZ&&z<b.maxZ);
+ assert.equal(at(0,1,19),false);assert.equal(at(2,1,19),true);assert.equal(at(0,2.8,19),true);assert.equal(shiftedBox({minX:-11,maxX:11,minZ:-19,maxZ:19}).minX,49);
+ const f=layout.floors[0],b=fs.readFileSync('public'+f.url),n=b.readUInt32LE(12),g=JSON.parse(b.subarray(20,20+n)),bin=b.subarray(28+n),geo=new THREE.BufferGeometry();for(const[k,name]of[['POSITION','position'],['NORMAL','normal'],['COLOR_0','color']]){const a=g.accessors[g.meshes.find(m=>m.name==='structure').primitives[0].attributes[k]],v=g.bufferViews[a.bufferView],array=new Float32Array(a.count*3);for(let i=0;i<array.length;i++)array[i]=bin.readFloatLE((v.byteOffset||0)+(a.byteOffset||0)+i*4);geo.setAttribute(name,new THREE.BufferAttribute(array,3));}const mesh=new THREE.Mesh(geo);mesh.name='structure';const model=new THREE.Group();model.add(mesh);const opened=openSchoolEntrance(model);assert.notEqual(mesh.geometry,geo);const ray=new THREE.Raycaster(new THREE.Vector3(0,1,20),new THREE.Vector3(0,0,-1),0,1.5);model.updateMatrixWorld(true);assert.equal(ray.intersectObject(mesh).length,0);opened.dispose();opened.dispose();assert.equal(mesh.geometry,geo);geo.dispose();
+});
+import{Resources}from'../../src/systems/resources.js';import{createCampusConnection}from'../../src/systems/campus-connection.js';import{blocked}from'../../src/systems/physics.js';
+test('ground collision passes under the entrance lintel while camera occlusion retains its height',()=>{
+ const scene=new THREE.Scene(),resources=new Resources(),world={resources,solids:[],occluders:[],doors:[],groundHeight:()=>0,addDoor(x,name,o){const d={pivot:new THREE.Group(),bounds:{enabled:false,minX:58.6,maxX:61.4,minZ:18.9,maxZ:19.1,minY:0,maxY:2.6}};this.doors.push(d);this.solids.push(d.bounds);this.occluders.push(d.bounds);return d;}};
+ const c=createCampusConnection(scene,world,layout);c.installFloor(layout.floors[0].colliders.flatMap(splitEntranceBox).map(b=>shiftedBox(b)));
+ assert.equal(blocked(60,19,world.solids),false);assert.ok(world.occluders.some(b=>b.minX<60&&b.maxX>60&&b.minZ<19&&b.maxZ>19&&b.minY>=2.6));c.dispose();assert.equal(world.solids.length,0);assert.equal(world.occluders.length,0);resources.dispose();
+});
+import{FollowCamera}from'../../src/systems/camera.js';import{CutsceneManager}from'../../src/systems/cutscene-manager.js';
+test('follow and narrative cameras aim at the correct world target under a translated parent',()=>{
+ const scene=new THREE.Scene(),g=new THREE.Group();g.position.x=60;scene.add(g);const camera=new THREE.PerspectiveCamera();g.add(camera);const follow=new FollowCamera(camera,[]);follow.update({x:0,y:.03,z:16},.016,true);let expected=new THREE.Vector3(60,1.45,16).sub(camera.getWorldPosition(new THREE.Vector3())).normalize();assert.ok(camera.getWorldDirection(new THREE.Vector3()).dot(expected)>.999);
+ const manager=new CutsceneManager({camera});manager.play({id:'translated',shots:[{duration:1,camera:{from:[2,2,17],lookFrom:[0,1.4,16],to:[1,2,17],lookAt:[0,1.4,16]}}]});expected=new THREE.Vector3(60,1.4,16).sub(camera.getWorldPosition(new THREE.Vector3())).normalize();assert.ok(camera.getWorldDirection(new THREE.Vector3()).dot(expected)>.999);manager.skip();
+});
+import{validateProgress}from'../../src/systems/progress.js';
+test('world-path saves retain extended positions and old school saves retain their local frame',()=>{
+ const outside=validateProgress({position:{x:60,z:20},schoolVisit:{active:false}});assert.deepEqual(outside.position,{x:60,z:20});assert.equal(outside.schoolVisit.active,false);
+ const old=validateProgress({schoolVisit:{active:true,floor:2,position:{x:6.9,z:0},actors:{davi:{floor:2,x:6,z:0,index:1,rotation:.2}}}});assert.equal(old.schoolVisit.floor,2);assert.deepEqual(old.schoolVisit.position,{x:6.9,z:0});assert.equal(old.schoolVisit.actors.davi.x,6);
+ const doorway=validateProgress({schoolVisit:{active:true,floor:0,position:{x:0,z:19.1}}});assert.equal(doorway.schoolVisit.position.z,19.1);
+});
