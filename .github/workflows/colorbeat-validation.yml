@@ -9,6 +9,7 @@ on:
     branches:
       - main
       - feat/aurora-07a
+      - feat/aurora-081-colorbeat-unified
 
 concurrency:
   group: colorbeat-${{ github.head_ref || github.ref_name }}
@@ -38,6 +39,7 @@ jobs:
           path: |
             docs/captures/07b/*.png
             docs/captures/081/*.png
+            docs/captures/082-m1/*.jpg
           if-no-files-found: ignore
           retention-days: 5
 

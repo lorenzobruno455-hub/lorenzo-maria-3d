@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {COLORBEAT_STYLE} from './colorbeat-materials.js';
+import {NARRATIVE_POINTS,bookPoint} from './school-narrative-map.js';
 import { batchMeshes } from './batching.js';
 
 // M1 GLBs encode independent, axis-aligned boxes as 12 flat triangles each.
@@ -37,18 +38,34 @@ export function createSchoolFurniture({ resources, materials, floor, source }) {
     mesh.position.set(...center); mesh.scale.set(size[0] * (kind === 'cylinder' ? .5 : 1), size[1], size[2] * (kind === 'cylinder' ? .5 : 1)); mesh.castShadow = mesh.receiveShadow = true; group.add(mesh);
     return mesh;
   };
-  const prop = (parent, kind, x, z, w, h, d, color, finish = 'plain', offset = 0) => {
+  const reserved=[...Object.values(NARRATIVE_POINTS),...Array.from({length:6},(_,i)=>bookPoint(i))].filter(p=>p.floor===floor.index&&p.top!=null);
+  const prop = (parent, kind, x, z, w, h, d, color, finish = 'plain', offset = 0, role = null) => {
     const y = parent.max[1] + offset;
     // Props stay strictly inside the existing supporting footprint.
     if (x - w / 2 < parent.min[0] + .015 || x + w / 2 > parent.max[0] - .015 || z - d / 2 < parent.min[2] + .015 || z + d / 2 > parent.max[2] - .015) return;
+    if(role && reserved.some(p=>Math.abs(p.top-parent.max[1])<.25 && Math.hypot(Math.max(x-w/2-p.x,0,p.x-x-w/2),Math.max(z-d/2-p.z,0,p.z-z-d/2))<.27))return;
+    if(role && offset && !supports.some(s=>s.sourceBox===boxes.indexOf(parent) && Math.abs(s.bounds.maxY-y)<1e-7 && s.bounds.minX<x+w/2 && s.bounds.maxX>x-w/2 && s.bounds.minZ<z+d/2 && s.bounds.maxZ>z-d/2))return;
+    if(role==='shelf-book' && boxes.some(b=>b!==parent && x+w/2>b.min[0] && x-w/2<b.max[0] && z+d/2>b.min[2] && z-d/2<b.max[2] && y+h>b.min[1]+.001 && y<b.max[1]-.001))return;
     add(kind, [x, y + h / 2, z], [w, h, d], color, finish);
     const bounds = { minX: x-w/2, maxX: x+w/2, minY: y, maxY: y+h, minZ: z-d/2, maxZ: z+d/2 };
-    supports.push({ sourceBox: boxes.indexOf(parent), surfaceY: y, parentSurfaceY: parent.max[1], offset, parent: { minX: parent.min[0], maxX: parent.max[0], minZ: parent.min[2], maxZ: parent.max[2] }, bounds });
+    supports.push({ sourceBox: boxes.indexOf(parent), role, decorative:!!role, surfaceY: y, parentSurfaceY: parent.max[1], offset, parent: { minX: parent.min[0], maxX: parent.max[0], minZ: parent.min[2], maxZ: parent.max[2] }, bounds });
     stats.details++;
-    if (h >= .18 && w >= .1 && d >= .1) colliders.push({ ...bounds, minY: bounds.minY + floor.baseY, maxY: bounds.maxY + floor.baseY, kind: 'furniture-detail' });
+    if (!role && h >= .18 && w >= .1 && d >= .1) colliders.push({ ...bounds, minY: bounds.minY + floor.baseY, maxY: bounds.maxY + floor.baseY, kind: 'furniture-detail' });
   };
   try {
     const decorated = new Set();
+    const paper='#eee9dd', blue='#2d5fa8', dark='#5b616b';
+    // Small original props borrow the same primitives, material cache and batcher.
+    const notebook=(b,x,z,color)=>{
+      prop(b,'box',x,z,.23,.025,.29,color,'plain',0,'notebook');
+      prop(b,'box',x,z,.205,.012,.265,paper,'plain',.025,'pages');
+      prop(b,'box',x+.13,z-.06,.016,.016,.19,dark,'plain',0,'pencil');
+    };
+    const bottle=(b,x,z)=>{
+      prop(b,'cylinder',x,z,.065,.13,.065,blue,'plain',0,'bottle');
+      prop(b,'cylinder',x,z,.045,.02,.045,dark,'plain',.13,'bottle-cap');
+    };
+
     for (const b of boxes) {
       const [w,h,d] = b.size, [x,,z] = b.center;
       const top = h < .16 && Math.min(w,d) > .3;
@@ -76,9 +93,33 @@ export function createSchoolFurniture({ resources, materials, floor, source }) {
       if (room.type === 'library' && w > .16 && w < .26 && h > .25 && h < .36 && d > .12 && d < .22) {
         add('box', [x, b.center[1], b.max[2] + .002], [w*.72,h*.8,.004], '#eee9dd'); stats.details++;
       }
+      if(room.type==='library' && top && d>2 && w<.7 && b.max[1]<2) {
+        // Existing shelves remain partially filled. Occupied source book volumes are skipped.
+        for(let j=0;j<9;j++){
+          const height=[.24,.30,.34][(j+Math.round(b.max[1]*10))%3], depth=[.09,.12,.14][j%3];
+          prop(b,'box',x,b.min[2]+.20+j*.28,.22,height,depth,[blue,'#8b6a4e',paper][j%3],'plain',0,'shelf-book');
+        }
+      }
+      if(room.type==='class' && top && w>.75 && d>.5 && b.max[1]>.65 && b.max[1]<1.25) {
+        const variant=(Math.round((x-room.x1)*7)+Math.round((z-room.z1)*5))%4;
+        notebook(b,x-.12,z-.015,variant%2?blue:'#8b6a4e');
+        bottle(b,x+.35,z+.18);
+        if(variant===1)prop(b,'rounded',x+.20,z,.17,.045,.065,dark,'cloth',0,'pencil-case');
+        if(variant===2)prop(b,'box',x+.20,z,.18,.016,.22,paper,'plain',0,'worksheet');
+        continue;
+      }
+      if(room.type==='library' && top && w>1.2 && d>.65 && b.max[1]>.65 && b.max[1]<1.25){
+        // Keep the six interactive books and puzzle staging clear at the center.
+        notebook(b,b.min[0]+.22,b.max[2]-.19,'#8b6a4e');
+        prop(b,'box',b.min[0]+.22,b.max[2]-.19,.025,.006,.12,blue,'plain',.037,'bookmark');
+        const lx=b.max[0]-.22,lz=b.max[2]-.15;
+        prop(b,'box',lx,lz,.16,.025,.14,dark,'plain',0,'lamp-base');
+        prop(b,'box',lx,lz,.035,.18,.035,dark,'plain',.025,'lamp-stem');
+        prop(b,'rounded',lx,lz,.22,.07,.16,paper,'plain',.205,'lamp-shade');
+        continue;
+      }
       if (!top || w < .75 || d < .5 || b.max[1] < .65 || b.max[1] > 1.25 || decorated.has(room.id)) continue;
       decorated.add(room.id);
-      const paper = '#eee9dd', blue = '#2d5fa8', dark = '#5b616b';
       if (['secretaria','office','reception','lab'].includes(room.type)) {
         prop(b,'box',x,z-.08,.32,.018,.14,dark,'plain');
         prop(b,'box',x,z+.13,.18,.025,.13,dark);

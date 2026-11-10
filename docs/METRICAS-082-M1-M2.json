@@ -1,0 +1,708 @@
+{
+  "base": "50db300213cef648aa2ade04e90acd5caf3cf999",
+  "method": "Chromium headless SwiftShader; 960x600, Médio, sombras, resolução adaptativa desligada; todos os GLBs carregados. Contadores renderer.info, sem FPS físico.",
+  "before": [
+    {
+      "name": "class-a",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": -6.5,
+        "y": 0.03,
+        "z": 15.5
+      },
+      "camera": {
+        "x": -6.495145163352198,
+        "y": 2.392940514880652,
+        "z": 12.4517335256856,
+        "distance": 3.190781860684213
+      },
+      "quality": "medium",
+      "drawCalls": 74,
+      "triangles": 117918,
+      "geometries": 150,
+      "textures": 17,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 163,
+        "textures": 5,
+        "programs": 24
+      }
+    },
+    {
+      "name": "class-b",
+      "floor": 1,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 6.5,
+        "y": 3.63,
+        "z": 8.5
+      },
+      "camera": {
+        "x": 6.504853610849058,
+        "y": 5.992702431628425,
+        "z": 5.452503183139499,
+        "distance": 3.189976219489936
+      },
+      "quality": "medium",
+      "drawCalls": 54,
+      "triangles": 74374,
+      "geometries": 151,
+      "textures": 17,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 165,
+        "textures": 5,
+        "programs": 23
+      }
+    },
+    {
+      "name": "corridor-1",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 0,
+        "y": 0.03,
+        "z": 14.5
+      },
+      "camera": {
+        "x": 0,
+        "y": 3.0078659715345273,
+        "z": 18.400391469421344,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 126,
+      "triangles": 121962,
+      "geometries": 152,
+      "textures": 41,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 163,
+        "textures": 5,
+        "programs": 27
+      }
+    },
+    {
+      "name": "corridor-2",
+      "floor": 1,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 0,
+        "y": 3.63,
+        "z": 8
+      },
+      "camera": {
+        "x": 0,
+        "y": 6.607865971534527,
+        "z": 11.900391469421344,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 66,
+      "triangles": 76786,
+      "geometries": 154,
+      "textures": 41,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 165,
+        "textures": 5,
+        "programs": 26
+      }
+    },
+    {
+      "name": "library",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": -5,
+        "y": 0.03,
+        "z": -14
+      },
+      "camera": {
+        "x": -5,
+        "y": 3.0078659715345273,
+        "z": -10.099608530578656,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 94,
+      "triangles": 128194,
+      "geometries": 149,
+      "textures": 38,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 163,
+        "textures": 5,
+        "programs": 28
+      }
+    },
+    {
+      "name": "laboratory",
+      "floor": 1,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 6.5,
+        "y": 3.63,
+        "z": -7
+      },
+      "camera": {
+        "x": 3.023942415330862,
+        "y": 6.607865971534527,
+        "z": -5.230797557429071,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 53,
+      "triangles": 83722,
+      "geometries": 152,
+      "textures": 25,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 165,
+        "textures": 5,
+        "programs": 25
+      }
+    },
+    {
+      "name": "reception",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 6.5,
+        "y": 0.03,
+        "z": -5
+      },
+      "camera": {
+        "x": 6.5,
+        "y": 2.468422599284166,
+        "z": -2.450199894538337,
+        "distance": 2.7456629743187753
+      },
+      "quality": "medium",
+      "drawCalls": 76,
+      "triangles": 120486,
+      "geometries": 152,
+      "textures": 41,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 163,
+        "textures": 5,
+        "programs": 26
+      }
+    },
+    {
+      "name": "teachers",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": -6.5,
+        "y": 0.03,
+        "z": -5
+      },
+      "camera": {
+        "x": -6.5,
+        "y": 3.0078659715345273,
+        "z": -1.099608530578657,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 115,
+      "triangles": 121074,
+      "geometries": 152,
+      "textures": 41,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 163,
+        "textures": 5,
+        "programs": 27
+      }
+    },
+    {
+      "name": "hall",
+      "floor": 2,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 0,
+        "y": 7.23,
+        "z": 5
+      },
+      "camera": {
+        "x": 1.4695571150127453,
+        "y": 10.282030478162575,
+        "z": 8.042214479496206,
+        "distance": 3.7520914881159975
+      },
+      "quality": "medium",
+      "drawCalls": 58,
+      "triangles": 48088,
+      "geometries": 135,
+      "textures": 30,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 151,
+        "textures": 5,
+        "programs": 26
+      }
+    },
+    {
+      "name": "board",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": -6.5,
+        "y": 0.03,
+        "z": 17
+      },
+      "camera": {
+        "x": -6.493385969607747,
+        "y": 2.0776401563891165,
+        "z": 12.84716673959936,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 74,
+      "triangles": 117918,
+      "geometries": 151,
+      "textures": 18,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 163,
+        "textures": 5,
+        "programs": 24
+      }
+    },
+    {
+      "name": "class-desks-a",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": -6.5,
+        "y": 0.03,
+        "z": 16.2
+      },
+      "camera": {
+        "x": -6.5,
+        "y": 2.6600157837252505,
+        "z": 18.524223164434744,
+        "distance": 2.620334237260448
+      },
+      "quality": "medium",
+      "drawCalls": 130,
+      "triangles": 122034,
+      "geometries": 151,
+      "textures": 39,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 163,
+        "textures": 5,
+        "programs": 27
+      }
+    },
+    {
+      "name": "class-desks-b",
+      "floor": 1,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 6.5,
+        "y": 3.63,
+        "z": 9.2
+      },
+      "camera": {
+        "x": 6.5,
+        "y": 6.270987069977272,
+        "z": 11.54529703635738,
+        "distance": 2.644092966179215
+      },
+      "quality": "medium",
+      "drawCalls": 64,
+      "triangles": 76642,
+      "geometries": 154,
+      "textures": 40,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 165,
+        "textures": 5,
+        "programs": 26
+      }
+    }
+  ],
+  "after": [
+    {
+      "name": "class-b",
+      "floor": 1,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 6.5,
+        "y": 3.63,
+        "z": 8.5
+      },
+      "camera": {
+        "x": 6.504851755338421,
+        "y": 5.992342041303717,
+        "z": 5.453668225607331,
+        "distance": 3.1887567078742
+      },
+      "quality": "medium",
+      "drawCalls": 57,
+      "triangles": 79602,
+      "geometries": 152,
+      "textures": 15,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 168,
+        "textures": 5,
+        "programs": 23
+      }
+    },
+    {
+      "name": "corridor-2",
+      "floor": 1,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 0,
+        "y": 3.63,
+        "z": 8
+      },
+      "camera": {
+        "x": 0,
+        "y": 6.607865971534527,
+        "z": 11.900391469421344,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 69,
+      "triangles": 82050,
+      "geometries": 154,
+      "textures": 38,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 168,
+        "textures": 5,
+        "programs": 26
+      }
+    },
+    {
+      "name": "class-desks-b",
+      "floor": 1,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 6.5,
+        "y": 3.63,
+        "z": 9.2
+      },
+      "camera": {
+        "x": 6.5,
+        "y": 6.270984415398352,
+        "z": 11.545291937387681,
+        "distance": 2.644087217589714
+      },
+      "quality": "medium",
+      "drawCalls": 67,
+      "triangles": 81906,
+      "geometries": 157,
+      "textures": 40,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 168,
+        "textures": 5,
+        "programs": 26
+      }
+    },
+    {
+      "name": "class-a",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": -6.5,
+        "y": 0.03,
+        "z": 15.5
+      },
+      "camera": {
+        "x": -6.4951446409893325,
+        "y": 2.393041971870054,
+        "z": 12.451405543236552,
+        "distance": 3.19112517727345
+      },
+      "quality": "medium",
+      "drawCalls": 76,
+      "triangles": 120540,
+      "geometries": 154,
+      "textures": 18,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 166,
+        "textures": 5,
+        "programs": 24
+      }
+    },
+    {
+      "name": "corridor-1",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 0,
+        "y": 0.03,
+        "z": 14.5
+      },
+      "camera": {
+        "x": 0,
+        "y": 3.0078659715345273,
+        "z": 18.400391469421344,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 129,
+      "triangles": 125532,
+      "geometries": 155,
+      "textures": 41,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 166,
+        "textures": 5,
+        "programs": 27
+      }
+    },
+    {
+      "name": "library",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": -5,
+        "y": 0.03,
+        "z": -14
+      },
+      "camera": {
+        "x": -5,
+        "y": 3.0078659715345273,
+        "z": -10.099608530578656,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 96,
+      "triangles": 130816,
+      "geometries": 155,
+      "textures": 41,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 166,
+        "textures": 5,
+        "programs": 26
+      }
+    },
+    {
+      "name": "class-desks-a",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": -6.5,
+        "y": 0.03,
+        "z": 16.2
+      },
+      "camera": {
+        "x": -6.5,
+        "y": 2.6588803575467024,
+        "z": 18.522042214515594,
+        "distance": 2.6178754295907076
+      },
+      "quality": "medium",
+      "drawCalls": 132,
+      "triangles": 124704,
+      "geometries": 155,
+      "textures": 40,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 166,
+        "textures": 5,
+        "programs": 27
+      }
+    },
+    {
+      "name": "board",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": -6.5,
+        "y": 0.03,
+        "z": 17
+      },
+      "camera": {
+        "x": -6.493385969607747,
+        "y": 2.0776401563891165,
+        "z": 12.84716673959936,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 76,
+      "triangles": 120540,
+      "geometries": 154,
+      "textures": 18,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 166,
+        "textures": 5,
+        "programs": 24
+      }
+    }
+  ]
+}

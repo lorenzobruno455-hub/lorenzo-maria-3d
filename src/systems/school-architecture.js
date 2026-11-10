@@ -41,7 +41,7 @@ export function createSchoolArchitecture({ resources, materials, floor, structur
   if (floor.index === 2) {
     for (const side of [-1,1]) for (const z of [-14,-7,0,7,14]) window(side,z,2.5);
     for (const x of [-5,5]) for(const z of [-13,-5,3,11]) fixture(x,z);
-    sign('SALÃO MULTIUSO',0,2.2,-18.875,0,3,.5);
+    sign('SALÃO MULTIUSO',0,2.2,-18.855,0,3,.5);
   } else {
     for (const room of floor.rooms) {
       const side = room.x1 <= -10 ? -1 : room.x2 >= 10 ? 1 : 0;
@@ -54,19 +54,69 @@ export function createSchoolArchitecture({ resources, materials, floor, structur
       if(alongZ) {
         for(const s of [-1,1]) box('door-jamb',[d.x,1.32,d.z+s*(d.width/2+.065)],[.25,2.58,.13],'#7A5A3D','wood');
         box('door-lintel',[d.x,2.66,d.z],[.25,.12,d.width+.26],'#7A5A3D','wood');
-        sign(room.name,d.x-Math.sign(d.x)*.095,2.87,d.z,Math.sign(d.x)*Math.PI/2,1.9,.26);
+        sign(room.name,d.x-Math.sign(d.x)*.115,2.87,d.z,-Math.sign(d.x)*Math.PI/2,1.9,.26);
       } else {
         for(const s of [-1,1]) box('door-jamb',[d.x+s*(d.width/2+.065),1.32,d.z],[.13,2.58,.25],'#7A5A3D','wood');
         box('door-lintel',[d.x,2.66,d.z],[d.width+.26,.12,.25],'#7A5A3D','wood');
-        sign(room.name,d.x,2.87,d.z+.095,0,1.9,.26);
+        sign(room.name,d.x,2.87,d.z+.145,0,1.9,.26);
       }
     }
     for(const z of [-12,-4,4,12]) fixture(0,z);
   }
   // Thin perimeter trim stays inside the inherited wall collision buffer.
   for(const side of [-1,1]) box('institutional-trim',[side*10.84,.78,0],[.07,.055,37.4],'#B9413B');
-  sign('IDEIAS EM MOVIMENTO',10.875,1.9,17, -Math.PI/2,1.25,.9);
-  sign('LER • CRIAR • COMPARTILHAR',-10.875,1.9,-17,Math.PI/2,1.25,.9);
+  sign('IDEIAS EM MOVIMENTO',10.855,1.9,17, -Math.PI/2,1.25,.9);
+  sign('LER • CRIAR • COMPARTILHAR',-10.855,1.9,-17,Math.PI/2,1.25,.9);
+  // Reuse the sign atlas for original educational content; all measurements are game coordinates.
+  for (const room of floor.rooms) {
+    if (!['class','library'].includes(room.type)) continue;
+    const wall = floor.colliders.find(c=>c.kind==='wall' && c.minX<=room.x && c.maxX>=room.x && Math.abs((c.minZ+c.maxZ)/2-room.z2)<.15);
+    if (!wall) continue;
+    const z=wall.minZ-.02;
+    if(room.type==='class') {
+      sign('HOJE: OBSERVAR • CRIAR\nIDEIAS + CUIDADO = DESCOBERTAS',room.x,1.09,room.z2-.408,Math.PI,4.25,.64);
+      Object.assign(signs.at(-1),{roomId:room.id,kind:'lesson',background:'#173C2E',foreground:'#FFF4D5'});
+      // A solid backing connects the inherited board to its actual wall.
+      box('board-mount',[room.x,1.09,(room.z2-.30+wall.minZ)/2],[4.5,.78,wall.minZ-(room.z2-.30)],'#7A5A3D','wood');
+      sign('NOSSA TURMA\nLER • OUVIR • COMPARTILHAR\nPROJETO: ESCOLA VIVA',room.x-3.05,1.95,z,Math.PI,1.25,1.1);
+      Object.assign(signs.at(-1),{roomId:room.id,kind:'mural'});
+      sign('AGENDA\nSEG  TER  QUA  QUI  SEX\nLEITURA  •  CRIAÇÃO',room.x+3.1,1.95,z,Math.PI,1.15,.8);
+      Object.assign(signs.at(-1),{roomId:room.id,kind:'calendar'});
+      sign('GEOGRAFIA',room.x-1.65,2.4,z,Math.PI,1.25,.65);
+      Object.assign(signs.at(-1),{roomId:room.id,kind:'map'});
+      const back=floor.colliders.find(c=>c.kind==='wall' && c.minX<=room.x && c.maxX>=room.x && Math.abs((c.minZ+c.maxZ)/2-room.z1)<.15);
+      if(back){
+        sign('TRABALHOS DA TURMA\nOBSERVAR  •  DESENHAR  •  EXPERIMENTAR',room.x,1.95,back.maxZ+.02,0,2.6,.85);
+        Object.assign(signs.at(-1),{roomId:room.id,kind:'mural',background:'#F4F4F1'});
+      }
+    }else{
+      sign('BIBLIOTECA\nLER É DESCOBRIR\nCONSULTE • CUIDE • DEVOLVA',room.x,2.0,z,Math.PI,2.8,.8);
+      Object.assign(signs.at(-1),{roomId:room.id,kind:'library'});
+      const back=floor.colliders.find(c=>c.kind==='wall' && c.minX<=room.x && c.maxX>=room.x && Math.abs((c.minZ+c.maxZ)/2-room.z1)<.15);
+      if(back){sign('CANTINHO DA LEITURA\nHISTÓRIAS ABREM CAMINHOS',room.x,2.0,back.maxZ+.02,0,2.8,.85);Object.assign(signs.at(-1),{roomId:room.id,kind:'mural'});}
+    }
+    sign('12\n9    •    3\n6',room.x,2.55,z,Math.PI,.38,.38);
+    Object.assign(signs.at(-1),{roomId:room.id,kind:'clock'});
+  }
+  if(floor.index<2)for(const side of [-1,1]) {
+    // Use only continuous wall sections, never the door or stair opening.
+    const walls=floor.colliders.filter(c=>c.kind==='wall' && c.minY===floor.baseY && Math.abs((c.minX+c.maxX)/2-side*2)<.01 && c.maxZ-c.minZ>2.5);
+    for(const [i,wall] of walls.entries()) {
+      const z=(wall.minZ+wall.maxZ)/2, x=side*(Math.min(Math.abs(wall.minX),Math.abs(wall.maxX))-.025);
+      sign(i%2?'VIDA NA ESCOLA\nLEITURA • CIÊNCIA • ARTE':'NOSSOS PROJETOS\nCRIAR JUNTOS',x,1.9,z,-side*Math.PI/2,Math.min(1.7,wall.maxZ-wall.minZ-.4),.65);
+      Object.assign(signs.at(-1),{kind:'corridor',background:i%2?'#2F5D9A':'#F4F4F1',foreground:i%2?'#FFFFFF':'#2F5D9A'});
+      // Shallow wall-mounted drinking fountain, wholly inside the existing collision margin.
+      if(i===1){
+        box('wall-planter',[side*1.74,1.15,z],[.28,.25,.60],'#7A5A3D','wood');
+        for(const dz of [-.18,0,.18])box('planter-leaf',[side*1.74,1.40,z+dz],[.14,.30,.12],'#39715A');
+      }
+      if(i===0){
+        box('water-fountain',[side*1.74,.85,z],[.28,.65,.52],'#F4F4F1');
+        box('fountain-basin',[side*1.71,1.19,z],[.30,.035,.48],'#5B616B','metal');
+        box('fountain-tap',[side*1.78,1.25,z+.13],[.06,.12,.055],'#5B616B','metal');
+      }
+    }
+  }
   for(const stair of floor.stairs || []) {
     // Offset from interaction/arrival centers, readable horizontal landing marker.
     sign(`${stair.destination+1}º ANDAR  →`,stair.x+1.15,.033,stair.z, -Math.PI/2,1.1,.55);
@@ -76,22 +126,52 @@ export function createSchoolArchitecture({ resources, materials, floor, structur
     const geometry=mergeGeometries(geometries,false); geometries.forEach(g=>g.dispose()); owned.push(geometry);
     const mesh=new THREE.Mesh(geometry,material); mesh.name='architecture-batch'; mesh.castShadow=material.userData.colorbeatKind!=='glass'; mesh.receiveShadow=true; group.add(mesh);
   }
+  // Variable-height rows preserve each panel's aspect ratio; one compact atlas per floor.
+  const atlasWidth=256;let usedHeight=0;
+  for(const s of signs){s.atlasY=usedHeight;s.atlasWidth=s.kind==='clock'?64:s.kind&&s.kind!=='lesson'?128:atlasWidth;s.atlasHeight=Math.max(32,Math.ceil(s.atlasWidth*s.height/s.width));usedHeight+=s.atlasHeight;}
+  const atlasHeight=THREE.MathUtils.ceilPowerOfTwo(Math.max(32,usedHeight));
+  stats.atlas={width:atlasWidth,height:atlasHeight};
   let texture, signMaterial;
   if (typeof document !== 'undefined') {
-    const canvas=document.createElement('canvas');canvas.width=512;canvas.height=512;
+    const canvas=document.createElement('canvas');canvas.width=atlasWidth;canvas.height=atlasHeight;
     const context=canvas.getContext('2d');
     if(context) {
       texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;
-      const paint=()=>{if(disposed)return;context.clearRect(0,0,512,512);signs.forEach((s,i)=>{const y=i*32;context.fillStyle=s.floor?'#2F5D9A':'#F4F4F1';context.fillRect(0,y,512,32);context.fillStyle=s.floor?'#FFFFFF':'#2F5D9A';context.font='bold 23px "Barlow Condensed", "Atkinson Hyperlegible", sans-serif' ;context.textAlign='center';context.textBaseline='middle';context.fillText(s.text,256,y+16,496);});texture.needsUpdate=true;};
+      texture.generateMipmaps=false;texture.minFilter=THREE.LinearFilter;
+      const paint=()=>{if(disposed)return;context.clearRect(0,0,atlasWidth,atlasHeight);signs.forEach(s=>{
+        const y=s.atlasY,h=s.atlasHeight,width=s.atlasWidth,lines=s.text.split('\n');
+        context.fillStyle=s.background||(s.floor?'#2F5D9A':'#F4F4F1');context.fillRect(0,y,width,h);
+        if(['mural','calendar','corridor','map'].includes(s.kind)){
+          context.strokeStyle='#E2B947';context.lineWidth=5;context.strokeRect(3,y+3,width-6,h-6);
+        }
+        if(s.kind==='clock'){
+          const cx=width/2,cy=y+h/2,r=Math.min(width,h)*.43;
+          context.fillStyle='#F4F4F1';context.beginPath();context.arc(cx,cy,r,0,Math.PI*2);context.fill();
+          context.strokeStyle='#141824';context.lineWidth=5;context.stroke();
+          for(let i=0;i<12;i++){const a=i*Math.PI/6;context.beginPath();context.moveTo(cx+Math.sin(a)*r*.85,cy-Math.cos(a)*r*.85);context.lineTo(cx+Math.sin(a)*r*.96,cy-Math.cos(a)*r*.96);context.stroke();}
+          context.beginPath();context.moveTo(cx-r*.45,cy-r*.25);context.lineTo(cx,cy);context.lineTo(cx+r*.18,cy-r*.65);context.stroke();return;
+        }
+        if(s.kind==='map'){
+          context.fillStyle='#A9CED5';context.fillRect(14,y+h*.32,width-28,h*.57);
+          context.fillStyle='#2F5D9A';
+          // Original schematic land shapes; a classroom diagram, not a geographic survey.
+          for(const poly of [[[.15,.4],[.32,.38],[.42,.55],[.3,.76]],[[.52,.4],[.76,.38],[.87,.55],[.7,.63],[.62,.82]]]){
+            context.beginPath();poly.forEach(([x,v],i)=>i?context.lineTo(x*width,y+v*h):context.moveTo(x*width,y+v*h));context.closePath();context.fill();
+          }
+        }
+        context.fillStyle=s.foreground||(s.floor?'#FFFFFF':'#2F5D9A');
+        context.font=`bold ${Math.min(24,Math.floor((h-8)/lines.length*.7))}px "Barlow Condensed", "Atkinson Hyperlegible", sans-serif`;
+        context.textAlign='center';context.textBaseline='middle';
+        lines.forEach((line,i)=>context.fillText(line,width/2,s.kind==='map'?y+h*.17:y+(i+.5)*h/lines.length,width-16));
+      });texture.needsUpdate=true;};
       paint(); document.fonts?.ready.then(paint);
     }
   }
-  // Geometry remains available in headless runs; painting requires a browser canvas.
-  signMaterial=new THREE.MeshBasicMaterial({map:texture || null,color:texture?'#FFFFFF':'#2F5D9A',side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});
-  const signGeometries=signs.map((s,i)=>{
-    const g=new THREE.PlaneGeometry(s.width,s.height), uv=g.attributes.uv;
-    for(let j=0;j<uv.count;j++) uv.setY(j,1-(i*32+1+(1-uv.getY(j))*30)/512);
-    if(s.floor) g.rotateX(-Math.PI/2); else g.rotateY(s.rotation);
+  signMaterial=new THREE.MeshBasicMaterial({map:texture||null,color:texture?'#FFFFFF':'#2F5D9A',side:THREE.FrontSide});
+  const signGeometries=signs.map(s=>{
+    const g=new THREE.PlaneGeometry(s.width,s.height),uv=g.attributes.uv;
+    for(let j=0;j<uv.count;j++){uv.setX(j,(1+uv.getX(j)*(s.atlasWidth-2))/atlasWidth);uv.setY(j,1-(s.atlasY+1+(1-uv.getY(j))*(s.atlasHeight-2))/atlasHeight);}
+    if(s.floor)g.rotateX(-Math.PI/2);else g.rotateY(s.rotation);
     g.translate(s.x,s.y,s.z);return g;
   });
   if(signGeometries.length){const geometry=mergeGeometries(signGeometries,false);signGeometries.forEach(g=>g.dispose());owned.push(geometry);const mesh=new THREE.Mesh(geometry,signMaterial);mesh.name='school-sign-atlas';group.add(mesh);}

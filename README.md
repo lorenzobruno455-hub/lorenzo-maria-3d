@@ -120,3 +120,7 @@ Biblioteca e pátio detalhados, cinco NPCs GLB originais, áudio e interface ace
 Na tela inicial, escolha **Visitar São Jorge · 0.8 M1**; durante a campanha, **Pausa → Visitar São Jorge**. Explore três pavimentos, use E/Interagir nos patamares e escolha Inspecionar andares para a vista por piso ou todos. **Voltar à campanha** restaura o campus anterior. As missões e os seis livros ainda estão no campus 0.7; o remapeamento é M3.
 
 [Auditoria](docs/AUDITORIA-08-M1.md) · [Entrega M1 e limitações](docs/ENTREGA-08.md) · [Matriz dos ambientes](docs/SAO_JORGE_ROOM_MATRIX.md) · [Licenças](docs/ASSET-LICENSES.md). Preparação dos assets: `python3 scripts/prepare-sao-jorge.py`. Nenhuma medida do jogo é apresentada como medida real da escola.
+
+## Living School 0.8.2 — M1 + M2 (entrega parcial)
+
+Salas de aula, placas/quadros, corredores e biblioteca sobre a 0.8.1 validada, sem alterações na campanha ou nos saves. [Entrega, inventário e capturas](docs/ENTREGA-082-M1-M2.md) · [Métricas](docs/PERFORMANCE-082-M1-M2.md). Ambientes especializados e salão permanecem M3/M4; sem merge automático.
