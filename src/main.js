@@ -289,10 +289,9 @@ function animate(now) {
     }
     interactionTime = Math.max(0, interactionTime - dt); saveTimer += dt; if (saveTimer > 1) { save(); saveTimer = 0; }
   }
-  if(started)school.tick(paused?0:dt,time);
+  if(started){school.quality=settings.quality;school.tick(paused?0:dt,time);}
   dialogues.update(adventure?.cutscenes.paused?0:dt);
   if(!school?.loading&&!school?.inspecting)story?.update(paused || document.hidden ? 0 : dt, player.position, active());
-  if(school?.active)school.quality=settings.quality;
   if (!paused && started) {
     if(!school?.loading&&!school?.inspecting&&!adventure?.cutscenes.active)living.update(panelOpen ? 0 : dt, { player: player.position, active: active(), dialogueOpen: dialog, speaker: $('speaker').textContent, playerSpeed: speed });
     if(adventure?.cutscenes.active)for(const a of living.actors)a.character.update(adventure.cutscenes.paused?0:dt,0,false,false,a.character.cutscenePose||{});

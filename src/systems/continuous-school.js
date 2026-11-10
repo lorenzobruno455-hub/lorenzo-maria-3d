@@ -51,8 +51,8 @@ export class ContinuousSchool extends SchoolVisit{
   const p=this.player.position.clone().add(new THREE.Vector3(this.origin.x,0,this.origin.z));const distance=moveWithCollisions(p,delta,this.world.solids);this.player.position.x=p.x-this.origin.x;this.player.position.z=p.z-this.origin.z;return distance;
  }
  tick(dt,time){
-  const p=this.player.getWorldPosition(new THREE.Vector3()),near=Math.hypot(p.x-ENTRANCE.x,p.z-ENTRANCE.z);this.detailNear=near<15;
-  if(near<18&&!this.leases.has(0)&&!this.prefetching&&time>=this.retryAt){this.prefetching=true;void this.ensureFloor(0).catch(()=>{this.retryAt=time+5;this.onStatus('Não foi possível carregar São Jorge. Aproxime-se novamente para tentar.');}).finally(()=>{this.prefetching=false;this.showFloors();});}
+  const p=this.player.getWorldPosition(new THREE.Vector3()),near=Math.hypot(p.x-ENTRANCE.x,p.z-ENTRANCE.z);this.detailNear=near<15;this.entranceDistance=near;
+  if(!this.active&&!this.loading&&near<18&&!this.leases.has(0)&&!this.prefetching&&time>=this.retryAt){this.prefetching=true;void this.ensureFloor(0).catch(()=>{this.retryAt=time+5;this.onStatus('Não foi possível carregar São Jorge. Aproxime-se novamente para tentar.');}).finally(()=>{this.prefetching=false;this.showFloors();});}
   this.connection.door.open=near<5&&this.leases.has(0);
   if(!this.active&&this.leases.has(0)&&Math.abs(p.x-this.origin.x)<10.7&&p.z<18.88&&p.z>-18.8)this.activate();
   if(this.active&&this.floor===0&&this.player.position.z>19.2)this.exit();
@@ -63,7 +63,7 @@ export class ContinuousSchool extends SchoolVisit{
   if(!this.connection)return super.showFloors();super.showFloors();
   this.group.visible=this.active||this.detailNear;
   if(!this.active)for(const[i,l]of this.leases)l.model.visible=i===0&&this.detailNear;
-  this.connection.update(this.active,[...this.leases].filter(([,l])=>l.model.visible).map(([i])=>i),this.inspecting,this.active||this.detailNear);
+  this.connection.update(this.active,[...this.leases].filter(([,l])=>l.model.visible).map(([i])=>i),this.inspecting,this.active||this.detailNear,this.entranceDistance??Infinity);
  }
  presentWorld(){
   // Interior walls occlude the distant campus. Restore before the doorway can
@@ -71,6 +71,7 @@ export class ContinuousSchool extends SchoolVisit{
   const hidden=this.active&&!this.inspecting&&this.player.position.z<16;
   if(hidden){for(const r of this.legacyRoots)if(r.parent===this.scene){if(!this.hiddenRoots.has(r))this.hiddenRoots.set(r,r.visible);r.visible=false;}}
   else this.restoreCampus();
+  this.connection.cull(this.follow.camera);
  }
  restoreCampus(){for(const[r,visible]of this.hiddenRoots)r.visible=visible;this.hiddenRoots.clear();}
  explore(){super.explore();if(this.active)this.follow.obstacles=this.cameraObstacles();}

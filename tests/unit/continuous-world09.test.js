@@ -13,7 +13,7 @@ import{Resources}from'../../src/systems/resources.js';import{createCampusConnect
 test('ground collision passes under the entrance lintel while camera occlusion retains its height',()=>{
  const scene=new THREE.Scene(),resources=new Resources(),world={resources,solids:[],occluders:[],doors:[],groundHeight:()=>0,addDoor(x,name,o){const d={pivot:new THREE.Group(),bounds:{enabled:false,minX:58.6,maxX:61.4,minZ:18.9,maxZ:19.1,minY:0,maxY:2.6}};this.doors.push(d);this.solids.push(d.bounds);this.occluders.push(d.bounds);return d;}};
  const c=createCampusConnection(scene,world,layout);c.installFloor(layout.floors[0].colliders.flatMap(splitEntranceBox).map(b=>shiftedBox(b)));
- assert.equal(blocked(60,19,world.solids),false);assert.ok(world.occluders.some(b=>b.minX<60&&b.maxX>60&&b.minZ<19&&b.maxZ>19&&b.minY>=2.6));c.dispose();assert.equal(world.solids.length,0);assert.equal(world.occluders.length,0);resources.dispose();
+ assert.equal(blocked(60,19,world.solids),false);assert.ok(world.occluders.some(b=>b.minX<60&&b.maxX>60&&b.minZ<19&&b.maxZ>19&&b.minY>=2.6));const camera=new THREE.PerspectiveCamera(52,800/450,.06,140);camera.position.set(0,4,25.5);camera.lookAt(0,1.42,19);c.update(false,[],false,false,60);c.cull(camera);assert.ok(c.proxies.every(g=>!g.visible));camera.position.set(60,4,30);camera.lookAt(60,2,19);c.cull(camera);assert.equal(c.proxies[0].visible,true);c.dispose();assert.equal(world.solids.length,0);assert.equal(world.occluders.length,0);resources.dispose();
 });
 import{FollowCamera}from'../../src/systems/camera.js';import{CutsceneManager}from'../../src/systems/cutscene-manager.js';
 test('follow and narrative cameras aim at the correct world target under a translated parent',()=>{
