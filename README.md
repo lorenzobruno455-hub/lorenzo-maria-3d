@@ -29,6 +29,12 @@ npm run dev
 
 Para testar no Android na mesma rede Wi-Fi, abra `http://IP-DO-COMPUTADOR:5173`. Vite já escuta em `0.0.0.0`. A porta precisa estar acessível na rede; no Chromebook pode ser necessário ativar o encaminhamento da porta 5173 nas configurações do Linux. Evite redes públicas para o servidor de desenvolvimento. LocalStorage funciona por navegador e endereço: mudar a URL ou porta usa outro salvamento.
 
+## Instalar no Chrome Android (PWA)
+
+Publique a build em HTTPS e abra o endereço no Chrome Android atualizado. No menu ⋮, escolha **Adicionar à tela inicial → Instalar** (ou **Instalar aplicativo**) e confirme. Se aparecer somente **Criar atalho**, isso não confirma a instalação da PWA. Abra pelo ícone instalado: o manifesto solicita tela cheia, sem barra de endereço, e orientação horizontal. O Android pode mostrar suas barras temporariamente por gestos; o suporte à orientação/tela cheia depende do navegador e do sistema.
+
+Teste o movimento, a câmera e a interação, feche e reabra pelo ícone para conferir o progresso. Use a mesma origem/endereço do jogo anterior para manter acesso aos saves locais; não limpe os dados do site. HTTP por IP na rede local não serve para validar a instalação: use HTTPS. Não há cache offline nem service worker; a instalação usa o suporte do Chrome atual ao manifesto e o jogo continua exigindo conexão para carregar. Os PNGs de instalação reutilizam `public/favicon.svg`. Manifesto e ícones usam caminhos relativos e o HTML respeita o `base` do Vite.
+
 ## Aventuras 0.7B
 
 Após o prólogo, abra **Álbum e história → Aventuras 0.7B**. Três aventuras com cenas puláveis, investigação física, escolhas, quebra-cabeça e ritmo. [Entrega 0.7B](docs/ENTREGA-07B.md) · [Missões](docs/MISSIONS-07B.md) · [Animações](docs/ANIMATION-SYSTEM.md) · [Cutscenes](docs/CUTSCENES-07B.md).
