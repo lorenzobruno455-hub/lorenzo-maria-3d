@@ -47,3 +47,7 @@ As duas salas, seus tampos, os dois corredores, a biblioteca e o quadro próximo
 - Revisão independente somente leitura de M1/M2 e depois M3/M4 não encontrou falhas concretas. Não repetiu testes. As entregas parciais anteriores registram a situação de revisão em seu momento.
 
 Equipamentos são representações estilizadas, não simulações funcionais. Relógios são cenográficos; os mapas são esquemáticos; não há projeção luminosa dinâmica nem substâncias funcionais. A licença dos recursos anteriores foi preservada, sem recursos pagos ou dependências novas.
+
+## Ajuste posterior solicitado: tela inteira
+
+Botão **Entrar/Sair da tela inteira** no início das configurações, com Fullscreen API, sincronização ao sair pelo navegador e aviso quando indisponível/negado. Sem alterar jogabilidade ou saves. Teste focado de entrada/saída real aprovado (9,8 s) e build aprovada (86 módulos); sem repetir a regressão anterior. O mesmo botão foi aplicado separadamente à hospedagem 0.8.1, sem publicar a 0.8.2 inteira.
