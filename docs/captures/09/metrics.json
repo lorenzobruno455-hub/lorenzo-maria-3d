@@ -1,0 +1,137 @@
+{
+  "source": "833806c67685ca083c9a4c9d92ad913aecb5f889",
+  "campaign": "six memories unlocked; prologue complete",
+  "method": "960×600, medium, shadows on, adaptive off; headless Chromium SwiftShader, loaded models/fonts. No physical Android FPS measurement.",
+  "samples": [
+    {
+      "name": "campus",
+      "floor": null,
+      "worldPosition": {
+        "x": 0,
+        "y": 0.025,
+        "z": 19
+      },
+      "cameraWorld": {
+        "x": 0,
+        "y": 4.041443285890879,
+        "z": 25.500652449035574
+      },
+      "quality": "medium",
+      "drawCalls": 241,
+      "triangles": 245248,
+      "geometries": 123,
+      "textures": 41,
+      "school": []
+    },
+    {
+      "name": "path",
+      "floor": null,
+      "worldPosition": {
+        "x": 43,
+        "y": 0.03,
+        "z": 20
+      },
+      "cameraWorld": {
+        "x": 36.49934755096443,
+        "y": 4.046441429603827,
+        "z": 20
+      },
+      "quality": "medium",
+      "drawCalls": 53,
+      "triangles": 145374,
+      "geometries": 118,
+      "textures": 10,
+      "school": [
+        0
+      ]
+    },
+    {
+      "name": "entrance",
+      "floor": null,
+      "worldPosition": {
+        "x": 60,
+        "y": -0.02,
+        "z": 22
+      },
+      "cameraWorld": {
+        "x": 60,
+        "y": 3.9964432858908796,
+        "z": 28.500652449035574
+      },
+      "quality": "medium",
+      "drawCalls": 107,
+      "triangles": 199180,
+      "geometries": 117,
+      "textures": 12,
+      "school": [
+        0
+      ]
+    },
+    {
+      "name": "inside",
+      "floor": 0,
+      "worldPosition": {
+        "x": 60,
+        "y": 0.03,
+        "z": 16
+      },
+      "cameraWorld": {
+        "x": 60,
+        "y": 2.4004705796136196,
+        "z": 18.379670272282315
+      },
+      "quality": "medium",
+      "drawCalls": 152,
+      "triangles": 162920,
+      "geometries": 163,
+      "textures": 39,
+      "school": [
+        0
+      ]
+    },
+    {
+      "name": "floor-2",
+      "floor": 1,
+      "worldPosition": {
+        "x": 60,
+        "y": 3.63,
+        "z": 8
+      },
+      "cameraWorld": {
+        "x": 60,
+        "y": 6.607865971534527,
+        "z": 11.900391469421344
+      },
+      "quality": "medium",
+      "drawCalls": 83,
+      "triangles": 89568,
+      "geometries": 169,
+      "textures": 41,
+      "school": [
+        1
+      ]
+    },
+    {
+      "name": "floor-3",
+      "floor": 2,
+      "worldPosition": {
+        "x": 60,
+        "y": 7.23,
+        "z": 5
+      },
+      "cameraWorld": {
+        "x": 61.69653585873974,
+        "y": 10.207865971534527,
+        "z": 8.512096196681547
+      },
+      "quality": "medium",
+      "drawCalls": 70,
+      "triangles": 54656,
+      "geometries": 143,
+      "textures": 30,
+      "school": [
+        2
+      ]
+    }
+  ]
+}

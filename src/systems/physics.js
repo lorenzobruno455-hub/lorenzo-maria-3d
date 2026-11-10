@@ -1,5 +1,6 @@
 export const PLAYER_RADIUS = .32;
-export const BOUNDS = { minX: -38, maxX: 38, minZ: -27, maxZ: 29 };
+import {CONTINUOUS_BOUNDS} from './world-coordinates.js';
+export const BOUNDS = CONTINUOUS_BOUNDS;
 export const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
 
 // Radial dead zone preserves the direction, including shallow diagonals.

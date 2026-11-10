@@ -3,7 +3,7 @@ import './school.css';
 import schoolLayout from './data/sao-jorge.json' with {type:'json'};
 import {narrativePriority} from './systems/school-narrative-map.js';
 import {SchoolNarrative} from './systems/school-narrative.js';
-import {SchoolVisit} from './systems/school-visit.js';
+import {ContinuousSchool} from './systems/continuous-school.js';
 import {Adventure} from './systems/adventure.js';
 import './adventure.css';
 import { GLBAssets } from './systems/asset-pipeline.js';
@@ -28,7 +28,7 @@ import { Controls } from './systems/controls.js';
 import { FollowCamera } from './systems/camera.js';
 import { Quality } from './systems/quality.js';
 import { VisualEffects } from './systems/visual-effects.js';
-import { registerStateReader } from './systems/diagnostics.js';
+import { registerStateReader,registerNavigationReader } from './systems/diagnostics.js';
 import { Audio } from './systems/audio.js';
 import { blocked, resolveSpawn, relativeMovement, moveWithCollisions, clamp } from './systems/physics.js';
 import { loadSave, saveProgress, freshProgress, collect, objective, mariaDialogue } from './systems/progress.js';
@@ -77,7 +77,7 @@ function notify(message) { $('toast').textContent = message; $('toast').hidden =
 function save() {
   if(school?.active) school.capture();
   else {progress.position = { x: player.position.x, z: player.position.z }; progress.yaw = follow.yaw; progress.pitch = follow.pitch;}
-  progress.doors = world.doors.map(d => d.open);
+  progress.doors = world.doors.filter(d=>!d.transient).map(d => d.open);
   const ok = saveProgress(storage, progress, settings);
   $('save-status').textContent = ok ? 'Progresso salvo neste aparelho' : 'Salvamento indisponível neste navegador'; return ok;
 }
@@ -119,7 +119,7 @@ function nearestTarget() {
  }
  adventure?.targets().forEach(o=>add(o,'adventure',2.6,{...(Number.isFinite(o.height)?{height:o.height}:{}),priority:3}));
  living?.targets().forEach(o=>add(o,o.kind,o.kind==='maria'?2.5:2.4));
- world.doors.forEach(o=>add(o,'door',3.1,{height:1.4,ignoreCollider:o.bounds}));
+ world.doors.filter(d=>!d.transient).forEach(o=>add(o,'door',3.1,{height:1.4,ignoreCollider:o.bounds}));
  if(progress.stage===1&&!living?.free)world.collectibles.filter(o=>!o.taken).forEach(o=>add(o,'item',2));
  world.points.forEach(o=>add(o,'point',2.4,{height:1.5}));
  story?.world.objects.filter(o=>(!o.mesh||o.mesh.visible)&&(o.kind!=='memory'||progress.stage===2)).forEach(o=>add(o,o.kind,o.kind==='memory-book'?2.1:2.3,{height:o.height,ignoreCollider:o.ignoreCollider}));
@@ -173,15 +173,16 @@ adventure=new Adventure({scene,world,living,story,player,character:lorenzo,camer
 lorenzo.player=true;
 const ink=new InkOutlines(scene,world.resources,[lorenzo,...living.actors.map(a=>a.character)]);
 const legacyRoots=scene.children.filter(node=>node!==player&&node!==sun&&!node.isHemisphereLight&&!node.isCamera);
-school=new SchoolVisit({scene,legacyRoots,player,follow,pool:assets,layout:schoolLayout,getState:()=>progress.schoolVisit,onStatus:notify,onChange:()=>{controls.clear();lastHUD='';lastLocation='';lastTarget='';syncSchoolUI();syncModal();needsRender=true;if(!school?.loading)save();}});
+school=new ContinuousSchool({scene,world,frameNodes:[effect,interactionAccent.mesh],legacyRoots,player,follow,pool:assets,layout:schoolLayout,getState:()=>progress.schoolVisit,onStatus:notify,onChange:event=>{if(!event?.preserveInput)controls.clear();target=null;lastHUD='';lastLocation='';lastTarget='';syncSchoolUI();syncModal();needsRender=true;if(!school?.loading&&!event?.deferSave)save();}});
 school.narrative=new SchoolNarrative({school,world,story,living,adventure,getProgress:()=>progress});
 function syncSchoolUI(){if(!school)return;document.body.classList.toggle('school-visit',school.active);document.body.classList.toggle('school-inspecting',school.active&&school.inspecting);$('school-toolbar').hidden=!school.active&&!school.loading;$('school-floor-title').textContent=school.loading?'Carregando São Jorge…':school.inspecting?'Inspeção · coordenadas de jogo':`${school.navigation.floor(school.floor).label} · São Jorge`;$('school-inspect').textContent=school.inspecting?'Explorar':'Andares';$('school-inspect').disabled=school.loading;$('school-floor-view').hidden=!school.inspecting;$('school-floor-view').value=String(school.view);$('school-floor-view').disabled=school.loading;$('story-menu').disabled=school.loading;document.querySelectorAll('[data-story]').forEach(b=>b.disabled=school.loading);$('restart').disabled=school.active||school.loading;interactions.world=school.active?{occluders:school.navigation.obstacles(school.floor)}:world;}
 async function openSchool(){if(school.active||school.loading)return;if(dialog||panelOpen||adventure?.busy||story?.seat){notify('Conclua a interação atual antes de visitar São Jorge.');return;}if(!started){started=true;$('welcome').hidden=true;audio.unlock();}if(paused)setPause(false);await school.enter();syncSchoolUI();syncModal();save();}
-$('visit-school').onclick=openSchool;$('visit-school-paused').onclick=openSchool;
-$('school-exit').onclick=()=>school.exit();$('school-inspect').onclick=()=>{if(school.inspecting)school.explore();else void school.inspect(school.floor);};$('school-floor-view').onchange=event=>void school.inspect(event.target.value);
+
+$('school-exit').onclick=()=>notify('Saída a pé: desça ao 1º andar e atravesse a porta no fim do corredor.');$('school-inspect').onclick=()=>{if(school.inspecting)school.explore();else void school.inspect(school.floor);};$('school-floor-view').onchange=event=>void school.inspect(event.target.value);
 
 $('help').onclick = () => speak('COMO JOGAR', 'Use WASD ou o joystick para andar. Arraste o mouse ou o lado direito da tela para olhar ao redor. Segure Shift ou Correr para correr. Aproxime-se de Maria, portas, placas ou lembranças e pressione E ou Interagir. As portas da sala e da biblioteca podem ser abertas. Use Esc ou ☰ para pausar.');
 function syncSettings() {
+  $('safe-checkpoint').disabled=!!adventure?.cutscenes.active;
   $('quality').value = settings.quality; $('sensitivity').value = settings.sensitivity; $('volume').value = settings.volume;
   $('audio-enabled').checked = settings.sound; $('shadows').checked = settings.shadows; $('adaptive').checked = settings.adaptive;
   $('sound').textContent = `Som: ${settings.sound ? 'ligado' : 'desligado'}`;
@@ -192,6 +193,16 @@ for (const id of ['quality', 'sensitivity', 'volume', 'audio-enabled', 'shadows'
   settings.sound = $('audio-enabled').checked; settings.shadows = $('shadows').checked; settings.adaptive = $('adaptive').checked;
   audio.unlock(); if (id === 'quality' || id === 'shadows') { quality.apply();  } syncSettings(); save();
 });
+// Explicit rescue: never resets campaign, inventory, memories or quest state.
+$('safe-checkpoint').onclick=()=>{
+  if(adventure?.cutscenes.active)return;
+  dialogues.close();story.close();story.seat=null;story.focus=null;adventure?.actions.clear();
+  school.exit({recover:true});controls.clear();
+  const point=resolveSpawn({x:0,z:10},world.solids);player.position.set(point.x,world.groundHeight(point.x,point.z),point.z);player.rotation.y=0;
+  follow.yaw=0;follow.pitch=.38;follow.conversation=false;follow.focusObject=null;follow.initialized=false;follow.actualDistance=follow.distance;
+  interactionTime=effectTime=0;effect.visible=false;target=null;lastHUD=lastTarget=lastLocation='';
+  updateHUD();setPause(false);follow.update(player.position,0,true);save();notify('Ponto seguro · pátio central. Seu progresso foi mantido.');
+};
 $('restart').onclick = () => { $('reset-confirm').hidden = false; $('confirm-reset').focus(); };
 $('cancel-reset').onclick = () => { $('reset-confirm').hidden = true; $('restart').focus(); };
 $('confirm-reset').onclick = () => {
@@ -220,7 +231,7 @@ function nextObjective() {
 function updateMarker() {
   const next = nextObjective(); $('objective-marker').hidden = !next || progress.stage === 2 && !story?.goal() && !adventure?.goal();
   if (!next) return;
-  markerPosition.set(next.x, (school?.active?school.navigation.floor(school.floor).walkY:0)+2.7, next.z).project(camera);
+  markerPosition.set(next.x, (school?.active?school.navigation.floor(school.floor).walkY:0)+2.7, next.z);if(school?.active)school.group.localToWorld(markerPosition);markerPosition.project(camera);
   const behind = markerPosition.z > 1, x = clamp((markerPosition.x * .5 + .5) * innerWidth, 25, innerWidth - 95), y = clamp((-markerPosition.y * .5 + .5) * innerHeight, 65, innerHeight - 170);
   const label = adventure?.goal()||story?.goal() ? next.name : next.name === 'MARIA' ? 'MARIA' : next.id === 'notebook' ? 'SALA 01' : next.id === 'card' ? 'BIBLIOTECA' : 'JARDIM';
   $('objective-marker').querySelector('small').textContent = `${behind ? '↻ ' : ''}${label} · ${Math.round(Math.hypot(next.x - player.position.x, next.z - player.position.z))} m`;
@@ -289,9 +300,9 @@ function animate(now) {
     }
     interactionTime = Math.max(0, interactionTime - dt); saveTimer += dt; if (saveTimer > 1) { save(); saveTimer = 0; }
   }
+  if(started){school.quality=settings.quality;school.tick(paused?0:dt,time);}
   dialogues.update(adventure?.cutscenes.paused?0:dt);
   if(!school?.loading&&!school?.inspecting)story?.update(paused || document.hidden ? 0 : dt, player.position, active());
-  if(school?.active)school.quality=settings.quality;
   if (!paused && started) {
     if(!school?.loading&&!school?.inspecting&&!adventure?.cutscenes.active)living.update(panelOpen ? 0 : dt, { player: player.position, active: active(), dialogueOpen: dialog, speaker: $('speaker').textContent, playerSpeed: speed });
     if(adventure?.cutscenes.active)for(const a of living.actors)a.character.update(adventure.cutscenes.paused?0:dt,0,false,false,a.character.cutscenePose||{});
@@ -299,12 +310,13 @@ function animate(now) {
     player.position.y=story?.seat?story.seat.height:school?.active?school.navigation.floor(school.floor).walkY:world.groundHeight(player.position.x,player.position.z);
     lorenzo.update(adventure?.cutscenes.paused?0:dt, speed, dialog && $('speaker').textContent === 'LORENZO', interactionTime > 0,story?.seat?{state:'sit',seatHeight:school?.active?story.seat.height:.8}:{});
 
-    if(!school?.active){world.quality=settings.quality;world.update(dt, time, player.position);}
+
     if (effectTime > 0) { effectTime -= dt; particles.forEach((m, i) => { const t = .8 - effectTime; m.position.set(Math.cos(m.userData.angle) * t, t * (1.5 + i % 3 * .2), Math.sin(m.userData.angle) * t); m.scale.setScalar(.035 * Math.max(0, effectTime / .8)); }); if (effectTime <= 0) effect.visible = false; }
   }
   if (toastTime > 0) { toastTime -= dt; if (toastTime <= 0) $('toast').hidden = true; }
   let indoors=!!school?.active;
-  if(school?.active){school.narrative.updateObjects();if(!paused&&!school.inspecting)school.narrative.updateBall(dt);school.update(paused?0:dt,settings.quality);follow.interiorDistance=4.2;}else indoors=updateAtmosphere(renderer,follow,player.position,settings.quality,dt,world);
+  if(school?.active){school.narrative.updateObjects();if(!paused&&!school.inspecting)school.narrative.updateBall(dt);school.update(paused?0:dt,settings.quality);follow.interiorDistance=school.cameraDistance();}else indoors=updateAtmosphere(renderer,follow,player.position,settings.quality,dt,world);
+  const shadowCenter=school.active||player.position.x>44?60:0;if(sun.target.position.x!==shadowCenter){sun.position.x=-20+shadowCenter;sun.target.position.x=shadowCenter;sun.target.updateMatrixWorld();}
   updateColorbeatLighting({renderer,sun,hemisphere,indoors,dt:paused?0:dt,cinematic:!!adventure?.cutscenes.active});
   player.visible=!school?.inspecting&&!(dialog&&story?.focus?.hidePlayer);document.body.classList.toggle('reading-memory',!player.visible);
   follow.reducedMotion=motionPreference.matches;
@@ -319,9 +331,10 @@ function animate(now) {
   ink.update(settings.quality,player.position,camera,{width:innerWidth,height:innerHeight});
   hudTimer += dt; if (hudTimer > .08) {
     updateHUD(); updateTarget(); updateMarker();
-    const zone = school?.active ? `${school.navigation.floor(school.floor).label} · ${school.room()?.name||'Corredor'} · SÃO JORGE` : player.position.z < -18 && Math.abs(player.position.x) < 6 ? 'CANTINA' : player.position.x < -28 && player.position.z < 10 ? 'QUADRA' : player.position.x > 28 && player.position.z < -6 ? 'SALA DE MÚSICA' : player.position.z < -6 && Math.abs(player.position.x) > 6 ? (player.position.x < 0 ? 'SALA DE LITERATURA' : 'BIBLIOTECA') : player.position.z > 17 ? 'JARDIM DA ESCOLA' : 'PÁTIO CENTRAL';
+    const zone = school?.active ? `${school.navigation.floor(school.floor).label} · ${school.room()?.name||'Corredor'} · SÃO JORGE` : player.position.x>38?'CAMINHO DO SÃO JORGE': player.position.z < -18 && Math.abs(player.position.x) < 6 ? 'CANTINA' : player.position.x < -28 && player.position.z < 10 ? 'QUADRA' : player.position.x > 28 && player.position.z < -6 ? 'SALA DE MÚSICA' : player.position.z < -6 && Math.abs(player.position.x) > 6 ? (player.position.x < 0 ? 'SALA DE LITERATURA' : 'BIBLIOTECA') : player.position.z > 17 ? 'JARDIM DA ESCOLA' : 'PÁTIO CENTRAL';
     if (lastLocation !== zone) { $('location').firstChild.textContent = `${zone} `; lastLocation = zone; } hudTimer = 0;
   }
+  school.presentWorld();
   // Frozen pause/welcome scenes need only redraw on resize, settings or camera settling.
   if (active() || dialog || adventure?.busy || (panelOpen && started && story?.game) || needsRender) { renderer.render(scene, camera); needsRender = false; }
   audio.update?.(); if (active()) quality.sample(rawDT);
@@ -335,8 +348,8 @@ world.quality=settings.quality;world.update(0,0,player.position);living.update(0
 export function getGameState() {
   return { x: player.position.x, z: player.position.z, stage: progress.stage, collected: progress.collected.length, items: [...progress.collected], started, paused, dialog,
     yaw: follow.yaw, pitch: follow.pitch, analog: { ...controls.analog }, running: controls.runPointers.size > 0 || controls.keys.has('shift'), animation: lorenzo.state,
-    school:school?.state(), y:player.position.y,
-    camera: { x: camera.position.x, y: camera.position.y, z: camera.position.z, distance: follow.actualDistance }, doors: world.doors.map(d => ({ open: d.open, angle: d.angle })),
+    school:school?.state(), y:player.position.y,worldPosition:(()=>{const p=player.getWorldPosition(new THREE.Vector3());return{x:p.x,y:p.y,z:p.z};})(),
+    cameraWorld:(()=>{const p=camera.getWorldPosition(new THREE.Vector3());return{x:p.x,y:p.y,z:p.z};})(),camera: { x: camera.position.x, y: camera.position.y, z: camera.position.z, distance: follow.actualDistance }, doors: world.doors.map(d => ({ open: d.open, angle: d.angle })),
     living: structuredClone(progress.living), npcs: living.actors.map(a => ({ id: a.definition.id, rotation:a.agent.rotation,renderRotation:a.character.root.rotation.y,floor:a.agent.position.floor, y:a.character.root.position.y, visible:a.character.root.visible, x: a.agent.position.x, z: a.agent.position.z, state: a.agent.state, model:!!a.character.custom, animation:a.character.state, distance: a.agent.distanceWalked, transitions: a.agent.transitions })),
     adventure:adventure?.director.snapshot(),cinematic:{active:!!adventure?.cutscenes.active,paused:!!adventure?.cutscenes.paused,id:adventure?.cutscenes.scene?.id||null},physicalAction:adventure?.actions.active?.kind||null,adventureRhythm:adventure?.activityState?.phase,
     campaign: structuredClone(progress.campaign), storyPage: story?.page, rhythm: story?.game?.phase,
@@ -346,6 +359,7 @@ export function getGameState() {
     quality: settings.quality, resolutionScale: quality.scale, outlines: ink.actorInk.filter(s=>s.mesh.visible).length, fps: Math.round(quality.fps), drawCalls: renderer.info.render.calls, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures, triangles: renderer.info.render.triangles, drawingBuffer:{width:renderer.domElement.width,height:renderer.domElement.height} };
 }
 registerStateReader(getGameState);
+registerNavigationReader(()=>({origin:school.active?{x:60,z:0}:{x:0,z:0},floor:school.active?school.floor:null,position:{x:player.position.x,z:player.position.z},solids:(school.active?(school.floor===0?world.solids.map(b=>({...b,minX:b.minX-60,maxX:b.maxX-60})):school.navigation.movementObstacles(school.floor)):world.solids).map(b=>({...b}))}));
 if(new URLSearchParams(location.search).has('debug')){addEventListener('keydown',e=>{if(e.code==='F3'){e.preventDefault();if(validator.visible)validator.clear();else validator.show([...world.placed,...story.world.placed],[player,...living.actors.map(a=>a.character.root)]);needsRender=true;}});}
 
 export function dispose() {

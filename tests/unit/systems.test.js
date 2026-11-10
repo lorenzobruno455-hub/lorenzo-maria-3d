@@ -23,7 +23,7 @@ test('thin walls stop tunnelling at large delta and allow sliding', () => {
   assert(p.z <= -.31); assert(p.x > .9); assert(!blocked(p.x, p.z, [wall]));
 });
 test('world bounds and disabled open obstacles', () => {
-  assert(blocked(39, 0, [])); assert(!blocked(0, .1, [{ ...wall, enabled: false }]));
+  assert(!blocked(39, 0, [])); assert(blocked(83, 0, [])); assert(!blocked(0, .1, [{ ...wall, enabled: false }]));
 });
 test('camera contracts before walls, ceilings and near-plane edges', () => {
   const from = { x: 0, y: 1.5, z: -3 }, to = { x: 0, y: 2.5, z: 4 };

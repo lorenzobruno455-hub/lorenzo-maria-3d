@@ -51,7 +51,7 @@ export class InkOutlines {
     uniforms.cbInkPixels.value=quality==='high'?1.4:quality==='medium'?1.15:.9;
     for (const item of this.actorInk) {
       const distance = Math.hypot(item.actor.root.position.x - position.x, item.actor.root.position.z - position.z);
-      const cameraDistance=camera?camera.position.distanceTo(item.actor.root.getWorldPosition(this.actorPosition||(this.actorPosition=new THREE.Vector3()))):distance;
+      const cameraDistance=camera?camera.getWorldPosition(this.cameraPosition||(this.cameraPosition=new THREE.Vector3())).distanceTo(item.actor.root.getWorldPosition(this.actorPosition||(this.actorPosition=new THREE.Vector3()))):distance;
       item.mesh.castShadow = false;
       item.mesh.visible = item.actor.player ? (quality !== 'low' || item.core) : quality !== 'low' && item.core && cameraDistance < (quality === 'high' ? 25 : 14);
     }

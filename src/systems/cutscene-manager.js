@@ -1,6 +1,7 @@
 import { Vector3 } from 'three';
 
 const bounded = (value, fallback, max = 120) => Number.isFinite(value) ? Math.max(.05, Math.min(max, value)) : fallback;
+const lookLocal=(object,value)=>{const target=new Vector3(...value);object.parent?.localToWorld(target);object.lookAt(target);};
 const vector = value => Array.isArray(value) && value.length === 3 && value.every(Number.isFinite);
 
 /** Owns transient scene transforms, never the application's global pause state. */
@@ -27,12 +28,12 @@ export class CutsceneManager {
     this.shot = shot;
     if (shot.camera && this.camera) {
       if (vector(shot.camera.from)) this.camera.position.fromArray(shot.camera.from);
-      if (vector(shot.camera.lookFrom)) this.camera.lookAt(...shot.camera.lookFrom);
+      if (vector(shot.camera.lookFrom)) lookLocal(this.camera,shot.camera.lookFrom);
       this.cameraFrom = this.camera.position.clone();
       this.cameraTo = vector(shot.camera.to) ? new Vector3(...shot.camera.to) : this.cameraFrom.clone();
       this.cameraRotation = this.camera.quaternion.clone();
       if (vector(shot.camera.lookAt)) {
-        this.camera.position.copy(this.cameraTo); this.camera.lookAt(...shot.camera.lookAt);
+        this.camera.position.copy(this.cameraTo); lookLocal(this.camera,shot.camera.lookAt);
         this.cameraEndRotation = this.camera.quaternion.clone();
         this.camera.position.copy(this.cameraFrom); this.camera.quaternion.copy(this.cameraRotation);
       } else this.cameraEndRotation = this.cameraRotation.clone();
@@ -48,7 +49,7 @@ export class CutsceneManager {
       });
       if (command.state) { actor.cutscenePose = {state:command.state}; actor.requestAction?.(command.state, { duration:this.duration }); }
       if (vector(command.position)) actor.root.position.fromArray(command.position);
-      if (vector(command.lookAt)) actor.root.lookAt(...command.lookAt);
+      if (vector(command.lookAt)) lookLocal(actor.root,command.lookAt);
     }
     if (shot.light && this.light) {
       if (Number.isFinite(shot.light.intensity)) this.light.intensity = shot.light.intensity;

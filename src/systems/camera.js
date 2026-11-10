@@ -33,6 +33,6 @@ export class FollowCamera {
     // Resolve after smoothing too. Padding covers the camera near plane, including screen edges.
     const fraction = cameraFraction(target, this.position, this.obstacles, .2);
     if (fraction < 1) this.position.lerpVectors(target, this.position, fraction);
-    this.camera.position.copy(this.position); this.camera.lookAt(this.focus); this.initialized = true;this.wasNarrative=!!(this.focusObject||this.conversation);
+    this.camera.position.copy(this.position); this.worldFocus ||= new THREE.Vector3();this.worldFocus.copy(this.focus);this.camera.parent?.localToWorld(this.worldFocus);this.camera.lookAt(this.worldFocus); this.initialized = true;this.wasNarrative=!!(this.focusObject||this.conversation);
   }
 }
