@@ -21,9 +21,9 @@ test('architectural dressing stays mounted, preserves apertures and releases onl
     for(const wall of floor.colliders.filter(c=>c.kind==='wall'))assert(wallCaps.some(c=>c.minX===wall.minX&&c.maxX===wall.maxX&&c.minZ===wall.minZ&&c.maxZ===wall.maxZ&&c.maxY===floor.baseY+3.4));
     for(const label of result.stats.labels){
       if(label.floor)assert.equal(label.y,.033);
-      else if(label.text.startsWith('IDEIAS')||label.text.startsWith('LER'))assert.equal(Math.abs(label.x),10.875);
-      else if(label.text==='SALÃO MULTIUSO')assert.equal(label.z,-18.875);
-      else {assert.equal(label.y,2.87);assert.equal(label.height,.26);const room=floor.rooms.find(r=>r.name===label.text);assert(room);if(Math.abs(room.door.x)===2)assert.equal(label.x,room.door.x-Math.sign(room.door.x)*.095);else assert.equal(label.z,room.door.z+.095);}
+      else if(label.text.startsWith('IDEIAS')||label.text.startsWith('LER'))assert.equal(Math.abs(label.x),10.855);
+      else if(label.text==='SALÃO MULTIUSO')assert.equal(label.z,-18.855);
+      else if(!label.kind) {assert.equal(label.y,2.87);assert.equal(label.height,.26);const room=floor.rooms.find(r=>r.name===label.text);assert(room);if(Math.abs(room.door.x)===2)assert.equal(label.x,room.door.x-Math.sign(room.door.x)*.115);else assert.equal(label.z,room.door.z+.145);}
     }
     const ceiling=result.group.getObjectByName('school-ceiling');assert.equal(ceiling.geometry,box);
     assert(Math.abs(ceiling.position.y-ceiling.scale.y/2-3.4)<1e-9);

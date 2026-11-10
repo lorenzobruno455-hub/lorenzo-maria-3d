@@ -95,3 +95,7 @@ Nenhum modelo, textura, fonte, áudio ou imagem externa foi adicionado. O polime
 ## Colorbeat 0.8.1 M3/M4
 
 `actor-ink-material.js`: extensão original dos ShaderChunks MeshBasic do Three.js (MIT, já dependência do projeto), mantendo morph/skinning e projetando o contorno na câmera. `interaction-accent.js`: geometria de colchetes e feedback originais; arte procedural CC0-1.0, código sob a licença do projeto. Não há texturas novas para roupas: o perfil fosco preserva as cores dos GLBs existentes. Fontes locais Barlow Condensed/Atkinson e GLBs mantêm as licenças documentadas acima. Capturas comparativas são renderizações reais do próprio jogo. Nenhum asset de Hi-Fi RUSH, serviço pago, crédito de geração ou dependência adicional foi usado.
+
+## Living School 0.8.2
+
+Mobiliário complementar, papelaria, equipamentos didáticos esquemáticos, diagramas, relógios e sinalização M1–M4 são geometria/canvas procedurais originais do projeto, reutilizando primitivas e a paleta Colorbeat existentes; nenhum modelo, textura ou serviço externo pago foi acrescentado. Ícones PWA derivados do favicon original do projeto, sem nova marca ou arte externa. Fontes e demais GLBs mantêm as atribuições anteriores.

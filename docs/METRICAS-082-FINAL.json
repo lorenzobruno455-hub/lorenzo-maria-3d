@@ -1,0 +1,1112 @@
+{
+  "method": "Chromium headless SwiftShader; 960x600; Médio; DPR1; sombras; adaptive false; mesmos enquadramentos. Não são FPS físicos.",
+  "baselineByCase": {
+    "class-a": "0.8.1 validada (50db300)",
+    "class-b": "0.8.1 validada (50db300)",
+    "corridor-1": "0.8.1 validada (50db300)",
+    "corridor-2": "0.8.1 validada (50db300)",
+    "library": "0.8.1 validada (50db300)",
+    "laboratory": "0.8.1 validada (50db300)",
+    "science": "M1/M2 validado (1d06c7d)",
+    "reception": "0.8.1 validada (50db300)",
+    "secretary": "M1/M2 validado (1d06c7d)",
+    "office": "M1/M2 validado (1d06c7d)",
+    "coord": "M1/M2 validado (1d06c7d)",
+    "teachers": "0.8.1 validada (50db300)",
+    "cinema": "M1/M2 validado (1d06c7d)",
+    "hall": "0.8.1 validada (50db300)",
+    "hall-details": "M3, salão ainda sem M4 (3b05215)"
+  },
+  "before": [
+    {
+      "name": "class-a",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": -6.5,
+        "y": 0.03,
+        "z": 15.5
+      },
+      "camera": {
+        "x": -6.495145163352198,
+        "y": 2.392940514880652,
+        "z": 12.4517335256856,
+        "distance": 3.190781860684213
+      },
+      "quality": "medium",
+      "drawCalls": 74,
+      "triangles": 117918,
+      "geometries": 150,
+      "textures": 17,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 163,
+        "textures": 5,
+        "programs": 24
+      }
+    },
+    {
+      "name": "class-b",
+      "floor": 1,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 6.5,
+        "y": 3.63,
+        "z": 8.5
+      },
+      "camera": {
+        "x": 6.504853610849058,
+        "y": 5.992702431628425,
+        "z": 5.452503183139499,
+        "distance": 3.189976219489936
+      },
+      "quality": "medium",
+      "drawCalls": 54,
+      "triangles": 74374,
+      "geometries": 151,
+      "textures": 17,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 165,
+        "textures": 5,
+        "programs": 23
+      }
+    },
+    {
+      "name": "corridor-1",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 0,
+        "y": 0.03,
+        "z": 14.5
+      },
+      "camera": {
+        "x": 0,
+        "y": 3.0078659715345273,
+        "z": 18.400391469421344,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 126,
+      "triangles": 121962,
+      "geometries": 152,
+      "textures": 41,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 163,
+        "textures": 5,
+        "programs": 27
+      }
+    },
+    {
+      "name": "corridor-2",
+      "floor": 1,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 0,
+        "y": 3.63,
+        "z": 8
+      },
+      "camera": {
+        "x": 0,
+        "y": 6.607865971534527,
+        "z": 11.900391469421344,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 66,
+      "triangles": 76786,
+      "geometries": 154,
+      "textures": 41,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 165,
+        "textures": 5,
+        "programs": 26
+      }
+    },
+    {
+      "name": "library",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": -5,
+        "y": 0.03,
+        "z": -14
+      },
+      "camera": {
+        "x": -5,
+        "y": 3.0078659715345273,
+        "z": -10.099608530578656,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 94,
+      "triangles": 128194,
+      "geometries": 149,
+      "textures": 38,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 163,
+        "textures": 5,
+        "programs": 28
+      }
+    },
+    {
+      "name": "laboratory",
+      "floor": 1,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 6.5,
+        "y": 3.63,
+        "z": -7
+      },
+      "camera": {
+        "x": 3.023942415330862,
+        "y": 6.607865971534527,
+        "z": -5.230797557429071,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 53,
+      "triangles": 83722,
+      "geometries": 152,
+      "textures": 25,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 165,
+        "textures": 5,
+        "programs": 25
+      }
+    },
+    {
+      "name": "science",
+      "floor": 1,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": -6.5,
+        "y": 3.63,
+        "z": -13
+      },
+      "camera": {
+        "x": -6.5,
+        "y": 6.607865971534527,
+        "z": -9.099608530578656,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 58,
+      "triangles": 89046,
+      "geometries": 154,
+      "textures": 38,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 168,
+        "textures": 5,
+        "programs": 26
+      }
+    },
+    {
+      "name": "reception",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 6.5,
+        "y": 0.03,
+        "z": -5
+      },
+      "camera": {
+        "x": 6.5,
+        "y": 2.468422599284166,
+        "z": -2.450199894538337,
+        "distance": 2.7456629743187753
+      },
+      "quality": "medium",
+      "drawCalls": 76,
+      "triangles": 120486,
+      "geometries": 152,
+      "textures": 41,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 163,
+        "textures": 5,
+        "programs": 26
+      }
+    },
+    {
+      "name": "secretary",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 6.5,
+        "y": 0.03,
+        "z": -14
+      },
+      "camera": {
+        "x": 6.5,
+        "y": 3.0078659715345273,
+        "z": -10.099608530578656,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 81,
+      "triangles": 130588,
+      "geometries": 155,
+      "textures": 41,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 166,
+        "textures": 5,
+        "programs": 26
+      }
+    },
+    {
+      "name": "office",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 0,
+        "y": 0.03,
+        "z": -17.4
+      },
+      "camera": {
+        "x": 0,
+        "y": 2.6911848679776265,
+        "z": -13.387586745672454,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 77,
+      "triangles": 130516,
+      "geometries": 155,
+      "textures": 41,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 166,
+        "textures": 5,
+        "programs": 26
+      }
+    },
+    {
+      "name": "coord",
+      "floor": 1,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 6.5,
+        "y": 3.63,
+        "z": 1.5
+      },
+      "camera": {
+        "x": 6.5,
+        "y": 6.268129397670709,
+        "z": 4.549801201220275,
+        "distance": 3.2840716491018025
+      },
+      "quality": "medium",
+      "drawCalls": 59,
+      "triangles": 81642,
+      "geometries": 157,
+      "textures": 41,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 168,
+        "textures": 5,
+        "programs": 26
+      }
+    },
+    {
+      "name": "teachers",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": -6.5,
+        "y": 0.03,
+        "z": -5
+      },
+      "camera": {
+        "x": -6.5,
+        "y": 3.0078659715345273,
+        "z": -1.099608530578657,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 115,
+      "triangles": 121074,
+      "geometries": 152,
+      "textures": 41,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 163,
+        "textures": 5,
+        "programs": 27
+      }
+    },
+    {
+      "name": "cinema",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 6.5,
+        "y": 0.03,
+        "z": 1.5
+      },
+      "camera": {
+        "x": 6.504853609052875,
+        "y": 2.392702082761084,
+        "z": -1.5474956890686618,
+        "distance": 3.189975038970525
+      },
+      "quality": "medium",
+      "drawCalls": 81,
+      "triangles": 122616,
+      "geometries": 154,
+      "textures": 18,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 166,
+        "textures": 5,
+        "programs": 24
+      }
+    },
+    {
+      "name": "hall",
+      "floor": 2,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 0,
+        "y": 7.23,
+        "z": 5
+      },
+      "camera": {
+        "x": 1.4695571150127453,
+        "y": 10.282030478162575,
+        "z": 8.042214479496206,
+        "distance": 3.7520914881159975
+      },
+      "quality": "medium",
+      "drawCalls": 58,
+      "triangles": 48088,
+      "geometries": 135,
+      "textures": 30,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 151,
+        "textures": 5,
+        "programs": 26
+      }
+    },
+    {
+      "name": "hall-details",
+      "floor": 2,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 6.5,
+        "y": 7.23,
+        "z": 13
+      },
+      "camera": {
+        "x": 6.506211969849215,
+        "y": 10.207865971534527,
+        "z": 9.099613477337742,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 56,
+      "triangles": 48064,
+      "geometries": 134,
+      "textures": 17,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 151,
+        "textures": 5,
+        "programs": 23
+      }
+    }
+  ],
+  "after": [
+    {
+      "name": "class-a",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": -6.5,
+        "y": 0.03,
+        "z": 15.5
+      },
+      "camera": {
+        "x": -6.495146389150942,
+        "y": 2.392702431628425,
+        "z": 12.452503183139498,
+        "distance": 3.189976219489937
+      },
+      "quality": "medium",
+      "drawCalls": 76,
+      "triangles": 120550,
+      "geometries": 153,
+      "textures": 17,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 166,
+        "textures": 5,
+        "programs": 24
+      }
+    },
+    {
+      "name": "class-b",
+      "floor": 1,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 6.5,
+        "y": 3.63,
+        "z": 8.5
+      },
+      "camera": {
+        "x": 6.504853300036881,
+        "y": 5.992642063501815,
+        "z": 5.452698336633866,
+        "distance": 3.189771941998082
+      },
+      "quality": "medium",
+      "drawCalls": 57,
+      "triangles": 79608,
+      "geometries": 154,
+      "textures": 17,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 168,
+        "textures": 5,
+        "programs": 23
+      }
+    },
+    {
+      "name": "corridor-1",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 0,
+        "y": 0.03,
+        "z": 14.5
+      },
+      "camera": {
+        "x": 0,
+        "y": 3.0078659715345273,
+        "z": 18.400391469421344,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 133,
+      "triangles": 131590,
+      "geometries": 159,
+      "textures": 41,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 166,
+        "textures": 5,
+        "programs": 27
+      }
+    },
+    {
+      "name": "corridor-2",
+      "floor": 1,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 0,
+        "y": 3.63,
+        "z": 8
+      },
+      "camera": {
+        "x": 0,
+        "y": 6.607865971534527,
+        "z": 11.900391469421344,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 73,
+      "triangles": 88320,
+      "geometries": 161,
+      "textures": 41,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 168,
+        "textures": 5,
+        "programs": 26
+      }
+    },
+    {
+      "name": "library",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": -5,
+        "y": 0.03,
+        "z": -14
+      },
+      "camera": {
+        "x": -5,
+        "y": 3.0078659715345273,
+        "z": -10.099608530578656,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 100,
+      "triangles": 136874,
+      "geometries": 159,
+      "textures": 41,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 166,
+        "textures": 5,
+        "programs": 26
+      }
+    },
+    {
+      "name": "laboratory",
+      "floor": 1,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 6.5,
+        "y": 3.63,
+        "z": -7
+      },
+      "camera": {
+        "x": 3.023942415330862,
+        "y": 6.607865971534527,
+        "z": -5.230797557429071,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 60,
+      "triangles": 94992,
+      "geometries": 158,
+      "textures": 25,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 168,
+        "textures": 5,
+        "programs": 25
+      }
+    },
+    {
+      "name": "science",
+      "floor": 1,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": -6.5,
+        "y": 3.63,
+        "z": -13
+      },
+      "camera": {
+        "x": -6.5,
+        "y": 6.607865971534527,
+        "z": -9.099608530578656,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 61,
+      "triangles": 95016,
+      "geometries": 160,
+      "textures": 41,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 168,
+        "textures": 5,
+        "programs": 26
+      }
+    },
+    {
+      "name": "reception",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 6.5,
+        "y": 0.03,
+        "z": -5
+      },
+      "camera": {
+        "x": 6.5,
+        "y": 2.468422599284166,
+        "z": -2.4501998945383376,
+        "distance": 2.745662974318775
+      },
+      "quality": "medium",
+      "drawCalls": 82,
+      "triangles": 129214,
+      "geometries": 158,
+      "textures": 40,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 166,
+        "textures": 5,
+        "programs": 26
+      }
+    },
+    {
+      "name": "secretary",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 6.5,
+        "y": 0.03,
+        "z": -14
+      },
+      "camera": {
+        "x": 6.5,
+        "y": 3.0078659715345273,
+        "z": -10.099608530578656,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 85,
+      "triangles": 136646,
+      "geometries": 159,
+      "textures": 41,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 166,
+        "textures": 5,
+        "programs": 26
+      }
+    },
+    {
+      "name": "office",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 0,
+        "y": 0.03,
+        "z": -17.4
+      },
+      "camera": {
+        "x": 0,
+        "y": 2.6911848679776265,
+        "z": -13.387586745672454,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 81,
+      "triangles": 136574,
+      "geometries": 158,
+      "textures": 40,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 166,
+        "textures": 5,
+        "programs": 26
+      }
+    },
+    {
+      "name": "coord",
+      "floor": 1,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 6.5,
+        "y": 3.63,
+        "z": 1.5
+      },
+      "camera": {
+        "x": 6.5,
+        "y": 6.268129397670708,
+        "z": 4.549801201220275,
+        "distance": 3.284071649101802
+      },
+      "quality": "medium",
+      "drawCalls": 63,
+      "triangles": 87912,
+      "geometries": 159,
+      "textures": 39,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 168,
+        "textures": 5,
+        "programs": 26
+      }
+    },
+    {
+      "name": "teachers",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": -6.5,
+        "y": 0.03,
+        "z": -5
+      },
+      "camera": {
+        "x": -6.5,
+        "y": 3.0078659715345273,
+        "z": -1.099608530578657,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 122,
+      "triangles": 129826,
+      "geometries": 159,
+      "textures": 41,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 166,
+        "textures": 5,
+        "programs": 27
+      }
+    },
+    {
+      "name": "cinema",
+      "floor": 0,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 6.5,
+        "y": 0.03,
+        "z": 1.5
+      },
+      "camera": {
+        "x": 6.504853610849058,
+        "y": 2.3927024316284244,
+        "z": -1.5474968168605008,
+        "distance": 3.189976219489936
+      },
+      "quality": "medium",
+      "drawCalls": 84,
+      "triangles": 126154,
+      "geometries": 157,
+      "textures": 18,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 166,
+        "textures": 5,
+        "programs": 24
+      }
+    },
+    {
+      "name": "hall",
+      "floor": 2,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 0,
+        "y": 7.23,
+        "z": 5
+      },
+      "camera": {
+        "x": 1.4699224292663937,
+        "y": 10.282436181343467,
+        "z": 8.042970737487586,
+        "distance": 3.7530242130081426
+      },
+      "quality": "medium",
+      "drawCalls": 60,
+      "triangles": 53348,
+      "geometries": 137,
+      "textures": 30,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 152,
+        "textures": 5,
+        "programs": 26
+      }
+    },
+    {
+      "name": "hall-details",
+      "floor": 2,
+      "timing": null,
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "position": {
+        "x": 6.5,
+        "y": 7.23,
+        "z": 13
+      },
+      "camera": {
+        "x": 6.506211969849215,
+        "y": 10.207865971534527,
+        "z": 9.099613477337742,
+        "distance": 4.2
+      },
+      "quality": "medium",
+      "drawCalls": 60,
+      "triangles": 53636,
+      "geometries": 136,
+      "textures": 15,
+      "colorbeat": {
+        "style": "aurora-colorbeat-081",
+        "inkPixels": 1.15,
+        "accent": false,
+        "exposure": 1,
+        "sharedLibrary": true,
+        "materials": 152,
+        "textures": 5,
+        "programs": 23
+      }
+    }
+  ],
+  "additionalFitout": [
+    {
+      "floor": 0,
+      "draws": 4,
+      "triangles": 6048,
+      "props": 44,
+      "solidVolumes": 9,
+      "roles": {
+        "secretaria": 16,
+        "teachers": 6,
+        "cinema": 2,
+        "reception": 10,
+        "office": 10
+      }
+    },
+    {
+      "floor": 1,
+      "draws": 4,
+      "triangles": 6264,
+      "props": 97,
+      "solidVolumes": 2,
+      "roles": {
+        "science": 37,
+        "lab": 50,
+        "coord": 10
+      }
+    },
+    {
+      "floor": 2,
+      "draws": 4,
+      "triangles": 5568,
+      "props": 3,
+      "solidVolumes": 9,
+      "roles": {
+        "hall": 3
+      }
+    }
+  ]
+}

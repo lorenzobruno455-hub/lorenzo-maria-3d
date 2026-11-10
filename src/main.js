@@ -1,3 +1,4 @@
+import {installFullscreen} from './systems/fullscreen.js';
 import './school.css';
 import schoolLayout from './data/sao-jorge.json' with {type:'json'};
 import {narrativePriority} from './systems/school-narrative-map.js';
@@ -33,6 +34,7 @@ import { blocked, resolveSpawn, relativeMovement, moveWithCollisions, clamp } fr
 import { loadSave, saveProgress, freshProgress, collect, objective, mariaDialogue } from './systems/progress.js';
 
 const $ = id => document.getElementById(id);
+installFullscreen($('fullscreen-button'),$('fullscreen-status'));
 let storage; try { storage = localStorage; } catch { storage = null; }
 const saved = loadSave(storage), settings = saved.settings;
 let progress = saved.progress, started = false, paused = false, dialog = false, dialogDone = null, target = null;

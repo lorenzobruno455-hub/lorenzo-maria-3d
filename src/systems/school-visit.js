@@ -1,5 +1,6 @@
 import {SchoolMaterials,finishSchoolSurfaces} from './school-materials.js';
 import {createSchoolFurniture} from './school-furniture.js';
+import {createSchoolLivingDetails} from './school-living-details.js';
 import {createSchoolArchitecture} from './school-architecture.js';
 import {SchoolLighting} from './school-lighting.js';
 import * as THREE from 'three';
@@ -23,7 +24,7 @@ export class SchoolVisit {
   }
   prepareDetails(floor,lease){
     if(!this.materials)return;
-    let surfaces,furniture,architecture;
+    let surfaces,furniture,architecture,living;
     try{
       surfaces=finishSchoolSurfaces({model:lease.model,materials:this.materials});
       const source=lease.model.getObjectByName('furniture');
@@ -31,11 +32,13 @@ export class SchoolVisit {
       if(furniture){source.parent.add(furniture.group);furniture.updateQuality(this.quality);}
       architecture=createSchoolArchitecture({resources:this.pool.resources,materials:this.materials,floor,structure:lease.model.getObjectByName('structure')});
       lease.model.add(architecture.group);architecture.updateQuality(this.quality);
-      this.details.set(floor.index,{surfaces,furniture,architecture});
-      floor.colliders.push(...(furniture?.colliders||[]),...architecture.colliders);
-    }catch(error){furniture?.dispose();architecture?.dispose();surfaces?.dispose();console.warn('Acabamento São Jorge:',error.message);this.onStatus('Alguns detalhes não carregaram; a navegação continua disponível.');}
+      living=createSchoolLivingDetails({resources:this.pool.resources,materials:this.materials,floor,source,existingSupports:furniture?.supports||[]});
+      lease.model.add(living.group);living.updateQuality(this.quality);
+      this.details.set(floor.index,{surfaces,furniture,architecture,living});
+      floor.colliders.push(...(furniture?.colliders||[]),...architecture.colliders,...living.colliders);
+    }catch(error){furniture?.dispose();architecture?.dispose();living?.dispose();surfaces?.dispose();console.warn('Acabamento São Jorge:',error.message);this.onStatus('Alguns detalhes não carregaram; a navegação continua disponível.');}
   }
-  update(dt,quality=this.quality){this.quality=quality;if(!this.active)return;for(const detail of this.details.values()){detail.architecture.updateQuality(quality);detail.furniture?.updateQuality(quality);}this.lighting.update(this.navigation.floor(this.floor),this.player.position,quality,dt,this.inspecting);}
+  update(dt,quality=this.quality){this.quality=quality;if(!this.active)return;for(const detail of this.details.values()){detail.architecture.updateQuality(quality);detail.furniture?.updateQuality(quality);detail.living?.updateQuality(quality);}this.lighting.update(this.navigation.floor(this.floor),this.player.position,quality,dt,this.inspecting);}
   async enter(){
     if(this.disposed||this.active||this.loading)return false;
     const token=++this.token,state=this.getState();this.loading=true;this.onStatus('Carregando São Jorge…');this.onChange();
@@ -76,6 +79,6 @@ export class SchoolVisit {
   targets(){if(!this.active||this.inspecting)return[];return this.navigation.targets(this.floor).map(s=>({...s,kind:'school-stair',name:s.label||s.name||'Escadas',height:this.navigation.floor(this.floor).walkY+1.2}));}
   move(delta){return this.active&&!this.inspecting?this.navigation.move(this.player.position,delta,this.floor):0;}
   room(){return this.navigation.roomAt(this.floor,this.player.position);}
-  state(){return{active:this.active,loading:this.loading,inspect:this.inspecting,view:this.view,floor:this.floor,loaded:[...this.leases.keys()],room:this.active?this.room()?.name:null,narrative:!!this.narrative?.active,narrativeDetails:this.narrative?.active?this.narrative.describe():null,style:this.details.has(this.floor)?'M2':'M1',details:this.details.has(this.floor)?{furniture:this.details.get(this.floor).furniture?.stats,architecture:{windows:this.details.get(this.floor).architecture.stats.windows,fixtures:this.details.get(this.floor).architecture.stats.fixtures,signs:this.details.get(this.floor).architecture.stats.signs},supports:this.details.get(this.floor).furniture?.supports.length}:null};}
-  dispose(){if(this.disposed)return;this.exit();this.disposed=true;this.group.removeFromParent();for(const d of this.details.values()){d.furniture?.dispose();d.architecture.dispose();d.surfaces.dispose();}this.details.clear();this.lighting.dispose();this.materials?.dispose();for(const lease of this.leases.values())lease.release();this.leases.clear();}
+  state(){return{active:this.active,loading:this.loading,inspect:this.inspecting,view:this.view,floor:this.floor,loaded:[...this.leases.keys()],room:this.active?this.room()?.name:null,narrative:!!this.narrative?.active,narrativeDetails:this.narrative?.active?this.narrative.describe():null,style:this.details.has(this.floor)?'M2':'M1',details:this.details.has(this.floor)?{furniture:this.details.get(this.floor).furniture?.stats,architecture:{windows:this.details.get(this.floor).architecture.stats.windows,fixtures:this.details.get(this.floor).architecture.stats.fixtures,signs:this.details.get(this.floor).architecture.stats.signs},living:this.details.get(this.floor).living?.stats,supports:this.details.get(this.floor).furniture?.supports.length}:null};}
+  dispose(){if(this.disposed)return;this.exit();this.disposed=true;this.group.removeFromParent();for(const d of this.details.values()){d.furniture?.dispose();d.architecture.dispose();d.living?.dispose();d.surfaces.dispose();}this.details.clear();this.lighting.dispose();this.materials?.dispose();for(const lease of this.leases.values())lease.release();this.leases.clear();}
 }

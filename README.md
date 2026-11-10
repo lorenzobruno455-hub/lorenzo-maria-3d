@@ -1,4 +1,4 @@
-# Lorenzo & Maria 3D — Colorbeat 0.8.1
+# Lorenzo & Maria 3D — Project Aurora 0.8.2
 
 Exploração em terceira pessoa no fictício Colégio Aurora, com Three.js, JavaScript e Vite. Interface e diálogos em português. O capítulo inicial continua completo: converse com Maria, encontre três lembranças e retorne ao pátio.
 
@@ -120,3 +120,9 @@ Biblioteca e pátio detalhados, cinco NPCs GLB originais, áudio e interface ace
 Na tela inicial, escolha **Visitar São Jorge · 0.8 M1**; durante a campanha, **Pausa → Visitar São Jorge**. Explore três pavimentos, use E/Interagir nos patamares e escolha Inspecionar andares para a vista por piso ou todos. **Voltar à campanha** restaura o campus anterior. As missões e os seis livros ainda estão no campus 0.7; o remapeamento é M3.
 
 [Auditoria](docs/AUDITORIA-08-M1.md) · [Entrega M1 e limitações](docs/ENTREGA-08.md) · [Matriz dos ambientes](docs/SAO_JORGE_ROOM_MATRIX.md) · [Licenças](docs/ASSET-LICENSES.md). Preparação dos assets: `python3 scripts/prepare-sao-jorge.py`. Nenhuma medida do jogo é apresentada como medida real da escola.
+
+## Living School 0.8.2 — M1 a M4
+
+Decoração das oito salas, placas/quadros corrigidos, corredores, biblioteca, ambientes especializados e composição reversível no salão. Preserva a campanha, os sete personagens, as memórias e os saves. [Entrega M1/M2](docs/ENTREGA-082-M1-M2.md) · [M3](docs/ENTREGA-082-M3.md) · [Entrega final e métricas](docs/ENTREGA-082-M4.md). Sem integração física da 0.9 ou merge automático.
+
+A configuração PWA já publicada na hospedagem 0.8.1 foi preservada nesta fonte: manifesto com fullscreen/landscape, ícones originais 192/512 e acesso autenticado ao manifesto. No Chrome Android atualizado, abra o endereço HTTPS, escolha **Instalar aplicativo** e inicie pelo ícone instalado. Somente criar um atalho não confirma instalação. Não há cache offline; o Android pode exibir barras temporariamente e o suporte final depende do navegador/sistema. Use o mesmo endereço e não limpe os dados do site para manter acesso aos saves locais.
