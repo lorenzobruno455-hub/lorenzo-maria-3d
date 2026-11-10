@@ -6,8 +6,8 @@ Base: 0.8.1 validada, 50db300. Escopo autorizado: dois primeiros marcos do pedid
 - [x] Corrigir sinais conforme faces reais das paredes e UVs do atlas; testar raios de visibilidade dos dois lados e ausência de interseção.
 - [x] Reaproveitar os tampos, materiais Colorbeat e batching para compor as oito salas: papelaria, livros, estojos e garrafas determinísticos apoiados. Não mover mesas, cadeiras nem paredes.
 - [x] Acrescentar conteúdo legível às lousas, mural/calendário/mapa e relógio usando o atlas compartilhado existente. Sem textura por cartaz.
-- [ ] Testes focados antes/depois, capturas comparáveis, métricas e revisão do diff. Regressão completa uma vez ao encerrar o M1, por CI do PR para evitar duplicação local.
-- [ ] Entrega parcial com inventário e PR sem merge. M3–M4 pendentes.
+- [x] Testes focados antes/depois, capturas comparáveis, métricas e revisão do diff. Regressão completa uma vez ao encerrar o M1, por CI do PR para evitar duplicação local.
+- [x] Entrega parcial com inventário e PR sem merge. M3–M4 pendentes.
 
 Restrições: conservar seis livros, sete avatares, narrativas, controles, schema v04, carregamento por piso, colisões e arquitetura. Não alegar FPS físicos; sinalização e decoração são ficcionais originais. Priorizar buffers compartilhados, descarte idempotente, UVs válidos e oclusão normal.
 

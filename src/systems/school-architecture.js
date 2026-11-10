@@ -42,6 +42,10 @@ export function createSchoolArchitecture({ resources, materials, floor, structur
     for (const side of [-1,1]) for (const z of [-14,-7,0,7,14]) window(side,z,2.5);
     for (const x of [-5,5]) for(const z of [-13,-5,3,11]) fixture(x,z);
     sign('SALÃO MULTIUSO',0,2.2,-18.855,0,3,.5);
+    for(const [x,z,rotation] of [[5,-18.855,0],[-5,18.855,Math.PI]]){
+      sign('ENCONTROS DA ESCOLA\nLEITURA • ARTE • MÚSICA\nESPAÇO PARA CRIAR JUNTOS',x,1.95,z,rotation,3,.9);
+      Object.assign(signs.at(-1),{roomId:floor.rooms[0].id,kind:'mural'});
+    }
   } else {
     for (const room of floor.rooms) {
       const side = room.x1 <= -10 ? -1 : room.x2 >= 10 ? 1 : 0;

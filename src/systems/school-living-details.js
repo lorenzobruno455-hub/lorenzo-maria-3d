@@ -12,7 +12,7 @@ export function createSchoolLivingDetails({resources,materials,floor,source,exis
  const owned=[],supports=[],colliders=[],placements=[],stats={draws:0,triangles:0,props:0};let disposed=false;
  const boxes=decodeFurnitureBoxes(source)||[],targets=[...Object.values(NARRATIVE_POINTS),...Array.from({length:6},(_,i)=>bookPoint(i))].filter(p=>p.floor===floor.index);
  const wood='#8b6a4e',blue='#2d5fa8',paper='#eee9dd',dark='#5b616b';
- const add=(kind,x,y,z,w,h,d,color,finish='plain')=>{const m=new THREE.Mesh(resources.geometry(kind),materials.get(color,finish));m.position.set(x,y+h/2,z);m.scale.set(w*(kind==='cylinder'?.5:1),h,d*(kind==='cylinder'?.5:1));group.add(m);};
+ const add=(kind,x,y,z,w,h,d,color,finish='plain')=>{const m=new THREE.Mesh(resources.geometry(kind),materials.get(color,finish));m.position.set(x,y+h/2,z);m.scale.set(w*(['cylinder','sphere'].includes(kind)?.5:1),h*(kind==='sphere'?.5:1),d*(['cylinder','sphere'].includes(kind)?.5:1));group.add(m);};
  const clearTarget=(b,p,radius)=>Math.hypot(Math.max(b.minX-p.x,0,p.x-b.maxX),Math.max(b.minZ-p.z,0,p.z-b.maxZ))>=radius;
  function solid(room,kind,x,z,w,h,d){
   const b=bounds(x,.03,z,w,h,d),absolute={...b,minY:b.minY+floor.baseY,maxY:b.maxY+floor.baseY};
@@ -56,6 +56,13 @@ export function createSchoolLivingDetails({resources,materials,floor,source,exis
   prop(p,'observation-slide',x+.055,z-.055,.08,.004,.035,blue,.03);
  }
  const surfaces=[];
+ if(floor.index===2){
+  const room=floor.rooms[0];
+  // Small freestanding sets at the perimeter; no stage or fixed infrastructure.
+  for(const side of [-1,1])for(const z of [-16,14])for(const dx of [-.35,.35])chair(room,side*7.5+dx,z);
+  const t=table(room,7.5,16.5,1.6,.75);if(t)surfaces.push(t);
+ }
+
  for(const b of boxes){const [w,h,d]=b.size,[x,,z]=b.center,room=floor.rooms.find(r=>x>r.x1&&x<r.x2&&z>r.z1&&z<r.z2);
   if(room&&h<.16&&w>.75&&d>.5&&b.max[1]>.65&&b.max[1]<1.25)surfaces.push({...bounds(x,b.min[1],z,w,h,d),room});
  }
@@ -70,7 +77,8 @@ export function createSchoolLivingDetails({resources,materials,floor,source,exis
   if(['lab','science'].includes(type)){
    microscope(p,x-.34,z-.19);
    prop(p,'specimen-base',x+.32,z-.18,.16,.025,.15,dark);
-   prop(p,'cell-model',x+.32,z-.18,.10,.12,.10,blue,.025,'rounded');
+   prop(p,'cell-model',x+.32,z-.18,.10,.12,.10,blue,.025,'sphere');
+   prop(p,'cell-nucleus',x+.32,z-.18,.04,.025,.04,paper,.145,'sphere');
    prop(p,'sample-container',x+.32,z+.18,.075,.15,.075,paper,0,'cylinder');
    prop(p,'sample-cap',x+.32,z+.18,.08,.025,.08,blue,.15,'cylinder');
   }else if(['reception','secretaria','office','coord'].includes(type)){
@@ -81,6 +89,8 @@ export function createSchoolLivingDetails({resources,materials,floor,source,exis
    paperwork(p,x-.65,z);paperwork(p,x+.3,z);
    prop(p,'work-cup',x+.7,z-.2,.075,.10,.075,paper,0,'cylinder');
    prop(p,'organizer',x-.05,z+.32,.20,.12,.14,blue);
+  }else if(type==='hall'){
+   paperwork(p,x-.3,z);prop(p,'event-organizer',x+.4,z,.22,.12,.18,blue);
   }else if(type==='cinema'){
    prop(p,'projector',x,z,.36,.15,.25,paper);prop(p,'projector-control',x,z,.07,.025,.06,dark,.15);
   }

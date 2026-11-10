@@ -1,5 +1,7 @@
 # Living School 0.8.2 — M1 e M2
 
+Registro da entrega parcial. Algumas capturas representativas foram atualizadas na integração final; as métricas deste marco continuam históricas. A conclusão, revisão independente e medidas da cabeça final estão em [ENTREGA-082-M4.md](ENTREGA-082-M4.md).
+
 Entrega parcial: salas, sinalização, corredores e biblioteca. Branch `feat/aurora-082-living-school`, baseada em `50db300213cef648aa2ade04e90acd5caf3cf999` (0.8.1 validada pelo CI 42722179611). Não conclui M3/M4. A main, a conexão física 0.9 e a expansão 1.0 não foram alteradas. A publicação PWA no Sites é separada desta entrega.
 
 ## Auditoria e inventário
