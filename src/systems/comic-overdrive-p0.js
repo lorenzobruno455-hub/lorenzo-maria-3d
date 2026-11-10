@@ -83,7 +83,7 @@ export function decorateOverdriveMaterial(material,areas,{global=false}={}){
    float coMask=coScope(cbWorldPosition);float coLum=dot(diffuseColor.rgb,vec3(.2126,.7152,.0722));
    if(coMask>.001){vec3 c=diffuseColor.rgb;
     if(coLum>.72)c=coPaper;
-    else if(c.b>c.r*1.3&&c.b>.12)c=coCobalt;
+    else if(c.b>c.r*1.3&&c.b>.12)c=${global?'mix(c,coCobalt,.25)':'coCobalt'};
     else if(c.r>c.b*1.5&&c.g>c.b*1.5)c=coSun;
     diffuseColor.rgb=mix(diffuseColor.rgb,c,coMask);
     outgoingLight=diffuseColor.rgb;
