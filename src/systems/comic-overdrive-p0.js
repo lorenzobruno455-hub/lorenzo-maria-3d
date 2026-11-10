@@ -16,6 +16,7 @@ float coScope(vec3 p){float mask=0.;for(int i=0;i<3;i++){vec3 a=smoothstep(coAre
 vec3 coPigment(vec3 base,vec3 p){
  float hi=max(max(base.r,base.g),base.b),lo=min(min(base.r,base.g),base.b);
  if(base.g>base.r*1.15&&base.g>base.b*1.06){
+  if(base.b>base.g*.7)return coTurquoise;
   float coPatch=step(.46,fract(sin(dot(floor(p.xz/3.),vec2(17.13,7.91)))*231.17));
   return p.y<.3?mix(coLime,coEmerald,coPatch*.22):mix(coEmerald,coLime,step(.45,fract(p.y*.47+p.x*.11+p.z*.08)));
  }
@@ -60,6 +61,8 @@ export function decorateOverdriveMaterial(material,areas){
     vec3 shadow=mix(pigment*.44,coCobalt*.58,.4);
     vec3 middle=mix(pigment*.83,coTurquoise*.55,.09);
     vec3 bright=pigment*1.2;
+    // Warm plain surfaces include skin: keep its hue across the three bands.
+    if(coFamily==0.&&coBase.r>coBase.g*1.18&&coBase.g>coBase.b*1.05){shadow=pigment*.55;middle=pigment*.9;bright=pigment*1.15;}
     vec3 graphic=coBand<.5?shadow:(coBand<1.5?middle:bright);
     if(coBand<.5&&coFamily>0.&&coFamily<4.){
      float stripe=abs(fract((cbWorldPosition.x+cbWorldPosition.z+cbWorldPosition.y)*3.2)-.5);
@@ -106,7 +109,7 @@ function makeSky(scene,resources,owned){
  // Canvas colors are sRGB; ShaderMaterial samples need explicit linearization.
  mat.fragmentShader=mat.fragmentShader.replace('vec4 c=texture2D(atlas,coUV);','vec4 c=sRGBTransferEOTF(texture2D(atlas,coUV));');
  const clouds=new THREE.InstancedMesh(geo,mat,13),dummy=new THREE.Object3D();clouds.renderOrder=-90;clouds.frustumCulled=false;
- for(let i=0;i<13;i++){const a=i===12?.58:i*Math.PI/6+.1,r=i===12?78:72+(i%3)*5;dummy.position.set(Math.sin(a)*r,i===12?11:11+(i%4)*2,-Math.cos(a)*r);const w=i===12?9:15+(i%3)*4;dummy.scale.set(w,i===12?9:w*.6,1);dummy.updateMatrix();clouds.setMatrixAt(i,dummy.matrix);}group.add(clouds);owned.push(atlas,geo,mat);return group;
+ for(let i=0;i<13;i++){const a=i===12?.58:i*Math.PI/6+.1,r=i===12?78:72+(i%3)*5;dummy.position.set(Math.sin(a)*r,i===12?11:11+(i%4)*2,-Math.cos(a)*r);const w=i===12?9:15+(i%3)*4;dummy.scale.set(w,i===12?9:w*.6,1);dummy.updateMatrix();clouds.setMatrixAt(i,dummy.matrix);}group.add(clouds);owned.push(clouds,atlas,geo,mat);return group;
 }
 function makeSampleTree(scene,resources,owned){
  const saved=[],matrix=new THREE.Matrix4(),position=new THREE.Vector3(),hidden=new THREE.Matrix4().makeScale(.00001,.00001,.00001);
@@ -114,7 +117,7 @@ function makeSampleTree(scene,resources,owned){
  const group=new THREE.Group();group.name='P0 one-tree silhouette';group.position.set(10,4.5,13);scene.add(group);
  const geometry=resources.geometry('leaf'),material=resources.material('#ffffff'),ink=new THREE.MeshBasicMaterial({color:P0_PALETTE.ink,side:THREE.BackSide,toneMapped:false}),leaves=new THREE.InstancedMesh(geometry,material,3),outline=new THREE.InstancedMesh(geometry,ink,3),dummy=new THREE.Object3D();
  for(const[i,p]of [[0,[-1,-.1,0,1.65,1.35,1.65]],[1,[.7,.2,-.15,1.75,1.55,1.65]],[2,[0,.7,.5,1.35,1.25,1.45]]]){dummy.position.set(...p.slice(0,3));dummy.scale.set(...p.slice(3));dummy.updateMatrix();leaves.setMatrixAt(i,dummy.matrix);leaves.setColorAt(i,color(['emerald','lime','turquoise'][i]));dummy.scale.multiplyScalar(1.025);dummy.updateMatrix();outline.setMatrixAt(i,dummy.matrix);}
- leaves.receiveShadow=true;outline.renderOrder=1;group.add(outline,leaves);owned.push(ink);
+ leaves.receiveShadow=true;outline.renderOrder=1;group.add(outline,leaves);owned.push(leaves,outline,ink);
  const shadowGeo=new THREE.CircleGeometry(2.5,14),shadowMat=new THREE.MeshBasicMaterial({color:P0_PALETTE.cobalt,transparent:true,opacity:.38,depthWrite:false,toneMapped:false}),shadow=new THREE.Mesh(shadowGeo,shadowMat);shadow.rotation.x=-Math.PI/2;shadow.position.set(10,.008,13);shadow.scale.set(1,.65,1);scene.add(shadow);owned.push(shadowGeo,shadowMat);
  return{group,shadow,saved,restore(){for(const s of saved){s.mesh.setMatrixAt(s.index,s.matrix);s.mesh.instanceMatrix.needsUpdate=true;}group.removeFromParent();shadow.removeFromParent();}};
 }
