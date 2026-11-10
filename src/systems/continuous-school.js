@@ -3,7 +3,7 @@ import {SchoolVisit}from'./school-visit.js';
 import {createCampusConnection}from'./campus-connection.js';
 import {openSchoolEntrance,splitEntranceBox}from'./school-entrance.js';
 import {SCHOOL_ORIGIN,ENTRANCE,changeFrame,shiftedBox}from'./world-coordinates.js';
-import {moveWithCollisions}from'./physics.js';
+import {moveWithCollisions,resolveSpawn}from'./physics.js';
 
 // Same scene, actors, controls and internal coordinates. Reparenting changes the
 // coordinate frame, never the world pose; worldPosition diagnostics prove it.
@@ -28,8 +28,11 @@ export class ContinuousSchool extends SchoolVisit{
  async enter(){
   // Used only to restore an existing school save at application startup.
   if(this.active||this.loading||this.disposed)return false;const s=this.getState(),token=++this.token;this.loading=true;this.onChange();
-  try{const p=s.floor===0&&Math.abs(s.position.x)<1&&s.position.z>18.8&&s.position.z<=19.2?{...s.position,floor:0,y:.03}:this.navigation.resolve(s.floor,s.position);await this.ensureFloor(p.floor);if(this.disposed||token!==this.token)return false;
+  try{const floor=this.navigation.floor(s.floor);await this.ensureFloor(floor.index);if(this.disposed||token!==this.token)return false;
+   // Resolve after the current furniture/architecture colliders have arrived.
+   const p=s.floor===0&&Math.abs(s.position.x)<1&&s.position.z>18.8&&s.position.z<=19.2?{...s.position,floor:0,y:.03}:this.navigation.resolve(floor.index,s.position);
    this.player.position.set(p.x+this.origin.x,p.y,p.z+this.origin.z);if(p.floor===0&&p.z>18){const d=this.connection.door;d.open=true;d.angle=Math.PI/2;d.pivot.rotation.y=d.angle;this.world.update(0,0,this.player.position);}
+   if(p.floor===0){const safe=resolveSpawn(this.player.position,this.world.solids,{x:floor.spawn.x+this.origin.x,z:floor.spawn.z+this.origin.z});this.player.position.x=safe.x;this.player.position.z=safe.z;}
    this.follow.yaw=s.yaw;this.follow.pitch=s.pitch;
    this.activate();this.floor=p.floor;this.view=p.floor;this.follow.obstacles=this.cameraObstacles();this.follow.initialized=false;this.showFloors();this.narrative?.updateActors(0,{});this.capture();return true;
   }catch{this.getState().active=false;this.onStatus('São Jorge indisponível. Você pode continuar no campus.');return false;}
@@ -40,11 +43,13 @@ export class ContinuousSchool extends SchoolVisit{
   changeFrame(this.player,this.group,this.follow,this.origin);for(const n of this.frameNodes)this.group.attach(n);
   this.narrative?.enter();this.follow.obstacles=this.cameraObstacles();this.showFloors();this.capture();this.onChange({preserveInput:true});
  }
- exit(){
-  // A toolbar cannot travel. Only crossing the real ground-floor doorway exits.
-  if(!this.active||this.floor!==0||this.player.position.z<19.2||this.inspecting)return false;
-  this.capture();this.narrative?.leave();changeFrame(this.player,this.scene,this.follow,{x:-this.origin.x,z:-this.origin.z});for(const n of this.frameNodes)this.scene.attach(n);
-  this.active=false;this.getState().active=false;this.follow.obstacles=this.world.occluders;this.follow.focusObject=null;this.follow.interiorDistance=null;this.restoreCampus();this.showFloors();this.onChange({preserveInput:true});return true;
+ exit({recover=false}={}){
+  // Normal travel still requires the physical door. Recovery is an explicit
+  // settings action, and also cancels an unfinished saved-position restore.
+  if(!recover&&(!this.active||this.floor!==0||this.player.position.z<19.2||this.inspecting))return false;
+  if(recover){++this.token;this.loading=false;}
+  if(this.active){this.capture();this.narrative?.leave();changeFrame(this.player,this.scene,this.follow,{x:-this.origin.x,z:-this.origin.z});for(const n of this.frameNodes)this.scene.attach(n);}
+  this.active=false;this.inspecting=false;this.getState().active=false;this.follow.obstacles=this.world.occluders;this.follow.focusObject=null;this.follow.interiorDistance=null;this.restoreCampus();this.showFloors();this.onChange({preserveInput:true,deferSave:recover});return true;
  }
  move(delta){
   if(this.inspecting)return 0;if(this.floor!==0)return super.move(delta);

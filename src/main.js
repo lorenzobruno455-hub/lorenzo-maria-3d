@@ -173,7 +173,7 @@ adventure=new Adventure({scene,world,living,story,player,character:lorenzo,camer
 lorenzo.player=true;
 const ink=new InkOutlines(scene,world.resources,[lorenzo,...living.actors.map(a=>a.character)]);
 const legacyRoots=scene.children.filter(node=>node!==player&&node!==sun&&!node.isHemisphereLight&&!node.isCamera);
-school=new ContinuousSchool({scene,world,frameNodes:[effect,interactionAccent.mesh],legacyRoots,player,follow,pool:assets,layout:schoolLayout,getState:()=>progress.schoolVisit,onStatus:notify,onChange:event=>{if(!event?.preserveInput)controls.clear();target=null;lastHUD='';lastLocation='';lastTarget='';syncSchoolUI();syncModal();needsRender=true;if(!school?.loading)save();}});
+school=new ContinuousSchool({scene,world,frameNodes:[effect,interactionAccent.mesh],legacyRoots,player,follow,pool:assets,layout:schoolLayout,getState:()=>progress.schoolVisit,onStatus:notify,onChange:event=>{if(!event?.preserveInput)controls.clear();target=null;lastHUD='';lastLocation='';lastTarget='';syncSchoolUI();syncModal();needsRender=true;if(!school?.loading&&!event?.deferSave)save();}});
 school.narrative=new SchoolNarrative({school,world,story,living,adventure,getProgress:()=>progress});
 function syncSchoolUI(){if(!school)return;document.body.classList.toggle('school-visit',school.active);document.body.classList.toggle('school-inspecting',school.active&&school.inspecting);$('school-toolbar').hidden=!school.active&&!school.loading;$('school-floor-title').textContent=school.loading?'Carregando São Jorge…':school.inspecting?'Inspeção · coordenadas de jogo':`${school.navigation.floor(school.floor).label} · São Jorge`;$('school-inspect').textContent=school.inspecting?'Explorar':'Andares';$('school-inspect').disabled=school.loading;$('school-floor-view').hidden=!school.inspecting;$('school-floor-view').value=String(school.view);$('school-floor-view').disabled=school.loading;$('story-menu').disabled=school.loading;document.querySelectorAll('[data-story]').forEach(b=>b.disabled=school.loading);$('restart').disabled=school.active||school.loading;interactions.world=school.active?{occluders:school.navigation.obstacles(school.floor)}:world;}
 async function openSchool(){if(school.active||school.loading)return;if(dialog||panelOpen||adventure?.busy||story?.seat){notify('Conclua a interação atual antes de visitar São Jorge.');return;}if(!started){started=true;$('welcome').hidden=true;audio.unlock();}if(paused)setPause(false);await school.enter();syncSchoolUI();syncModal();save();}
@@ -182,6 +182,7 @@ $('school-exit').onclick=()=>notify('Saída a pé: desça ao 1º andar e atraves
 
 $('help').onclick = () => speak('COMO JOGAR', 'Use WASD ou o joystick para andar. Arraste o mouse ou o lado direito da tela para olhar ao redor. Segure Shift ou Correr para correr. Aproxime-se de Maria, portas, placas ou lembranças e pressione E ou Interagir. As portas da sala e da biblioteca podem ser abertas. Use Esc ou ☰ para pausar.');
 function syncSettings() {
+  $('safe-checkpoint').disabled=!!adventure?.cutscenes.active;
   $('quality').value = settings.quality; $('sensitivity').value = settings.sensitivity; $('volume').value = settings.volume;
   $('audio-enabled').checked = settings.sound; $('shadows').checked = settings.shadows; $('adaptive').checked = settings.adaptive;
   $('sound').textContent = `Som: ${settings.sound ? 'ligado' : 'desligado'}`;
@@ -192,6 +193,16 @@ for (const id of ['quality', 'sensitivity', 'volume', 'audio-enabled', 'shadows'
   settings.sound = $('audio-enabled').checked; settings.shadows = $('shadows').checked; settings.adaptive = $('adaptive').checked;
   audio.unlock(); if (id === 'quality' || id === 'shadows') { quality.apply();  } syncSettings(); save();
 });
+// Explicit rescue: never resets campaign, inventory, memories or quest state.
+$('safe-checkpoint').onclick=()=>{
+  if(adventure?.cutscenes.active)return;
+  dialogues.close();story.close();story.seat=null;story.focus=null;adventure?.actions.clear();
+  school.exit({recover:true});controls.clear();
+  const point=resolveSpawn({x:0,z:10},world.solids);player.position.set(point.x,world.groundHeight(point.x,point.z),point.z);player.rotation.y=0;
+  follow.yaw=0;follow.pitch=.38;follow.conversation=false;follow.focusObject=null;follow.initialized=false;follow.actualDistance=follow.distance;
+  interactionTime=effectTime=0;effect.visible=false;target=null;lastHUD=lastTarget=lastLocation='';
+  updateHUD();setPause(false);follow.update(player.position,0,true);save();notify('Ponto seguro · pátio central. Seu progresso foi mantido.');
+};
 $('restart').onclick = () => { $('reset-confirm').hidden = false; $('confirm-reset').focus(); };
 $('cancel-reset').onclick = () => { $('reset-confirm').hidden = true; $('restart').focus(); };
 $('confirm-reset').onclick = () => {

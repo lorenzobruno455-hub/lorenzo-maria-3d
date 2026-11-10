@@ -1,6 +1,8 @@
-# Lorenzo & Maria 3D — Project Aurora 0.9
+# Lorenzo & Maria 3D — Project Aurora 0.9.1
 
 Exploração em terceira pessoa no fictício Colégio Aurora, com Three.js, JavaScript e Vite. Interface e diálogos em português. O capítulo inicial continua completo: converse com Maria, encontre três lembranças e retorne ao pátio.
+
+Correção 0.9.1: **Pausa → Voltar ao ponto seguro** recupera o personagem no pátio central sem apagar progresso. [Diagnóstico e validação](docs/RECUPERACAO-091.md).
 
 A 0.9 conecta fisicamente o campus ao São Jorge pela lateral leste: siga o caminho até a porta e entre ou saia andando. Preserva os três pavimentos e seus patamares interativos, a arte 0.8.2 e os saves v04. [Entrega, localização, transformação, capturas e testes](docs/ENTREGA-09.md). O PR não realiza merge nem atualiza automaticamente a hospedagem.
 
