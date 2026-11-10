@@ -1,0 +1,12 @@
+/* P0 owner-review HUD sample only. Menus/dialogue rollout remains P3. */
+body.comic-overdrive-p0{--co-ink:#131a2a;--co-paper:#fff3d7;--co-cobalt:#2352ff;--co-sun:#ffe238;--co-coral:#ff5a4b;--co-aqua:#18d6cc}
+.comic-overdrive-p0 header .brand,.comic-overdrive-p0 header>a{background:var(--co-sun);color:var(--co-ink)}
+.comic-overdrive-p0 header{border-bottom-color:var(--co-aqua)}
+.comic-overdrive-p0 #mission{background:var(--co-paper);border-color:var(--co-ink);border-left-color:var(--co-coral);box-shadow:6px 6px 0 var(--co-cobalt)}
+.comic-overdrive-p0 #mission progress{accent-color:var(--co-aqua)}
+.comic-overdrive-p0 #location{border-left-color:var(--co-coral);box-shadow:4px 4px 0 var(--co-cobalt)}
+.comic-overdrive-p0 #location span{color:var(--co-aqua)}
+.comic-overdrive-p0 #run{background:var(--co-coral);color:var(--co-ink)}
+.comic-overdrive-p0 #interact:not(:disabled){background:var(--co-aqua);color:var(--co-ink)}
+.comic-overdrive-p0 #joystick{border-color:var(--co-paper);background:#2352ff80}
+.comic-overdrive-p0 #stick{background:var(--co-sun);border-color:var(--co-ink)}

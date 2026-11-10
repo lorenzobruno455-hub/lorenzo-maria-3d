@@ -1,0 +1,204 @@
+{
+  "source": "721fb8f8622f4c7500888de232113fa181227bb0",
+  "method": "Chromium/SwiftShader; 960×600; Medium; shadows on; adaptive off; reduced motion; same saved positions/camera and morning clock. Timing: 20 active rAF intervals after models/fonts and 12 settling frames. Screenshots freeze via pause with only its overlay hidden. No physical-device FPS claim.",
+  "samples": [
+    {
+      "name": "campus",
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "worldPosition": {
+        "x": 4,
+        "y": 0.025,
+        "z": 20
+      },
+      "camera": {
+        "x": 0.3879223484935568,
+        "y": 2.560227446299722,
+        "z": 25.891448275467376
+      },
+      "yaw": -0.55,
+      "pitch": 0.16,
+      "quality": "medium",
+      "exposure": 1,
+      "clock": "08:15",
+      "drawCalls": 219,
+      "triangles": 248180,
+      "geometries": 131,
+      "textures": 34,
+      "programs": 19,
+      "overdrive": {
+        "id": "comic-overdrive-p0",
+        "areas": [
+          "campus-sample",
+          "connection-facade",
+          "sj-f1-01"
+        ],
+        "treeInstancesReplaced": 18,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "frames": 20,
+        "meanMs": 693.305,
+        "p50Ms": 633.2000000000007,
+        "p95Ms": 1433.4000000000015,
+        "samplesMs": [
+          1266.5,
+          66.79999999999927,
+          616.5,
+          1433.4000000000015,
+          83.29999999999927,
+          1383.2999999999993,
+          100,
+          1449.9000000000015,
+          83.39999999999782,
+          700,
+          1299.9000000000015,
+          16.599999999998545,
+          600,
+          683.3000000000029,
+          666.5999999999985,
+          700.0999999999985,
+          633.2000000000007,
+          1400,
+          100,
+          583.2999999999993
+        ]
+      }
+    },
+    {
+      "name": "connection",
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "worldPosition": {
+        "x": 60,
+        "y": -0.02,
+        "z": 22
+      },
+      "camera": {
+        "x": 60,
+        "y": 2.515227446299722,
+        "z": 28.91059098362939
+      },
+      "yaw": 0,
+      "pitch": 0.16,
+      "quality": "medium",
+      "exposure": 1,
+      "clock": "08:15",
+      "drawCalls": 116,
+      "triangles": 201870,
+      "geometries": 118,
+      "textures": 13,
+      "programs": 27,
+      "overdrive": {
+        "id": "comic-overdrive-p0",
+        "areas": [
+          "campus-sample",
+          "connection-facade",
+          "sj-f1-01"
+        ],
+        "treeInstancesReplaced": 18,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "frames": 20,
+        "meanMs": 915.8,
+        "p50Ms": 883.3000000000029,
+        "p95Ms": 1766.7000000000007,
+        "samplesMs": [
+          866.7000000000007,
+          1783.2999999999993,
+          16.700000000000728,
+          1583.2000000000007,
+          100,
+          899.8999999999978,
+          1766.7000000000007,
+          833.2000000000007,
+          850,
+          816.7000000000007,
+          933.2999999999993,
+          266.59999999999854,
+          533.2999999999993,
+          883.4000000000015,
+          999.9000000000015,
+          900,
+          1683.199999999997,
+          916.5999999999985,
+          800,
+          883.3000000000029
+        ]
+      }
+    },
+    {
+      "name": "class-a",
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "worldPosition": {
+        "x": 53.5,
+        "y": 0.03,
+        "z": 15.5
+      },
+      "camera": {
+        "x": 53.5,
+        "y": 2.388036842139284,
+        "z": 12.467581900527112
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.3,
+      "quality": "medium",
+      "exposure": 1,
+      "clock": "08:15",
+      "drawCalls": 87,
+      "triangles": 121802,
+      "geometries": 160,
+      "textures": 20,
+      "programs": 27,
+      "overdrive": {
+        "id": "comic-overdrive-p0",
+        "areas": [
+          "campus-sample",
+          "connection-facade",
+          "sj-f1-01"
+        ],
+        "treeInstancesReplaced": 18,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "frames": 20,
+        "meanMs": 870.7949999999998,
+        "p50Ms": 833.2999999999993,
+        "p95Ms": 1749.8999999999978,
+        "samplesMs": [
+          549.8999999999996,
+          1216.7999999999993,
+          33.20000000000073,
+          1550,
+          16.700000000000728,
+          783.2000000000007,
+          1666.699999999997,
+          316.6000000000022,
+          650,
+          833.2999999999993,
+          916.5999999999985,
+          1816.6000000000022,
+          16.700000000000728,
+          1749.8999999999978,
+          833.2999999999993,
+          66.70000000000073,
+          899.9000000000015,
+          1699.8999999999978,
+          900.1000000000022,
+          899.7999999999993
+        ]
+      }
+    }
+  ]
+}
