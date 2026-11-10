@@ -29,23 +29,23 @@
 
 Files: `src/systems/comic-overdrive-p0.js`, `src/systems/world.js`, `src/main.js`, `tests/unit/comic-overdrive-p1-p2.test.js`.
 
-- [ ] Add failing tests for a global profile with no mask loop, instance/skin chunks intact and restoration of borrowed material ownership.
-- [ ] Add profile options to the existing decorator/factory; preserve the P0 flag and add `?comic=legacy` for comparison. Default to the authorized P1/P2 presentation.
-- [ ] Tag existing campus crowns with their already-known centers; reuse one fill + one outline batch, keep original matrices for restoration. Existing connection foliage and flowers retain their geometries/parents and gain the shared palette.
-- [ ] Run focused unit and shader/browser smoke; commit P1.
+- [x] Add failing tests for a global profile with no mask loop, instance/skin chunks intact and restoration of borrowed material ownership.
+- [x] Add profile options to the existing decorator/factory; preserve the P0 flag and add `?comic=legacy` for comparison. Default to the authorized P1/P2 presentation.
+- [x] Tag existing campus crowns with their already-known centers; reuse one fill + one outline batch, keep original matrices for restoration. Existing connection foliage and flowers retain their geometries/parents and gain the shared palette.
+- [x] Run focused unit and shader/browser smoke; commit P1.
 
 ### Task 2: P2 school and props
 
 Files: same profile module, `tests/comic-overdrive-p1-p2.spec.js`, existing P0 smoke.
 
-- [ ] Test all three school floors, shared atlas/props, books and collisions against legacy mode; verify release of streamed resources.
-- [ ] Apply the same profile to materials of future leases, including glass and sign transparency without changing UVs. Keep selective edges, light rigs and loading strategy.
-- [ ] Capture representative exterior and specialist interiors; compare render metrics in identical preset/cameras. Commit P2.
+- [x] Test all three school floors, shared atlas/props, books and collisions against legacy mode; verify release of streamed resources.
+- [x] Apply the same profile to materials of future leases, including glass and sign transparency without changing UVs. Keep selective edges, light rigs and loading strategy.
+- [x] Capture representative exterior and specialist interiors; compare render metrics in identical preset/cameras. Commit P2.
 
 ### Task 3: Evidence and delivery
 
 Files: `scripts/capture-overdrive-p1-p2.mjs`, `docs/COMIC-OVERDRIVE-P1-P2.md`, `docs/captures/comic-overdrive-p1-p2/`.
 
-- [ ] Run build, unit suite and one final browser regression; distinguish pre-existing failures from affected tests.
-- [ ] Record actual screenshots, costs and physical-device limitations; no Android FPS claims.
-- [ ] Open a stacked PR on P0 with no merge/deploy; provide safe terminal commands using fetch/switch/pull --ff-only, dependency lock and Vite host.
+- [x] Run build, unit suite and one final browser regression; distinguish pre-existing failures from affected tests.
+- [x] Record actual screenshots, costs and physical-device limitations; no Android FPS claims.
+- [x] Open a stacked PR on P0 with no merge/deploy; provide safe terminal commands using fetch/switch/pull --ff-only, dependency lock and Vite host.
