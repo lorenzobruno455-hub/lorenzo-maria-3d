@@ -98,6 +98,24 @@ export function createSchoolArchitecture({ resources, materials, floor, structur
     sign('12\n9    •    3\n6',room.x,2.55,z,Math.PI,.38,.38);
     Object.assign(signs.at(-1),{roomId:room.id,kind:'clock'});
   }
+  const environmentCopy={
+    teachers:'SALA DOS PROFESSORES\nPLANEJAR • TROCAR • ENSINAR',
+    reception:'RECEPÇÃO\nINFORMAÇÕES • ACOLHIMENTO',
+    secretaria:'SECRETARIA\nATENDIMENTO • ORGANIZAÇÃO',
+    office:'DIREÇÃO\nESCUTA • DIÁLOGO • CUIDADO',
+    coord:'COORDENAÇÃO\nAPRENDER EM CONJUNTO',
+    science:'CIÊNCIAS\nOBSERVAR • REGISTRAR • COMPARAR',
+    lab:'LABORATÓRIO\nOBSERVAÇÃO • MÉTODO • DESCOBERTA',
+  };
+  for(const room of floor.rooms){
+    if(room.type==='cinema'){
+      sign('CINE ESCOLA\nHISTÓRIAS EM MOVIMENTO',room.x,1.09,room.z2-.408,Math.PI,4.25,.64);
+      Object.assign(signs.at(-1),{roomId:room.id,kind:'lesson',background:'#141824',foreground:'#FFF4D5'});
+    }
+    const copy=environmentCopy[room.type];if(!copy)continue;
+    const wall=floor.colliders.find(c=>c.kind==='wall'&&c.minX<=room.x&&c.maxX>=room.x&&Math.abs((c.minZ+c.maxZ)/2-room.z1)<.15);
+    if(wall){sign(copy,room.x,1.95,wall.maxZ+.02,0,Math.min(2.8,room.x2-room.x1-.6),.85);Object.assign(signs.at(-1),{roomId:room.id,kind:'mural'});}
+  }
   if(floor.index<2)for(const side of [-1,1]) {
     // Use only continuous wall sections, never the door or stair opening.
     const walls=floor.colliders.filter(c=>c.kind==='wall' && c.minY===floor.baseY && Math.abs((c.minX+c.maxX)/2-side*2)<.01 && c.maxZ-c.minZ>2.5);

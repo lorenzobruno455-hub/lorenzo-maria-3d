@@ -1,0 +1,12 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import * as THREE from 'three';
+import{Resources}from'../../src/systems/resources.js';import{createSchoolLivingDetails}from'../../src/systems/school-living-details.js';import{furnitureSource}from'../fixtures/school-glb.js';import{NARRATIVE_POINTS,bookPoint}from'../../src/systems/school-narrative-map.js';
+const floors=JSON.parse(fs.readFileSync('src/data/sao-jorge.json')).floors,resources=new Resources(),cache=new Map(),materials={get(c,k){const key=c+k;if(!cache.has(key))cache.set(key,new THREE.MeshBasicMaterial());return cache.get(key);}};
+const hit=(a,b)=>a.minX<b.maxX-1e-6&&a.maxX>b.minX+1e-6&&a.minZ<b.maxZ-1e-6&&a.maxZ>b.minZ+1e-6&&a.minY<b.maxY-1e-6&&a.maxY>b.minY+1e-6;
+test('specialized rooms gain supported equipment and workspaces without obstructing doors or narrative targets',()=>{
+ const decorated=new Set();
+ for(const floor of floors.slice(0,2)){const source=furnitureSource(floor),result=createSchoolLivingDetails({resources,materials,floor,source});
+ for(const s of result.supports){decorated.add(s.roomType);assert.ok(s.bounds.minX>=s.parent.minX&&s.bounds.maxX<=s.parent.maxX);assert.ok(s.bounds.minZ>=s.parent.minZ&&s.bounds.maxZ<=s.parent.maxZ);assert.ok(s.bounds.minY>=s.parent.maxY);for(const p of [...Object.values(NARRATIVE_POINTS),...Array.from({length:6},(_,i)=>bookPoint(i))].filter(p=>p.floor===floor.index&&p.top!=null)){if(Math.abs(p.top-s.parent.maxY)>.25)continue;assert.ok(Math.hypot(Math.max(s.bounds.minX-p.x,0,p.x-s.bounds.maxX),Math.max(s.bounds.minZ-p.z,0,p.z-s.bounds.maxZ))>=.27);}}
+ for(const c of result.colliders){const r=floor.rooms.find(r=>r.id===c.roomId);assert.ok(c.minX>r.x1&&c.maxX<r.x2&&c.minZ>r.z1&&c.maxZ<r.z2);assert.ok(c.minY>=floor.baseY);assert.ok(!floor.colliders.some(o=>hit(c,o)),'new furniture cannot intersect original solids');const d=r.door;assert.ok(!hit(c,{minX:d.x-.7,maxX:d.x+.7,minZ:d.z-.7,maxZ:d.z+.7,minY:floor.baseY,maxY:floor.baseY+2.6}),'door clearance');}
+ assert.ok(result.stats.draws<=4);let released=0;const gs=result.group.children.map(m=>m.geometry);for(const g of gs)g.addEventListener('dispose',()=>released++);result.dispose();result.dispose();assert.equal(released,gs.length);source.geometry.dispose();}
+ for(const type of ['teachers','reception','secretaria','office','coord','lab','science','cinema'])assert.ok(decorated.has(type),`missing ${type}`);
+});
