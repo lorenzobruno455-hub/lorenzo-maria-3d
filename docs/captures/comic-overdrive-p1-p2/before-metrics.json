@@ -1,0 +1,358 @@
+{
+  "source": "f9fd7a976ff3efbd24ff28741b3f2272bd0391ee",
+  "method": "Chromium/SwiftShader; 960×600; Medium; shadows on; adaptive off; reduced motion; same saved positions/camera and morning clock. Timing: 8 active rAF intervals after models/fonts and 6 settling frames. Screenshots freeze via pause with only its overlay hidden. No physical-device FPS claim.",
+  "samples": [
+    {
+      "name": "campus",
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "worldPosition": {
+        "x": 4,
+        "y": 0.025,
+        "z": 20
+      },
+      "camera": {
+        "x": 0.3879223484935568,
+        "y": 2.560227446299722,
+        "z": 25.891448275467376
+      },
+      "yaw": -0.55,
+      "pitch": 0.16,
+      "quality": "medium",
+      "exposure": 1,
+      "clock": "08:15",
+      "drawCalls": 214,
+      "triangles": 247492,
+      "geometries": 128,
+      "textures": 33,
+      "programs": 15,
+      "overdrive": null,
+      "timing": {
+        "frames": 8,
+        "meanMs": 574.9749999999999,
+        "p50Ms": 516.5,
+        "p95Ms": 1083.300000000001,
+        "samplesMs": [
+          33.29999999999927,
+          900,
+          1083.300000000001,
+          16.69999999999891,
+          500,
+          516.5,
+          583.3999999999996,
+          966.6000000000004
+        ]
+      }
+    },
+    {
+      "name": "connection",
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "worldPosition": {
+        "x": 60,
+        "y": -0.02,
+        "z": 22
+      },
+      "camera": {
+        "x": 60,
+        "y": 2.515227446299722,
+        "z": 28.91059098362939
+      },
+      "yaw": 0,
+      "pitch": 0.16,
+      "quality": "medium",
+      "exposure": 1,
+      "clock": "08:15",
+      "drawCalls": 114,
+      "triangles": 201676,
+      "geometries": 116,
+      "textures": 12,
+      "programs": 27,
+      "overdrive": null,
+      "timing": {
+        "frames": 8,
+        "meanMs": 712.4875,
+        "p50Ms": 650,
+        "p95Ms": 1250.0999999999985,
+        "samplesMs": [
+          783.3000000000011,
+          1050,
+          16.69999999999891,
+          749.8999999999996,
+          600,
+          650,
+          599.9000000000015,
+          1250.0999999999985
+        ]
+      }
+    },
+    {
+      "name": "class-a",
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "worldPosition": {
+        "x": 53.5,
+        "y": 0.03,
+        "z": 15.5
+      },
+      "camera": {
+        "x": 53.5,
+        "y": 2.3880347503451542,
+        "z": 12.467588662728867
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.3,
+      "quality": "medium",
+      "exposure": 1,
+      "clock": "08:15",
+      "drawCalls": 85,
+      "triangles": 121608,
+      "geometries": 158,
+      "textures": 19,
+      "programs": 26,
+      "overdrive": null,
+      "timing": {
+        "frames": 8,
+        "meanMs": 510.4000000000001,
+        "p50Ms": 500,
+        "p95Ms": 566.6000000000004,
+        "samplesMs": [
+          483.3000000000011,
+          566.5999999999985,
+          533.3000000000011,
+          483.39999999999964,
+          416.60000000000036,
+          533.3999999999996,
+          566.6000000000004,
+          500
+        ]
+      }
+    },
+    {
+      "name": "corridor-2",
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "worldPosition": {
+        "x": 60,
+        "y": 3.63,
+        "z": 8
+      },
+      "camera": {
+        "x": 60,
+        "y": 6.607865971534527,
+        "z": 11.900391469421344
+      },
+      "yaw": 0,
+      "pitch": 0.38,
+      "quality": "medium",
+      "exposure": 1,
+      "clock": "08:15",
+      "drawCalls": 83,
+      "triangles": 89568,
+      "geometries": 168,
+      "textures": 41,
+      "programs": 28,
+      "overdrive": null,
+      "timing": {
+        "frames": 8,
+        "meanMs": 664.5499999999997,
+        "p50Ms": 750,
+        "p95Ms": 833.3999999999996,
+        "samplesMs": [
+          716.5999999999985,
+          50,
+          766.6000000000004,
+          750,
+          800,
+          783.2000000000007,
+          833.3999999999996,
+          616.5999999999985
+        ]
+      }
+    },
+    {
+      "name": "library",
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "worldPosition": {
+        "x": 55,
+        "y": 0.03,
+        "z": -14
+      },
+      "camera": {
+        "x": 55,
+        "y": 3.0078659715345273,
+        "z": -10.099608530578656
+      },
+      "yaw": 0,
+      "pitch": 0.38,
+      "quality": "medium",
+      "exposure": 1,
+      "clock": "08:15",
+      "drawCalls": 99,
+      "triangles": 137030,
+      "geometries": 164,
+      "textures": 41,
+      "programs": 27,
+      "overdrive": null,
+      "timing": {
+        "frames": 8,
+        "meanMs": 558.3125,
+        "p50Ms": 549.8999999999996,
+        "p95Ms": 1066.6000000000004,
+        "samplesMs": [
+          516.6999999999989,
+          483.3000000000011,
+          550,
+          549.8999999999996,
+          616.6999999999989,
+          566.7000000000007,
+          1066.6000000000004,
+          116.60000000000036
+        ]
+      }
+    },
+    {
+      "name": "laboratory",
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "worldPosition": {
+        "x": 66.5,
+        "y": 3.63,
+        "z": -7
+      },
+      "camera": {
+        "x": 63.023942415330865,
+        "y": 6.607865971534527,
+        "z": -5.230797557429071
+      },
+      "yaw": -1.1,
+      "pitch": 0.38,
+      "quality": "medium",
+      "exposure": 1,
+      "clock": "08:15",
+      "drawCalls": 64,
+      "triangles": 95256,
+      "geometries": 164,
+      "textures": 22,
+      "programs": 28,
+      "overdrive": null,
+      "timing": {
+        "frames": 8,
+        "meanMs": 554.15,
+        "p50Ms": 499.89999999999964,
+        "p95Ms": 1033.300000000001,
+        "samplesMs": [
+          533.3000000000002,
+          516.6999999999989,
+          1033.300000000001,
+          433.2999999999993,
+          16.700000000000728,
+          499.89999999999964,
+          466.7000000000007,
+          933.2999999999993
+        ]
+      }
+    },
+    {
+      "name": "reception",
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "worldPosition": {
+        "x": 66.5,
+        "y": 0.03,
+        "z": -5
+      },
+      "camera": {
+        "x": 66.5,
+        "y": 2.469287569898349,
+        "z": -2.4480342884679156
+      },
+      "yaw": 0,
+      "pitch": 0.38,
+      "quality": "medium",
+      "exposure": 1,
+      "clock": "08:15",
+      "drawCalls": 85,
+      "triangles": 129442,
+      "geometries": 162,
+      "textures": 39,
+      "programs": 27,
+      "overdrive": null,
+      "timing": {
+        "frames": 8,
+        "meanMs": 641.6500000000001,
+        "p50Ms": 566.6000000000004,
+        "p95Ms": 1183.2999999999993,
+        "samplesMs": [
+          583.3000000000011,
+          633.2999999999993,
+          516.7000000000007,
+          566.6999999999989,
+          533.3000000000011,
+          566.6000000000004,
+          1183.2999999999993,
+          550
+        ]
+      }
+    },
+    {
+      "name": "hall",
+      "viewport": {
+        "width": 960,
+        "height": 600
+      },
+      "worldPosition": {
+        "x": 60,
+        "y": 7.23,
+        "z": 5
+      },
+      "camera": {
+        "x": 61.470777122304945,
+        "y": 10.283385368737507,
+        "z": 8.044740086572999
+      },
+      "yaw": 0.45,
+      "pitch": 0.45,
+      "quality": "medium",
+      "exposure": 1,
+      "clock": "08:15",
+      "drawCalls": 70,
+      "triangles": 54656,
+      "geometries": 144,
+      "textures": 30,
+      "programs": 28,
+      "overdrive": null,
+      "timing": {
+        "frames": 8,
+        "meanMs": 520.8125000000001,
+        "p50Ms": 516.6000000000004,
+        "p95Ms": 983.3999999999996,
+        "samplesMs": [
+          483.3000000000002,
+          549.8999999999996,
+          983.3999999999996,
+          566.6000000000004,
+          16.600000000000364,
+          500,
+          550.1000000000004,
+          516.6000000000004
+        ]
+      }
+    }
+  ]
+}
