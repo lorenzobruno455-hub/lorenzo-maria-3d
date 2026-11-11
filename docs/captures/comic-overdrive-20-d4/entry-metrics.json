@@ -1,0 +1,102 @@
+{
+  "source": "086f2bc13174a8d051714361a3f44c3b2b15cd63",
+  "variant": "entry",
+  "viewport": {
+    "width": 960,
+    "height": 600
+  },
+  "method": "Chromium/SwiftShader, medium, shadows when preset supports them, adaptive off, reduced motion, v04 restoration, unchanged camera/physics; 3 settling frames + 2 timing samples in this invocation. Audit samples are not performance benchmarks or physical Android FPS.",
+  "samples": [
+    {
+      "name": "photo-side-entry",
+      "room": null,
+      "worldPosition": {
+        "x": 39,
+        "y": -0.02,
+        "z": 27
+      },
+      "camera": {
+        "x": 32.8299025103592,
+        "y": 9.349597454786826,
+        "z": 34.30897804483961
+      },
+      "cameraFocus": {
+        "x": 52,
+        "y": 1.8,
+        "z": 22
+      },
+      "yaw": -0.75,
+      "pitch": 0.12,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 74,
+      "triangles": 48082,
+      "geometries": 97,
+      "textures": 12,
+      "programs": 21,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 3,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 0,
+        "contactPatches": 0,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "schoolExterior": {
+        "floors": 3,
+        "windows": 27,
+        "label": "COLÉGIO SÃO JORGE",
+        "bands": [
+          "blue-middle",
+          "pink-upper"
+        ],
+        "fixedInteriorChanges": 0,
+        "structuralYellowBeams": 0,
+        "proposal": {
+          "approved": false,
+          "facade": "west-long-side",
+          "gate": {
+            "x": 46.8,
+            "z": 20.4,
+            "width": 3,
+            "height": 2.1
+          },
+          "annex": {
+            "minX": 49,
+            "maxX": 71,
+            "minZ": 26,
+            "maxZ": 42,
+            "eave": 4.15,
+            "rise": 1.8
+          },
+          "corridorDoor": {
+            "x": 60,
+            "z": 19,
+            "width": 2.6,
+            "height": 2.6
+          }
+        },
+        "draws": 17
+      },
+      "timing": {
+        "samplesMs": [
+          583.2999999999993,
+          499.90000000000055
+        ],
+        "meanMs": 541.5999999999999
+      }
+    }
+  ]
+}
