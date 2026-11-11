@@ -48,7 +48,8 @@ jobs:
   browser:
     needs: validate
     runs-on: ubuntu-latest
-    timeout-minutes: 18
+    # Keep individual test limits; allow setup/artifact time around the 17.6m shard.
+    timeout-minutes: 22
     strategy:
       fail-fast: false
       matrix:
