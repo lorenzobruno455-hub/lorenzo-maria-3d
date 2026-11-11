@@ -11,7 +11,8 @@ export function extendThreeGateConnection(base,world,rotation){
  part('#9cae7d',62,-.22,-37,42,.4,4,'plaster');
  const paths=[[44,12.75,3,14.5],[46.5,5.5,5,3],[44,-15.25,3,41.5],[59,-36,30,3],[74,-31.5,3,9],[72.5,-27,5,3]];
  for(const[x,z,w,d]of paths)part('#69717D',x,.01,z,w,.04,d);
- batchMeshes(group,[...group.children],owned);
+ // Same ground/path materials share the base connection's static batches.
+ batchMeshes(base.staticRoute,[...base.staticRoute.children.filter(o=>o.isMesh),...group.children],owned);
  // Preserve the old campus' northern limit while allowing the new school district northward.
  solids.push({minX:-38,maxX:38,minZ:-38,maxZ:-27,minY:0,maxY:3,kind:'legacy-campus-limit'});
  const localWall=(minX,maxX,minZ,maxZ,minY=0,maxY=3.3)=>schoolBoundsToWorld({minX,maxX,minZ,maxZ,minY,maxY,kind:'court-wall'},rotation);

@@ -1,0 +1,42 @@
+{
+  "method": "Chromium/SwiftShader, 800x450 default courtyard, DPR1; original preset checks, four targeted budget cases passed. Not physical Android FPS. Source after shared route batching; no draw/geometry/time limit increased.",
+  "source_sha256": {
+    "src/systems/campus-connection.js": "474846bc9fa4ed6863ae7c722afde8f03d0910b9fb5b482402844bd5c38d2392",
+    "src/systems/school-three-gate-connection.js": "0be29dbc68f6fed373574b573f2cddc3c10a245876c5638aeccb7c419489ac10"
+  },
+  "rows": [
+    {
+      "quality": "low",
+      "drawCalls": 158,
+      "geometries": 83,
+      "textures": 17,
+      "triangles": 193350,
+      "drawingBuffer": {
+        "width": 800,
+        "height": 450
+      }
+    },
+    {
+      "quality": "medium",
+      "drawCalls": 263,
+      "geometries": 124,
+      "textures": 42,
+      "triangles": 241578,
+      "drawingBuffer": {
+        "width": 800,
+        "height": 450
+      }
+    },
+    {
+      "quality": "high",
+      "drawCalls": 271,
+      "geometries": 124,
+      "textures": 42,
+      "triangles": 251518,
+      "drawingBuffer": {
+        "width": 800,
+        "height": 450
+      }
+    }
+  ]
+}

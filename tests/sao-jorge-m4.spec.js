@@ -22,8 +22,8 @@ test('M4 touch HUD stays clear in portrait/landscape and NPC dialogue keeps a fi
 test('M4 repeated three-floor visits retain stable GPU resource counts and the same campaign',async({page})=>{
  await boot(page);await page.waitForFunction(()=>{const s=window.readGame();return s.npcs.every(n=>n.model)&&s.visual.models.lorenzo;});const campaign=(await state(page)).campaign,rows=[];
  for(let i=0;i<3;i++){
-  if(i){await page.locator('#pause-button').click();await walkIntoSchool(page);await expect.poll(async()=>(await state(page)).school.active).toBe(true);}
-  await page.locator('#school-inspect').click();await page.locator('#school-floor-view').selectOption('all');await expect.poll(async()=>(await state(page)).school.loaded.length).toBe(3);await expect(page.locator('#school-inspect')).toBeEnabled();await page.locator('#school-inspect').click();await walkOut(page);await frames(page);const s=await state(page);expect(s.campaign).toEqual(campaign);rows.push({cycle:i+1,geometries:s.geometries,textures:s.textures});
+  if(i){await page.locator('#pause-button').click();await walkIntoSchool(page,{arrival:'reception'});await expect.poll(async()=>(await state(page)).school.active).toBe(true);}
+  await page.locator('#school-inspect').click();await page.locator('#school-floor-view').selectOption('all');await expect.poll(async()=>(await state(page)).school.loaded.length).toBe(3);await expect(page.locator('#school-inspect')).toBeEnabled();await page.locator('#school-inspect').click();await walkOut(page,{returnToCampus:false});await frames(page);const s=await state(page);expect(s.campaign).toEqual(campaign);rows.push({cycle:i+1,geometries:s.geometries,textures:s.textures});
  }
  expect(rows[2].geometries).toBe(rows[1].geometries);expect(rows[2].textures).toBe(rows[1].textures);await mkdir('work/aurora08m4',{recursive:true});await writeFile('work/aurora08m4/lifecycle.json',JSON.stringify(rows,null,2));
 });
