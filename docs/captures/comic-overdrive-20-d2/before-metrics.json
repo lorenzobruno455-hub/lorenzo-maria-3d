@@ -1,0 +1,170 @@
+{
+  "source": "c0cb49762bd8c1106ff9a598a0a6e1794592624e",
+  "variant": "before",
+  "viewport": {
+    "width": 960,
+    "height": 600
+  },
+  "method": "Chromium/SwiftShader, Medium, shadows on, adaptive off, reduced motion, v04 restoration, unchanged camera/physics, six settling frames + eight timing samples. Browser timing is not physical Android FPS.",
+  "samples": [
+    {
+      "name": "campus",
+      "worldPosition": {
+        "x": 4,
+        "y": 0.025,
+        "z": 20
+      },
+      "camera": {
+        "x": 0.3879223484935568,
+        "y": 2.560227446299722,
+        "z": 25.891448275467376
+      },
+      "yaw": -0.55,
+      "pitch": 0.16,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 220,
+      "triangles": 242598,
+      "geometries": 132,
+      "textures": 34,
+      "programs": 20,
+      "overdrive": {
+        "id": "comic-overdrive-20-b",
+        "proposal": "b",
+        "edgeBatches": 3,
+        "inkPixels": 2.8,
+        "expanded": false,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          633.3000000000011,
+          750,
+          600,
+          1299.8999999999996,
+          600,
+          50,
+          666.7000000000007,
+          1699.8999999999996
+        ],
+        "meanMs": 787.4750000000001
+      }
+    },
+    {
+      "name": "court",
+      "worldPosition": {
+        "x": -33,
+        "y": -0.02,
+        "z": 10
+      },
+      "camera": {
+        "x": -33,
+        "y": 2.653207013980769,
+        "z": 16.88690584951685
+      },
+      "yaw": 0,
+      "pitch": 0.18,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 131,
+      "triangles": 187914,
+      "geometries": 120,
+      "textures": 22,
+      "programs": 19,
+      "overdrive": {
+        "id": "comic-overdrive-20-b",
+        "proposal": "b",
+        "edgeBatches": 3,
+        "inkPixels": 2.8,
+        "expanded": false,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          516.6999999999998,
+          933.2999999999993,
+          16.700000000000728,
+          449.89999999999964,
+          550.1000000000004,
+          433.2999999999993,
+          449.90000000000146,
+          450
+        ],
+        "meanMs": 474.98750000000007
+      }
+    },
+    {
+      "name": "trees",
+      "worldPosition": {
+        "x": 2,
+        "y": 0.025,
+        "z": 20
+      },
+      "camera": {
+        "x": -1.647108651624683,
+        "y": 2.004402857784209,
+        "z": 25.948585287776183
+      },
+      "yaw": -0.55,
+      "pitch": 0.08,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 220,
+      "triangles": 242598,
+      "geometries": 132,
+      "textures": 34,
+      "programs": 21,
+      "overdrive": {
+        "id": "comic-overdrive-20-b",
+        "proposal": "b",
+        "edgeBatches": 3,
+        "inkPixels": 2.8,
+        "expanded": false,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          633.3999999999996,
+          749.9000000000015,
+          550,
+          616.5999999999985,
+          633.4000000000015,
+          750,
+          866.5999999999985,
+          750
+        ],
+        "meanMs": 693.7375
+      }
+    }
+  ]
+}

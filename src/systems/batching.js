@@ -10,6 +10,7 @@ export function batchMeshes(parent, meshes, owned) {
     if (Array.isArray(mesh.material)) continue;
     mesh.updateMatrixWorld(true);
     const geometry = mesh.geometry.clone().applyMatrix4(new THREE.Matrix4().multiplyMatrices(inverse, mesh.matrixWorld));
+    if(!geometry.hasAttribute('comicBoxEdge'))geometry.setAttribute('comicBoxEdge',new THREE.Float32BufferAttribute(new Float32Array(geometry.attributes.position.count),1));
     if (!groups.has(mesh.material)) groups.set(mesh.material, []);
     groups.get(mesh.material).push(geometry); mesh.removeFromParent();
   }

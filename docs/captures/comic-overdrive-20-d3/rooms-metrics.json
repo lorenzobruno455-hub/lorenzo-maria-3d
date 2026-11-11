@@ -1,0 +1,980 @@
+{
+  "source": "22ace486ac0977e0edab43d7ba0340c211bb4de1",
+  "variant": "rooms",
+  "viewport": {
+    "width": 960,
+    "height": 600
+  },
+  "method": "Chromium/SwiftShader, medium, shadows when preset supports them, adaptive off, reduced motion, v04 restoration, unchanged camera/physics; 3 settling frames + 2 timing samples in this invocation. Audit samples are not performance benchmarks or physical Android FPS.",
+  "samples": [
+    {
+      "name": "sj-f1-02",
+      "room": "Banheiro masculino",
+      "expectedRoom": "Banheiro masculino",
+      "worldPosition": {
+        "x": 53.5,
+        "y": 0.03,
+        "z": 10.5
+      },
+      "camera": {
+        "x": 53.5,
+        "y": 1.7511227471714883,
+        "z": 9.452814406827297
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.28,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 99,
+      "triangles": 137580,
+      "geometries": 161,
+      "textures": 20,
+      "programs": 31,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 215,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          33.399999999999636,
+          1233.300000000001
+        ],
+        "meanMs": 633.3500000000004
+      }
+    },
+    {
+      "name": "sj-f1-03",
+      "room": "Banheiro feminino",
+      "expectedRoom": "Banheiro feminino",
+      "worldPosition": {
+        "x": 53.5,
+        "y": 0.03,
+        "z": 7.25
+      },
+      "camera": {
+        "x": 53.5,
+        "y": 1.8216844406397232,
+        "z": 5.957428797391014
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.28,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 103,
+      "triangles": 139656,
+      "geometries": 164,
+      "textures": 20,
+      "programs": 31,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 215,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          1183.1999999999998,
+          1266.7000000000007
+        ],
+        "meanMs": 1224.9500000000003
+      }
+    },
+    {
+      "name": "sj-f1-04",
+      "room": "Escadas",
+      "expectedRoom": "Escadas",
+      "worldPosition": {
+        "x": 53.5,
+        "y": 0.03,
+        "z": 2.5
+      },
+      "camera": {
+        "x": 53.5,
+        "y": 2.18112638424912,
+        "z": -0.04256785170104305
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.28,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 105,
+      "triangles": 137504,
+      "geometries": 167,
+      "textures": 20,
+      "programs": 31,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 215,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          1066.6999999999998,
+          1033.2000000000007
+        ],
+        "meanMs": 1049.9500000000003
+      }
+    },
+    {
+      "name": "sj-f1-05",
+      "room": "Sala dos professores",
+      "expectedRoom": "Sala dos professores",
+      "worldPosition": {
+        "x": 53.5,
+        "y": 0.03,
+        "z": -4.75
+      },
+      "camera": {
+        "x": 53.5,
+        "y": 2.5420670146935866,
+        "z": -8.547776339742846
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.28,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 119,
+      "triangles": 156568,
+      "geometries": 168,
+      "textures": 17,
+      "programs": 31,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 215,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          1166.6000000000004,
+          1266.6000000000004
+        ],
+        "meanMs": 1216.6000000000004
+      }
+    },
+    {
+      "name": "sj-f1-07",
+      "room": "Sala de aula B",
+      "expectedRoom": "Sala de aula B",
+      "worldPosition": {
+        "x": 66.5,
+        "y": 0.03,
+        "z": 15.5
+      },
+      "camera": {
+        "x": 66.5,
+        "y": 2.3213378352605103,
+        "z": 12.469832281214355
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.28,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 86,
+      "triangles": 137256,
+      "geometries": 161,
+      "textures": 19,
+      "programs": 30,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 215,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          683.2999999999993,
+          1499.9000000000015
+        ],
+        "meanMs": 1091.6000000000004
+      }
+    },
+    {
+      "name": "sj-f1-08",
+      "room": "Sala de aula C",
+      "expectedRoom": "Sala de aula C",
+      "worldPosition": {
+        "x": 66.5,
+        "y": 0.03,
+        "z": 8.5
+      },
+      "camera": {
+        "x": 66.5,
+        "y": 2.326122388547226,
+        "z": 5.453193500787837
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.28,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 92,
+      "triangles": 132236,
+      "geometries": 161,
+      "textures": 17,
+      "programs": 31,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 215,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          833.3000000000011,
+          950
+        ],
+        "meanMs": 891.6500000000005
+      }
+    },
+    {
+      "name": "sj-f1-09",
+      "room": "Sala de cinema",
+      "expectedRoom": "Sala de cinema",
+      "worldPosition": {
+        "x": 66.5,
+        "y": 0.03,
+        "z": 1.5
+      },
+      "camera": {
+        "x": 66.5,
+        "y": 2.3249045106881825,
+        "z": -1.5425712026089866
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.28,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 103,
+      "triangles": 143400,
+      "geometries": 167,
+      "textures": 20,
+      "programs": 31,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 215,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          1099.8999999999996,
+          1033.2000000000007
+        ],
+        "meanMs": 1066.5500000000002
+      }
+    },
+    {
+      "name": "sj-f1-10",
+      "room": "Recepção",
+      "expectedRoom": "Recepção",
+      "worldPosition": {
+        "x": 66.5,
+        "y": 0.03,
+        "z": -5.5
+      },
+      "camera": {
+        "x": 66.5,
+        "y": 2.326401270387104,
+        "z": -8.547776339742846
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.28,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 119,
+      "triangles": 156100,
+      "geometries": 165,
+      "textures": 17,
+      "programs": 31,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 215,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          1283.2999999999993,
+          2616.6000000000004
+        ],
+        "meanMs": 1949.9499999999998
+      }
+    },
+    {
+      "name": "sj-f1-11",
+      "room": "Secretaria",
+      "expectedRoom": "Secretaria",
+      "worldPosition": {
+        "x": 66.5,
+        "y": 0.03,
+        "z": -14
+      },
+      "camera": {
+        "x": 66.5,
+        "y": 2.610693723969278,
+        "z": -18.03643284090524
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.28,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 125,
+      "triangles": 156664,
+      "geometries": 171,
+      "textures": 20,
+      "programs": 31,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 215,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          1133.3000000000002,
+          1166.6999999999998
+        ],
+        "meanMs": 1150
+      }
+    },
+    {
+      "name": "sj-f1-12",
+      "room": "Direção",
+      "expectedRoom": "Direção",
+      "worldPosition": {
+        "x": 60,
+        "y": 0.03,
+        "z": -17.5
+      },
+      "camera": {
+        "x": 60,
+        "y": 1.7426657741297915,
+        "z": -18.517775592054218
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.28,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 125,
+      "triangles": 156664,
+      "geometries": 168,
+      "textures": 17,
+      "programs": 31,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 215,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          1383.2999999999993,
+          2916.6000000000004
+        ],
+        "meanMs": 2149.95
+      }
+    },
+    {
+      "name": "sj-f2-01",
+      "room": "Sala de aula A",
+      "expectedRoom": "Sala de aula A",
+      "worldPosition": {
+        "x": 53.5,
+        "y": 3.63,
+        "z": 15.5
+      },
+      "camera": {
+        "x": 53.5,
+        "y": 5.926122388547227,
+        "z": 12.453193500787837
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.28,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 68,
+      "triangles": 93166,
+      "geometries": 164,
+      "textures": 19,
+      "programs": 30,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 243,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          850.1000000000004,
+          1483.199999999999
+        ],
+        "meanMs": 1166.6499999999996
+      }
+    },
+    {
+      "name": "sj-f2-02",
+      "room": "Sala de aula B",
+      "expectedRoom": "Sala de aula B",
+      "worldPosition": {
+        "x": 53.5,
+        "y": 3.63,
+        "z": 8.5
+      },
+      "camera": {
+        "x": 53.5,
+        "y": 5.926401270387103,
+        "z": 5.452223660257156
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.28,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 72,
+      "triangles": 95746,
+      "geometries": 163,
+      "textures": 15,
+      "programs": 30,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 243,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          1000,
+          1083.2999999999993
+        ],
+        "meanMs": 1041.6499999999996
+      }
+    },
+    {
+      "name": "sj-f2-03",
+      "room": "Banheiro masculino",
+      "expectedRoom": "Banheiro masculino",
+      "worldPosition": {
+        "x": 53.5,
+        "y": 3.63,
+        "z": 3.25
+      },
+      "camera": {
+        "x": 53.5,
+        "y": 5.421684440639723,
+        "z": 1.9574287973910138
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.28,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 77,
+      "triangles": 101854,
+      "geometries": 170,
+      "textures": 19,
+      "programs": 30,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 243,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          1283.2999999999993,
+          2699.8999999999996
+        ],
+        "meanMs": 1991.5999999999995
+      }
+    },
+    {
+      "name": "sj-f2-04",
+      "room": "Banheiro feminino",
+      "expectedRoom": "Banheiro feminino",
+      "worldPosition": {
+        "x": 53.5,
+        "y": 3.63,
+        "z": -0.25
+      },
+      "camera": {
+        "x": 53.5,
+        "y": 5.423181200338644,
+        "z": -1.547776339742845
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.28,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 82,
+      "triangles": 112402,
+      "geometries": 167,
+      "textures": 16,
+      "programs": 30,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 243,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          1316.6000000000004,
+          1200
+        ],
+        "meanMs": 1258.3000000000002
+      }
+    },
+    {
+      "name": "sj-f2-05",
+      "room": "Escadas",
+      "expectedRoom": "Escadas",
+      "worldPosition": {
+        "x": 53.5,
+        "y": 3.63,
+        "z": -5
+      },
+      "camera": {
+        "x": 53.5,
+        "y": 5.782345225676238,
+        "z": -7.546806499212163
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.28,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 88,
+      "triangles": 112618,
+      "geometries": 166,
+      "textures": 15,
+      "programs": 30,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 243,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          1166.6000000000004,
+          1183.199999999999
+        ],
+        "meanMs": 1174.8999999999996
+      }
+    },
+    {
+      "name": "sj-f2-06",
+      "room": "Sala de ciências",
+      "expectedRoom": "Sala de ciências",
+      "worldPosition": {
+        "x": 53.5,
+        "y": 3.63,
+        "z": -13.5
+      },
+      "camera": {
+        "x": 53.5,
+        "y": 6.210693723969277,
+        "z": -17.53643284090524
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.28,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 103,
+      "triangles": 114322,
+      "geometries": 167,
+      "textures": 15,
+      "programs": 30,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 243,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          1116.6000000000004,
+          1049.8999999999996
+        ],
+        "meanMs": 1083.25
+      }
+    },
+    {
+      "name": "sj-f2-08",
+      "room": "Sala de aula D",
+      "expectedRoom": "Sala de aula D",
+      "worldPosition": {
+        "x": 66.5,
+        "y": 3.63,
+        "z": 8.5
+      },
+      "camera": {
+        "x": 66.5,
+        "y": 5.924904510688182,
+        "z": 5.457428797391014
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.28,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 78,
+      "triangles": 96946,
+      "geometries": 167,
+      "textures": 19,
+      "programs": 30,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 243,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          1133.4000000000005,
+          1216.5
+        ],
+        "meanMs": 1174.9500000000003
+      }
+    },
+    {
+      "name": "sj-f2-09",
+      "room": "Coordenação",
+      "expectedRoom": "Coordenação",
+      "worldPosition": {
+        "x": 66.5,
+        "y": 3.63,
+        "z": 1.5
+      },
+      "camera": {
+        "x": 66.5,
+        "y": 5.926401270387103,
+        "z": -1.5477763397428448
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.28,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 87,
+      "triangles": 106402,
+      "geometries": 169,
+      "textures": 17,
+      "programs": 30,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 243,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          1083.2999999999993,
+          1016.6000000000004
+        ],
+        "meanMs": 1049.9499999999998
+      }
+    },
+    {
+      "name": "sj-f2-11",
+      "room": "Sala de aula E",
+      "expectedRoom": "Sala de aula E",
+      "worldPosition": {
+        "x": 66.5,
+        "y": 3.63,
+        "z": -15.5
+      },
+      "camera": {
+        "x": 66.5,
+        "y": 5.916277880915922,
+        "z": -18.512571202608985
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.28,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 94,
+      "triangles": 114166,
+      "geometries": 171,
+      "textures": 19,
+      "programs": 30,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 243,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          1233.3000000000002,
+          1216.5999999999995
+        ],
+        "meanMs": 1224.9499999999998
+      }
+    }
+  ]
+}
