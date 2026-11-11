@@ -1,0 +1,51 @@
+/* Original Comic Overdrive panels. Existing geometry/layout, controls and text stay owned by their systems. */
+body.comic-overdrive{--co-ink:#131a2a;--co-paper:#fff3d7;--co-sun:#ffe238;--co-cobalt:#2352ff;--co-coral:#ff5a4b;--co-aqua:#18d6cc;--co-pink:#ff3d9a}
+.comic-overdrive .overlay{background:linear-gradient(120deg,#131a2aee 0 48%,#2352ffb3 48% 75%,#18d6cc80 75%)}
+.comic-overdrive .welcome-content{background:#131a2af5;border-top-color:var(--co-sun);border-left:7px solid var(--co-aqua);box-shadow:8px 8px 0 var(--co-cobalt)}
+.comic-overdrive .welcome-content::after{background:var(--co-coral);box-shadow:-8px 8px 0 var(--co-aqua)}
+.comic-overdrive #welcome #start{background:var(--co-sun);color:var(--co-ink);border-color:var(--co-ink)}
+.comic-overdrive :is(.settings-panel,.story-window,#dialog){background:var(--co-paper);color:var(--co-ink);border-color:var(--co-ink);border-top:5px solid var(--co-cobalt);border-left-color:var(--co-coral);box-shadow:6px 6px 0 var(--co-cobalt)}
+.comic-overdrive :is(.settings-panel,.story-heading) h2{color:var(--co-ink);text-shadow:none}
+.comic-overdrive .story-heading{background:var(--co-paper);border-bottom-color:var(--co-ink)}
+.comic-overdrive .settings-panel :is(select,input[type=range],input[type=checkbox]){accent-color:var(--co-cobalt)}
+.comic-overdrive .settings-panel select{background:var(--co-ink);color:var(--co-paper)}
+.comic-overdrive :is(#dialog,.settings-panel,.story-window) button{background:var(--co-ink);color:var(--co-paper);border-color:var(--co-ink)}
+.comic-overdrive :is(#dialog,.settings-panel,.story-window) button:is(:hover,:focus-visible):not(:disabled){background:var(--co-cobalt);color:var(--co-paper)}
+.comic-overdrive #dialog #next{background:var(--co-sun);color:var(--co-ink)}
+.comic-overdrive #speaker{background:var(--co-ink);color:var(--co-sun)!important}
+.comic-overdrive #dialog .portrait{background:var(--co-cobalt);color:var(--co-paper);box-shadow:3px 3px 0 var(--co-coral)}
+.comic-overdrive #dialog small.dialogue-source{color:var(--co-cobalt)}
+.comic-overdrive .story-card{background:var(--co-ink);color:var(--co-paper);border-color:var(--co-ink);border-top-color:var(--co-aqua);box-shadow:4px 4px 0 var(--co-coral)}
+.comic-overdrive .story-card :is(h3,p){color:var(--co-paper)}
+.comic-overdrive .story-card :is(small,strong){color:var(--co-sun)}
+.comic-overdrive .story-card.rarity-2{border-top-color:var(--co-pink)}
+.comic-overdrive .story-card.rarity-3{border-top-color:var(--co-sun)}
+.comic-overdrive .letter-text{color:var(--co-ink);background:var(--co-paper);border-left-color:var(--co-coral)}
+.comic-overdrive .letter-text strong{color:var(--co-ink);text-decoration:underline;text-decoration-color:var(--co-coral)}
+.comic-overdrive :is(#mission,#prompt){background:var(--co-paper);color:var(--co-ink);border-color:var(--co-ink);border-left-color:var(--co-coral);box-shadow:4px 4px 0 var(--co-cobalt)}
+.comic-overdrive #mission .progress i{background:var(--co-aqua)}
+.comic-overdrive #location{box-shadow:3px 3px 0 var(--co-cobalt);color:var(--co-sun)}
+.comic-overdrive #school-toolbar{box-shadow:4px 4px 0 var(--co-cobalt);border-top:3px solid var(--co-sun)}
+.comic-overdrive #toast{background:var(--co-sun);color:var(--co-ink);border-left-color:var(--co-coral)}
+.comic-overdrive #touch-actions #run{background:var(--co-coral);color:var(--co-ink)}
+.comic-overdrive #touch-actions #interact:not(:disabled){background:var(--co-aqua);color:var(--co-ink)}
+.comic-overdrive #touch-actions button.held,.comic-overdrive button[aria-pressed=true]{border-style:double;outline:2px solid var(--co-paper);outline-offset:2px}
+.comic-overdrive #joystick{border-color:var(--co-paper);background:#2352ff80}
+.comic-overdrive #stick{background:var(--co-sun);border-color:var(--co-ink)}
+.comic-overdrive :is(button,a,input,select):focus-visible{outline:3px solid var(--co-cobalt);outline-offset:3px}
+.comic-overdrive #cinematic{border-color:var(--co-ink)}
+.comic-overdrive #cinematic>div{background:#131a2aee;border-left:5px solid var(--co-aqua);padding:5px 10px;color:var(--co-paper);text-shadow:none}
+.comic-overdrive #scene-title{color:var(--co-sun)}
+.comic-overdrive #cinematic::before{content:'';position:absolute;inset:0;border-left:4px solid var(--co-coral);border-right:4px solid var(--co-aqua);pointer-events:none}
+.comic-overdrive #cinematic button{background:var(--co-sun);color:var(--co-ink);border-color:var(--co-ink)}
+.comic-overdrive #cinematic #scene-pause{background:var(--co-aqua)}
+.comic-overdrive .colorbeat-burst::before{background:var(--co-coral);border-color:var(--co-ink)}
+.comic-overdrive .colorbeat-burst::after{background:var(--co-sun);border-color:var(--co-ink)}
+.comic-overdrive .colorbeat-burst[data-kind=memory]::before{background:var(--co-pink)}
+.comic-overdrive .colorbeat-burst[data-kind=memory]::after{background:var(--co-paper)}
+.comic-overdrive .colorbeat-burst[data-kind=quest]::before{background:var(--co-aqua)}
+.comic-overdrive .colorbeat-burst[data-kind=chapter]::before{background:var(--co-cobalt)}
+@media(max-width:700px),(max-height:500px){.comic-overdrive :is(.settings-panel,.story-window,#dialog){box-shadow:3px 3px 0 var(--co-cobalt)}}
+@media(prefers-reduced-motion:reduce){body.comic-overdrive *,body.comic-overdrive *::before,body.comic-overdrive *::after{animation:none!important;transition:none!important}.comic-overdrive .colorbeat-burst{display:none}}
+@media(prefers-contrast:more){.comic-overdrive :is(.settings-panel,.story-window,#dialog){border-top-color:#fff;outline:2px solid var(--co-ink)}.comic-overdrive button{outline-offset:4px}}
+@media(forced-colors:active){.comic-overdrive :is(button,.settings-panel,.story-window,#dialog){border-color:CanvasText;box-shadow:none}.comic-overdrive :focus-visible{outline-color:Highlight}.comic-overdrive #cinematic::before{display:none}}

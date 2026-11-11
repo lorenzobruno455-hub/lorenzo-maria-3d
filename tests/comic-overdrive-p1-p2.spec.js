@@ -4,7 +4,7 @@ const done={stage:2,collected:['notebook','card','photo'],campaign:{memories:Arr
 test('global exterior uses the new profile by default and preserves physical route and legacy save',async({page})=>{
  const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
  await seed(page,{...done,position:{x:34,z:20},yaw:0});await start(page);
- expect((await state(page)).overdrive).toMatchObject({id:'comic-overdrive-p1-p2',trees:11,cloudCards:13});
+ expect((await state(page)).overdrive).toMatchObject({id:'comic-overdrive-p3-p4',trees:11,cloudCards:13});
  const campaign=(await state(page)).campaign;await page.keyboard.down('d');try{await expect.poll(async()=>(await state(page)).worldPosition.x,{timeout:45000}).toBeGreaterThan(59.7);}finally{await page.keyboard.up('d');}
  await expect.poll(async()=>(await state(page)).school.loaded.includes(0)).toBe(true);
  await page.keyboard.down('w');try{await expect.poll(async()=>(await state(page)).school.active).toBe(true);}finally{await page.keyboard.up('w');}
@@ -17,7 +17,7 @@ for(const [floor,x,z]of [[0,-5,-14],[1,6.5,-7],[2,0,5]])test(`global school floo
  const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
  await seed(page,{...done,schoolVisit:{active:true,floor,position:{x,z},yaw:0,pitch:.38}},{quality:'medium',shadows:true});await start(page);await expect.poll(async()=>(await state(page)).school.loading).toBe(false);await expect.poll(async()=>(await state(page)).school.details?.living.props??0).toBeGreaterThan(0);
  const before=await state(page),nav=await page.evaluate(async()=>(await import('/src/systems/diagnostics.js')).getNavigationState().solids);
- expect(before.overdrive.id).toBe('comic-overdrive-p1-p2');expect(before.school.floor).toBe(floor);
+ expect(before.overdrive.id).toBe('comic-overdrive-p3-p4');expect(before.school.floor).toBe(floor);
  await page.goto('http://localhost:5173/?comic=legacy');await page.locator('#start').click();await page.evaluate(async()=>window.readGame=(await import('/src/systems/diagnostics.js')).getGameState);await expect.poll(async()=>(await state(page)).school.loading).toBe(false);
  expect((await state(page)).overdrive).toBe(null);expect((await state(page)).campaign).toEqual(before.campaign);expect((await state(page)).school.narrativeDetails).toEqual(before.school.narrativeDetails);
  expect(await page.evaluate(async()=>(await import('/src/systems/diagnostics.js')).getNavigationState().solids)).toEqual(nav);expect(errors).toEqual([]);

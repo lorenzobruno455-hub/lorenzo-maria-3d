@@ -41,11 +41,11 @@ function worldVarying(shader){
  #endif
  cbWorldPosition=(modelMatrix*coWorld).xyz;`);
 }
-export function decorateOverdriveMaterial(material,areas,{global=false}={}){
+export function decorateOverdriveMaterial(material,areas,{global=false,finishing=false,hatchBudget={value:1}}={}){
  if(!material.isMeshToonMaterial&&!material.isMeshBasicMaterial&&!material.isLineBasicMaterial&&!(global&&material.isMeshStandardMaterial))return()=>{};
  const oldCompile=material.onBeforeCompile,oldKey=material.customProgramCacheKey;
- const kind=material.userData.colorbeatKind,family={wood:1,tile:2,concrete:2,plaster:3,fabric:4,cloth:4}[kind]||0;
- material.customProgramCacheKey=()=>oldKey.call(material)+(global?':comic-overdrive-global-v1':':comic-overdrive-p0-v1');
+ const kind=material.userData.colorbeatKind,family={wood:1,tile:2,concrete:2,plaster:3,fabric:4,cloth:4,skin:5,hair:6,eye:7}[kind]||0;
+ material.customProgramCacheKey=()=>oldKey.call(material)+(finishing?':comic-overdrive-finish-v1':global?':comic-overdrive-global-v1':':comic-overdrive-p0-v1');
  material.onBeforeCompile=shader=>{
   oldCompile.call(material,shader);worldVarying(shader);
   Object.assign(shader.uniforms,{coAreaMin:{value:areas.map(a=>a.min)},coAreaMax:{value:areas.map(a=>a.max)},coFamily:{value:family}});
@@ -53,6 +53,7 @@ export function decorateOverdriveMaterial(material,areas,{global=false}={}){
   if(!shader.fragmentShader.includes('varying vec3 cbWorldPosition;'))shader.fragmentShader='varying vec3 cbWorldPosition;\n'+shader.fragmentShader;
   let profile=GLSL;
   if(global)profile=profile.replace('uniform vec3 coAreaMin[3];uniform vec3 coAreaMax[3];','').replace(/float coScope\(vec3 p\)\{.*?return mask;\}/,'float coScope(vec3 p){return 1.;}').replace('step(.46,fract(sin(dot(floor(p.xz/3.),vec2(17.13,7.91)))*231.17))','mod(floor(p.x/3.)+floor(p.z/3.),2.)').replace('base.g>base.r*1.15&&base.g>base.b*1.06','base.g>base.r*1.04&&base.g>base.b*1.12');
+  if(finishing){profile='uniform float coHatchBudget;\n'+profile;shader.uniforms.coHatchBudget=hatchBudget;}
   shader.fragmentShader=profile+'\n'+shader.fragmentShader;
   const effect=material.isMeshToonMaterial?/* glsl */`
    float coMask=coScope(cbWorldPosition);
@@ -67,11 +68,16 @@ export function decorateOverdriveMaterial(material,areas,{global=false}={}){
     // Warm plain surfaces include skin: keep its hue across the three bands.
     if(coFamily==0.&&coBase.r>coBase.g*1.18&&coBase.g>coBase.b*1.05){shadow=pigment*.55;middle=pigment*.9;bright=pigment*1.15;}
     vec3 graphic=coBand<.5?shadow:(coBand<1.5?middle:bright);
-    if(coBand<.5&&coFamily>0.&&coFamily<4.){
-     float stripe=abs(fract((cbWorldPosition.x+cbWorldPosition.z+cbWorldPosition.y)*3.2)-.5);
-     float aa=max(fwidth(stripe),.015);graphic*=1.-.16*(1.-smoothstep(.04,.04+aa,stripe));
+    if(coFamily==5.)graphic=coBase*(.82+.24*step(.24,coEnergy));
+    if(coFamily==6.)graphic=coBase*(.65+.45*step(.24,coEnergy));
+    if(coFamily==7.)graphic=coBase;
+    if(coBand<.5&&coFamily>0.&&coFamily<4.${finishing?'&&coHatchBudget>0.':''}){
+     float coHatchPhase=(cbWorldPosition.x+cbWorldPosition.z+cbWorldPosition.y)*3.2;
+     float stripe=abs(fract(coHatchPhase)-.5);
+     float coHatchWeight=${finishing?'coHatchBudget*(1.-smoothstep(.22,.6,fwidth(coHatchPhase)))':'1.'};
+     float aa=max(fwidth(stripe),.015);graphic*=1.-.16*coHatchWeight*(1.-smoothstep(.04,.04+aa,stripe));
     }
-    outgoingLight=mix(outgoingLight,graphic,coMask*smoothstep(.008,.045,coLum));
+    outgoingLight=mix(outgoingLight,graphic,coMask*(coFamily>=5.?1.:smoothstep(.008,.045,coLum)));
    }
   `:material.isMeshStandardMaterial?/* glsl */`
    // Graphic glazing keeps its existing alpha, depth and sorting semantics.
@@ -128,11 +134,12 @@ function makeSampleTree(scene,resources,owned){
  const shadowGeo=new THREE.CircleGeometry(2.5,14),shadowMat=new THREE.MeshBasicMaterial({color:P0_PALETTE.cobalt,transparent:true,opacity:.38,depthWrite:false,toneMapped:false}),shadow=new THREE.Mesh(shadowGeo,shadowMat);shadow.rotation.x=-Math.PI/2;shadow.position.set(10,.008,13);shadow.scale.set(1,.65,1);scene.add(shadow);owned.push(shadowGeo,shadowMat);
  return{group,shadow,saved,restore(){for(const s of saved){s.mesh.setMatrixAt(s.index,s.matrix);s.mesh.instanceMatrix.needsUpdate=true;}group.removeFromParent();shadow.removeFromParent();}};
 }
-export function createComicOverdriveP0({scene,resources,school,ink,global=false}){
+export function createComicOverdriveP0({scene,resources,school,ink,global=false,finishing=false}){
+ finishing=global&&finishing;const hatchBudget={value:1},oldActorProfiles=resources.colorbeat.actorProfiles;if(finishing)resources.colorbeat.actorProfiles=true;
  const areas=global?[]:createP0Areas(school.layout),owned=[],restores=[],seen=new WeakSet(),models=new WeakSet(),oldDecorator=resources.colorbeat.decorate,oldFog=scene.fog.color.clone(),oldInkLimit=ink.actorMaterial.userData.inkUniforms.cbInkWorldLimit.value;
- const decorate=m=>{if(!m||seen.has(m)||m.userData.inkUniforms)return;seen.add(m);restores.push(decorateOverdriveMaterial(m,areas,{global}));};
+ const decorate=m=>{if(!m||seen.has(m)||m.userData.inkUniforms)return;seen.add(m);restores.push(decorateOverdriveMaterial(m,areas,{global,finishing,hatchBudget}));};
  const scan=root=>root.traverse(o=>{if(o.material)for(const m of Array.isArray(o.material)?o.material:[o.material])decorate(m);});
  resources.colorbeat.decorate=m=>{oldDecorator?.(m);decorate(m);};resources.colorbeat.materials.forEach(decorate);scan(scene);
- const tree=global?createComicCanopies(scene,resources,owned):makeSampleTree(scene,resources,owned),sky=makeSky(scene,resources,owned),worldPosition=new THREE.Vector3();scene.fog.color.set(P0_PALETTE.sky);if(!global)document.body.classList.add('comic-overdrive-p0');let disposed=false;
- return{areas,update(camera){if(disposed)return;sky.position.copy(camera.getWorldPosition(worldPosition));if(global){const all=school.inspecting&&school.view==='all';sky.visible=!all;tree.setInspection(all);}for(const[,lease]of school.leases)if(!models.has(lease.model)){models.add(lease.model);scan(lease.model);}if(!global){const u=ink.actorMaterial.userData.inkUniforms;u.cbInkPixels.value=1.8;u.cbInkWorldLimit.value=.032;}},state(){return{id:global?'comic-overdrive-p1-p2':'comic-overdrive-p0',areas:global?['all-exteriors','all-school-floors']:areas.map(a=>a.id),treeInstancesReplaced:global?tree.saved.reduce((n,s)=>n+s.count,0):tree.saved.length,trees:tree.trees??1,cloudCards:13,shadowBands:3};},dispose(){if(disposed)return;disposed=true;resources.colorbeat.decorate=oldDecorator;restores.reverse().forEach(fn=>fn());tree.restore();sky.removeFromParent();owned.forEach(r=>r.dispose());scene.fog.color.copy(oldFog);ink.actorMaterial.userData.inkUniforms.cbInkWorldLimit.value=oldInkLimit;document.body.classList.remove('comic-overdrive-p0');}};
+ const tree=global?createComicCanopies(scene,resources,owned):makeSampleTree(scene,resources,owned),sky=makeSky(scene,resources,owned),worldPosition=new THREE.Vector3();scene.fog.color.set(P0_PALETTE.sky);if(!global)document.body.classList.add('comic-overdrive-p0');if(finishing)document.body.classList.add('comic-overdrive');let disposed=false;
+ return{areas,update(camera,quality='medium'){if(disposed)return;if(finishing){hatchBudget.value=quality==='low'?0:1;ink.actorMaterial.userData.inkUniforms.cbInkWorldLimit.value=.024;}sky.position.copy(camera.getWorldPosition(worldPosition));if(global){const all=school.inspecting&&school.view==='all';sky.visible=!all;tree.setInspection(all);}for(const[,lease]of school.leases)if(!models.has(lease.model)){models.add(lease.model);scan(lease.model);}if(!global){const u=ink.actorMaterial.userData.inkUniforms;u.cbInkPixels.value=1.8;u.cbInkWorldLimit.value=.032;}},state(){return{id:global?(finishing?'comic-overdrive-p3-p4':'comic-overdrive-p1-p2'):'comic-overdrive-p0',...(finishing?{actorProfiles:true,hatching:hatchBudget.value}:{}),areas:global?['all-exteriors','all-school-floors']:areas.map(a=>a.id),treeInstancesReplaced:global?tree.saved.reduce((n,s)=>n+s.count,0):tree.saved.length,trees:tree.trees??1,cloudCards:13,shadowBands:3};},dispose(){if(disposed)return;disposed=true;resources.colorbeat.decorate=oldDecorator;resources.colorbeat.actorProfiles=oldActorProfiles;restores.reverse().forEach(fn=>fn());tree.restore();sky.removeFromParent();owned.forEach(r=>r.dispose());scene.fog.color.copy(oldFog);ink.actorMaterial.userData.inkUniforms.cbInkWorldLimit.value=oldInkLimit;document.body.classList.remove('comic-overdrive-p0','comic-overdrive');}};
 }
