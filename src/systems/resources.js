@@ -8,6 +8,8 @@ export class Resources {
     if (!this.geometries.has(kind)) {
       const geometry = kind === 'rounded' ? new RoundedBoxGeometry(1,1,1,2,.06) : kind === 'box' ? new THREE.BoxGeometry(1, 1, 1) : kind === 'sphere' ? new THREE.SphereGeometry(1, 12, 8) : kind === 'leaf' ? new THREE.IcosahedronGeometry(1, 1) : new THREE.CylinderGeometry(1, 1, 1, 12);
       if(!geometry.index)geometry.setIndex(Array.from({length:geometry.attributes.position.count},(_,i)=>i));
+      // Face-UV borders are valid on boxes, never on a cylinder/sphere seam.
+      geometry.setAttribute('comicBoxEdge',new THREE.Float32BufferAttribute(new Float32Array(geometry.attributes.position.count).fill(kind==='box'?1:0),1));
       this.geometries.set(kind, geometry);
     }
     return this.geometries.get(kind);

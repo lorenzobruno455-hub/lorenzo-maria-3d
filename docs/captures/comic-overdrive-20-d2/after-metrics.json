@@ -1,0 +1,276 @@
+{
+  "source": "c0cb49762bd8c1106ff9a598a0a6e1794592624e",
+  "variant": "after",
+  "viewport": {
+    "width": 960,
+    "height": 600
+  },
+  "method": "Chromium/SwiftShader, Medium, shadows on, adaptive off, reduced motion, v04 restoration, unchanged camera/physics, six settling frames + eight timing samples. Browser timing is not physical Android FPS.",
+  "samples": [
+    {
+      "name": "campus",
+      "worldPosition": {
+        "x": 4,
+        "y": 0.025,
+        "z": 20
+      },
+      "camera": {
+        "x": 0.3879223484935568,
+        "y": 2.560227446299722,
+        "z": 25.891448275467376
+      },
+      "yaw": -0.55,
+      "pitch": 0.16,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 220,
+      "triangles": 242598,
+      "geometries": 132,
+      "textures": 34,
+      "programs": 20,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2",
+        "proposal": "b",
+        "edgeBatches": 3,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          950,
+          899.8999999999996,
+          950,
+          900,
+          883.2999999999993,
+          866.6000000000004,
+          866.5999999999985,
+          883.3000000000029
+        ],
+        "meanMs": 899.9625000000001
+      }
+    },
+    {
+      "name": "sky-tree",
+      "worldPosition": {
+        "x": 10,
+        "y": -0.02,
+        "z": 18
+      },
+      "camera": {
+        "x": 10,
+        "y": 1.9594028577842089,
+        "z": 24.977611944118337
+      },
+      "yaw": 0,
+      "pitch": 0.08,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 227,
+      "triangles": 235958,
+      "geometries": 123,
+      "textures": 38,
+      "programs": 20,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2",
+        "proposal": "b",
+        "edgeBatches": 3,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          1033.2999999999993,
+          1033.300000000001,
+          1033.2999999999993,
+          999.8999999999996,
+          916.6999999999989,
+          999.9000000000015,
+          966.5999999999985,
+          850.1000000000022
+        ],
+        "meanMs": 979.1375
+      }
+    },
+    {
+      "name": "classroom-a",
+      "worldPosition": {
+        "x": 53.5,
+        "y": 0.03,
+        "z": 15.5
+      },
+      "camera": {
+        "x": 53.5,
+        "y": 2.388028208535891,
+        "z": 12.467609810619782
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.3,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 89,
+      "triangles": 136010,
+      "geometries": 158,
+      "textures": 18,
+      "programs": 30,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          883.2999999999993,
+          733.3999999999996,
+          1516.6000000000004,
+          16.700000000000728,
+          683.1999999999989,
+          683.4000000000015,
+          733.1999999999989,
+          883.3000000000011
+        ],
+        "meanMs": 766.6375
+      }
+    },
+    {
+      "name": "court",
+      "worldPosition": {
+        "x": -33,
+        "y": -0.02,
+        "z": 10
+      },
+      "camera": {
+        "x": -33,
+        "y": 2.653207013980769,
+        "z": 16.88690584951685
+      },
+      "yaw": 0,
+      "pitch": 0.18,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 131,
+      "triangles": 187914,
+      "geometries": 120,
+      "textures": 22,
+      "programs": 19,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2",
+        "proposal": "b",
+        "edgeBatches": 3,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          483.2999999999993,
+          533.3000000000011,
+          516.6999999999989,
+          449.89999999999964,
+          900,
+          516.7000000000007,
+          500,
+          500
+        ],
+        "meanMs": 549.9875
+      }
+    },
+    {
+      "name": "trees",
+      "worldPosition": {
+        "x": 2,
+        "y": 0.025,
+        "z": 20
+      },
+      "camera": {
+        "x": -1.647108651624683,
+        "y": 2.004402857784209,
+        "z": 25.948585287776183
+      },
+      "yaw": -0.55,
+      "pitch": 0.08,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 220,
+      "triangles": 242598,
+      "geometries": 132,
+      "textures": 34,
+      "programs": 21,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2",
+        "proposal": "b",
+        "edgeBatches": 3,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          666.6000000000004,
+          700,
+          699.8999999999996,
+          733.3999999999996,
+          649.8999999999996,
+          650,
+          683.3000000000011,
+          633.3999999999996
+        ],
+        "meanMs": 677.0625
+      }
+    }
+  ]
+}

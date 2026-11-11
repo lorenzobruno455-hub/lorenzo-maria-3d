@@ -7,6 +7,7 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 // mesh's geometry and transform, without copying collision or shadow geometry.
 export class InkOutlines {
   constructor(scene, resources, actors) {
+    this.minimalNPCInk=false;
     this.actorInk = []; this.actors = actors;
     this.actorMaterial = createActorInkMaterial();
     for (const actor of actors) actor.root.userData.inkActor = true;
@@ -53,7 +54,7 @@ export class InkOutlines {
       const distance = Math.hypot(item.actor.root.position.x - position.x, item.actor.root.position.z - position.z);
       const cameraDistance=camera?camera.getWorldPosition(this.cameraPosition||(this.cameraPosition=new THREE.Vector3())).distanceTo(item.actor.root.getWorldPosition(this.actorPosition||(this.actorPosition=new THREE.Vector3()))):distance;
       item.mesh.castShadow = false;
-      item.mesh.visible = item.actor.player ? (quality !== 'low' || item.core) : quality !== 'low' && item.core && cameraDistance < (quality === 'high' ? 25 : 14);
+      item.mesh.visible = item.actor.player ? (quality !== 'low' || item.core) : (quality !== 'low'||this.minimalNPCInk) && item.core && cameraDistance < (quality === 'high' ? 25 : 14);
     }
   }
   dispose() {
