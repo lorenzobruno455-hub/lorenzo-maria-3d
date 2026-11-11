@@ -16,7 +16,8 @@ export function createActorInkMaterial({instanced=false}={}) {
   // the same path for rigid fallback meshes too, without a second normal pass.
   shader.vertexShader=shader.vertexShader.replace('#if defined ( USE_ENVMAP ) || defined ( USE_SKINNING )','#if 1');
   shader.vertexShader=shader.vertexShader.replace('#include <project_vertex>',`#include <project_vertex>
-   vec3 cbInkNormal=normalize(${instanced?'transformedNormal':'normalMatrix*objectNormal'});
+   // BackSide enables FLIP_SIDED in defaultnormal_vertex; undo it for outward extrusion.
+   vec3 cbInkNormal=normalize(${instanced?'-transformedNormal':'normalMatrix*objectNormal'});
    vec2 cbInkOffset=cbInkNormal.xy/max(length(cbInkNormal.xy),.0001);
    float cbInkCap=cbInkWorldLimit*projectionMatrix[1][1]*cbInkViewport.y/(2.*max(-mvPosition.z,.01));
    gl_Position.xy+=cbInkOffset*2.*min(cbInkPixels,cbInkCap)/cbInkViewport*gl_Position.w;`);

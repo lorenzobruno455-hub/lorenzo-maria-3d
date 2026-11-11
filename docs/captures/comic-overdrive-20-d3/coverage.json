@@ -1,0 +1,194 @@
+[
+  {
+    "floor": 1,
+    "id": "sj-f1-01",
+    "name": "Sala de aula A",
+    "capture": "classroom-a-after.jpg",
+    "restoredRoom": "Sala de aula A",
+    "evidence": "existing core screenshot / visible game HUD"
+  },
+  {
+    "floor": 1,
+    "id": "sj-f1-02",
+    "name": "Banheiro masculino",
+    "capture": "sj-f1-02-rooms.jpg",
+    "restoredRoom": "Banheiro masculino",
+    "evidence": "diagnostics + screenshot"
+  },
+  {
+    "floor": 1,
+    "id": "sj-f1-03",
+    "name": "Banheiro feminino",
+    "capture": "sj-f1-03-rooms.jpg",
+    "restoredRoom": "Banheiro feminino",
+    "evidence": "diagnostics + screenshot"
+  },
+  {
+    "floor": 1,
+    "id": "sj-f1-04",
+    "name": "Escadas",
+    "capture": "sj-f1-04-rooms.jpg",
+    "restoredRoom": "Escadas",
+    "evidence": "diagnostics + screenshot"
+  },
+  {
+    "floor": 1,
+    "id": "sj-f1-05",
+    "name": "Sala dos professores",
+    "capture": "sj-f1-05-rooms.jpg",
+    "restoredRoom": "Sala dos professores",
+    "evidence": "diagnostics + screenshot"
+  },
+  {
+    "floor": 1,
+    "id": "sj-f1-06",
+    "name": "Biblioteca",
+    "capture": "library-after.jpg",
+    "restoredRoom": "Biblioteca",
+    "evidence": "existing core screenshot / visible game HUD"
+  },
+  {
+    "floor": 1,
+    "id": "sj-f1-07",
+    "name": "Sala de aula B",
+    "capture": "sj-f1-07-rooms.jpg",
+    "restoredRoom": "Sala de aula B",
+    "evidence": "diagnostics + screenshot"
+  },
+  {
+    "floor": 1,
+    "id": "sj-f1-08",
+    "name": "Sala de aula C",
+    "capture": "sj-f1-08-rooms.jpg",
+    "restoredRoom": "Sala de aula C",
+    "evidence": "diagnostics + screenshot"
+  },
+  {
+    "floor": 1,
+    "id": "sj-f1-09",
+    "name": "Sala de cinema",
+    "capture": "sj-f1-09-rooms.jpg",
+    "restoredRoom": "Sala de cinema",
+    "evidence": "diagnostics + screenshot"
+  },
+  {
+    "floor": 1,
+    "id": "sj-f1-10",
+    "name": "Recepção",
+    "capture": "sj-f1-10-rooms.jpg",
+    "restoredRoom": "Recepção",
+    "evidence": "diagnostics + screenshot"
+  },
+  {
+    "floor": 1,
+    "id": "sj-f1-11",
+    "name": "Secretaria",
+    "capture": "sj-f1-11-rooms.jpg",
+    "restoredRoom": "Secretaria",
+    "evidence": "diagnostics + screenshot"
+  },
+  {
+    "floor": 1,
+    "id": "sj-f1-12",
+    "name": "Direção",
+    "capture": "sj-f1-12-rooms.jpg",
+    "restoredRoom": "Direção",
+    "evidence": "diagnostics + screenshot"
+  },
+  {
+    "floor": 2,
+    "id": "sj-f2-01",
+    "name": "Sala de aula A",
+    "capture": "sj-f2-01-rooms.jpg",
+    "restoredRoom": "Sala de aula A",
+    "evidence": "diagnostics + screenshot"
+  },
+  {
+    "floor": 2,
+    "id": "sj-f2-02",
+    "name": "Sala de aula B",
+    "capture": "sj-f2-02-rooms.jpg",
+    "restoredRoom": "Sala de aula B",
+    "evidence": "diagnostics + screenshot"
+  },
+  {
+    "floor": 2,
+    "id": "sj-f2-03",
+    "name": "Banheiro masculino",
+    "capture": "sj-f2-03-rooms.jpg",
+    "restoredRoom": "Banheiro masculino",
+    "evidence": "diagnostics + screenshot"
+  },
+  {
+    "floor": 2,
+    "id": "sj-f2-04",
+    "name": "Banheiro feminino",
+    "capture": "sj-f2-04-rooms.jpg",
+    "restoredRoom": "Banheiro feminino",
+    "evidence": "diagnostics + screenshot"
+  },
+  {
+    "floor": 2,
+    "id": "sj-f2-05",
+    "name": "Escadas",
+    "capture": "sj-f2-05-rooms.jpg",
+    "restoredRoom": "Escadas",
+    "evidence": "diagnostics + screenshot"
+  },
+  {
+    "floor": 2,
+    "id": "sj-f2-06",
+    "name": "Sala de ciências",
+    "capture": "sj-f2-06-rooms.jpg",
+    "restoredRoom": "Sala de ciências",
+    "evidence": "diagnostics + screenshot"
+  },
+  {
+    "floor": 2,
+    "id": "sj-f2-07",
+    "name": "Sala de aula C",
+    "capture": "classroom-c-after.jpg",
+    "restoredRoom": "Sala de aula C",
+    "evidence": "existing core screenshot / visible game HUD"
+  },
+  {
+    "floor": 2,
+    "id": "sj-f2-08",
+    "name": "Sala de aula D",
+    "capture": "sj-f2-08-rooms.jpg",
+    "restoredRoom": "Sala de aula D",
+    "evidence": "diagnostics + screenshot"
+  },
+  {
+    "floor": 2,
+    "id": "sj-f2-09",
+    "name": "Coordenação",
+    "capture": "sj-f2-09-rooms.jpg",
+    "restoredRoom": "Coordenação",
+    "evidence": "diagnostics + screenshot"
+  },
+  {
+    "floor": 2,
+    "id": "sj-f2-10",
+    "name": "Laboratório",
+    "capture": "laboratory-after.jpg",
+    "restoredRoom": "Laboratório",
+    "evidence": "existing core screenshot / visible game HUD"
+  },
+  {
+    "floor": 2,
+    "id": "sj-f2-11",
+    "name": "Sala de aula E",
+    "capture": "sj-f2-11-rooms.jpg",
+    "restoredRoom": "Sala de aula E",
+    "evidence": "diagnostics + screenshot"
+  },
+  {
+    "floor": 3,
+    "id": "sj-f3-01",
+    "name": "Salão multiuso",
+    "capture": "hall-after.jpg",
+    "restoredRoom": "Salão multiuso",
+    "evidence": "existing core screenshot / visible game HUD"
+  }
+]

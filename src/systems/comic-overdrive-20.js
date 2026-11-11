@@ -10,12 +10,13 @@ export const OVERDRIVE_20_STUDIES=Object.freeze({
 });
 
 export function decorateOverdrive20Material(material,variant,{expanded=false,depth=false,edgePixelRatio={value:1}}={}){
- if(!material.isMeshToonMaterial||!OVERDRIVE_20_STUDIES[variant])return()=>{};
+ if((!material.isMeshToonMaterial&&!(depth&&material.isMeshStandardMaterial&&material.transparent))||!OVERDRIVE_20_STUDIES[variant])return()=>{};
  const study=OVERDRIVE_20_STUDIES[variant],compile=material.onBeforeCompile,key=material.customProgramCacheKey;
  material.customProgramCacheKey=()=>key.call(material)+`:overdrive-20-${variant}-${depth?'d3':expanded?'d2':'d1'}`;
  material.onBeforeCompile=shader=>{
   compile.call(material,shader);
-  const values={Floor:expanded?'#60402F':study.floor,Paving:'#69717D',Paper:study.paper,Shadow:study.shadow,Pink:'#FF3194',Blue:'#2250FF',Green:'#21D75B',Aqua:'#16D9D4',Sun:'#FFE238',Coral:'#FF503A',Ink:study.ink};
+  if(material.isMeshStandardMaterial){shader.fragmentShader=shader.fragmentShader.replace('mix(coTurquoise*.58,coPaper*.9,coRim)','mix(coTurquoise*.38,coPaper*.55,coRim)');return;}
+  const values={Floor:expanded?'#60402F':study.floor,Paving:'#69717D',Paper:depth?'#FFF1D6':study.paper,Ceiling:'#FFF8E9',Shadow:study.shadow,Pink:'#FF3194',Blue:'#2250FF',Green:'#21D75B',Aqua:'#16D9D4',Sun:'#FFE238',Coral:'#FF503A',Ink:study.ink};
   for(const[name,value]of Object.entries(values))shader.uniforms['co20'+name]={value:new THREE.Color(value)};
   shader.fragmentShader=Object.keys(values).map(n=>`uniform vec3 co20${n};`).join('\n')+'\n'+shader.fragmentShader;
   if(expanded){
@@ -32,6 +33,8 @@ export function decorateOverdrive20Material(material,variant,{expanded=false,dep
     float hi20=max(max(base20.r,base20.g),base20.b);
     float lo20=min(min(base20.r,base20.g),base20.b);
     bool inside20=abs(cbWorldPosition.x-60.)<11.2&&abs(cbWorldPosition.z)<19.2;
+    bool floorSurface20=n20.y>.65&&(coFamily==2.||(coFamily==1.&&mod(cbWorldPosition.y+.001,3.6)<.13));
+    bool pavingSurface20=!inside20&&n20.y>.65&&coFamily==0.&&cbWorldPosition.y>=0.&&cbWorldPosition.y<.1&&hi20<.5;
     vec3 pigment20=base20;
     if(base20.g>base20.r*1.04&&base20.g>base20.b*1.12){
      pigment20=mix(co20Green,co20Aqua,step(.7,base20.b/max(base20.g,.001))*.65);
@@ -58,6 +61,19 @@ export function decorateOverdrive20Material(material,variant,{expanded=false,dep
     float lum20=dot(base20,vec3(.2126,.7152,.0722));
     float energy20=dot(reflectedLight.directDiffuse,vec3(.2126,.7152,.0722))/max(lum20,.008);
     graphic20=mix(dark20,graphic20,.55+.45*smoothstep(.06,.22,energy20));
+    ${depth?`// The owner specified brown/grey floors: broad colored shadows must not turn them violet.
+    if(floorSurface20||pavingSurface20){vec3 floorTint20=inside20?co20Floor:co20Paving;graphic20=mix(floorTint20*.40,floorTint20,.55+.45*smoothstep(.06,.22,energy20));}`:''}
+    ${depth?`// Separate light ceiling, warm wall and dark floor in the real three-floor frame.
+    if(inside20&&!facade20&&hi20-lo20<.20&&hi20>.38&&(coFamily==0.||coFamily==3.)){
+     float height20=mod(cbWorldPosition.y,3.6);
+     if(n20.y<-.65)graphic20=co20Ceiling*.94;
+     else if(abs(n20.y)<.2){
+      float foot20=1.-smoothstep(.075,.15,height20);
+      float crown20=smoothstep(3.06,3.4,height20);
+      graphic20=mix(graphic20,co20Ink,foot20*.84);
+      graphic20=mix(graphic20,co20Shadow*.20,crown20*.55);
+     }
+    }`:''}
     // Near-black authored markings stay dark; atlas text and transparent glazing are excluded.
     outgoingLight=mix(base20,graphic20,smoothstep(.008,.045,lum20));
     ${expanded?`// Per-face UV borders: no extra draw and no diagonal triangle edges.

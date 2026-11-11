@@ -1,0 +1,14 @@
+{
+  "note": "Final D3 working-tree renderer hashes; captures reference the preceding local D2 HEAD, whose tree was published as ef346ba. Core captures survived an environment restart; unfinished browser processes were not counted as successful tests.",
+  "sha256": {
+    "src/main.js": "d89eeb4f5e4a60c6163df474a7950ec11a9b0974f0f0770aab431d47cfcf53c4",
+    "src/systems/resources.js": "2141492067bc628bda416a16237da925e93befcb3a865461976107b1de08cfbc",
+    "src/systems/batching.js": "2a2087299c9ddaf257b9995bb80498767d8c637bc7868f2ce16f9b3d1edfdb3f",
+    "src/systems/actor-ink-material.js": "d69e26595cf9ea9f27bae970e07bb09d2f8b2daa43c88414200744837234ce7f",
+    "src/systems/ink-outlines.js": "0710aacb19a43e7d285e646ca21e94d717b876cf90e6aaddb3543ff4dc92217c",
+    "src/systems/comic-overdrive-nature.js": "12084696688e98a041e1d99a9189aa1746743d8f9daa3b472200227cc18c6cc8",
+    "src/systems/comic-overdrive-20.js": "6f94926791f8b2a846aa1fe095f556cb8604019cf95a9d89357fbf3f3fd7c660",
+    "src/systems/comic-overdrive-p0.js": "b10579b88a4e5f4907d9af3c907583c7b8c56f561a6dcddf70173bbdd3df70ae",
+    "src/systems/school-comic-depth.js": "b37220683f735c0da6cfbcdab5e311acf6edd77b1bbe4cf7dac2bb342077811a"
+  }
+}

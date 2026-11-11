@@ -36,8 +36,8 @@ test('minimum NPC silhouettes survive Low only when the expanded style requests 
  ink.minimalNPCInk=true;ink.update('low',root.position,camera);assert.equal(ink.actorInk[0].mesh.visible,true);
  camera.position.z=50;ink.update('low',root.position,camera);assert.equal(ink.actorInk[0].mesh.visible,false);ink.dispose();body.children[0].geometry.dispose();body.children[0].material.dispose();
 });
-test('canopy pixel ink uses the transformed normal after instancing, not an unscaled object normal',()=>{
- const m=createActorInkMaterial({instanced:true}),s={uniforms:{},vertexShader:THREE.ShaderLib.basic.vertexShader};m.onBeforeCompile(s);assert.match(s.vertexShader,/cbInkNormal=normalize\(transformedNormal\)/);assert.ok(s.vertexShader.indexOf('cbInkOffset')>s.vertexShader.indexOf('#include <defaultnormal_vertex>'));m.dispose();
+test('BackSide canopy ink cancels FLIP_SIDED after instanced normal transformation to expand outward',()=>{
+ const m=createActorInkMaterial({instanced:true}),s={uniforms:{},vertexShader:THREE.ShaderLib.basic.vertexShader};m.onBeforeCompile(s);assert.equal(m.side,THREE.BackSide);assert.match(THREE.ShaderChunk.defaultnormal_vertex,/#ifdef FLIP_SIDED/);assert.match(s.vertexShader,/cbInkNormal=normalize\(-transformedNormal\)/);assert.ok(s.vertexShader.indexOf('cbInkOffset')>s.vertexShader.indexOf('#include <defaultnormal_vertex>'));m.dispose();
 });
 test('campus ink reuses its line draw instead of expanding all micro-edges, and restores borrowed material',()=>{
  const geometry=new THREE.BufferGeometry().setAttribute('position',new THREE.Float32BufferAttribute([0,0,0,1,0,0],3)),material=new THREE.LineBasicMaterial({color:'#778899',opacity:.48}),source=new THREE.LineSegments(geometry,material);

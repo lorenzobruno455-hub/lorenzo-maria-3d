@@ -1,0 +1,360 @@
+{
+  "source": "22ace486ac0977e0edab43d7ba0340c211bb4de1",
+  "variant": "after",
+  "viewport": {
+    "width": 960,
+    "height": 600
+  },
+  "method": "Chromium/SwiftShader, medium, shadows when preset supports them, adaptive off, reduced motion, v04 restoration, unchanged camera/physics; 3 settling frames + 2 timing samples in this invocation. Audit samples are not performance benchmarks or physical Android FPS.",
+  "samples": [
+    {
+      "name": "campus",
+      "room": null,
+      "worldPosition": {
+        "x": 4,
+        "y": 0.025,
+        "z": 20
+      },
+      "camera": {
+        "x": 0.3879223484935568,
+        "y": 2.560227446299722,
+        "z": 25.891448275467376
+      },
+      "yaw": -0.55,
+      "pitch": 0.16,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 220,
+      "triangles": 242598,
+      "geometries": 132,
+      "textures": 34,
+      "programs": 20,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 3,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 0,
+        "contactPatches": 0,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          1599.8999999999996,
+          1216.7000000000007
+        ],
+        "meanMs": 1408.3000000000002
+      }
+    },
+    {
+      "name": "classroom-a",
+      "room": "Sala de aula A",
+      "worldPosition": {
+        "x": 53.5,
+        "y": 0.03,
+        "z": 15.5
+      },
+      "camera": {
+        "x": 53.5,
+        "y": 2.3875244856984863,
+        "z": 12.46923820961292
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.3,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 90,
+      "triangles": 136440,
+      "geometries": 161,
+      "textures": 20,
+      "programs": 31,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 215,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          783.1999999999998,
+          750
+        ],
+        "meanMs": 766.5999999999999
+      }
+    },
+    {
+      "name": "hall",
+      "room": "Salão multiuso",
+      "worldPosition": {
+        "x": 60,
+        "y": 7.23,
+        "z": 5
+      },
+      "camera": {
+        "x": 61.46811502522984,
+        "y": 10.28042895178847,
+        "z": 8.03922912671647
+      },
+      "yaw": 0.45,
+      "pitch": 0.45,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 77,
+      "triangles": 62320,
+      "geometries": 149,
+      "textures": 31,
+      "programs": 34,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 15,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          1033.2999999999993,
+          1766.6000000000004
+        ],
+        "meanMs": 1399.9499999999998
+      }
+    },
+    {
+      "name": "court",
+      "room": null,
+      "worldPosition": {
+        "x": -33,
+        "y": -0.02,
+        "z": 10
+      },
+      "camera": {
+        "x": -33,
+        "y": 2.653207013980769,
+        "z": 16.88690584951685
+      },
+      "yaw": 0,
+      "pitch": 0.18,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 131,
+      "triangles": 187914,
+      "geometries": 120,
+      "textures": 22,
+      "programs": 19,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 3,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 0,
+        "contactPatches": 0,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          566.6000000000004,
+          516.6999999999998
+        ],
+        "meanMs": 541.6500000000001
+      }
+    },
+    {
+      "name": "corridor-2",
+      "worldPosition": {
+        "x": 60,
+        "y": 3.63,
+        "z": 8
+      },
+      "camera": {
+        "x": 60.49067271853737,
+        "y": 5.966564416939651,
+        "z": 12.069293544693382
+      },
+      "yaw": 0.12,
+      "pitch": 0.22,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 91,
+      "triangles": 105476,
+      "geometries": 173,
+      "textures": 42,
+      "programs": 34,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 243,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          1283.199999999999,
+          1233.3999999999996
+        ],
+        "meanMs": 1258.2999999999993
+      }
+    },
+    {
+      "name": "trees",
+      "room": null,
+      "worldPosition": {
+        "x": 2,
+        "y": 0.025,
+        "z": 20
+      },
+      "camera": {
+        "x": -1.647108651624683,
+        "y": 2.004402857784209,
+        "z": 25.948585287776183
+      },
+      "yaw": -0.55,
+      "pitch": 0.08,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 220,
+      "triangles": 242598,
+      "geometries": 132,
+      "textures": 34,
+      "programs": 21,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 3,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 0,
+        "contactPatches": 0,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          783.4000000000005,
+          816.6000000000004
+        ],
+        "meanMs": 800.0000000000005
+      }
+    },
+    {
+      "name": "library",
+      "room": "Biblioteca",
+      "worldPosition": {
+        "x": 53.5,
+        "y": 0.03,
+        "z": -13.5
+      },
+      "camera": {
+        "x": 53.5,
+        "y": 2.610693723969278,
+        "z": -17.53643284090524
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.28,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 151,
+      "triangles": 157096,
+      "geometries": 169,
+      "textures": 24,
+      "programs": 31,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 215,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          1350,
+          1583.2999999999993
+        ],
+        "meanMs": 1466.6499999999996
+      }
+    }
+  ]
+}
