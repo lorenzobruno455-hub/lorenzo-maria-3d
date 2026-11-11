@@ -74,7 +74,7 @@ export function decorateOverdriveMaterial(material,areas,{global=false,finishing
     if(coBand<.5&&coFamily>0.&&coFamily<4.${finishing?'&&coHatchBudget>0.':''}){
      float coHatchPhase=(cbWorldPosition.x+cbWorldPosition.z+cbWorldPosition.y)*3.2;
      float stripe=abs(fract(coHatchPhase)-.5);
-     float coHatchWeight=${finishing?'coHatchBudget*(1.-smoothstep(.22,.6,fwidth(coHatchPhase)))':'1.'};
+     float coHatchWeight=${finishing?'coHatchBudget*(1.-smoothstep(.10,.25,fwidth(coHatchPhase)))':'1.'};
      float aa=max(fwidth(stripe),.015);graphic*=1.-.16*coHatchWeight*(1.-smoothstep(.04,.04+aa,stripe));
     }
     outgoingLight=mix(outgoingLight,graphic,coMask*(coFamily>=5.?1.:smoothstep(.008,.045,coLum)));
