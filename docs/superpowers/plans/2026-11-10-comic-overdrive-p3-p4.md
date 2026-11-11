@@ -24,17 +24,17 @@
 - Old long regression timeouts must be investigated without modifying game speed, assertions or timeout budgets.
 
 ### Task 1 — P3 characters and interface
-- [ ] Capture P1/P2 baseline of character, hall, mobile menu/dialogue/settings/album/cinematic.
-- [ ] Add failing role/ownership tests; implement opt-in `skin`, `hair`, `eye` profiles through existing GLB material conversion and shared cache.
-- [ ] Add scoped original comic panels/state accents/cinematic framing/VFX styling; preserve text, layout, safe areas and hit targets.
-- [ ] Add browser shader/contrast/mobile/cinematic smoke and compare real images; commit P3.
+- [x] Capture P1/P2 baseline of character, hall, mobile menu/dialogue/settings/album/cinematic.
+- [x] Add failing role/ownership tests; implement opt-in `skin`, `hair`, `eye` profiles through existing GLB material conversion and shared cache.
+- [x] Add scoped original comic panels/state accents/cinematic framing/VFX styling; preserve text, layout, safe areas and hit targets.
+- [x] Add browser shader/contrast/mobile/cinematic smoke and compare real images; commit P3.
 
 ### Task 2 — P4 polish and automation
-- [ ] Filter hatching using world-space derivatives, reduce distant strokes and disable decorative hatching on Low; retain selected actor ink limits and no facial ink.
-- [ ] Test efficient large camera drags in the regression helper using normal pointer capture; change only automation if proven, without game hooks or larger timeouts.
-- [ ] Measure draw calls/triangles/resources at comparable views; verify visibility, save/control and resource ownership checks.
-- [ ] Run unit/build/focused checks while editing; one full browser regression after stabilization, followed only by necessary targeted reruns.
+- [x] Filter hatching using world-space derivatives, reduce distant strokes and disable decorative hatching on Low; retain selected actor ink limits and no facial ink.
+- [x] Test efficient large camera drags in the regression helper using normal pointer capture; change only automation if proven, without game hooks or larger timeouts.
+- [x] Measure draw calls/triangles/resources at comparable views; verify visibility, save/control and resource ownership checks.
+- [x] Run unit/build/focused checks while editing; one full browser regression after stabilization, followed only by necessary targeted reruns.
 
 ### Task 3 — Delivery
-- [ ] Inventory all visual categories, record actual before/after images, measurements, limitations and device checklist.
-- [ ] Review new diff; open stacked PR on P1/P2, no merge/publication. Provide Chromebook-compatible terminal commands.
+- [x] Inventory all visual categories, record actual before/after images, measurements, limitations and device checklist.
+- [x] Review new diff; open stacked PR on P1/P2, no merge/publication. Provide Chromebook-compatible terminal commands.
