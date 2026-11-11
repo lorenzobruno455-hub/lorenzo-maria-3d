@@ -1,5 +1,14 @@
 # Referências visuais — Hi-Fi RUSH → Lorenzo & Maria 3D
 
+## Complemento do proprietário — Comic Overdrive 2.0, 11/11/2026
+
+Referências adicionais solicitadas durante D0–D1:
+
+- [Hi-Fi RUSH 2D Cinematics — Bruno Luna / Behance](https://www.behance.net/gallery/163115085/Hi-Fi-RUSH-2D-Cinematics): a indexação pública identifica supervisão de backgrounds na Titmouse, estudos de cor e feedbacks de layout. A página e suas imagens completas retornaram HTTP 403 nesta sessão; **inspeção visual integral pendente**, sem atribuir detalhes não vistos ao trabalho.
+- [Hi-Fi RUSH — Interface In Game](https://interfaceingame.com/games/hi-fi-rush/): página consultada e imagens de menu principal, pausa e opções inspecionadas. Observados painéis angulares, áreas vermelhas/pretas, seleção amarela, cabeçalhos expressivos, hierarquia compacta e abas com estado destacado. Os rótulos funcionais mantêm leitura simples.
+
+Aplicação proposta na revisão de UI/cutscenes da **Fase 5**: painéis e enquadramentos originais; contraste claro entre estado selecionado e fundo; hierarquia visual entre título/ação/explicação; preservar área útil do jogo, alvos de toque, navegação, reduced motion e alto contraste. Para cinematics, estudar chaves de cor e organização de planos após acesso visual à referência. Nenhum asset, fonte, logotipo ou interface será extraído ou copiado. A foto do São Jorge prevalece na arquitetura. O bloco 0–1 não amplia o escopo para reconstruir a interface.
+
 Pesquisa: **7 de novembro de 2026**. Base do projeto: versão 0.5, Three.js r181, JavaScript e Vite.
 
 **Estado:** pesquisa feita antes da implementação e aprovada pelo usuário. A direção integrada foi aplicada na edição **Aurora Comic**; veja [entrega e limites efetivos](ENTREGA-VISUAL-COMIC.md). As seções de proposta registram as decisões que orientaram o trabalho. Os números de cores, tamanhos e durações são escolhas propostas para Lorenzo & Maria, não especificações oficiais de Hi-Fi RUSH.

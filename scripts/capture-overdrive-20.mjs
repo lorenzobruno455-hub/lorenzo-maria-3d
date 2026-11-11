@@ -5,7 +5,7 @@ import {execFileSync} from 'node:child_process';
 // Real game renders, restored through the existing v04 save path. No camera or physics overrides.
 const variant=process.argv[2]||'baseline',dir='docs/captures/comic-overdrive-20';
 export const scenes=[
- ['facade',null,41,0,-Math.PI/2,.20],['campus',null,4,20,-.55,.16],
+ ['facade',null,25,24,-.90,.08],['campus',null,4,20,-.55,.16],
  ['sky-tree',null,10,18,0,.08],['classroom-a',0,-6.5,15.5,Math.PI,.30],
  ['classroom-c',1,6.5,15.5,Math.PI,.30],['corridor',0,0,8,.12,.22],
  ['library',0,-6.5,-13.5,Math.PI,.28],['laboratory',1,6.5,-7,Math.PI,.28],

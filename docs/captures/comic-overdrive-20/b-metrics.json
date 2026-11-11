@@ -1,0 +1,115 @@
+{
+  "source": "c8f854556a24cca5eb737152ff4e28ebe400565b",
+  "variant": "b",
+  "viewport": {
+    "width": 960,
+    "height": 600
+  },
+  "method": "Chromium/SwiftShader, Medium, shadows on, adaptive off, reduced motion, v04 restoration, unchanged camera/physics, six settling frames + eight timing samples. Browser timing is not physical Android FPS.",
+  "samples": [
+    {
+      "name": "facade",
+      "worldPosition": {
+        "x": 25,
+        "y": -0.02,
+        "z": 24
+      },
+      "camera": {
+        "x": 19.534248799233968,
+        "y": 1.9594028577842089,
+        "z": 28.33735313918841
+      },
+      "yaw": -0.9,
+      "pitch": 0.08,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 97,
+      "triangles": 168184,
+      "geometries": 129,
+      "textures": 13,
+      "programs": 19,
+      "overdrive": {
+        "id": "comic-overdrive-20-b",
+        "proposal": "b",
+        "edgeBatches": 3,
+        "inkPixels": 2.8,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          383.39999999999964,
+          433.3000000000002,
+          450,
+          916.6000000000004,
+          33.399999999999636,
+          383.2999999999993,
+          766.6000000000004,
+          33.399999999999636
+        ],
+        "meanMs": 424.9999999999999
+      }
+    },
+    {
+      "name": "classroom-a",
+      "worldPosition": {
+        "x": 53.5,
+        "y": 0.03,
+        "z": 15.5
+      },
+      "camera": {
+        "x": 53.5,
+        "y": 2.3880213656320093,
+        "z": 12.467631931867748
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.3,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 89,
+      "triangles": 129674,
+      "geometries": 160,
+      "textures": 20,
+      "programs": 30,
+      "overdrive": {
+        "id": "comic-overdrive-20-b",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "timing": {
+        "samplesMs": [
+          849.8999999999996,
+          916.7000000000007,
+          1133.199999999999,
+          916.6000000000004,
+          933.3999999999996,
+          949.9000000000015,
+          916.5999999999985,
+          900
+        ],
+        "meanMs": 939.5374999999999
+      }
+    }
+  ]
+}

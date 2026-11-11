@@ -1,0 +1,8 @@
+{
+  "note": "A/B rendered in the D1 working tree after the D0 commit; renderer file hashes below identify that source independently of the HEAD stored in capture metadata. Baseline is the unchanged P3/P4 default.",
+  "sha256": {
+    "src/main.js": "f7c43a09ff61275661ea9aa19de4aa8993a82ff928e601c2c6c3dd421632ddf0",
+    "src/systems/comic-overdrive-p0.js": "f59dea6be8d60eade20c153509386420358af52f087b2a50604479314be35da5",
+    "src/systems/comic-overdrive-20.js": "6bac1a040ae89b5aff18a455b07dbc4b4e084005da6ea653046016fa46a9081e"
+  }
+}
