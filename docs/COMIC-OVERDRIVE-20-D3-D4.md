@@ -32,4 +32,24 @@ Mundo contínuo na mesma cena, sem teletransporte. Vetores de movimento, colisor
 
 Acabamento original dos painéis com áreas diagonais, cores de impressão, títulos marcados, seleção amarela e hierarquia de leitura, a partir das referências registradas em [Referências Hi-Fi RUSH](REFERENCIAS-HIFI-RUSH.md). Nenhum asset copiado. Alvos de toque e controles não foram recortados; reduced motion e alto contraste mantidos. A página Behance integral permaneceu indisponível (403); não se atribuem detalhes não inspecionados a ela.
 
-Validação final, capturas de dez cenas e métricas: em andamento. Resultados serão registrados ao concluir, sem repetir suítes completas por alteração. FPS físico Android permanece pendente de teste em aparelho; tempos de SwiftShader não equivalem a FPS de telefone.
+[Dez cenas finais](captures/comic-overdrive-20-d5/final-metrics.json): campus, árvores/céu, salas A e C, corredores dos dois pisos, biblioteca, laboratório, salão e quadra antiga. São renders reais de 960×600, preset Médio, sem erro de página/shader. A auditoria dos 24 ambientes da fase 3 continua válida para a decoração; esta fase mantém seus dados e posições locais. Os dois exteriores anotados complementam esse conjunto.
+
+[Comparação anterior](captures/comic-overdrive-20-d3/after-metrics.json) → [final](captures/comic-overdrive-20-d5/final-metrics.json), mesmas poses locais/preset, com a iluminação mundial incidindo no prédio agora girado:
+
+| Cena | Draws antes → depois | Triângulos antes → depois |
+| --- | --- | --- |
+| Campus | 220 → 243 | 242.598 → 247.116 |
+| Sala A | 90 → 87 | 136.440 → 134.798 |
+| Biblioteca | 151 → 154 | 157.096 → 157.386 |
+| Salão | 77 → 79 | 62.320 → 62.524 |
+| Quadra antiga | 131 → 131 | 187.914 → 187.914 |
+
+A fachada aumenta o custo exterior; a camada é ocultada nos interiores afastados dos portais. Os JSONs registram também geometrias/texturas e amostras de tempo. Contagens com sombras incluem passes de renderização. Amostras curtas de SwiftShader, algumas com carga concorrente de captura, servem à auditoria e **não são benchmark de desempenho**.
+
+[Presets móveis e interface](captures/comic-overdrive-20-d5/ui-metrics.json): 844×390 com sete GLBs carregados, Baixo/Médio/Alto; pausa, diálogo, inventário e retrato 390×844 com alto contraste/reduced motion. A cinemática tem captura real separada. Sem erros de página/console. Nenhum limiar de draw calls ou de tempo individual dos testes foi ampliado.
+
+Verificações locais: 17 unitários direcionados finais passaram; outros testes de navegação, compatibilidade e NPCs passaram durante a implementação. Browser: prévia/padrão com mesma colisão/campanha, caminhada pelos três portões, save externo/recarga, recuperação do save da porta antiga e retorno ao campus passaram. A jornada foi dividida em ida e volta para não ultrapassar o limite individual de 240s no renderizador de software. Uma primeira execução concorrente do teste de menus atingiu 90s; a regressão final validará seu estado definitivo. Build de produção aprovado; aviso preexistente de chunk Three acima de 500 kB mantido.
+
+Revisão independente final: nenhum problema crítico, importante ou menor identificado. Ela verificou a árvore de trabalho completa, incluindo transformação, portas, streaming, saves, recursos e UI. Desempenho físico, geografia não comprovada pelas referências e resultado de CI permanecem explicitamente fora de sua conclusão técnica.
+
+**Regressão completa:** execução final em quatro shards disjuntos do workflow existente, pendente de resultado. O workflow agora inclui a base deste PR; atualizações apenas de documentação não repetem toda a suíte. FPS físico Android permanece pendente de teste em aparelho; tempos de SwiftShader não equivalem a FPS de telefone.

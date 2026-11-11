@@ -28,3 +28,13 @@ test('court world save returns through the inner gate and reception to the origi
  test.setTimeout(240000);await seed(page,{stage:2,collected:['notebook','card','photo'],position:{x:73,z:-27}});await start(page);
  await expect.poll(async()=>(await state(page)).school.gates.find(g=>g.id==='court').angle).toBeGreaterThan(1.4);await walkTo(page,{x:69,z:-27});await walkTo(page,{x:60,z:-21});await expect.poll(async()=>(await state(page)).school.doorAngle).toBeGreaterThan(1.4);await walkTo(page,{x:60,z:-18.4});await expect.poll(async()=>(await state(page)).school.active).toBe(true);await walkOut(page);expect((await state(page)).worldPosition.z).toBeCloseTo(19,0);expect((await state(page)).items).toEqual(['notebook','card','photo']);
 });
+
+test('Android touch stays held across the rotated reception and v04 reload restores inside it',async({browser})=>{
+ const context=await browser.newContext({viewport:{width:844,height:390},hasTouch:true,isMobile:true}),page=await context.newPage();
+ await seed(page,{stage:2,collected:['notebook','card','photo'],position:{x:47,z:5.5},yaw:-Math.PI/2});await start(page);
+ await expect.poll(async()=>(await state(page)).school.gates.find(g=>g.id==='reception').angle).toBeLessThan(-1.4);
+ const client=await context.newCDPSession(page),r=await page.locator('#joystick').boundingBox(),x=r.x+r.width/2,y=r.y+r.height/2,touch=(type,points)=>client.send('Input.dispatchTouchEvent',{type,touchPoints:points.map(([id,x,y])=>({id,x,y,radiusX:3,radiusY:3,force:1}))});
+ await touch('touchStart',[[1,x,y]]);await touch('touchMove',[[1,x,y-45]]);await expect.poll(async()=>(await state(page)).school.active).toBe(true);expect((await state(page)).analog.z).toBeLessThan(-.5);await touch('touchEnd',[]);
+ await page.locator('#pause-button').tap();const inside=await state(page);await page.reload();await page.locator('#start').tap();await page.evaluate(async()=>window.readGame=(await import('/src/systems/diagnostics.js')).getGameState);await expect.poll(async()=>(await state(page)).school.active).toBe(true);expect((await state(page)).x).toBeCloseTo(inside.x,1);expect((await state(page)).school.room).toBe('Recepção');
+ await touch('touchStart',[[2,x,y]]);await touch('touchMove',[[2,x,y+45]]);await expect.poll(async()=>(await state(page)).school.active).toBe(false);expect((await state(page)).analog.z).toBeGreaterThan(.5);await touch('touchEnd',[]);expect((await state(page)).analog.z).toBe(0);expect((await state(page)).items).toEqual(['notebook','card','photo']);await context.close();
+});

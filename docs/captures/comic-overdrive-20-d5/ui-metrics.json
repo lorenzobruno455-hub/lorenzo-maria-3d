@@ -1,0 +1,54 @@
+{
+  "method": "Chromium/SwiftShader, browser emulation; not physical Android FPS. Reused live settings, no game-state mutation.",
+  "rows": [
+    {
+      "quality": "low",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "drawCalls": 162,
+      "triangles": 202990,
+      "geometries": 77,
+      "textures": 24,
+      "models": {
+        "lorenzo": true,
+        "maria": true
+      },
+      "npcs": 6
+    },
+    {
+      "quality": "medium",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "drawCalls": 237,
+      "triangles": 249094,
+      "geometries": 118,
+      "textures": 36,
+      "models": {
+        "lorenzo": true,
+        "maria": true
+      },
+      "npcs": 6
+    },
+    {
+      "quality": "high",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "drawCalls": 241,
+      "triangles": 256642,
+      "geometries": 118,
+      "textures": 36,
+      "models": {
+        "lorenzo": true,
+        "maria": true
+      },
+      "npcs": 6
+    }
+  ],
+  "errors": []
+}

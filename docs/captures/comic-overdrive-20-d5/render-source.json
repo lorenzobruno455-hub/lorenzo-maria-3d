@@ -1,0 +1,32 @@
+{
+  "base": "6abb9cd9bc87403013b1f35e830be317cfe1da48",
+  "note": "Real game captures from F4/F5 working tree. Internal shots use v04 local saves; external review camera only in preview query. HUD hidden for clean scene captures. Gate save-placement wiring does not alter these clear exterior capture positions. Hashes reflect final source at capture delivery.",
+  "sha256": {
+    "src/main.js": "7797581527c2ba7bd99d807f96d2b1feea0b98058a8d5d01c127c7383d205f32",
+    "src/comic-overdrive.css": "926baac323f4cae930a1532d90d86a66b079ccc81a6ab333f91a85097a67024f",
+    "scripts/capture-overdrive-20.mjs": "e4720a8b9e04962065c89bf76fd4e12b9458e2df8fe393336e1425353ab8f60d",
+    "src/systems/school-architecture.js": "8d98b356c4c040d1ebc0ba19cfc0a15bb9a719ecb92a4104ae3feaac7546c5d5",
+    "src/systems/school-entrance.js": "6cb30f45fa1f7b3ceff0bff78f26805c6986c1d2b0bcff5d0326096783ed5dfe",
+    "src/systems/school-comic-depth.js": "b37220683f735c0da6cfbcdab5e311acf6edd77b1bbe4cf7dac2bb342077811a",
+    "src/systems/school-exterior.js": "5232a09355a869704022b4411d03e987f21fdb656586613efb7a6db0fe454f8f",
+    "src/systems/school-three-gate-connection.js": "83a546b6982b504e439f577137b6eba7fb4b7fc46bc271421b56e8cbd631d73b",
+    "src/systems/world.js": "65038d22850fbb5e56646074c3841f2fb82d33f39cbe908401ab1f1957c209ad",
+    "src/systems/school-progress.js": "039d259e5dd18d254f32e8ae2ffec70477a558071e5e25132286906b66a02cfb",
+    "src/systems/school-living-details.js": "be8629fe9003b404b6dac3958e4f544808836de34c6586d99cf59671b87b7dbe",
+    "src/systems/school-visit.js": "3d878cf32c0eea1b0fbbe025449713eb980b8b89eca795180bc709764e76c8e8",
+    "src/systems/school-navigation.js": "bdf8619b19ec3db5a00bcaa78c79dc45dd689cd36bd12ed760a003c581db41e1",
+    "src/systems/school-presentation.js": "b9a9a5a0954770f2b134c9c814f93f6f76491a7c8706ca8bc4e9e6da2ac222a2",
+    "src/systems/school-furniture.js": "91f826c9999d0ef4b95b82dbf98e0604a651be6ec4865aea7059ddfadda4e2ab",
+    "src/systems/school-narrative.js": "2ce696cc1449100fcb78d1829e918d230e576fc56a9cea6637b97845950c4b0b",
+    "src/systems/school-save-placement.js": "cbc4bfd115b7b713264e292c05e14bf9e5a36f0908432643bd00f611a5d0d8aa",
+    "src/systems/continuous-school.js": "9c5fafceb78ac7d84b82edf28f6594e6a70ae307bbe5368d2157c9e2bdf51d78",
+    "src/systems/school-access-layout.js": "37def846d7613fe1704a294bcf204c74ac3dfae6e55e849640a17f2b86e82abd",
+    "src/systems/world-coordinates.js": "6fe2e44177684752ac688b4f91645b7a23e65e8bdbe063f3c97576635f34b6b4",
+    "src/systems/campus-connection.js": "c2093cab4a3bb3e47c7241cb6c03f800bd21fa5b9906231f306765378e51726a",
+    "src/systems/campus-world.js": "e46709401944f204e49b17814b2d0f7824456178bf61fc5ead2a5f18116c0448",
+    "src/systems/story-world.js": "ee6af5e6ab4f48bf9fcf2e86f676ea99ebcead5f5e5fcb99c1abdcc2abcbb906",
+    "src/systems/school-narrative-map.js": "ddf578d3b296afb0328911ca3e735f7b1446b1d21abceb1976b1d46a56e62bad",
+    "src/systems/school-materials.js": "9c92fa99e1c34dc673e8d9e71562e913839d4264fb721256ef5eac4a21cba954",
+    "src/systems/school-lighting.js": "a81984b9e50f1c5bd26eb90ae48e606351a439a1a76aeaf0d58da9894e423743"
+  }
+}

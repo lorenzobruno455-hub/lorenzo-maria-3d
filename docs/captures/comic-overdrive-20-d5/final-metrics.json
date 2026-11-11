@@ -1,0 +1,1479 @@
+{
+  "source": "6abb9cd9bc87403013b1f35e830be317cfe1da48",
+  "variant": "final",
+  "viewport": {
+    "width": 960,
+    "height": 600
+  },
+  "method": "Chromium/SwiftShader, medium, shadows when preset supports them, adaptive off, reduced motion, v04 restoration, unchanged camera/physics; 3 settling frames + 2 timing samples in this invocation. Audit samples are not performance benchmarks or physical Android FPS.",
+  "samples": [
+    {
+      "name": "campus",
+      "room": null,
+      "worldPosition": {
+        "x": 4,
+        "y": 0.025,
+        "z": 20
+      },
+      "camera": {
+        "x": 0.3879223484935568,
+        "y": 2.560227446299722,
+        "z": 25.891448275467376
+      },
+      "cameraFocus": {
+        "x": 4,
+        "y": 1.4449999999999998,
+        "z": 20
+      },
+      "yaw": -0.55,
+      "pitch": 0.16,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 243,
+      "triangles": 247116,
+      "geometries": 149,
+      "textures": 36,
+      "programs": 24,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 3,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 0,
+        "contactPatches": 0,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "schoolExterior": {
+        "floors": 3,
+        "windows": 27,
+        "label": "COLÉGIO SÃO JORGE",
+        "bands": [
+          "blue-middle",
+          "pink-upper"
+        ],
+        "fixedInteriorChanges": 0,
+        "structuralYellowBeams": 0,
+        "proposal": {
+          "approved": true,
+          "schoolRotation": 3.141592653589793,
+          "facade": "photo-street-side",
+          "campusFace": "reception-side",
+          "gates": [
+            {
+              "id": "court",
+              "name": "Portão da quadra",
+              "local": {
+                "x": -11,
+                "z": 27
+              },
+              "basis": 1.5707963267948966,
+              "width": 3,
+              "height": 2.6,
+              "openAngle": 1.5707963267948966,
+              "x": 71,
+              "z": -27
+            },
+            {
+              "id": "school",
+              "name": "Portão da escola · dentro da quadra",
+              "local": {
+                "x": 0,
+                "z": 19
+              },
+              "basis": 3.141592653589793,
+              "width": 2.6,
+              "height": 2.6,
+              "openAngle": 1.5707963267948966,
+              "x": 60,
+              "z": -19
+            },
+            {
+              "id": "reception",
+              "name": "Entrada da recepção",
+              "local": {
+                "x": 11,
+                "z": -5.5
+              },
+              "basis": 4.71238898038469,
+              "width": 2.6,
+              "height": 2.6,
+              "openAngle": -1.5707963267948966,
+              "x": 49,
+              "z": 5.5
+            }
+          ],
+          "annex": {
+            "minX": 49,
+            "maxX": 71,
+            "minZ": 19,
+            "maxZ": 35,
+            "eave": 4.15,
+            "rise": 1.8
+          },
+          "court": {
+            "minX": 49,
+            "maxX": 71,
+            "minZ": -35,
+            "maxZ": -19,
+            "minY": 0,
+            "maxY": 4.15
+          },
+          "corridorDoor": {
+            "id": "school",
+            "name": "Portão da escola · dentro da quadra",
+            "local": {
+              "x": 0,
+              "z": 19
+            },
+            "basis": 3.141592653589793,
+            "width": 2.6,
+            "height": 2.6,
+            "openAngle": 1.5707963267948966,
+            "x": 60,
+            "z": -19
+          }
+        },
+        "draws": 15
+      },
+      "timing": {
+        "samplesMs": [
+          933.3000000000011,
+          900
+        ],
+        "meanMs": 916.6500000000005
+      }
+    },
+    {
+      "name": "classroom-a",
+      "room": "Sala de aula A",
+      "worldPosition": {
+        "x": 66.5,
+        "y": 0.03,
+        "z": -15.500000000000002
+      },
+      "camera": {
+        "x": 66.5,
+        "y": 2.39133850095367,
+        "z": -12.456908535156737
+      },
+      "cameraFocus": {
+        "x": 66.5,
+        "y": 1.45,
+        "z": -15.500000000000002
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.3,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 87,
+      "triangles": 134798,
+      "geometries": 168,
+      "textures": 19,
+      "programs": 30,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 215,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "schoolExterior": {
+        "floors": 3,
+        "windows": 27,
+        "label": "COLÉGIO SÃO JORGE",
+        "bands": [
+          "blue-middle",
+          "pink-upper"
+        ],
+        "fixedInteriorChanges": 0,
+        "structuralYellowBeams": 0,
+        "proposal": {
+          "approved": true,
+          "schoolRotation": 3.141592653589793,
+          "facade": "photo-street-side",
+          "campusFace": "reception-side",
+          "gates": [
+            {
+              "id": "court",
+              "name": "Portão da quadra",
+              "local": {
+                "x": -11,
+                "z": 27
+              },
+              "basis": 1.5707963267948966,
+              "width": 3,
+              "height": 2.6,
+              "openAngle": 1.5707963267948966,
+              "x": 71,
+              "z": -27
+            },
+            {
+              "id": "school",
+              "name": "Portão da escola · dentro da quadra",
+              "local": {
+                "x": 0,
+                "z": 19
+              },
+              "basis": 3.141592653589793,
+              "width": 2.6,
+              "height": 2.6,
+              "openAngle": 1.5707963267948966,
+              "x": 60,
+              "z": -19
+            },
+            {
+              "id": "reception",
+              "name": "Entrada da recepção",
+              "local": {
+                "x": 11,
+                "z": -5.5
+              },
+              "basis": 4.71238898038469,
+              "width": 2.6,
+              "height": 2.6,
+              "openAngle": -1.5707963267948966,
+              "x": 49,
+              "z": 5.5
+            }
+          ],
+          "annex": {
+            "minX": 49,
+            "maxX": 71,
+            "minZ": 19,
+            "maxZ": 35,
+            "eave": 4.15,
+            "rise": 1.8
+          },
+          "court": {
+            "minX": 49,
+            "maxX": 71,
+            "minZ": -35,
+            "maxZ": -19,
+            "minY": 0,
+            "maxY": 4.15
+          },
+          "corridorDoor": {
+            "id": "school",
+            "name": "Portão da escola · dentro da quadra",
+            "local": {
+              "x": 0,
+              "z": 19
+            },
+            "basis": 3.141592653589793,
+            "width": 2.6,
+            "height": 2.6,
+            "openAngle": 1.5707963267948966,
+            "x": 60,
+            "z": -19
+          }
+        },
+        "draws": 15
+      },
+      "timing": {
+        "samplesMs": [
+          1899.9000000000015,
+          1566.5999999999985
+        ],
+        "meanMs": 1733.25
+      }
+    },
+    {
+      "name": "classroom-c",
+      "room": "Sala de aula C",
+      "worldPosition": {
+        "x": 53.5,
+        "y": 3.63,
+        "z": -15.5
+      },
+      "camera": {
+        "x": 53.5,
+        "y": 5.99297567223292,
+        "z": -12.451616005486137
+      },
+      "cameraFocus": {
+        "x": 53.5,
+        "y": 5.05,
+        "z": -15.5
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.3,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 65,
+      "triangles": 91570,
+      "geometries": 169,
+      "textures": 16,
+      "programs": 29,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 243,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "schoolExterior": {
+        "floors": 3,
+        "windows": 27,
+        "label": "COLÉGIO SÃO JORGE",
+        "bands": [
+          "blue-middle",
+          "pink-upper"
+        ],
+        "fixedInteriorChanges": 0,
+        "structuralYellowBeams": 0,
+        "proposal": {
+          "approved": true,
+          "schoolRotation": 3.141592653589793,
+          "facade": "photo-street-side",
+          "campusFace": "reception-side",
+          "gates": [
+            {
+              "id": "court",
+              "name": "Portão da quadra",
+              "local": {
+                "x": -11,
+                "z": 27
+              },
+              "basis": 1.5707963267948966,
+              "width": 3,
+              "height": 2.6,
+              "openAngle": 1.5707963267948966,
+              "x": 71,
+              "z": -27
+            },
+            {
+              "id": "school",
+              "name": "Portão da escola · dentro da quadra",
+              "local": {
+                "x": 0,
+                "z": 19
+              },
+              "basis": 3.141592653589793,
+              "width": 2.6,
+              "height": 2.6,
+              "openAngle": 1.5707963267948966,
+              "x": 60,
+              "z": -19
+            },
+            {
+              "id": "reception",
+              "name": "Entrada da recepção",
+              "local": {
+                "x": 11,
+                "z": -5.5
+              },
+              "basis": 4.71238898038469,
+              "width": 2.6,
+              "height": 2.6,
+              "openAngle": -1.5707963267948966,
+              "x": 49,
+              "z": 5.5
+            }
+          ],
+          "annex": {
+            "minX": 49,
+            "maxX": 71,
+            "minZ": 19,
+            "maxZ": 35,
+            "eave": 4.15,
+            "rise": 1.8
+          },
+          "court": {
+            "minX": 49,
+            "maxX": 71,
+            "minZ": -35,
+            "maxZ": -19,
+            "minY": 0,
+            "maxY": 4.15
+          },
+          "corridorDoor": {
+            "id": "school",
+            "name": "Portão da escola · dentro da quadra",
+            "local": {
+              "x": 0,
+              "z": 19
+            },
+            "basis": 3.141592653589793,
+            "width": 2.6,
+            "height": 2.6,
+            "openAngle": 1.5707963267948966,
+            "x": 60,
+            "z": -19
+          }
+        },
+        "draws": 15
+      },
+      "timing": {
+        "samplesMs": [
+          1316.5,
+          1350
+        ],
+        "meanMs": 1333.25
+      }
+    },
+    {
+      "name": "corridor",
+      "worldPosition": {
+        "x": 60,
+        "y": 0.03,
+        "z": -8
+      },
+      "camera": {
+        "x": 59.50932728146263,
+        "y": 2.3665644169396516,
+        "z": -12.069293544693382
+      },
+      "cameraFocus": {
+        "x": 60,
+        "y": 1.45,
+        "z": -8
+      },
+      "yaw": 0.1200000000000001,
+      "pitch": 0.22,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 146,
+      "triangles": 148308,
+      "geometries": 176,
+      "textures": 39,
+      "programs": 36,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 215,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "schoolExterior": {
+        "floors": 3,
+        "windows": 27,
+        "label": "COLÉGIO SÃO JORGE",
+        "bands": [
+          "blue-middle",
+          "pink-upper"
+        ],
+        "fixedInteriorChanges": 0,
+        "structuralYellowBeams": 0,
+        "proposal": {
+          "approved": true,
+          "schoolRotation": 3.141592653589793,
+          "facade": "photo-street-side",
+          "campusFace": "reception-side",
+          "gates": [
+            {
+              "id": "court",
+              "name": "Portão da quadra",
+              "local": {
+                "x": -11,
+                "z": 27
+              },
+              "basis": 1.5707963267948966,
+              "width": 3,
+              "height": 2.6,
+              "openAngle": 1.5707963267948966,
+              "x": 71,
+              "z": -27
+            },
+            {
+              "id": "school",
+              "name": "Portão da escola · dentro da quadra",
+              "local": {
+                "x": 0,
+                "z": 19
+              },
+              "basis": 3.141592653589793,
+              "width": 2.6,
+              "height": 2.6,
+              "openAngle": 1.5707963267948966,
+              "x": 60,
+              "z": -19
+            },
+            {
+              "id": "reception",
+              "name": "Entrada da recepção",
+              "local": {
+                "x": 11,
+                "z": -5.5
+              },
+              "basis": 4.71238898038469,
+              "width": 2.6,
+              "height": 2.6,
+              "openAngle": -1.5707963267948966,
+              "x": 49,
+              "z": 5.5
+            }
+          ],
+          "annex": {
+            "minX": 49,
+            "maxX": 71,
+            "minZ": 19,
+            "maxZ": 35,
+            "eave": 4.15,
+            "rise": 1.8
+          },
+          "court": {
+            "minX": 49,
+            "maxX": 71,
+            "minZ": -35,
+            "maxZ": -19,
+            "minY": 0,
+            "maxY": 4.15
+          },
+          "corridorDoor": {
+            "id": "school",
+            "name": "Portão da escola · dentro da quadra",
+            "local": {
+              "x": 0,
+              "z": 19
+            },
+            "basis": 3.141592653589793,
+            "width": 2.6,
+            "height": 2.6,
+            "openAngle": 1.5707963267948966,
+            "x": 60,
+            "z": -19
+          }
+        },
+        "draws": 15
+      },
+      "timing": {
+        "samplesMs": [
+          1916.5,
+          1900
+        ],
+        "meanMs": 1908.25
+      }
+    },
+    {
+      "name": "library",
+      "room": "Biblioteca",
+      "worldPosition": {
+        "x": 66.5,
+        "y": 0.03,
+        "z": 13.499999999999998
+      },
+      "camera": {
+        "x": 66.5,
+        "y": 2.6106937239692782,
+        "z": 17.536432840905235
+      },
+      "cameraFocus": {
+        "x": 66.5,
+        "y": 1.45,
+        "z": 13.499999999999998
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.28,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 154,
+      "triangles": 157386,
+      "geometries": 176,
+      "textures": 23,
+      "programs": 31,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 215,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "schoolExterior": {
+        "floors": 3,
+        "windows": 27,
+        "label": "COLÉGIO SÃO JORGE",
+        "bands": [
+          "blue-middle",
+          "pink-upper"
+        ],
+        "fixedInteriorChanges": 0,
+        "structuralYellowBeams": 0,
+        "proposal": {
+          "approved": true,
+          "schoolRotation": 3.141592653589793,
+          "facade": "photo-street-side",
+          "campusFace": "reception-side",
+          "gates": [
+            {
+              "id": "court",
+              "name": "Portão da quadra",
+              "local": {
+                "x": -11,
+                "z": 27
+              },
+              "basis": 1.5707963267948966,
+              "width": 3,
+              "height": 2.6,
+              "openAngle": 1.5707963267948966,
+              "x": 71,
+              "z": -27
+            },
+            {
+              "id": "school",
+              "name": "Portão da escola · dentro da quadra",
+              "local": {
+                "x": 0,
+                "z": 19
+              },
+              "basis": 3.141592653589793,
+              "width": 2.6,
+              "height": 2.6,
+              "openAngle": 1.5707963267948966,
+              "x": 60,
+              "z": -19
+            },
+            {
+              "id": "reception",
+              "name": "Entrada da recepção",
+              "local": {
+                "x": 11,
+                "z": -5.5
+              },
+              "basis": 4.71238898038469,
+              "width": 2.6,
+              "height": 2.6,
+              "openAngle": -1.5707963267948966,
+              "x": 49,
+              "z": 5.5
+            }
+          ],
+          "annex": {
+            "minX": 49,
+            "maxX": 71,
+            "minZ": 19,
+            "maxZ": 35,
+            "eave": 4.15,
+            "rise": 1.8
+          },
+          "court": {
+            "minX": 49,
+            "maxX": 71,
+            "minZ": -35,
+            "maxZ": -19,
+            "minY": 0,
+            "maxY": 4.15
+          },
+          "corridorDoor": {
+            "id": "school",
+            "name": "Portão da escola · dentro da quadra",
+            "local": {
+              "x": 0,
+              "z": 19
+            },
+            "basis": 3.141592653589793,
+            "width": 2.6,
+            "height": 2.6,
+            "openAngle": 1.5707963267948966,
+            "x": 60,
+            "z": -19
+          }
+        },
+        "draws": 15
+      },
+      "timing": {
+        "samplesMs": [
+          3583.2000000000007,
+          3433.2000000000007
+        ],
+        "meanMs": 3508.2000000000007
+      }
+    },
+    {
+      "name": "laboratory",
+      "room": "Laboratório",
+      "worldPosition": {
+        "x": 53.5,
+        "y": 3.63,
+        "z": 7
+      },
+      "camera": {
+        "x": 53.5,
+        "y": 6.210693723969277,
+        "z": 11.036432840905238
+      },
+      "cameraFocus": {
+        "x": 53.5,
+        "y": 5.05,
+        "z": 7
+      },
+      "yaw": 3.141592653589793,
+      "pitch": 0.28,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 96,
+      "triangles": 114370,
+      "geometries": 179,
+      "textures": 19,
+      "programs": 30,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 243,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "schoolExterior": {
+        "floors": 3,
+        "windows": 27,
+        "label": "COLÉGIO SÃO JORGE",
+        "bands": [
+          "blue-middle",
+          "pink-upper"
+        ],
+        "fixedInteriorChanges": 0,
+        "structuralYellowBeams": 0,
+        "proposal": {
+          "approved": true,
+          "schoolRotation": 3.141592653589793,
+          "facade": "photo-street-side",
+          "campusFace": "reception-side",
+          "gates": [
+            {
+              "id": "court",
+              "name": "Portão da quadra",
+              "local": {
+                "x": -11,
+                "z": 27
+              },
+              "basis": 1.5707963267948966,
+              "width": 3,
+              "height": 2.6,
+              "openAngle": 1.5707963267948966,
+              "x": 71,
+              "z": -27
+            },
+            {
+              "id": "school",
+              "name": "Portão da escola · dentro da quadra",
+              "local": {
+                "x": 0,
+                "z": 19
+              },
+              "basis": 3.141592653589793,
+              "width": 2.6,
+              "height": 2.6,
+              "openAngle": 1.5707963267948966,
+              "x": 60,
+              "z": -19
+            },
+            {
+              "id": "reception",
+              "name": "Entrada da recepção",
+              "local": {
+                "x": 11,
+                "z": -5.5
+              },
+              "basis": 4.71238898038469,
+              "width": 2.6,
+              "height": 2.6,
+              "openAngle": -1.5707963267948966,
+              "x": 49,
+              "z": 5.5
+            }
+          ],
+          "annex": {
+            "minX": 49,
+            "maxX": 71,
+            "minZ": 19,
+            "maxZ": 35,
+            "eave": 4.15,
+            "rise": 1.8
+          },
+          "court": {
+            "minX": 49,
+            "maxX": 71,
+            "minZ": -35,
+            "maxZ": -19,
+            "minY": 0,
+            "maxY": 4.15
+          },
+          "corridorDoor": {
+            "id": "school",
+            "name": "Portão da escola · dentro da quadra",
+            "local": {
+              "x": 0,
+              "z": 19
+            },
+            "basis": 3.141592653589793,
+            "width": 2.6,
+            "height": 2.6,
+            "openAngle": 1.5707963267948966,
+            "x": 60,
+            "z": -19
+          }
+        },
+        "draws": 15
+      },
+      "timing": {
+        "samplesMs": [
+          1916.5999999999985,
+          2100
+        ],
+        "meanMs": 2008.2999999999993
+      }
+    },
+    {
+      "name": "hall",
+      "room": "Salão multiuso",
+      "worldPosition": {
+        "x": 60,
+        "y": 7.23,
+        "z": -5
+      },
+      "camera": {
+        "x": 58.530003509926416,
+        "y": 10.282518430269578,
+        "z": -8.04312405501277
+      },
+      "cameraFocus": {
+        "x": 60,
+        "y": 8.65,
+        "z": -5
+      },
+      "yaw": 0.4500000000000002,
+      "pitch": 0.45,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 79,
+      "triangles": 62524,
+      "geometries": 155,
+      "textures": 29,
+      "programs": 34,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 15,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "schoolExterior": {
+        "floors": 3,
+        "windows": 27,
+        "label": "COLÉGIO SÃO JORGE",
+        "bands": [
+          "blue-middle",
+          "pink-upper"
+        ],
+        "fixedInteriorChanges": 0,
+        "structuralYellowBeams": 0,
+        "proposal": {
+          "approved": true,
+          "schoolRotation": 3.141592653589793,
+          "facade": "photo-street-side",
+          "campusFace": "reception-side",
+          "gates": [
+            {
+              "id": "court",
+              "name": "Portão da quadra",
+              "local": {
+                "x": -11,
+                "z": 27
+              },
+              "basis": 1.5707963267948966,
+              "width": 3,
+              "height": 2.6,
+              "openAngle": 1.5707963267948966,
+              "x": 71,
+              "z": -27
+            },
+            {
+              "id": "school",
+              "name": "Portão da escola · dentro da quadra",
+              "local": {
+                "x": 0,
+                "z": 19
+              },
+              "basis": 3.141592653589793,
+              "width": 2.6,
+              "height": 2.6,
+              "openAngle": 1.5707963267948966,
+              "x": 60,
+              "z": -19
+            },
+            {
+              "id": "reception",
+              "name": "Entrada da recepção",
+              "local": {
+                "x": 11,
+                "z": -5.5
+              },
+              "basis": 4.71238898038469,
+              "width": 2.6,
+              "height": 2.6,
+              "openAngle": -1.5707963267948966,
+              "x": 49,
+              "z": 5.5
+            }
+          ],
+          "annex": {
+            "minX": 49,
+            "maxX": 71,
+            "minZ": 19,
+            "maxZ": 35,
+            "eave": 4.15,
+            "rise": 1.8
+          },
+          "court": {
+            "minX": 49,
+            "maxX": 71,
+            "minZ": -35,
+            "maxZ": -19,
+            "minY": 0,
+            "maxY": 4.15
+          },
+          "corridorDoor": {
+            "id": "school",
+            "name": "Portão da escola · dentro da quadra",
+            "local": {
+              "x": 0,
+              "z": 19
+            },
+            "basis": 3.141592653589793,
+            "width": 2.6,
+            "height": 2.6,
+            "openAngle": 1.5707963267948966,
+            "x": 60,
+            "z": -19
+          }
+        },
+        "draws": 15
+      },
+      "timing": {
+        "samplesMs": [
+          1200,
+          1516.5999999999985
+        ],
+        "meanMs": 1358.2999999999993
+      }
+    },
+    {
+      "name": "court",
+      "room": null,
+      "worldPosition": {
+        "x": -33,
+        "y": -0.02,
+        "z": 10
+      },
+      "camera": {
+        "x": -33,
+        "y": 2.653207013980769,
+        "z": 16.88690584951685
+      },
+      "cameraFocus": {
+        "x": -33,
+        "y": 1.4,
+        "z": 10
+      },
+      "yaw": 0,
+      "pitch": 0.18,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 131,
+      "triangles": 187914,
+      "geometries": 127,
+      "textures": 22,
+      "programs": 19,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 3,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 0,
+        "contactPatches": 0,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "schoolExterior": {
+        "floors": 3,
+        "windows": 27,
+        "label": "COLÉGIO SÃO JORGE",
+        "bands": [
+          "blue-middle",
+          "pink-upper"
+        ],
+        "fixedInteriorChanges": 0,
+        "structuralYellowBeams": 0,
+        "proposal": {
+          "approved": true,
+          "schoolRotation": 3.141592653589793,
+          "facade": "photo-street-side",
+          "campusFace": "reception-side",
+          "gates": [
+            {
+              "id": "court",
+              "name": "Portão da quadra",
+              "local": {
+                "x": -11,
+                "z": 27
+              },
+              "basis": 1.5707963267948966,
+              "width": 3,
+              "height": 2.6,
+              "openAngle": 1.5707963267948966,
+              "x": 71,
+              "z": -27
+            },
+            {
+              "id": "school",
+              "name": "Portão da escola · dentro da quadra",
+              "local": {
+                "x": 0,
+                "z": 19
+              },
+              "basis": 3.141592653589793,
+              "width": 2.6,
+              "height": 2.6,
+              "openAngle": 1.5707963267948966,
+              "x": 60,
+              "z": -19
+            },
+            {
+              "id": "reception",
+              "name": "Entrada da recepção",
+              "local": {
+                "x": 11,
+                "z": -5.5
+              },
+              "basis": 4.71238898038469,
+              "width": 2.6,
+              "height": 2.6,
+              "openAngle": -1.5707963267948966,
+              "x": 49,
+              "z": 5.5
+            }
+          ],
+          "annex": {
+            "minX": 49,
+            "maxX": 71,
+            "minZ": 19,
+            "maxZ": 35,
+            "eave": 4.15,
+            "rise": 1.8
+          },
+          "court": {
+            "minX": 49,
+            "maxX": 71,
+            "minZ": -35,
+            "maxZ": -19,
+            "minY": 0,
+            "maxY": 4.15
+          },
+          "corridorDoor": {
+            "id": "school",
+            "name": "Portão da escola · dentro da quadra",
+            "local": {
+              "x": 0,
+              "z": 19
+            },
+            "basis": 3.141592653589793,
+            "width": 2.6,
+            "height": 2.6,
+            "openAngle": 1.5707963267948966,
+            "x": 60,
+            "z": -19
+          }
+        },
+        "draws": 15
+      },
+      "timing": {
+        "samplesMs": [
+          1033.2999999999993,
+          866.6000000000004
+        ],
+        "meanMs": 949.9499999999998
+      }
+    },
+    {
+      "name": "corridor-2",
+      "worldPosition": {
+        "x": 60,
+        "y": 3.63,
+        "z": -8
+      },
+      "camera": {
+        "x": 59.50932728146263,
+        "y": 5.966564416939651,
+        "z": -12.069293544693382
+      },
+      "cameraFocus": {
+        "x": 60,
+        "y": 5.05,
+        "z": -8
+      },
+      "yaw": 0.1200000000000001,
+      "pitch": 0.22,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 94,
+      "triangles": 105812,
+      "geometries": 181,
+      "textures": 42,
+      "programs": 34,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 4,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 1,
+        "contactPatches": 243,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "schoolExterior": {
+        "floors": 3,
+        "windows": 27,
+        "label": "COLÉGIO SÃO JORGE",
+        "bands": [
+          "blue-middle",
+          "pink-upper"
+        ],
+        "fixedInteriorChanges": 0,
+        "structuralYellowBeams": 0,
+        "proposal": {
+          "approved": true,
+          "schoolRotation": 3.141592653589793,
+          "facade": "photo-street-side",
+          "campusFace": "reception-side",
+          "gates": [
+            {
+              "id": "court",
+              "name": "Portão da quadra",
+              "local": {
+                "x": -11,
+                "z": 27
+              },
+              "basis": 1.5707963267948966,
+              "width": 3,
+              "height": 2.6,
+              "openAngle": 1.5707963267948966,
+              "x": 71,
+              "z": -27
+            },
+            {
+              "id": "school",
+              "name": "Portão da escola · dentro da quadra",
+              "local": {
+                "x": 0,
+                "z": 19
+              },
+              "basis": 3.141592653589793,
+              "width": 2.6,
+              "height": 2.6,
+              "openAngle": 1.5707963267948966,
+              "x": 60,
+              "z": -19
+            },
+            {
+              "id": "reception",
+              "name": "Entrada da recepção",
+              "local": {
+                "x": 11,
+                "z": -5.5
+              },
+              "basis": 4.71238898038469,
+              "width": 2.6,
+              "height": 2.6,
+              "openAngle": -1.5707963267948966,
+              "x": 49,
+              "z": 5.5
+            }
+          ],
+          "annex": {
+            "minX": 49,
+            "maxX": 71,
+            "minZ": 19,
+            "maxZ": 35,
+            "eave": 4.15,
+            "rise": 1.8
+          },
+          "court": {
+            "minX": 49,
+            "maxX": 71,
+            "minZ": -35,
+            "maxZ": -19,
+            "minY": 0,
+            "maxY": 4.15
+          },
+          "corridorDoor": {
+            "id": "school",
+            "name": "Portão da escola · dentro da quadra",
+            "local": {
+              "x": 0,
+              "z": 19
+            },
+            "basis": 3.141592653589793,
+            "width": 2.6,
+            "height": 2.6,
+            "openAngle": 1.5707963267948966,
+            "x": 60,
+            "z": -19
+          }
+        },
+        "draws": 15
+      },
+      "timing": {
+        "samplesMs": [
+          1999.9000000000015,
+          2633.2000000000007
+        ],
+        "meanMs": 2316.550000000001
+      }
+    },
+    {
+      "name": "trees",
+      "room": null,
+      "worldPosition": {
+        "x": 2,
+        "y": 0.025,
+        "z": 20
+      },
+      "camera": {
+        "x": -1.647108651624683,
+        "y": 2.004402857784209,
+        "z": 25.948585287776183
+      },
+      "cameraFocus": {
+        "x": 2,
+        "y": 1.4449999999999998,
+        "z": 20
+      },
+      "yaw": -0.55,
+      "pitch": 0.08,
+      "exposure": 1,
+      "clock": "08:15",
+      "quality": "medium",
+      "drawCalls": 243,
+      "triangles": 247116,
+      "geometries": 149,
+      "textures": 36,
+      "programs": 24,
+      "overdrive": {
+        "id": "comic-overdrive-20-d2-d3",
+        "proposal": "b",
+        "edgeBatches": 3,
+        "inkPixels": 2.8,
+        "expanded": true,
+        "contactFloors": 0,
+        "contactPatches": 0,
+        "actorProfiles": true,
+        "hatching": 1,
+        "areas": [
+          "all-exteriors",
+          "all-school-floors"
+        ],
+        "treeInstancesReplaced": 150,
+        "trees": 11,
+        "cloudCards": 13,
+        "shadowBands": 3
+      },
+      "schoolExterior": {
+        "floors": 3,
+        "windows": 27,
+        "label": "COLÉGIO SÃO JORGE",
+        "bands": [
+          "blue-middle",
+          "pink-upper"
+        ],
+        "fixedInteriorChanges": 0,
+        "structuralYellowBeams": 0,
+        "proposal": {
+          "approved": true,
+          "schoolRotation": 3.141592653589793,
+          "facade": "photo-street-side",
+          "campusFace": "reception-side",
+          "gates": [
+            {
+              "id": "court",
+              "name": "Portão da quadra",
+              "local": {
+                "x": -11,
+                "z": 27
+              },
+              "basis": 1.5707963267948966,
+              "width": 3,
+              "height": 2.6,
+              "openAngle": 1.5707963267948966,
+              "x": 71,
+              "z": -27
+            },
+            {
+              "id": "school",
+              "name": "Portão da escola · dentro da quadra",
+              "local": {
+                "x": 0,
+                "z": 19
+              },
+              "basis": 3.141592653589793,
+              "width": 2.6,
+              "height": 2.6,
+              "openAngle": 1.5707963267948966,
+              "x": 60,
+              "z": -19
+            },
+            {
+              "id": "reception",
+              "name": "Entrada da recepção",
+              "local": {
+                "x": 11,
+                "z": -5.5
+              },
+              "basis": 4.71238898038469,
+              "width": 2.6,
+              "height": 2.6,
+              "openAngle": -1.5707963267948966,
+              "x": 49,
+              "z": 5.5
+            }
+          ],
+          "annex": {
+            "minX": 49,
+            "maxX": 71,
+            "minZ": 19,
+            "maxZ": 35,
+            "eave": 4.15,
+            "rise": 1.8
+          },
+          "court": {
+            "minX": 49,
+            "maxX": 71,
+            "minZ": -35,
+            "maxZ": -19,
+            "minY": 0,
+            "maxY": 4.15
+          },
+          "corridorDoor": {
+            "id": "school",
+            "name": "Portão da escola · dentro da quadra",
+            "local": {
+              "x": 0,
+              "z": 19
+            },
+            "basis": 3.141592653589793,
+            "width": 2.6,
+            "height": 2.6,
+            "openAngle": 1.5707963267948966,
+            "x": 60,
+            "z": -19
+          }
+        },
+        "draws": 15
+      },
+      "timing": {
+        "samplesMs": [
+          2583.2000000000007,
+          2516.5999999999985
+        ],
+        "meanMs": 2549.8999999999996
+      }
+    }
+  ]
+}

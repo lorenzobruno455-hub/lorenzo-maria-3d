@@ -6,12 +6,16 @@ on:
       - feat/colorbeat-v06-foundation
       - feat/aurora-07b
   pull_request:
+    # Reporting-only follow-ups do not repeat the complete browser regression.
+    paths-ignore:
+      - 'docs/**'
     branches:
       - main
       - feat/aurora-07a
       - feat/aurora-081-colorbeat-unified
       - feat/aurora-082-living-school
       - feat/aurora-comic-overdrive-p1-p2
+      - feat/aurora-comic-overdrive-20-d2
 
 concurrency:
   group: colorbeat-${{ github.head_ref || github.ref_name }}

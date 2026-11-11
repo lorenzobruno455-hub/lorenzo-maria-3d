@@ -2,6 +2,8 @@ import {test,expect} from '@playwright/test';
 import {seed,start,state} from './helpers.js';
 import {walkIntoSchool,walkOut} from './continuous-helpers.js';
 const done={stage:2,collected:['notebook','card','photo'],campaign:{memories:Array.from({length:6},(_,i)=>`memory-${i+1}`)}};
+// The confirmed reception opening is the sole ground-floor architecture delta.
+const unchangedRooms=solids=>solids.filter(b=>b.minX>=-11.2&&b.maxX<=11.2&&b.minZ>=-19.2&&b.maxZ<=19.2&&!(b.maxX>1.8&&b.minX<11.3&&b.maxZ>-9.2&&b.minZ<-1.8)).map(b=>JSON.stringify(['minX','maxX','minZ','maxZ','minY','maxY'].map(k=>Number.isFinite(b[k])?Number(b[k].toFixed(5)):null))).sort();
 test('global exterior uses the new profile by default and preserves physical route and legacy save',async({page})=>{
  const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
  await seed(page,{...done,position:{x:34,z:20},yaw:0});await start(page);
@@ -18,5 +20,5 @@ for(const [floor,x,z]of [[0,-5,-14],[1,6.5,-7],[2,0,5]])test(`global school floo
  expect(before.overdrive.id).toBe('comic-overdrive-20-d2-d3');expect(before.school.floor).toBe(floor);
  await page.goto('http://localhost:5173/?comic=legacy');await page.locator('#start').click();await page.evaluate(async()=>window.readGame=(await import('/src/systems/diagnostics.js')).getGameState);await expect.poll(async()=>(await state(page)).school.loading).toBe(false);
  expect((await state(page)).overdrive).toBe(null);expect((await state(page)).campaign).toEqual(before.campaign);expect((await state(page)).school.narrativeDetails).toEqual(before.school.narrativeDetails);
- if(floor>0)expect(await page.evaluate(async()=>(await import('/src/systems/diagnostics.js')).getNavigationState().solids)).toEqual(nav);else expect((await state(page)).school.room).toBe(before.school.room);expect(errors).toEqual([]);
+ if(floor>0)expect(await page.evaluate(async()=>(await import('/src/systems/diagnostics.js')).getNavigationState().solids)).toEqual(nav);else{expect(unchangedRooms(await page.evaluate(async()=>(await import('/src/systems/diagnostics.js')).getNavigationState().solids))).toEqual(unchangedRooms(nav));expect((await state(page)).school.room).toBe(before.school.room);};expect(errors).toEqual([]);
 });
