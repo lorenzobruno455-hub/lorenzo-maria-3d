@@ -66,8 +66,9 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      # Real walking adds travel time. Eight disjoint test shards retain one worker each.
-      - run: npm test -- --shard=${{ matrix.shard }}/8 --reporter=line,json
+      # Round-robin long missions across jobs; every case runs exactly once.
+      - run: node scripts/partition-browser-tests.mjs
+      - run: npm test -- --test-list=work/ci/browser-${{ matrix.shard }}.txt --reporter=line,json
         env:
           PLAYWRIGHT_JSON_OUTPUT_NAME: test-results/report.json
       - name: Attach browser evidence
