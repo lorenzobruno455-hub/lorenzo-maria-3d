@@ -7,13 +7,15 @@ test('Colorbeat theme applies to menus and adjusts outline quality without affec
   await expect(page.locator('#start')).toBeVisible();
   const theme = await page.evaluate(() => ({
     sun: getComputedStyle(document.documentElement).getPropertyValue('--cb-sun').trim(),
+    overdriveSun: getComputedStyle(document.body).getPropertyValue('--co-sun').trim(),
     titleFont: getComputedStyle(document.querySelector('.welcome-content h2')).fontFamily,
     menuColor: getComputedStyle(document.querySelector('#start')).backgroundColor,
   }));
   expect(theme.sun).toBe('#ffd43b');
+  expect(theme.overdriveSun).toBe('#ffe238');
   expect(theme.titleFont).toContain('Barlow Condensed');
   // Vite may finish applying stylesheet changes after the first browser paint.
-  await expect.poll(async () => page.locator('#start').evaluate(el => getComputedStyle(el).backgroundColor), { timeout: 5000 }).toBe('rgb(255, 212, 59)');
+  await expect.poll(async () => page.locator('#start').evaluate(el => getComputedStyle(el).backgroundColor), { timeout: 5000 }).toBe('rgb(255, 226, 56)');
   await page.screenshot({ path: 'test-results/v06-menu.png' });
   await page.locator('#start').click();
   await page.evaluate(async () => { window.readColorbeat = (await import('/src/systems/diagnostics.js')).getGameState; });

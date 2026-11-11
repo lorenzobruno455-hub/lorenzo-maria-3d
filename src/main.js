@@ -21,6 +21,7 @@ import * as THREE from 'three';
 import './style.css';
 import './comic.css';
 import './colorbeat-effects.css';
+import './comic-overdrive.css';
 import { Story } from './systems/story.js';
 import { Dialogue } from './systems/dialogue.js';
 import { createWorld } from './systems/world.js';
@@ -178,7 +179,7 @@ const legacyRoots=scene.children.filter(node=>node!==player&&node!==sun&&!node.i
 school=new ContinuousSchool({scene,world,frameNodes:[effect,interactionAccent.mesh],legacyRoots,player,follow,pool:assets,layout:schoolLayout,getState:()=>progress.schoolVisit,onStatus:notify,onChange:event=>{if(!event?.preserveInput)controls.clear();target=null;lastHUD='';lastLocation='';lastTarget='';syncSchoolUI();syncModal();needsRender=true;if(!school?.loading&&!event?.deferSave)save();}});
 school.narrative=new SchoolNarrative({school,world,story,living,adventure,getProgress:()=>progress});
 const comicMode=new URLSearchParams(location.search).get('comic');
-const overdriveP0=comicMode==='legacy'?null:createComicOverdriveP0({scene,resources:world.resources,school,ink,global:comicMode!=='overdrive-p0'});
+const overdriveP0=comicMode==='legacy'?null:createComicOverdriveP0({scene,resources:world.resources,school,ink,global:comicMode!=='overdrive-p0',finishing:comicMode!=='overdrive-p1-p2'});
 function syncSchoolUI(){if(!school)return;document.body.classList.toggle('school-visit',school.active);document.body.classList.toggle('school-inspecting',school.active&&school.inspecting);$('school-toolbar').hidden=!school.active&&!school.loading;$('school-floor-title').textContent=school.loading?'Carregando São Jorge…':school.inspecting?'Inspeção · coordenadas de jogo':`${school.navigation.floor(school.floor).label} · São Jorge`;$('school-inspect').textContent=school.inspecting?'Explorar':'Andares';$('school-inspect').disabled=school.loading;$('school-floor-view').hidden=!school.inspecting;$('school-floor-view').value=String(school.view);$('school-floor-view').disabled=school.loading;$('story-menu').disabled=school.loading;document.querySelectorAll('[data-story]').forEach(b=>b.disabled=school.loading);$('restart').disabled=school.active||school.loading;interactions.world=school.active?{occluders:school.navigation.obstacles(school.floor)}:world;}
 async function openSchool(){if(school.active||school.loading)return;if(dialog||panelOpen||adventure?.busy||story?.seat){notify('Conclua a interação atual antes de visitar São Jorge.');return;}if(!started){started=true;$('welcome').hidden=true;audio.unlock();}if(paused)setPause(false);await school.enter();syncSchoolUI();syncModal();save();}
 
@@ -338,7 +339,7 @@ function animate(now) {
     const zone = school?.active ? `${school.navigation.floor(school.floor).label} · ${school.room()?.name||'Corredor'} · SÃO JORGE` : player.position.x>38?'CAMINHO DO SÃO JORGE': player.position.z < -18 && Math.abs(player.position.x) < 6 ? 'CANTINA' : player.position.x < -28 && player.position.z < 10 ? 'QUADRA' : player.position.x > 28 && player.position.z < -6 ? 'SALA DE MÚSICA' : player.position.z < -6 && Math.abs(player.position.x) > 6 ? (player.position.x < 0 ? 'SALA DE LITERATURA' : 'BIBLIOTECA') : player.position.z > 17 ? 'JARDIM DA ESCOLA' : 'PÁTIO CENTRAL';
     if (lastLocation !== zone) { $('location').firstChild.textContent = `${zone} `; lastLocation = zone; } hudTimer = 0;
   }
-  school.presentWorld();overdriveP0?.update(camera);
+  school.presentWorld();overdriveP0?.update(camera,settings.quality);
   // Frozen pause/welcome scenes need only redraw on resize, settings or camera settling.
   if (active() || dialog || adventure?.busy || (panelOpen && started && story?.game) || needsRender) { renderer.render(scene, camera); needsRender = false; }
   audio.update?.(); if (active()) quality.sample(rawDT);

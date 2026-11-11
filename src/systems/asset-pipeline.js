@@ -36,7 +36,8 @@ export class GLBAssets {
       if (!mesh.isMesh) return;
       const convert = material => {
         const color = palette[material.name] || `#${material.color?.getHexString() || 'ffffff'}`;
-        const kind = /^(shirt|pants|fabric|cloth)$/i.test(material.name) ? 'fabric' : /metal|glass/i.test(material.name) ? material.name.toLowerCase().includes('glass') ? 'glass':'metal' : 'plain';
+        const role=this.resources.colorbeat?.actorProfiles&&/^(skin|hair|eye)$/i.test(material.name)?material.name.toLowerCase():null;
+        const kind = role || (/^(shirt|pants|fabric|cloth)$/i.test(material.name) ? 'fabric' : /metal|glass/i.test(material.name) ? material.name.toLowerCase().includes('glass') ? 'glass':'metal' : 'plain');
         const colored = vertexColors && mesh.geometry.hasAttribute('color');
         const key = `${color}:${kind}:${colored}`;
         if(!this.materials.has(key)) {

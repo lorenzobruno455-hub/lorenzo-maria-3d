@@ -1,12 +1,13 @@
 import{expect}from'@playwright/test';import{state}from'./helpers.js';
 // Read-only planning. Travel uses ordinary mouse camera drags and keyboard events.
-async function face(page,yaw){
+export async function face(page,yaw){
  const sensitivity=Number(await page.locator('#sensitivity').inputValue());
  const attempts=Math.ceil(Math.PI/(.0008*sensitivity*(page.viewportSize()?.width||800)))+2;
  for(let i=0;i<attempts;i++){
   const current=(await state(page)).yaw,angle=Math.atan2(Math.sin(yaw-current),Math.cos(yaw-current));if(Math.abs(angle)<.001)return;
   const p=await page.evaluate(()=>{const c=document.querySelector('#game');for(const fy of [.7,.6,.8,.5])for(const fx of [.5,.4,.6]){const x=innerWidth*fx,y=innerHeight*fy;if(document.elementFromPoint(x,y)===c)return{x,y,width:innerWidth};}throw Error('camera drag surface unavailable');});
-  const dx=Math.max(-p.width*.2,Math.min(p.width*.2,-angle/(.004*sensitivity))),expected=current-dx*.004*sensitivity;
+  // Canvas pointer capture keeps a full turn valid even beyond the viewport.
+  const dx=-angle/(.004*sensitivity),expected=current-dx*.004*sensitivity;
   await page.mouse.move(p.x,p.y);await page.mouse.down({button:'right'});await page.mouse.move(p.x+dx,p.y);await page.mouse.up({button:'right'});
   await expect.poll(async()=>Math.abs(Math.atan2(Math.sin((await state(page)).yaw-expected),Math.cos((await state(page)).yaw-expected)))).toBeLessThan(.001);
  }
