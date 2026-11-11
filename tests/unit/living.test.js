@@ -12,13 +12,13 @@ import { freshProgress, loadSave, saveProgress, SAVE_KEY, PREVIOUS_SAVE_KEY } fr
 import { createWorld } from '../../src/systems/world.js';
 import { Character } from '../../src/systems/character.js';
 import { LivingSchool } from '../../src/systems/living.js';
-import { blocked } from '../../src/systems/physics.js';
+import { blocked,BOUNDS } from '../../src/systems/physics.js';
 
 test('waypoint path goes around walls and rejects disconnected destinations', () => {
   const wall = { minX: -1, maxX: 1, minY: 0, maxY: 4, minZ: -5, maxZ: 5 };
   const from = { x: -3, z: 0 }, to = { x: 3, z: 0 }, path = findPath(from, to, [wall]);
   assert(path.length > 2); let previous = from; for (const node of path) { assert(clearSegment(previous, node, [wall])); previous = node; }
-  const sealed = { minX: -1, maxX: 1, minY: 0, maxY: 4, minZ: -28, maxZ: 30 }; assert.equal(findPath(from, to, [sealed]).length, 0);
+  const sealed = { minX: -1, maxX: 1, minY: 0, maxY: 4, minZ: BOUNDS.minZ-1, maxZ: BOUNDS.maxZ+1 }; assert.equal(findPath(from, to, [sealed]).length, 0);
 });
 test('routine agent travels, sits, stands, resumes and reacts to proximity', () => {
   const agent = new RoutineAgent({ id: 'test', start: { x: 0, z: 0 }, route: [{ x: 3, z: 0, state: 'sit', duration: 1 }, { x: 0, z: 0, state: 'observe', duration: 1 }] });

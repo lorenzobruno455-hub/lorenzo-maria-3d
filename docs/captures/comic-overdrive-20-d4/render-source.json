@@ -1,0 +1,11 @@
+{
+  "base": "086f2bc13174a8d051714361a3f44c3b2b15cd63",
+  "note": "Approval preview working tree; real game renders, review camera, HUD hidden for capture only. Annotation points projected from actual camera. No collision or save changes.",
+  "sha256": {
+    "src/main.js": "4a0848c80b2d8a9fdf76a848efdfe062f078d9947dddb974d220d7f22664bb3e",
+    "src/systems/school-exterior.js": "9fc590e49e3c30882d6cc4e7d709e336f730d9b6fb2a7a34d6a5e30da483f7e6",
+    "scripts/capture-overdrive-20.mjs": "e4720a8b9e04962065c89bf76fd4e12b9458e2df8fe393336e1425353ab8f60d",
+    "scripts/annotate-school-entry.mjs": "10a5a6d393b8db816d6e591120eb80e368a9602c487ab62ee2c4efd17aac0811",
+    "scripts/annotate-school-entry.py": "8c6a9e5b2063178790c20255d9b13c9e9e2db693725b929cb3aecb69ce5339cf"
+  }
+}

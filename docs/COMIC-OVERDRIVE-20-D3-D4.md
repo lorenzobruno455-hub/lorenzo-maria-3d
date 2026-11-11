@@ -1,0 +1,66 @@
+# Comic Overdrive 2.0 — fases 4–5
+
+Base GitHub: PR #17, `086f2bc`. Branch `feat/aurora-comic-overdrive-20-d3-d4`, PR #18. Proposta B e pisos marrom escuro/cinza mantidos. Sem merge na main do GitHub.
+
+**Entrega aceita no estado atual pelo proprietário (96% estimados do bloco, sem aprovação integral da regressão).** Em seguida, o proprietário solicitou atualizar o link Android. A publicação foi concluída pelo Sites, preservando endereço, project_id, audiência e origem dos saves: https://lorenzo-maria-aurora-081-play.divinekid13.chatgpt.site . Versão salva do Sites nº 6, fonte GitHub `25422929bf21f8f7c0c370930a561a0e09f6972d`, commit da fonte hospedada `eb939c6cb5cec63a672b47049b5d5cf5a7c2342a`. Nenhum ajuste adicional de jogabilidade foi feito para publicar.
+
+Build de publicação aprovado. CI [43016301335](https://github.com/lorenzobruno455-hub/lorenzo-maria-3d/actions/runs/43016301335): 178 unitários e build aprovados; primeira passagem de navegador com **99/101** cenários aprovados. Os grupos afetados foram repetidos, sem repetir os seis grupos verdes. Permaneceram falhas no sincronismo dos cliques do roteiro de ritmo e no gesto automatizado de câmera após mudar para retrato. O CI não está integralmente verde. O proprietário autorizou entregar e publicar assim; nenhuma falha foi ocultada ou marcada como sucesso. Teste em Android físico permanece pendente.
+
+
+## Fase 4 — implantação confirmada
+
+O proprietário confirmou três portões: externo da quadra; portão existente da escola **dentro da quadra**; entrada voltada ao campus antigo que **abre diretamente na recepção**. A quadra é colada à escola. Esta correção substitui a proposta preliminar de afastamento registrada em `6abb9cd`; as capturas antigas em `comic-overdrive-20-d4/` são históricas.
+
+Para orientar a recepção ao campus, aplicou-se uma rotação rígida de 180° ao prédio na origem `(60,0,0)`. Não houve espelhamento, troca de salas ou mudança nos croquis/GLBs. Transformação: `mundo=(60-localX, localY, -localZ)`. As coordenadas locais dos 24 ambientes, personagens e saves internos continuam iguais. A face da foto é tratada como face da rua, oposta ao campus; isso é adaptação de implantação no jogo, sem afirmar orientação geográfica real.
+
+| Acesso | Coordenadas locais X/Z | Mundo X/Z | Destino |
+| --- | --- | --- | --- |
+| G1 | −11; 27 | 71; −27 | Exterior → quadra |
+| G2 | 0; 19 | 60; −19 | Quadra → corredor existente |
+| G3 | 11; −5,5 | 49; 5,5 | Campus → recepção diretamente |
+
+Quadra no mundo `X=49…71,Z=−35…−19`, encostada no prédio em `Z=−19`. Caminho cinza pelo lado do campus e contorno norte levam aos acessos. O limite norte foi ampliado para `−37` somente no distrito novo; a antiga borda do campus continua protegida. Árvores, bancos e edifícios do campus antigo mantêm suas posições. Dois postes da conexão que atravessavam a área das salas foram reaproveitados junto ao novo caminho, em `(42,8;−12)` e `(42,8;−28)`; os outros dois continuam no local anterior.
+
+A parede externa da recepção ganhou um vão estreito de 2,6 unidades, com verga, identificação e batentes. A janela desse trecho foi substituída pelo acesso. O portão G2 e o vão original permanecem. Os três portões reutilizam o sistema existente de pivô, animação e colisão; não entram na lista persistente das duas portas antigas. G1 abre por proximidade; G2/G3 aguardam a chegada do piso carregado. Ao sair do repouso, os portões escolhem o lado oposto de quem se aproxima; isso evita que uma recarga próxima deixe a folha parada contra o personagem. A proteção existente contra fechar sobre pessoas continua ativa. Selos físicos impedem entrar antes disso.
+
+Fachada procedural: massa de três níveis, faixas rosa e azul, paredes claras, janelas, grade branca, letreiro; quadra azul com cobertura curva avermelhada. Sem emblema copiado, infraestrutura amarela inventada, modelo externo ou dependência nova. Geometrias/materiais compartilhados e batches estáticos; um atlas de letreiro/recepção 512×128. A camada exterior deixa de renderizar em inspeção e nos interiores afastados dos portais.
+
+[Vista da fachada](captures/comic-overdrive-20-d4-confirmed/overview-annotated.png) · [Os três portões](captures/comic-overdrive-20-d4-confirmed/entry-annotated.png).
+
+As imagens são capturas reais, com pontos projetados a partir da câmera real. A segunda usa um corte **somente na revisão**, ocultando a cobertura da quadra para mostrar G2. O jogo mantém a cobertura. Queries históricas conservam sua orientação antiga para comparação; o padrão e a prévia confirmada usam a implantação nova.
+
+## Compatibilidade
+
+Mundo contínuo na mesma cena, sem teletransporte. Vetores de movimento, colisores e yaw da câmera são transformados entre os referenciais; mudar de parent preserva a pose mundial. Saves v04 não são migrados: posições internas permanecem locais e externas permanecem mundiais. Só o pequeno vão da recepção amplia a validação de posição. Um save externo antigo sobre a parede da porta anterior é recuperado no entorno livre, sem cair em uma sala ainda descarregada. Sete personagens, seis memórias, missões, três pavimentos, checkpoint e controles permanecem sob os sistemas existentes.
+
+## Fase 5 — revisão e validação
+
+Acabamento original dos painéis com áreas diagonais, cores de impressão, títulos marcados, seleção amarela e hierarquia de leitura, a partir das referências registradas em [Referências Hi-Fi RUSH](REFERENCIAS-HIFI-RUSH.md). Nenhum asset copiado. Alvos de toque e controles não foram recortados; reduced motion e alto contraste mantidos. A página Behance integral permaneceu indisponível (403); não se atribuem detalhes não inspecionados a ela.
+
+[Dez cenas finais](captures/comic-overdrive-20-d5/final-metrics.json): campus, árvores/céu, salas A e C, corredores dos dois pisos, biblioteca, laboratório, salão e quadra antiga. São renders reais de 960×600, preset Médio, sem erro de página/shader. A auditoria dos 24 ambientes da fase 3 continua válida para a decoração; esta fase mantém seus dados e posições locais. Os dois exteriores anotados complementam esse conjunto.
+
+[Comparação anterior](captures/comic-overdrive-20-d3/after-metrics.json) → [final](captures/comic-overdrive-20-d5/final-metrics.json), mesmas poses locais/preset, com a iluminação mundial incidindo no prédio agora girado:
+
+| Cena | Draws antes → depois | Triângulos antes → depois |
+| --- | --- | --- |
+| Campus | 220 → 243 | 242.598 → 247.116 |
+| Sala A | 90 → 87 | 136.440 → 134.798 |
+| Biblioteca | 151 → 154 | 157.096 → 157.386 |
+| Salão | 77 → 79 | 62.320 → 62.524 |
+| Quadra antiga | 131 → 131 | 187.914 → 187.914 |
+
+A fachada aumenta o custo exterior; a camada é ocultada nos interiores afastados dos portais. Os JSONs registram também geometrias/texturas e amostras de tempo. Contagens com sombras incluem passes de renderização. Amostras curtas de SwiftShader, algumas com carga concorrente de captura, servem à auditoria e **não são benchmark de desempenho**.
+
+[Presets móveis e interface](captures/comic-overdrive-20-d5/ui-metrics.json): 844×390 com sete GLBs carregados, Baixo/Médio/Alto; pausa, diálogo, inventário e retrato 390×844 com alto contraste/reduced motion. A cinemática tem captura real separada. Sem erros de página/console. Os limites gráficos originais foram preservados. A exceção de tempo para três roteiros antigos completos está explicitada abaixo.
+
+Verificações locais: 17 unitários direcionados finais passaram; outros testes de navegação, compatibilidade e NPCs passaram durante a implementação. Browser: prévia/padrão com mesma colisão/campanha, caminhada pelos três portões, save externo/recarga, recuperação do save da porta antiga e retorno ao campus passaram. A jornada foi dividida em ida e volta para não ultrapassar o limite individual de 240s no renderizador de software. Uma primeira execução concorrente do teste de menus atingiu 90s; a execução isolada passou dentro do limite original. Build de produção aprovado; aviso preexistente de chunk Three acima de 500 kB mantido.
+
+Revisão independente da implementação F4/F5: nenhum problema crítico, importante ou menor identificado. A correção posterior do sentido de abertura foi reproduzida em teste RED→GREEN e no cenário de toque/recarga; a reposição dos dois postes foi coberta por verificação de não sobrepor salas. Ela verificou a árvore de trabalho completa, incluindo transformação, portas, streaming, saves, recursos e UI. Desempenho físico, geografia não comprovada pelas referências e resultado de CI permanecem explicitamente fora de sua conclusão técnica.
+
+**Regressão completa executada:** oito grupos disjuntos, com os resultados e pendências declarados no topo deste relatório. A primeira execução foi substituída após o caso real de portão e a adaptação das comparações de bounds mundiais para o referencial local; campanhas e memórias continuam comparadas integralmente. As capturas registram o estágio anterior à reposição dos dois postes e ao agrupamento final de pisos; topologia, paleta e ambientes não foram refeitos. [Métricas posteriores à otimização](captures/comic-overdrive-20-d5/validation-preset-metrics.json): no cenário padrão de validação 800×450, Baixo = 158 draws / 83 geometrias / 17 texturas, abaixo dos limites originais. Quatro testes específicos de orçamento gráfico passaram. Pisos e terreno da conexão agora compartilham batches por material, reduzindo chamadas sem alterar colisões. O workflow agora inclui a base deste PR; atualizações apenas de documentação não repetem toda a suíte. FPS físico Android permanece pendente de teste em aparelho; tempos de SwiftShader não equivalem a FPS de telefone.
+
+Os oito grupos executam **101 casos distintos**: o antigo caso que juntava seis capítulos e seis releituras foi separado em duas verificações independentes, mantendo todos os textos, datas, recompensas e validações. Os testes de ciclos de GPU deixam de repetir a viagem completa ao campus, já coberta pelas jornadas dos três portões. O teste de escadas inicia no acesso da recepção e ainda percorre os três pisos, recarrega e sai fisicamente. O limite de job continua em 22 minutos. A partição agora alterna os cenários da lista oficial do Playwright entre os oito grupos, evitando reunir todas as missões longas no mesmo job. A seleção foi conferida pelo próprio Playwright: 13/13/13/13/13/12/12/12 = 101 casos, sem omissões ou repetições. Apenas os três roteiros completos antigos de aventuras no campus passam de 90s para 180s, pois acumulam várias recargas frias de cena no renderizador de software; todas as etapas e assertivas permanecem, assim como os prazos locais das esperas e os limites gráficos. Os demais casos mantêm 90/240/300s. O teste de contornos aguarda os sete modelos antes de comparar presets, eliminando a leitura parcial durante o carregamento.
+
+O teste legado de contornos também foi alinhado ao comportamento B já aprovado: Baixo preserva as silhuetas principais próximas, portanto sua quantidade pode ser igual à do Médio nessa cena. A verificação continua exigindo contornos visíveis, quantidade não superior ao preset detalhado, preset Baixo ativo e hachuras desligadas no Baixo/ligadas no Alto. O jogo não foi alterado para satisfazer esse teste. Os três roteiros antigos completos passaram localmente no orçamento explícito de 180s; a verificação de contornos corrigida passou em 28,4s.
+
+Publicação confirmada pelo Sites: saved version appgprj_6af2643dbe7481918ec30d52ef928ca2~appgver_08a18bbebc988191bd349b6132df1cd4; deployment appgdep_6af45f97c49c819195a5036d45192e11, status succeeded. O auxiliar oficial não estava disponível no ambiente; foi reutilizado o fluxo Git autenticado por stdin da publicação anterior, seguido de build Vite e pacote estático, sem gravar credenciais. O archive contém apenas a configuração de hospedagem e dist.

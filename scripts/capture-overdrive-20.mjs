@@ -12,6 +12,7 @@ export const scenes=[
  ['hall',2,0,5,.45,.45],['entrance-court',null,58,24,-.65,.16],
  ['court',null,-33,10,0,.18],['corridor-2',1,0,8,.12,.22],
  ['trees',null,2,20,-.55,.08],
+ ['photo-front',null,22,27,-1.20,.08],['photo-side-entry',null,39,27,-.75,.12],
 ];
 await mkdir(dir,{recursive:true});const metrics=[];
 const viewport=process.env.CAPTURE_MOBILE==='1'?{width:844,height:390}:{width:960,height:600},captureQuality=process.env.CAPTURE_QUALITY||'medium';
@@ -33,9 +34,10 @@ try{for(const[name,floor,x,z,yaw,pitch,expectedRoom]of shots.filter(s=>(process.
  await page.evaluate(()=>document.fonts.ready);
  const timing=await page.evaluate(async({settle,samples})=>{for(let i=0;i<settle;i++)await new Promise(requestAnimationFrame);const values=[];let last=await new Promise(requestAnimationFrame);for(let i=0;i<samples;i++){const now=await new Promise(requestAnimationFrame);values.push(now-last);last=now;}return{samplesMs:values,meanMs:values.reduce((a,b)=>a+b)/values.length};},{settle,samples});
  const s=await page.evaluate(()=>readCapture());await page.locator('#pause-button').click();await page.addStyleTag({content:'#pause{visibility:hidden!important}'});
+ if(process.env.CAPTURE_CLEAN==='1')await page.addStyleTag({content:'body>:not(#game){visibility:hidden!important}'});
  await page.screenshot({path:`${dir}/${name}-${variant}.jpg`,quality:90});
  if(errors.length)throw Error(errors.join('\n'));
- metrics.push({name,room:s.school.room,expectedRoom,worldPosition:s.worldPosition,camera:s.cameraWorld,yaw:s.yaw,pitch:s.pitch,exposure:s.colorbeat.exposure,clock:(await page.locator('#location').textContent()).match(/\d{2}:\d{2}/)?.[0],quality:s.quality,drawCalls:s.drawCalls,triangles:s.triangles,geometries:s.geometries,textures:s.textures,programs:s.colorbeat.programs,overdrive:s.overdrive,timing});
+ metrics.push({name,room:s.school.room,expectedRoom,worldPosition:s.worldPosition,camera:s.cameraWorld,cameraFocus:s.cameraFocusWorld,yaw:s.yaw,pitch:s.pitch,exposure:s.colorbeat.exposure,clock:(await page.locator('#location').textContent()).match(/\d{2}:\d{2}/)?.[0],quality:s.quality,drawCalls:s.drawCalls,triangles:s.triangles,geometries:s.geometries,textures:s.textures,programs:s.colorbeat.programs,overdrive:s.overdrive,schoolExterior:s.schoolExterior,timing});
  await persist();await context.close();console.log(`${variant}: ${name}`);
 }}finally{await browser.close();}
 await persist();

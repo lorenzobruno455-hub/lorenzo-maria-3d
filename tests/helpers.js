@@ -6,8 +6,8 @@ export async function seed(page, progress = {}, settings = {}) {
     }
   }, { progress, settings });
 }
-export async function start(page) {
-  await page.goto('http://localhost:5173'); await page.locator('#start').click();
+export async function start(page,url='http://localhost:5173') {
+  await page.goto(url); await page.locator('#start').click();
   await page.evaluate(async () => { window.readGame = (await import('/src/systems/diagnostics.js')).getGameState; });
 }
 export const state = page => page.evaluate(() => window.readGame());

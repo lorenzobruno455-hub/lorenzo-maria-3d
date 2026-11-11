@@ -2,6 +2,7 @@ import{walkIntoSchool,walkOut}from'./continuous-helpers.js';
 import {test,expect} from '@playwright/test';
 import {mkdirSync} from 'node:fs';
 import {seed,start,state} from './helpers.js';
+import {chapters,memories} from '../src/systems/quests.js';
 import {NARRATIVE_POINTS as points} from '../src/systems/school-narrative-map.js';
 mkdirSync('docs/captures/08-m3',{recursive:true});
 const ready={stage:2,collected:['notebook','card','photo'],schoolVisit:{active:true,floor:0,position:{x:-4.7,z:16},yaw:0,pitch:.38}};
@@ -39,18 +40,23 @@ test('M3 Música uses the third-floor instrument, four real rhythm hits, animate
  await actorApproach(page,'davi');await interact(page,'Davi');await finishDialog(page);await expect(page.locator('#cinematic')).toBeVisible();expect((await state(page)).camera.y).toBeGreaterThan(8);await page.screenshot({path:'docs/captures/08-m3/music-finale.png'});await page.locator('#scene-skip').click();await nodeAt(page,'familiar-music',7);await relocate(page,points.instrument);expect((await state(page)).living.events['familiar-music']).toBe('done');
 });
 
-test('M3 six original chapters unlock in order, then all six library books replay without duplicating rewards',async({page})=>{
+test('M3 six original chapters unlock in order and preserve their rewards in the save',async({page})=>{
  test.setTimeout(300000);await boot(page);
  for(let i=1;i<=6;i++){
   const p=points[`memory-${i}`];await relocate(page,p);await expect.poll(async()=>(await state(page)).campaign.steps[`chapter-${i}`]||[]).toContain('visit');
   if([1,2,6].includes(i)){await actorApproach(page,'maria');await interact(page,'Maria');await page.getByRole('button',{name:'Escola',exact:true}).click();await finishDialog(page);await expect.poll(async()=>(await state(page)).campaign.steps[`chapter-${i}`]).toContain('talk');await relocate(page,p);}
   await interact(page,'Descobrir');await finishDialog(page);await expect.poll(async()=>(await state(page)).campaign.memories.length).toBe(i);
  }
- const original=(await state(page)).campaign;expect(original.letter).toBe(true);
+ const original=(await state(page)).campaign;expect(original.letter).toBe(true);expect(original.vouchers).toEqual(chapters.map(c=>c.reward));await page.locator('#pause-button').click();const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('lorenzo-maria-v04')).progress.campaign);expect(saved.memories).toEqual(original.memories);expect(saved.vouchers).toEqual(original.vouchers);
+});
+
+// Independent completed-save fixture; do not replay six chapters merely to read books.
+test('M3 all six library books replay their original dates without duplicating saved rewards',async({page})=>{
+ test.setTimeout(300000);await boot(page,{campaign:{memories:memories.map(m=>m.id),vouchers:chapters.map(c=>c.reward)},schoolVisit:{...ready.schoolVisit,position:{x:-7.3,z:-12.7}}});const original=(await state(page)).campaign;expect(original.memories).toHaveLength(6);
  for(let i=0;i<6;i++){
-  await relocate(page,{floor:0,x:-7.3+i*.32,z:-12.7});await interact(page,'Ler');await expect(page.locator('#speech')).toContainText(['19/08/2024','19/05/2025','17/08/2025','31/03/2026','05/09/2026','21/09/2026'][i]);await finishDialog(page);
+  if(i)await relocate(page,{floor:0,x:-7.3+i*.32,z:-12.7});await interact(page,'Ler');await expect(page.locator('#speech')).toContainText(['19/08/2024','19/05/2025','17/08/2025','31/03/2026','05/09/2026','21/09/2026'][i]);await finishDialog(page);
  }
- expect((await state(page)).campaign.memories).toEqual(original.memories);expect((await state(page)).campaign.vouchers).toEqual(original.vouchers);await walkOut(page);expect((await state(page)).campaign.letter).toBe(true);
+ expect((await state(page)).campaign.memories).toEqual(original.memories);expect((await state(page)).campaign.vouchers).toEqual(original.vouchers);await walkOut(page,{returnToCampus:false});expect((await state(page)).campaign.letter).toBe(true);
 });
 
 test('M3 Android reads a locked book, follows a quiz across floors and uses touch interactions',async({browser})=>{

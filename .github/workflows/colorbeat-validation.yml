@@ -6,12 +6,16 @@ on:
       - feat/colorbeat-v06-foundation
       - feat/aurora-07b
   pull_request:
+    # Reporting-only follow-ups do not repeat the complete browser regression.
+    paths-ignore:
+      - 'docs/**'
     branches:
       - main
       - feat/aurora-07a
       - feat/aurora-081-colorbeat-unified
       - feat/aurora-082-living-school
       - feat/aurora-comic-overdrive-p1-p2
+      - feat/aurora-comic-overdrive-20-d2
 
 concurrency:
   group: colorbeat-${{ github.head_ref || github.ref_name }}
@@ -48,12 +52,12 @@ jobs:
   browser:
     needs: validate
     runs-on: ubuntu-latest
-    # Keep individual test limits; allow setup/artifact time around the 17.6m shard.
+    # Keep all individual/job limits; spread long real-walking cases across smaller shards.
     timeout-minutes: 22
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4]
+        shard: [1, 2, 3, 4, 5, 6, 7, 8]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -62,8 +66,9 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      # Real walking adds travel time. Four disjoint test shards retain one worker each.
-      - run: npm test -- --shard=${{ matrix.shard }}/4 --reporter=line,json
+      # Round-robin long missions across jobs; every case runs exactly once.
+      - run: node scripts/partition-browser-tests.mjs
+      - run: npm test -- --test-list=work/ci/browser-${{ matrix.shard }}.txt --reporter=line,json
         env:
           PLAYWRIGHT_JSON_OUTPUT_NAME: test-results/report.json
       - name: Attach browser evidence

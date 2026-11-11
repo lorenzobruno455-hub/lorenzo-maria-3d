@@ -21,14 +21,20 @@ test('Colorbeat theme applies to menus and adjusts outline quality without affec
   await page.evaluate(async () => { window.readColorbeat = (await import('/src/systems/diagnostics.js')).getGameState; });
   await expect.poll(async () => page.evaluate(() => window.readColorbeat().outlines)).toBeGreaterThan(0);
   await page.screenshot({ path: 'test-results/v06-courtyard.png' });
+  await expect.poll(async()=>page.evaluate(()=>{const s=window.readColorbeat();return s.visual.models.lorenzo&&s.npcs.every(n=>n.model);})).toBe(true);
+  await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
   await page.locator('#pause-button').click();
   const detailed=await page.evaluate(()=>window.readColorbeat().outlines);
   await page.locator('#quality').selectOption('low');
   await page.locator('#resume').click();
-  await expect.poll(async()=>page.evaluate(()=>window.readColorbeat().outlines)).toBeLessThan(detailed);
+  // Expanded B deliberately retains nearby core silhouettes on Low.
+  await expect.poll(async()=>page.evaluate(()=>window.readColorbeat().outlines)).toBeLessThanOrEqual(detailed);
+  await expect.poll(async()=>page.evaluate(()=>window.readColorbeat().quality)).toBe('low');
+  await expect.poll(async()=>page.evaluate(()=>window.readColorbeat().overdrive.hatching)).toBe(0);
   await page.locator('#pause-button').click();
   await page.locator('#quality').selectOption('high');
   await page.locator('#resume').click();
+  await expect.poll(async()=>page.evaluate(()=>window.readColorbeat().overdrive.hatching)).toBe(1);
   await page.locator('#pause-button').click();
   await expect.poll(async () => page.evaluate(() => window.readColorbeat().outlines)).toBeGreaterThan(0);
   await page.locator('#resume').click();

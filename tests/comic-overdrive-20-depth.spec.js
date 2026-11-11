@@ -26,6 +26,6 @@ test('school depth preserves collision, six memories and upper-floor saved posit
  expect(before.overdrive.id).toBe('comic-overdrive-20-d2-d3');expect(before.overdrive.contactPatches).toBeGreaterThan(0);expect(before.school.floor).toBe(1);expect(before.campaign.memories.length).toBe(6);
  await page.locator('#pause-button').click();await page.goto('http://localhost:5173/?comic=overdrive-20-b');await page.locator('#start').click();await page.evaluate(async()=>window.readGame=(await import('/src/systems/diagnostics.js')).getGameState);
  await expect.poll(async()=>(await state(page)).school.active).toBe(true);
- const after=await state(page);expect(after.school.floor).toBe(1);expect(after.worldPosition.x).toBeCloseTo(before.worldPosition.x,4);expect(after.worldPosition.z).toBeCloseTo(before.worldPosition.z,4);expect(after.campaign.memories).toEqual(before.campaign.memories);
+ const after=await state(page);expect(after.school.floor).toBe(1);expect(after.x).toBeCloseTo(before.x,4);expect(after.z).toBeCloseTo(before.z,4);expect(after.campaign.memories).toEqual(before.campaign.memories);
  expect(await page.evaluate(async()=>(await import('/src/systems/diagnostics.js')).getNavigationState().solids)).toEqual(navigation);expect(errors).toEqual([]);
 });
