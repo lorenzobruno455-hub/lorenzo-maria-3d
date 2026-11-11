@@ -26,7 +26,13 @@ export function extendThreeGateConnection(base,world,rotation){
  const oldGround=world.groundHeight;world.groundHeight=(x,z)=>x>=48.8&&x<=71.2&&z>=-35.2&&z<=-18.8?.03:paths.some(([cx,cz,w,d])=>Math.abs(x-cx)<=w/2&&Math.abs(z-cz)<=d/2)?.03:oldGround(x,z);
  const install=base.installFloor.bind(base);base.installFloor=boxes=>{install(boxes);receptionSeal.enabled=false;};
  base.access=access;base.gateDoors=doors;base.schoolDoors=[base.door,doors.get('reception')];base.exteriorOccluders=occluders;
- base.updateGates=(position,ready)=>{for(const g of access.gates){const d=doors.get(g.id);d.open=Math.hypot(position.x-g.x,position.z-g.z)<5&&(g.id==='court'||ready);}};
+ base.updateGates=(position,ready)=>{for(const g of access.gates){
+  const d=doors.get(g.id),near=Math.hypot(position.x-g.x,position.z-g.z)<5&&(g.id==='court'||ready);
+  // Pick the free side only from rest; never reverse a leaf while it is moving.
+  // This also lets a near-door save reopen without sweeping into its owner.
+  if(near&&!d.open&&Math.abs(d.angle)<.03){const side=(position.x-g.x)*Math.sin(g.basis)+(position.z-g.z)*Math.cos(g.basis);d.openAngle=(side>=0?1:-1)*Math.abs(g.openAngle);}
+  d.open=near;
+ }};
  base.gatesState=()=>access.gates.map(g=>({id:g.id,name:g.name,x:g.x,z:g.z,local:{...g.local},angle:doors.get(g.id).angle,open:doors.get(g.id).open}));
  const dispose=base.dispose.bind(base);let disposed=false;base.dispose=()=>{
   if(disposed)return;disposed=true;world.groundHeight=oldGround;

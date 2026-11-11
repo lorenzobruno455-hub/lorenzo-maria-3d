@@ -42,14 +42,14 @@ export async function walkTo(page,target,{timeout=120000}={}){
 }
 export async function walkIntoSchool(page,{arrival='corridor'}={}){
  if(!(await state(page)).started)await page.locator('#start').click();if((await state(page)).paused)await page.locator('#resume').click();
- if((await state(page)).school.gates){await walkTo(page,{x:36,z:20});await walkTo(page,{x:47,z:5.5});await expect.poll(async()=>(await state(page)).school.gates.find(g=>g.id==='reception').angle,{timeout:20000}).toBeLessThan(-1.4);await walkTo(page,{x:49.6,z:5.5});await expect.poll(async()=>(await state(page)).school.active).toBe(true);if(arrival==='corridor'){await walkTo(page,{x:0,z:18.4});await face(page,0);}return;}
+ if((await state(page)).school.gates){await walkTo(page,{x:36,z:20});await walkTo(page,{x:47,z:5.5});await expect.poll(async()=>Math.abs((await state(page)).school.gates.find(g=>g.id==='reception').angle),{timeout:20000}).toBeGreaterThan(1.4);await walkTo(page,{x:49.6,z:5.5});await expect.poll(async()=>(await state(page)).school.active).toBe(true);if(arrival==='corridor'){await walkTo(page,{x:0,z:18.4});await face(page,0);}return;}
  await walkTo(page,{x:36,z:20});await walkTo(page,{x:60,z:20});await expect.poll(async()=>(await state(page)).school.doorAngle,{timeout:20000}).toBeGreaterThan(1.4);await walkTo(page,{x:60,z:18.4});await expect.poll(async()=>(await state(page)).school.active).toBe(true);
 }
 export async function walkOut(page,{returnToCampus=true}={}){
  const layout=(await import('../src/data/sao-jorge.json',{with:{type:'json'}})).default;
  if((await state(page)).school.inspect)await page.locator('#school-inspect').click();
  while((await state(page)).school.floor>0){const f=(await state(page)).school.floor,p=layout.floors[f].stairs.find(s=>s.destination===f-1);await walkTo(page,p);await expect(page.locator('#prompt')).toContainText(`${f}º`);await page.keyboard.press('e');await expect.poll(async()=>(await state(page)).school.floor).toBe(f-1);}
- if((await state(page)).school.gates){await walkTo(page,{x:10.3,z:-5.5});await expect.poll(async()=>(await state(page)).school.gates.find(g=>g.id==='reception').angle).toBeLessThan(-1.4);await walkTo(page,{x:12,z:-5.5});await expect.poll(async()=>(await state(page)).school.active).toBe(false);if(returnToCampus){await walkTo(page,{x:36,z:5.5});await walkTo(page,{x:0,z:19});}return;}
+ if((await state(page)).school.gates){await walkTo(page,{x:10.3,z:-5.5});await expect.poll(async()=>Math.abs((await state(page)).school.gates.find(g=>g.id==='reception').angle)).toBeGreaterThan(1.4);await walkTo(page,{x:12,z:-5.5});await expect.poll(async()=>(await state(page)).school.active).toBe(false);if(returnToCampus){await walkTo(page,{x:36,z:5.5});await walkTo(page,{x:0,z:19});}return;}
  await walkTo(page,{x:0,z:18.1});await expect.poll(async()=>(await state(page)).school.doorAngle).toBeGreaterThan(1.4);await walkTo(page,{x:0,z:20.3});await expect.poll(async()=>(await state(page)).school.active).toBe(false);
  if(returnToCampus){await walkTo(page,{x:36,z:20});await walkTo(page,{x:0,z:19});}
 }

@@ -21,10 +21,13 @@ export function createCampusConnection(scene,world,layout,options={}){
   for(const dx of [-.7,.7])part(props,'box','#5b616b',x+dx,.25,23,.08,.5,.55,'metal');
   colliders.push({minX:x-1,maxX:x+1,minZ:22.65,maxZ:23.35,minY:0,maxY:1.3});
  }
- for(const x of [40,48,57,70]){
-  part(props,'cylinder','#5b616b',x,1.7,17.5,.045,3.4,.045,'metal');part(props,'box','#eee9dd',x,3.4,17.5,.40,.08,.30,'plain');
-  colliders.push({minX:x-.05,maxX:x+.05,minZ:17.45,maxZ:17.55,minY:0,maxY:3.45});
+ // Keep connection lights beside the new path, out of both room footprints.
+ const lamps=options.threeGates?[[40,17.5],[48,17.5],[42.8,-12],[42.8,-28]]:[40,48,57,70].map(x=>[x,17.5]);
+ for(const [x,z] of lamps){
+  part(props,'cylinder','#5b616b',x,1.7,z,.045,3.4,.045,'metal');part(props,'box','#eee9dd',x,3.4,z,.40,.08,.30,'plain');
+  colliders.push({minX:x-.05,maxX:x+.05,minZ:z-.05,maxZ:z+.05,minY:0,maxY:3.45});
  }
+ colliders.forEach(b=>b.kind='connection-prop');
  batchMeshes(route,route.children.filter(m=>m.isMesh),owned);batchMeshes(props,props.children.filter(m=>m!==foliage),owned);
  for(const floor of layout.floors){
   const g=new THREE.Group();g.name=`São Jorge exterior proxy ${floor.index}`;g.position.set(SCHOOL_ORIGIN.x,floor.baseY,SCHOOL_ORIGIN.z);g.rotation.y=options.rotation||0;group.add(g);proxies.push(g);
