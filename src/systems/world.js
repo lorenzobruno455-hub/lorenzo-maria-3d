@@ -16,7 +16,7 @@ export function createWorld(scene) {
   const support = (id,x,z,w,d,h) => {const s=surface(id,x,z,w,d,h);surfaces.push(s);return s;};
   const prop=(id,s,options={})=>{const p=library.place(scene,id,s,options);placed.push(p);return p;};
   function collider(mesh, collision, camera = collision) {
-    mesh.updateMatrixWorld(true); box3.setFromObject(mesh);
+    mesh.updateWorldMatrix(true,true); box3.setFromObject(mesh);
     const b = { minX: box3.min.x, maxX: box3.max.x, minY: box3.min.y, maxY: box3.max.y, minZ: box3.min.z, maxZ: box3.max.z, enabled: true };
     if (collision) solids.push(b); if (camera) occluders.push(b); return b;
   }
@@ -36,13 +36,15 @@ export function createWorld(scene) {
   }
   box(0, -.22, 0, 82, .4, 70, '#9cae7d', false, 'plaster');
   box(0, .005, 7, 12, .04, 46, '#c9c1ad', false, 'tile'); box(0, .025, 0, 58, .04, 12, '#c9c1ad', false, 'tile');
-  function door(cx, name, { z=-6, width=3, height=3.3, transient=false }={}) {
-    const pivot = new THREE.Group(); pivot.position.set(cx - width/2, 0, z); scene.add(pivot);
-    const panel = resources.mesh('box', '#8b6f50', [width, height, .16], 'wood'); panel.position.set(width/2, height/2, 0); pivot.add(panel);
-    const glass = resources.mesh('box', '#8eaaa7', [.8, .8, .18], 'glass'); glass.position.set(width/2, height*2/3, 0); pivot.add(glass);
+  function door(cx, name, { z=-6, width=3, height=3.3, transient=false,rotation=0,openAngle=Math.PI/2,gate=false }={}) {
+    const pivot = new THREE.Group();let root=pivot;
+    if(rotation){root=new THREE.Group();root.position.set(cx,0,z);root.rotation.y=rotation;root.add(pivot);pivot.position.x=-width/2;scene.add(root);}
+    else{pivot.position.set(cx - width/2, 0, z);scene.add(pivot);}
+    const panel = resources.mesh('box', gate?'#2250FF':'#8b6f50', [width, height, .16], gate?'metal':'wood'); panel.position.set(width/2, height/2, 0); pivot.add(panel);
+    if(!gate){const glass = resources.mesh('box', '#8eaaa7', [.8, .8, .18], 'glass'); glass.position.set(width/2, height*2/3, 0); pivot.add(glass);}
     const handle = resources.mesh('sphere', '#b9b79b', [.07, .07, .12], 'metal'); handle.position.set(width-.35, height*1.3/3.3, .14); pivot.add(handle);
     const bounds = collider(panel, true, true);
-    const d = { id: doors.length, name, x: cx, z:z+.5, hingeZ:z, width, transient, pivot, panel, bounds, open: false, angle: 0 };
+    const d = { id: doors.length, name, x: cx+Math.sin(rotation)*.5, z:z+Math.cos(rotation)*.5, hingeZ:z, width, transient, pivot,root,panel,bounds,openAngle,open: false, angle: 0 };
     doors.push(d); return d;
   }
   function wing(cx, label) {
@@ -134,7 +136,7 @@ export function createWorld(scene) {
     { id: 'garden', x: 11.5, z: 25, name: 'Jardim do Aurora', text: 'Este jardim é cuidado pelos alunos. Um bom lugar para conversar antes da primeira aula.' },
   ];
   function updateDoorBounds(d) {
-    d.pivot.updateMatrixWorld(true); box3.setFromObject(d.panel);
+    d.pivot.updateWorldMatrix(true,true); box3.setFromObject(d.panel);
     Object.assign(d.bounds, { minX: box3.min.x, maxX: box3.max.x, minY: box3.min.y, maxY: box3.max.y, minZ: box3.min.z, maxZ: box3.max.z });
   }
   function toggleDoor(d, player) {
@@ -144,7 +146,7 @@ export function createWorld(scene) {
   }
   function update(dt, time, player) {
     for (const d of doors) {
-      const target = d.open ? Math.PI / 2 : 0;
+      const target = d.open ? d.openAngle : 0;
       const next = THREE.MathUtils.damp(d.angle, target, 9, dt), old = d.angle;
       d.angle = next; d.pivot.rotation.y = next; updateDoorBounds(d);
       const b = d.bounds;

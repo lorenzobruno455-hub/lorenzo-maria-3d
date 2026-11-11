@@ -49,7 +49,7 @@ export function createSchoolArchitecture({ resources, materials, floor, structur
   } else {
     for (const room of floor.rooms) {
       const side = room.x1 <= -10 ? -1 : room.x2 >= 10 ? 1 : 0;
-      if(side && room.type !== 'stair') window(side,(room.z1+room.z2)/2, Math.min(2.5,room.z2-room.z1-1));
+      if(side && room.type !== 'stair'&&!(floor.receptionEntrance&&room.type==='reception')) window(side,(room.z1+room.z2)/2, Math.min(2.5,room.z2-room.z1-1));
       if(room.type !== 'stair') fixture(room.x,room.z);
       const d=room.door;
       if(!d) continue;
@@ -68,7 +68,15 @@ export function createSchoolArchitecture({ resources, materials, floor, structur
     for(const z of [-12,-4,4,12]) fixture(0,z);
   }
   // Thin perimeter trim stays inside the inherited wall collision buffer.
-  for(const side of [-1,1]) box('institutional-trim',[side*10.84,.78,0],[.07,.055,37.4],'#B9413B');
+  if(floor.receptionEntrance){
+    for(const s of [-1,1])box('door-jamb',[10.80,1.32,-5.5+s*1.365],[.25,2.58,.13],'#7A5A3D','wood');
+    box('door-lintel',[10.80,2.66,-5.5],[.25,.12,2.86],'#7A5A3D','wood');
+    sign('ENTRADA • RECEPÇÃO',10.78,2.87,-5.5,-Math.PI/2,2.1,.30);
+  }
+  for(const side of [-1,1]){
+    const sections=floor.receptionEntrance&&side===1?[[-18.7,-6.8],[-4.2,18.7]]:[[-18.7,18.7]];
+    for(const[a,b]of sections)box('institutional-trim',[side*10.84,.78,(a+b)/2],[.07,.055,b-a],'#B9413B');
+  }
   sign('IDEIAS EM MOVIMENTO',10.855,1.9,17, -Math.PI/2,1.25,.9);
   sign('LER • CRIAR • COMPARTILHAR',-10.855,1.9,-17,Math.PI/2,1.25,.9);
   // Reuse the sign atlas for original educational content; all measurements are game coordinates.

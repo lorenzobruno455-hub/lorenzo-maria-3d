@@ -31,8 +31,10 @@ import { Controls } from './systems/controls.js';
 import { FollowCamera } from './systems/camera.js';
 import { Quality } from './systems/quality.js';
 import { VisualEffects } from './systems/visual-effects.js';
+import {resolveSchoolExteriorSave} from './systems/school-save-placement.js';
 import { registerStateReader,registerNavigationReader } from './systems/diagnostics.js';
 import {createSchoolExterior} from './systems/school-exterior.js';
+import {schoolBoundsToLocal} from './systems/world-coordinates.js';
 import { Audio } from './systems/audio.js';
 import { blocked, resolveSpawn, relativeMovement, moveWithCollisions, clamp } from './systems/physics.js';
 import { loadSave, saveProgress, freshProgress, collect, objective, mariaDialogue } from './systems/progress.js';
@@ -176,21 +178,24 @@ recoverPlayerPosition();
 adventure=new Adventure({scene,world,living,story,player,character:lorenzo,camera,light:sun,dialogue:dialogues,audio,effects:visualEffects,getProgress:()=>progress,save,notify,startGame:()=>{if(!started)$('start').click();if(paused)setPause(false);},onLock:()=>{controls.clear();syncModal();needsRender=true;}});
 lorenzo.player=true;
 const ink=new InkOutlines(scene,world.resources,[lorenzo,...living.actors.map(a=>a.character)]);
-const legacyRoots=scene.children.filter(node=>node!==player&&node!==sun&&!node.isHemisphereLight&&!node.isCamera);
-school=new ContinuousSchool({scene,world,frameNodes:[effect,interactionAccent.mesh],legacyRoots,player,follow,pool:assets,layout:schoolLayout,getState:()=>progress.schoolVisit,onStatus:notify,onChange:event=>{if(!event?.preserveInput)controls.clear();target=null;lastHUD='';lastLocation='';lastTarget='';syncSchoolUI();syncModal();needsRender=true;if(!school?.loading&&!event?.deferSave)save();}});
-school.narrative=new SchoolNarrative({school,world,story,living,adventure,getProgress:()=>progress});
 const comicMode=new URLSearchParams(location.search).get('comic');
 const exteriorPreview=comicMode==='overdrive-20-d3-preview';
+const confirmedSchool=comicMode===null||exteriorPreview;
+const legacyRoots=scene.children.filter(node=>node!==player&&node!==sun&&!node.isHemisphereLight&&!node.isCamera);
+school=new ContinuousSchool({scene,world,frameNodes:[effect,interactionAccent.mesh],legacyRoots,player,follow,pool:assets,layout:schoolLayout,rotation:confirmedSchool?Math.PI:0,threeGates:confirmedSchool,getState:()=>progress.schoolVisit,onStatus:notify,onChange:event=>{if(!event?.preserveInput)controls.clear();target=null;lastHUD='';lastLocation='';lastTarget='';syncSchoolUI();syncModal();needsRender=true;if(!school?.loading&&!event?.deferSave)save();}});
+if(confirmedSchool&&!progress.schoolVisit.active){const p=resolveSchoolExteriorSave(player.position,world.solids,school.rotation);player.position.set(p.x,world.groundHeight(p.x,p.z),p.z);}
+school.narrative=new SchoolNarrative({school,world,story,living,adventure,getProgress:()=>progress});
 const comicExpanded=comicMode===null||comicMode==='overdrive-20-d2'||comicMode==='overdrive-20-d2-d3'||exteriorPreview;
 const comicProposal=comicExpanded?'b':/^overdrive-20-([ab])$/.exec(comicMode||'')?.[1]||null;
 if(comicProposal)renderer.toneMapping=THREE.NoToneMapping;
 const overdriveP0=comicMode==='legacy'?null:createComicOverdriveP0({scene,resources:world.resources,school,ink,global:comicMode!=='overdrive-p0',finishing:comicMode!=='overdrive-p1-p2',proposal:comicProposal,expanded:comicExpanded,depth:comicMode===null||comicMode==='overdrive-20-d2-d3'||exteriorPreview});
-const schoolExterior=exteriorPreview?createSchoolExterior({scene,world}):null;
-const exteriorReview=exteriorPreview?({overview:{x:60,y:3.5,z:12,distance:50,yaw:-1.03,pitch:.30},entry:{x:52,y:1.8,z:22,distance:24,yaw:-1.0,pitch:.32}}[new URLSearchParams(location.search).get('exterior-view')]||null):null;
+const schoolExterior=confirmedSchool?createSchoolExterior({scene,world}):null;
+const exteriorReview=exteriorPreview?({overview:{x:60,y:3.5,z:-7,distance:50,yaw:2.1,pitch:.30},entry:{x:60,y:2,z:-9,distance:52,yaw:-2.1,pitch:.55}}[new URLSearchParams(location.search).get('exterior-view')]||null):null;
+schoolExterior?.setReview?.(exteriorPreview?new URLSearchParams(location.search).get('exterior-view'):null);
 function syncSchoolUI(){if(!school)return;document.body.classList.toggle('school-visit',school.active);document.body.classList.toggle('school-inspecting',school.active&&school.inspecting);$('school-toolbar').hidden=!school.active&&!school.loading;$('school-floor-title').textContent=school.loading?'Carregando São Jorge…':school.inspecting?'Inspeção · coordenadas de jogo':`${school.navigation.floor(school.floor).label} · São Jorge`;$('school-inspect').textContent=school.inspecting?'Explorar':'Andares';$('school-inspect').disabled=school.loading;$('school-floor-view').hidden=!school.inspecting;$('school-floor-view').value=String(school.view);$('school-floor-view').disabled=school.loading;$('story-menu').disabled=school.loading;document.querySelectorAll('[data-story]').forEach(b=>b.disabled=school.loading);$('restart').disabled=school.active||school.loading;interactions.world=school.active?{occluders:school.navigation.obstacles(school.floor)}:world;}
 async function openSchool(){if(school.active||school.loading)return;if(dialog||panelOpen||adventure?.busy||story?.seat){notify('Conclua a interação atual antes de visitar São Jorge.');return;}if(!started){started=true;$('welcome').hidden=true;audio.unlock();}if(paused)setPause(false);await school.enter();syncSchoolUI();syncModal();save();}
 
-$('school-exit').onclick=()=>notify('Saída a pé: desça ao 1º andar e atravesse a porta no fim do corredor.');$('school-inspect').onclick=()=>{if(school.inspecting)school.explore();else void school.inspect(school.floor);};$('school-floor-view').onchange=event=>void school.inspect(event.target.value);
+$('school-exit').onclick=()=>notify(school.threeGates?'Saída a pé: no 1º andar, use o portão da recepção ou o portão que leva à quadra.':'Saída a pé: desça ao 1º andar e atravesse a porta no fim do corredor.');$('school-inspect').onclick=()=>{if(school.inspecting)school.explore();else void school.inspect(school.floor);};$('school-floor-view').onchange=event=>void school.inspect(event.target.value);
 
 $('help').onclick = () => speak('COMO JOGAR', 'Use WASD ou o joystick para andar. Arraste o mouse ou o lado direito da tela para olhar ao redor. Segure Shift ou Correr para correr. Aproxime-se de Maria, portas, placas ou lembranças e pressione E ou Interagir. As portas da sala e da biblioteca podem ser abertas. Use Esc ou ☰ para pausar.');
 function syncSettings() {
@@ -334,7 +339,7 @@ function animate(now) {
   follow.reducedMotion=motionPreference.matches;
   follow.partner = living.partner?.agent.position;
   follow.focusObject = school?.active ? (school.focus()||(dialog?story?.focus:null)) : dialog ? story?.focus : null; follow.conversation = dialog && !story?.focus;
-  if(exteriorReview&&!school.active&&!dialog&&!adventure?.cutscenes.active)follow.focusObject=exteriorReview;
+  if(exteriorReview&&!school.active&&!dialog&&!adventure?.cutscenes.active){follow.focusObject=exteriorReview;follow.obstacles=[];}else if(!school.active)follow.obstacles=world.occluders;
   if(!adventure?.cutscenes.active)follow.update(player.position, active() || dialog ? dt : 0);
   if(started&&!school?.loading&&!school?.inspecting)adventure?.update(paused?0:dt,{active:active(),paused});
   if(!paused&&!school?.loading&&!school?.inspecting)adventure?.updateActivity(dt);
@@ -347,7 +352,7 @@ function animate(now) {
     const zone = school?.active ? `${school.navigation.floor(school.floor).label} · ${school.room()?.name||'Corredor'} · SÃO JORGE` : player.position.x>38?'CAMINHO DO SÃO JORGE': player.position.z < -18 && Math.abs(player.position.x) < 6 ? 'CANTINA' : player.position.x < -28 && player.position.z < 10 ? 'QUADRA' : player.position.x > 28 && player.position.z < -6 ? 'SALA DE MÚSICA' : player.position.z < -6 && Math.abs(player.position.x) > 6 ? (player.position.x < 0 ? 'SALA DE LITERATURA' : 'BIBLIOTECA') : player.position.z > 17 ? 'JARDIM DA ESCOLA' : 'PÁTIO CENTRAL';
     if (lastLocation !== zone) { $('location').firstChild.textContent = `${zone} `; lastLocation = zone; } hudTimer = 0;
   }
-  school.presentWorld();overdriveP0?.update(camera,settings.quality,renderer.getPixelRatio());
+  school.presentWorld();if(schoolExterior)schoolExterior.group.visible=!school.active||(!school.inspecting&&school.floor===0&&school.portalDistance()<5);overdriveP0?.update(camera,settings.quality,renderer.getPixelRatio());
   // Frozen pause/welcome scenes need only redraw on resize, settings or camera settling.
   if (active() || dialog || adventure?.busy || (panelOpen && started && story?.game) || needsRender) { renderer.render(scene, camera); needsRender = false; }
   audio.update?.(); if (active()) quality.sample(rawDT);
@@ -372,7 +377,7 @@ export function getGameState() {
     schoolExterior:schoolExterior?.state()||null,overdrive:overdriveP0?.state()||null,quality: settings.quality, resolutionScale: quality.scale, outlines: ink.actorInk.filter(s=>s.mesh.visible).length, fps: Math.round(quality.fps), drawCalls: renderer.info.render.calls, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures, triangles: renderer.info.render.triangles, drawingBuffer:{width:renderer.domElement.width,height:renderer.domElement.height} };
 }
 registerStateReader(getGameState);
-registerNavigationReader(()=>({origin:school.active?{x:60,z:0}:{x:0,z:0},floor:school.active?school.floor:null,position:{x:player.position.x,z:player.position.z},solids:(school.active?(school.floor===0?world.solids.map(b=>({...b,minX:b.minX-60,maxX:b.maxX-60})):school.navigation.movementObstacles(school.floor)):world.solids).map(b=>({...b}))}));
+registerNavigationReader(()=>({origin:school.active?{x:60,z:0}:{x:0,z:0},rotation:school.active?school.rotation:0,floor:school.active?school.floor:null,position:{x:player.position.x,z:player.position.z},solids:(school.active?(school.floor===0?world.solids.map(b=>schoolBoundsToLocal(b,school.rotation)):school.navigation.movementObstacles(school.floor)):world.solids).map(b=>({...b}))}));
 if(new URLSearchParams(location.search).has('debug')){addEventListener('keydown',e=>{if(e.code==='F3'){e.preventDefault();if(validator.visible)validator.clear();else validator.show([...world.placed,...story.world.placed],[player,...living.actors.map(a=>a.character.root)]);needsRender=true;}});}
 
 export function dispose() {

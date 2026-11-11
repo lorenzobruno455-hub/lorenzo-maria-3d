@@ -1,0 +1,146 @@
+{
+  "layout": {
+    "approved": true,
+    "schoolRotation": 3.141592653589793,
+    "facade": "photo-street-side",
+    "campusFace": "reception-side",
+    "gates": [
+      {
+        "id": "court",
+        "name": "Portão da quadra",
+        "local": {
+          "x": -11,
+          "z": 27
+        },
+        "basis": 1.5707963267948966,
+        "width": 3,
+        "height": 2.6,
+        "openAngle": 1.5707963267948966,
+        "x": 71,
+        "z": -27
+      },
+      {
+        "id": "school",
+        "name": "Portão da escola · dentro da quadra",
+        "local": {
+          "x": 0,
+          "z": 19
+        },
+        "basis": 3.141592653589793,
+        "width": 2.6,
+        "height": 2.6,
+        "openAngle": 1.5707963267948966,
+        "x": 60,
+        "z": -19
+      },
+      {
+        "id": "reception",
+        "name": "Entrada da recepção",
+        "local": {
+          "x": 11,
+          "z": -5.5
+        },
+        "basis": 4.71238898038469,
+        "width": 2.6,
+        "height": 2.6,
+        "openAngle": -1.5707963267948966,
+        "x": 49,
+        "z": 5.5
+      }
+    ],
+    "annex": {
+      "minX": 49,
+      "maxX": 71,
+      "minZ": 19,
+      "maxZ": 35,
+      "eave": 4.15,
+      "rise": 1.8
+    },
+    "court": {
+      "minX": 49,
+      "maxX": 71,
+      "minZ": -35,
+      "maxZ": -19,
+      "minY": 0,
+      "maxY": 4.15
+    },
+    "corridorDoor": {
+      "id": "school",
+      "name": "Portão da escola · dentro da quadra",
+      "local": {
+        "x": 0,
+        "z": 19
+      },
+      "basis": 3.141592653589793,
+      "width": 2.6,
+      "height": 2.6,
+      "openAngle": 1.5707963267948966,
+      "x": 60,
+      "z": -19
+    }
+  },
+  "views": {
+    "overview": {
+      "image": "photo-front-overview.jpg",
+      "points": {
+        "court": [
+          705.783244823662,
+          450.30722427825276
+        ],
+        "school": [
+          622.1146662631758,
+          352.0866514330346
+        ],
+        "reception": [
+          430.9876796961588,
+          275.0600867294666
+        ]
+      },
+      "route": [
+        [
+          456.24389580103815,
+          276.5363559376899
+        ],
+        [
+          431.2768776367594,
+          286.9399621176669
+        ],
+        [
+          405.9854315600793,
+          297.4787554558463
+        ]
+      ]
+    },
+    "entry": {
+      "image": "photo-side-entry-entry.jpg",
+      "points": {
+        "court": [
+          233.65432182639847,
+          303.48323769541577
+        ],
+        "school": [
+          369.40719997334776,
+          340.36081987407323
+        ],
+        "reception": [
+          700.2684394677113,
+          320.09345268120137
+        ]
+      },
+      "route": [
+        [
+          746.8484977345436,
+          365.1719141073143
+        ],
+        [
+          697.2972626899174,
+          333.3549969558961
+        ],
+        [
+          658.425934244285,
+          308.39566273130197
+        ]
+      ]
+    }
+  }
+}
