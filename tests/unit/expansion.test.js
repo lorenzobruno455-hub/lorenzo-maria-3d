@@ -27,3 +27,21 @@ for(const m of EXPANSION)test(`${m.id}: complete/resume every stage, reject wron
  assert.equal(rewardExpansion(p.expansion,p.campaign,m.id,'2026-11-13T00:00:00Z'),true);assert.equal(rewardExpansion(p.expansion,p.campaign,m.id),false);assert.equal(finishExpansion(p.expansion,m.id),false);
  assert.equal(Object.keys(p.campaign.achievements).filter(k=>k===`expansion-${m.id}`).length,1);
 });
+
+test('archive requires six original memories, including validated legacy saves',()=>{
+ const p=freshProgress();assert.equal(startExpansion(p.expansion,'archive',p.campaign),false);
+ const old=validateProgress({stage:2,collected:['notebook','card','photo'],campaign:{memories:Array.from({length:6},(_,i)=>`memory-${i+1}`)}});
+ assert.equal(startExpansion(old.expansion,'archive',old.campaign),true);
+ assert.deepEqual(PUZZLES.timeline.cards.map(c=>c.label),[
+ '19/08/2024 · Quando a gente começou','19/05/2025 · Se fomos babau','17/08/2025 · Um dos dias mais importantes da minha vida','31/03/2026 · O meu primeiro beijo','05/09/2026 · O último dia (que não foi)','21/09/2026 · Finalmente']);
+});
+test('partial puzzles, choices, fragments and simultaneous mission guards survive normalization',()=>{
+ const p=freshProgress();startExpansion(p.expansion,'plan',p.campaign);
+ assert.equal(startExpansion(p.expansion,'letter',p.campaign),false);
+ advanceExpansion(p.expansion,'plan-notebook');advanceExpansion(p.expansion,'bia',{choice:'Pedir uma pista sobre os blocos'});
+ advanceExpansion(p.expansion,'plan-pages-b');
+ const q=validateProgress(p).expansion.quests.plan;assert.deepEqual(q.collected,['plan-pages-b']);assert.equal(q.choices.bia,'Pedir uma pista sobre os blocos');
+ advanceExpansion(p.expansion,'plan-pages-a');advanceExpansion(p.expansion,'plan-pages-c');
+ const order=shuffledOrder('plan');setPuzzleOrder(p.expansion,'plan',order);assert.deepEqual(validateProgress(p).expansion.quests.plan.puzzles.plan,order);
+ assert.equal(setPuzzleOrder(p.expansion,'plan',Array(14).fill('plan-1')),false);
+});

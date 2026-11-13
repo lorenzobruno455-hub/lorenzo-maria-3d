@@ -236,12 +236,13 @@ $('confirm-reset').onclick = () => {
 function updateHUD() {
   const key = `${school?.active}:${school?.floor}:${school?.narrative?.goal()?.name}:${JSON.stringify(progress.adventure)}:${JSON.stringify(progress.expansion)}:${progress.living.mode}:${JSON.stringify(progress.living.events)}:${progress.stage}:${progress.collected.join(',')}:${progress.campaign.memories.join(',')}:${JSON.stringify(progress.campaign.steps)}`; if (key === lastHUD) return; lastHUD = key;
   $('objective').textContent = expansion?.goal()?.name || (school?.active?school.narrative.goal()?.name:null) || adventure?.goal()?.name || (((living?.free || living?.goal() || progress.stage===2)&&story)?story.objective():objective(progress));
-  $('count').textContent = progress.stage === 2 ? `${progress.campaign.memories.length} de 6 memórias · prólogo concluído` : `${progress.collected.length} de 3 lembranças`;
-  const total = progress.stage === 2 ? 6 : 3, amount = progress.stage === 2 ? progress.campaign.memories.length : progress.collected.length;
+  const expansionQuest=expansion?.current;
+  $('count').textContent = expansionQuest?`${expansionQuest.quest.step}/${expansionQuest.mission.tasks.length} objetivos · ficção narrativa`:progress.stage === 2 ? `${progress.campaign.memories.length} de 6 memórias · prólogo concluído` : `${progress.collected.length} de 3 lembranças`;
+  const total = expansionQuest?expansionQuest.mission.tasks.length:progress.stage === 2 ? 6 : 3, amount = expansionQuest?expansionQuest.quest.step:progress.stage === 2 ? progress.campaign.memories.length : progress.collected.length;
   $('progress').style.width = `${amount / total * 100}%`;
   document.querySelector('[role=progressbar]').setAttribute('aria-valuenow', amount);
   document.querySelector('[role=progressbar]').setAttribute('aria-valuemax', total);
-  $('mission').querySelector('.eyebrow').textContent = living?.free ? 'COLÉGIO AURORA · EXPLORAÇÃO LIVRE' : progress.stage === 2 ? `MEMÓRIAS · CAPÍTULO ${Math.min(6, progress.campaign.memories.length + 1)}/6` : 'CAPÍTULO 01 / PRIMEIRO SINAL';
+  $('mission').querySelector('.eyebrow').textContent = expansionQuest?'EXPANSÃO NARRATIVA · FICÇÃO':living?.free ? 'COLÉGIO AURORA · EXPLORAÇÃO LIVRE' : progress.stage === 2 ? `MEMÓRIAS · CAPÍTULO ${Math.min(6, progress.campaign.memories.length + 1)}/6` : 'CAPÍTULO 01 / PRIMEIRO SINAL';
 }
 function nextObjective() {
   if(expansion?.goal())return expansion.goal();
@@ -378,7 +379,7 @@ export function getGameState() {
     cameraWorld:(()=>{const p=camera.getWorldPosition(new THREE.Vector3());return{x:p.x,y:p.y,z:p.z};})(),cameraFocusWorld:follow.worldFocus?{x:follow.worldFocus.x,y:follow.worldFocus.y,z:follow.worldFocus.z}:null,camera: { x: camera.position.x, y: camera.position.y, z: camera.position.z, distance: follow.actualDistance }, doors: world.doors.map(d => ({ open: d.open, angle: d.angle })),
     living: structuredClone(progress.living), npcs: living.actors.map(a => ({ id: a.definition.id, rotation:a.agent.rotation,renderRotation:a.character.root.rotation.y,floor:a.agent.position.floor, y:a.character.root.position.y, visible:a.character.root.visible, x: a.agent.position.x, z: a.agent.position.z, state: a.agent.state, model:!!a.character.custom, animation:a.character.state, distance: a.agent.distanceWalked, transitions: a.agent.transitions })),
     adventure:adventure?.director.snapshot(),cinematic:{active:!!adventure?.cutscenes.active,paused:!!adventure?.cutscenes.paused,id:adventure?.cutscenes.scene?.id||null},physicalAction:adventure?.actions.active?.kind||null,adventureRhythm:adventure?.activityState?.phase,
-    expansion:structuredClone(progress.expansion),expansionTargets:expansion?.targets().map(({mesh,...t})=>t),
+    expansion:structuredClone(progress.expansion),expansionRuntime:expansion?.describe(),expansionTargets:expansion?.targets().map(({mesh,...t})=>t),
     campaign: structuredClone(progress.campaign), storyPage: story?.page, rhythm: story?.game?.phase,
     visual:{theme:'aurora-comic',edition:'0.7C',heroInk:ink.actorInk.filter(i=>i.actor.root===player&&i.mesh.isSkinnedMesh&&i.mesh.visible).length,fallbackInk:ink.actorInk.filter(i=>i.actor.root===player&&!i.mesh.isSkinnedMesh).length,models:{lorenzo:!!lorenzo.custom,maria:!!maria.custom},clips:{lorenzo:Object.keys(lorenzo.actions),maria:Object.keys(maria.actions)},toon:world.resources.material('#eadfc8').isMeshToonMaterial,outlineVertices:ink.staticInk.geometry.attributes.position?.count||0},
     spatial:validator.inspect(world.placed), memoryBooks:story.world.books.map(b=>({id:b.id,x:b.x,z:b.z,unlocked:b.unlocked,angle:b.mesh.userData.cover.rotation.z})),

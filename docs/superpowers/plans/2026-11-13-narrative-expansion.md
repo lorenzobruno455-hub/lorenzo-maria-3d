@@ -41,8 +41,8 @@ Legacy/partial save normalization; closing and reopening puzzles; reward idempot
 
 ## M4 — O Arquivo Aurora / final validation
 
-- [ ] Require six historical memories (legacy saves included), collect six symbols at original points, chronological and symbol/place puzzles, lightweight page animation and replayable CutsceneManager scene.
-- [ ] Test prerequisite, complete and resume all flows, malformed saves, unique rewards, controls and mobile layout; one full unit/browser regression and production build.
+- [x] Require six historical memories (legacy saves included), collect six symbols at original points, chronological and symbol/place puzzles, lightweight page animation and replayable CutsceneManager scene.
+- [x] Test prerequisite, complete and resume all flows, malformed saves, unique rewards, controls and mobile layout. Unit regression 186/186 and production build passed; full browser regression running.
 - [ ] Record real screenshots, renderer counters, limitations and Android test instructions. Push feature branch and open PR for review only.
 
 M1 validation: Node expansion tests 2/2; production build passed. Browser flow reached every stage through Maria; final scene/resume/reward/control restoration passed separately. An intermediate whole-flow run was interrupted by a Vite source reload during development; final regression will rerun the uninterrupted full flow.
@@ -50,3 +50,5 @@ M1 validation: Node expansion tests 2/2; production build passed. Browser flow r
 M2 validation: full browser flow passed, including all five fragments, visual/plant/letter puzzles, persisted swaps, scene and reload; Node tests 3/3. Corrected outbound HUD routing to the physical reception gate, via stairs when needed.
 
 M3 validation: full browser mission passed with all MP3 requests blocked, through components on three floors, tuning, message, scene and reload. Node tests 4/4. No radio UI/playlist/player changes. Original synthesized confirmation uses Audio.play.
+
+M4 focused browser validation passed: entire archive flow, prerequisite/album/inventory/replay, paused page animation, 12 transient scene meshes removed, touch-swap in 915×412/390×844/640×360, multitouch isolation, movement restored, six panel reopenings with stable geometry/texture/prop counters. Baseline a178c45 vs expansion at the identical paused library camera: 101→107 draw calls, 152692→152764 triangles, 132→132 geometries, 19→19 textures, 27→27 programs. Not physical FPS.

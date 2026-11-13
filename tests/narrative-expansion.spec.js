@@ -9,6 +9,7 @@ const points={
  'plan-pages-a':NARRATIVE_POINTS['school-exercise'],
  'plan-pages-b':{...NARRATIVE_POINTS['shelf-clue'],x:-6.05},
  'plan-pages-c':{floor:0,x:0,z:-8},
+ 'archive-diary':{...NARRATIVE_POINTS.album,x:-6.2},
  'radio-antique':{...NARRATIVE_POINTS.instrument,x:9.45},'radio-coil':{...NARRATIVE_POINTS['science-book'],x:-8.45},'radio-crystal':{...NARRATIVE_POINTS['shelf-clue'],x:-6.1},'radio-antenna':{...NARRATIVE_POINTS.score,x:9.45},
  'letter-envelope':{...NARRATIVE_POINTS.album,x:-7.6},
  'letter-fragment-1':{...NARRATIVE_POINTS['shelf-clue'],x:-6.85},
@@ -91,4 +92,47 @@ test('plan final scene resumes, skips, rewards once and restores controls',async
  await expect.poll(async()=>(await state(page)).expansion.quests.plan.completed).toBe(true);
  expect((await state(page)).campaign.achievements['expansion-plan']).toBeTruthy();
  const z=(await state(page)).z;await page.keyboard.down('s');await expect.poll(async()=>(await state(page)).z).toBeGreaterThan(z+.1);await page.keyboard.up('s');
+});
+
+test('archive prerequisite and completed rewards integrate into the original album and inventory',async({page})=>{
+ await seed(page,{stage:2,collected:['notebook','card','photo']});await start(page);
+ await page.locator('#story-menu').click();await page.getByRole('button',{name:'Expansão narrativa · quatro missões',exact:true}).click();await expect(page.locator('[data-mission="archive"]')).toBeDisabled();
+ expect((await state(page)).campaign.memories).toHaveLength(0);
+ // A completed, legitimate save is used only to verify read-only reward views and replay.
+ await page.addInitScript(quests=>{const s=JSON.parse(localStorage.getItem('lorenzo-maria-v04'));s.progress.campaign.memories=Array.from({length:6},(_,i)=>`memory-${i+1}`);s.progress.expansion={active:null,quests};s.progress.schoolVisit={active:true,floor:0,position:{x:-6.5,z:-15.3},yaw:0,pitch:.38};localStorage.setItem('lorenzo-maria-v04',JSON.stringify(s));},Object.fromEntries(EXPANSION.map(m=>[m.id,{step:m.tasks.length,completed:true}])));
+ await page.reload();await page.locator('#start').click();await page.evaluate(async()=>window.readGame=(await import('/src/systems/diagnostics.js')).getGameState);await expect.poll(async()=>(await state(page)).school.active).toBe(true);
+ await page.locator('#story-menu').click();await page.getByRole('button',{name:'Inventário',exact:true}).click();for(const m of EXPANSION)await expect(page.locator('#story-content')).toContainText(m.item);
+ await page.locator('#story-close').click();await page.locator('#story-menu').click();await page.getByRole('button',{name:'Álbum',exact:true}).click();
+ const letter=page.locator('.story-card').filter({has:page.getByRole('heading',{name:'Uma Carta Nunca Entregue',exact:true})});await letter.getByRole('button',{name:'Ler carta fictícia',exact:true}).click();await expect(page.locator('#story-content')).toContainText('Ficção narrativa');await expect(page.locator('#story-content')).toContainText('próximas lembranças');
+ await page.locator('#story-close').click();await page.locator('#story-menu').click();await page.getByRole('button',{name:'Álbum',exact:true}).click();
+ const before=await state(page);
+ await page.locator('.story-card').filter({has:page.getByRole('heading',{name:'O Arquivo Aurora',exact:true})}).getByRole('button',{name:'Rever conclusão',exact:true}).click();await expect(page.locator('#cinematic')).toBeVisible();
+ await page.locator('#scene-pause').click();const time=(await state(page)).expansionRuntime.sceneTime;
+ await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));expect((await state(page)).expansionRuntime.sceneTime).toBe(time);
+ expect((await state(page)).expansionRuntime.temporaryPages).toBe(12);await page.screenshot({animations:'disabled',path:'docs/captures/narrative-expansion/archive-finale.png'});
+ await page.locator('#scene-skip').click();expect((await state(page)).expansionRuntime.temporaryPages).toBe(0);expect((await state(page)).campaign).toEqual(before.campaign);expect((await state(page)).expansion).toEqual(before.expansion);
+});
+
+test.describe('touchscreen expansion',()=>{
+ test.use({hasTouch:true,isMobile:true});
+ test('swap targets, multitouch isolation, controls and stable resources across reopenings',async({page})=>{
+  test.setTimeout(90000);
+  const errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await seed(page,{stage:2,collected:['notebook','card','photo'],expansion:{active:'plan',quests:{plan:{step:3}}},schoolVisit:{active:true,floor:0,position:{x:-4.5,z:16.5},yaw:0,pitch:.38}});await start(page);await expect.poll(async()=>(await state(page)).school.active).toBe(true);
+  for(const viewport of [{width:915,height:412},{width:390,height:844},{width:640,height:360}]){
+   await page.setViewportSize(viewport);await interact(page);await expect(page.locator('.expansion-grid button')).toHaveCount(14);
+   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+   const sizes=await page.locator('.expansion-grid button').evaluateAll(ns=>ns.map(n=>({w:n.getBoundingClientRect().width,h:n.getBoundingClientRect().height})));expect(sizes.every(s=>s.w>=44&&s.h>=44)).toBe(true);
+   const initial=await state(page);await page.keyboard.press('w');
+   for(const id of [11,12])await page.locator('#joystick').dispatchEvent('pointerdown',{pointerId:id,pointerType:'touch',clientX:60,clientY:viewport.height-65,bubbles:true});
+   await page.locator('#joystick').dispatchEvent('pointermove',{pointerId:11,pointerType:'touch',clientX:110,clientY:viewport.height-65,bubbles:true});
+   await page.locator('#game').dispatchEvent('pointerdown',{pointerId:13,pointerType:'touch',clientX:viewport.width-30,clientY:200,bubbles:true});await page.locator('#game').dispatchEvent('pointermove',{pointerId:13,pointerType:'touch',clientX:viewport.width-80,clientY:160,bubbles:true});
+   await page.locator('[data-slot="0"]').tap();await page.locator('[data-slot="1"]').tap();const after=await state(page);expect(after.x).toBeCloseTo(initial.x,3);expect(after.z).toBeCloseTo(initial.z,3);expect(after.yaw).toBe(initial.yaw);expect(after.analog.x).toBe(0);
+   await page.screenshot({animations:'disabled',path:`docs/captures/narrative-expansion/android-${viewport.width}x${viewport.height}.png`});await page.locator('#story-close').tap();
+  }
+  const resources=await state(page);
+  for(let i=0;i<6;i++){await interact(page);await page.locator('#story-close').tap();}
+  const after=await state(page);expect(after.geometries).toBe(resources.geometries);expect(after.textures).toBe(resources.textures);expect(after.expansionRuntime.props).toBe(resources.expansionRuntime.props);
+  const z=after.z;await page.keyboard.down('s');await expect.poll(async()=>(await state(page)).z).toBeGreaterThan(z+.1);await page.keyboard.up('s');expect(errors).toEqual([]);
+ });
 });

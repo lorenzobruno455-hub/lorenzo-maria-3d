@@ -58,5 +58,16 @@ export const EXPANSION = [
   t('scene','scene','radio-antique','Celebrar a sintonia no salão'),
  ]},
 
+
+ {id:'archive',title:'O Arquivo Aurora',achievement:'Guardião das Memórias',item:'Arquivo Aurora Restaurado',requiresMemories:true,finale:'O diário cenográfico reúne os símbolos sem reescrever os registros. Cada página conserva sua data e sua voz. As seis memórias e a carta final original continuam disponíveis: este arquivo é um epílogo fictício complementar.',tasks:[
+  t('find','examine','archive-diary','Encontrar o Arquivo Aurora na biblioteca','O arquivo cenográfico só abre depois das seis memórias históricas. Seu selo diz: organizar não é reescrever. O conteúdo biográfico permanece no álbum original.'),
+  t('diary','examine','archive-diary','Examinar o diário e suas lacunas','Seis espaços aguardam símbolos. Visite os locais das memórias já desbloqueadas. Os objetos são metáforas do puzzle; não documentam novos fatos do relacionamento.'),
+  t('symbols','collect',null,'Recuperar os seis símbolos nos pontos de memória','Cada símbolo leva o nome de uma memória já conhecida. O título, a data e o relato original permanecem intactos.',{targets:memories.map((m,i)=>`archive-symbol-${i+1}`)}),
+  t('timeline','puzzle','archive-diary','Organizar a linha do tempo na biblioteca','Coloque os seis capítulos históricos na ordem cronológica. Os cartões usam diretamente os registros originais.',{puzzle:'timeline'}),
+  t('association','puzzle','archive-diary','Associar os símbolos às lembranças','Cada posição corresponde à memória de mesmo número na lista abaixo. Associe seu símbolo e lugar, usando as etiquetas coletadas.',{puzzle:'association'}),
+  t('restore','examine','archive-diary','Restaurar as páginas do arquivo','As seis páginas se encaixam. Os registros históricos não foram alterados. As outras três aventuras acrescentam apenas encenações fictícias opcionais, registradas separadamente.'),
+  t('scene','scene','archive-diary','Rever as páginas vivas do Arquivo Aurora'),
+ ]},
+
 ];
 export const missionById=id=>EXPANSION.find(m=>m.id===id);

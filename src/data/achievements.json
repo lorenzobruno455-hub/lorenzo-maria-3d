@@ -172,5 +172,12 @@
     "description": "Recupere a transmissão simbólica com Davi.",
     "available": true,
     "secret": false
+  },
+  {
+    "id": "expansion-archive",
+    "name": "Guardião das Memórias",
+    "description": "Restaure o arquivo complementar após as seis memórias históricas.",
+    "available": true,
+    "secret": false
   }
 ]

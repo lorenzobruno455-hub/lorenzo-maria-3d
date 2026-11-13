@@ -12,6 +12,7 @@ export const EXPANSION_POINTS={
  'plan-pages-a':at('school-exercise','Páginas · Preparação'),
  'plan-pages-b':at('shelf-clue','Páginas · Logística e Coragem',.45),
  'plan-pages-c':{floor:0,x:0,z:-8,name:'Páginas · Conversa',top:.04},
+ 'archive-diary':at('album','Arquivo Aurora · biblioteca',.6),
  'radio-antique':at('instrument','Rádio antigo · salão',.45),
  'radio-coil':at('science-book','Bobina de papel · ★ LorenzoFM',.45),
  'radio-crystal':at('shelf-clue','Cristal cenográfico · ◆ MariaFM',.4),
@@ -36,7 +37,7 @@ export class NarrativeExpansion {
   this.onSceneFinish=adventure.cutscenes.onFinish;
   adventure.cutscenes.onFinish=event=>{
    if(event.id.startsWith('expansion-')){
-    const id=event.id.slice('expansion-'.length);if(this.sceneAnimation?.mesh)this.sceneAnimation.mesh.rotation.z=this.sceneAnimation.base;this.sceneAnimation=null;
+    const id=event.id.slice('expansion-'.length);this.sceneAnimation?.pages?.removeFromParent();if(this.sceneAnimation?.mesh)this.sceneAnimation.mesh.rotation.z=this.sceneAnimation.base;this.sceneAnimation=null;
     if(['complete','skipped'].includes(event.reason)&&finishExpansion(this.state,id))this.reward(id);
    }else this.onSceneFinish?.(event);
   };
@@ -49,7 +50,8 @@ export class NarrativeExpansion {
   if(['maria','bia','davi'].includes(id))return this.school.active?this.school.narrative.actorPoint(id):null;
   if(id.startsWith('archive-symbol-')){
    const i=Number(id.split('-').at(-1))-1;
-   return this.school.active?{...NARRATIVE_POINTS[`memory-${i+1}`],name:`Símbolo ${SYMBOLS[i]} · ${memories[i].title}`}:{...memories[i].position,floor:null,top:.05,name:`Símbolo ${SYMBOLS[i]} · ${memories[i].title}`};
+   const source=NARRATIVE_POINTS[`memory-${i+1}`];
+   return this.school.active?{...source,x:source.x+.35,name:`Símbolo ${SYMBOLS[i]} · ${memories[i].title}`}:{...memories[i].position,floor:null,top:.05,name:`Símbolo ${SYMBOLS[i]} · ${memories[i].title}`};
   }
   const p=EXPANSION_POINTS[id];if(!p||p.outside===true&&this.school.active||p.outside!==true&&!this.school.active)return null;return p;
  }
@@ -113,7 +115,7 @@ export class NarrativeExpansion {
   this.story.show('expansion');document.getElementById('story-title').textContent='Aventuras · Expansão narrativa';
   const content=this.story.content;content.append(node('p',FICTION));
   for(const m of EXPANSION){const q=this.state.quests[m.id],card=node('article');card.className='story-card';card.append(node('h3',m.title),node('p',q?.completed?'✓ Concluída':q?m.tasks[q.step].title:'Explore, encontre pistas e resolva os puzzles.'));
-   if(q?.completed){card.append(node('p',`★ ${m.achievement} · ${m.item}`),button('Rever conclusão',()=>this.replay(m.id)));if(m.id==='letter')card.append(button('Ler carta fictícia',()=>this.showLetter()));}
+   if(q?.completed){card.append(node('p',`★ ${m.achievement} · ${m.item}`),node('p',m.finale),button('Rever conclusão',()=>this.replay(m.id)));if(m.id==='letter')card.append(button('Ler carta fictícia',()=>this.showLetter()));}
    else{const b=button(q?'Retomar missão':'Iniciar missão',()=>this.start(m.id));b.disabled=!!(m.requiresMemories&&this.getProgress().campaign.memories.length!==6||this.state.active&&this.state.active!==m.id);b.dataset.mission=m.id;card.append(b);if(m.requiresMemories)card.append(node('small',`Requer seis memórias históricas · ${this.getProgress().campaign.memories.length}/6`));}
    if(q&&Object.keys(q.choices).length)card.append(node('p',`Escolhas: ${Object.values(q.choices).join(' · ')}`));content.append(card);
   }
@@ -145,6 +147,13 @@ export class NarrativeExpansion {
   if(!p||this.school.active&&p.floor!==this.school.floor){this.notify('Volte ao local de conclusão indicado no diário para rever a cena.');return false;}
   this.story.close();this.story.start();const y=(this.school.active?this.school.navigation.floor(p.floor).baseY:0)+(p.top??.1);
   const mesh=this.ensureProp(m.tasks.at(-1).target,p);this.sceneAnimation={mesh,base:mesh?.rotation.z||0,time:0};
+  if(id==='archive'){
+   const pages=new THREE.Group();pages.position.set(p.x,y+.2,p.z);mesh.parent.add(pages);this.sceneAnimation.pages=pages;
+   for(let i=0;i<6;i++){
+    const page=this.world.resources.mesh('box','#fff5dc',[.21,.012,.28]);page.position.set((i-2.5)*.24,.1+Math.abs(i-2.5)*.04,0);page.rotation.y=(i-2.5)*.12;page.castShadow=false;pages.add(page);
+    const symbol=this.world.resources.mesh('box',['#ffda31','#ff579e','#27e7ed'][i%3],[.07,.035,.08]);symbol.position.set(page.position.x,page.position.y+.035,0);symbol.castShadow=false;pages.add(symbol);
+   }
+  }
   this.adventure.cutscenes.play({id:`expansion-${id}`,shots:[
    {duration:1.4,camera:{from:[p.x+1.8,y+1.5,p.z+2],to:[p.x+1.1,y+1.1,p.z+1.5],lookAt:[p.x,y+.15,p.z]},actors:[{id:'lorenzo',state:'observe'}],effect:'PÁGINAS VIVAS'},
    {duration:1.4,actors:[{id:'lorenzo',state:'react'}],dialogue:{speaker:'EPÍLOGO FICTÍCIO',text:`${m.finale} ${FICTION}`,provenance:'school-fiction'}},
@@ -164,7 +173,8 @@ export class NarrativeExpansion {
  update(dt){
   const visible=new Set(this.targets().map(t=>t.mesh).filter(Boolean));
   for(const mesh of this.props.values())mesh.visible=visible.has(mesh)||this.sceneAnimation?.mesh===mesh;
-  if(this.sceneAnimation){this.sceneAnimation.time+=dt;const a=this.sceneAnimation;if(a.mesh)a.mesh.rotation.z=a.base+Math.sin(a.time*5)*.08;}
+  if(this.sceneAnimation&&!this.adventure.cutscenes.paused){this.sceneAnimation.time+=dt;const a=this.sceneAnimation;if(a.mesh)a.mesh.rotation.z=a.base+(this.story.reduce?0:Math.sin(a.time*5)*.08);if(a.pages){a.pages.children.forEach((p,i)=>{p.visible=i<Math.ceil(a.time*6);});if(!this.story.reduce)a.pages.rotation.y=Math.sin(a.time)*.08;}}
  }
- dispose(){this.sceneAnimation=null;this.adventure.cutscenes.onFinish=this.onSceneFinish;for(const mesh of this.props.values())mesh.removeFromParent();this.props.clear();this.story.expansion=null;}
+ describe(){return{props:this.props.size,visible:[...this.props.values()].filter(m=>m.visible).length,temporaryPages:this.sceneAnimation?.pages?.children.length||0,sceneTime:this.sceneAnimation?.time||0};}
+ dispose(){this.sceneAnimation?.pages?.removeFromParent();if(this.sceneAnimation?.mesh)this.sceneAnimation.mesh.rotation.z=this.sceneAnimation.base;this.sceneAnimation=null;this.adventure.cutscenes.onFinish=this.onSceneFinish;for(const mesh of this.props.values())mesh.removeFromParent();this.props.clear();this.story.expansion=null;}
 }
