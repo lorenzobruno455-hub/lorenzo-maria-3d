@@ -151,5 +151,12 @@
     "available": true,
     "source": "AC",
     "condition": "egg"
+  },
+  {
+    "id": "expansion-plan",
+    "name": "O Estrategista",
+    "description": "Organize o Plano de 14 Etapas · aventura fictícia.",
+    "available": true,
+    "secret": false
   }
 ]

@@ -1,0 +1,37 @@
+import {memories} from '../systems/quests.js';
+export const FICTION = 'Ficção narrativa inspirada no casal · não altera as memórias históricas.';
+export const PLANS = [
+ ['Preparação','Abrir o caderno'],['Preparação','Escolher uma caneta'],['Preparação','Escrever “oi”'],['Preparação','Ensaiar o “oi” em silêncio'],
+ ['Logística','Desenhar uma rota até a carteira'],['Logística','Calcular a distância de três passos'],['Logística','Reservar um plano B para o cadarço'],['Logística','Consultar Bia sobre a rota'],
+ ['Coragem','Respirar sem consultar o manual'],['Coragem','Guardar o mapa de três passos'],['Coragem','Levantar da cadeira'],
+ ['Conversa','Caminhar até Maria'],['Conversa','Dizer “oi” de verdade'],['Conversa','Ouvir a resposta sem abrir a planilha'],
+].map(([block,label],i)=>({id:`plan-${i+1}`,block,label}));
+export const LETTER = [
+ 'Às vezes uma lembrança começa pequena.',
+ 'Quando prestamos atenção, ela ganha um lugar nas nossas palavras.',
+ 'Por isso guardo o que aprendemos ao ouvir um ao outro.',
+ 'Mesmo quando faltam palavras, podemos escolher cuidar do que ficou.',
+ 'E deixar espaço para as próximas lembranças, sem apressar a história.',
+];
+export const SYMBOLS = ['Caderno','Marcador','Luz','Coração','Flor','Arquivo'];
+export const PUZZLES = {
+ plan:{cards:PLANS,hint:'Preparação: caderno → caneta → escrever → ensaiar. Logística: rota → distância → plano B → Bia. Coragem: respirar → guardar → levantar. Conversa: caminhar → dizer oi → ouvir.'},
+ letter:{cards:LETTER.map((label,i)=>({id:`letter-${i+1}`,label})),hint:'Começo pequeno → atenção → por isso → mesmo quando → próximas lembranças.'},
+ visual:{cards:[{id:'sun',label:'☀ Sol nascente'},{id:'tree',label:'♣ Árvore'},{id:'heart',label:'♥ Coração'}],hint:'O marcador mostra o dia nascer, a árvore crescer e o carinho ficar: sol → árvore → coração.'},
+ box:{cards:[{id:'seed',label:'Semente'},{id:'sprout',label:'Broto'},{id:'flower',label:'Flor'}],hint:'Uma planta começa como semente, vira broto e só depois dá flor.'},
+ tuning:{kind:'sequence',cards:[{id:'lorenzo',label:'★ LorenzoFM · amarelo'},{id:'maria',label:'◆ MariaFM · rosa'},{id:'juntos',label:'♥ LorenzoeMariaFM · ciano'}],hint:'A bobina aponta a estrela; o cristal, o losango; a antena, o coração. Ordem: ★ → ◆ → ♥.'},
+ timeline:{cards:memories.map(m=>({id:m.id,label:`${m.date} · ${m.title}`})),hint:'Compare dia/mês/ano, começando por 2024. Os títulos e as datas são os registros originais.'},
+ association:{cards:memories.map((m,i)=>({id:m.id,label:`${SYMBOLS[i]} · ${m.environment}`})),hint:memories.map((m,i)=>`${i+1}: ${SYMBOLS[i]} → ${m.environment}`).join(' | ')},
+};
+const t=(id,type,target,title,text='',extra={})=>({id,type,target,title,text,...extra});
+export const EXPANSION = [
+ {id:'plan',title:'O Plano de 14 Etapas',achievement:'O Estrategista',item:'Caderno dos Planos',finale:'Maria sorri: “Você podia começar pelo oi.” Lorenzo fecha o caderno. Bia decide arquivar a planilha de três passos.',tasks:[
+  t('find','examine','plan-notebook','Encontrar o caderno na sala de história','Um caderno cenográfico anuncia: “Plano de 14 etapas para dizer oi”. Faltam páginas. A primeira pede uma caneta antes de qualquer estratégia.'),
+  t('bia','talk','bia','Conversar com Bia na biblioteca','Bia: “Dividi as páginas em três conjuntos: mesa da aula, leitura e corredor. A organização é séria; o plano, nem tanto.”',{choices:['Pedir uma pista sobre os blocos','Admitir que três passos bastavam']}),
+  t('pages','collect',null,'Recolher três conjuntos de páginas','As páginas formam quatro blocos: Preparação, Logística, Coragem e Conversa.',{targets:['plan-pages-a','plan-pages-b','plan-pages-c']}),
+  t('order','puzzle','plan-notebook','Organizar as 14 etapas no caderno','Toque em dois cartões para trocar suas posições.',{puzzle:'plan'}),
+  t('maria','talk','maria','Conversar com Maria','Maria: “Se a conversa precisa de quatorze etapas, podemos pular o formulário e começar pelo oi?”',{choices:['Dizer oi e ouvir Maria','Mostrar a Bia o plano simplificado']}),
+  t('scene','scene','plan-notebook','Concluir a encenação na sala de história'),
+ ]},
+];
+export const missionById=id=>EXPANSION.find(m=>m.id===id);

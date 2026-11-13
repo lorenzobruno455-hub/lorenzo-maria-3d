@@ -1,3 +1,4 @@
+import {freshExpansion,validateExpansion} from './expansion-progress.js';
 import { freshSchoolVisit, validateSchoolVisit } from './school-progress.js';
 export { freshSchoolVisit, validateSchoolVisit };
 import {freshAdventure,validateAdventure} from './quest-director.js';
@@ -15,7 +16,7 @@ export const ITEMS = [
   { id: 'photo', name: 'Fotografia do jardim', x: 10, z: 22 },
 ];
 export const DEFAULT_SETTINGS = { quality: 'medium', sensitivity: 1, volume: .5, sound: false, shadows: true, adaptive: true, controlsSize: 1, controlsOpacity: .8, musicVolume: .5, effectsVolume: .5 };
-export function freshProgress() { return { schoolVisit: freshSchoolVisit(), stage: 0, collected: [], position: { x: 0, z: 19 }, yaw: 0, pitch: .38, interactions: {}, adventure:freshAdventure(), living: freshLiving(), campaign: freshCampaign(), doors: [false, false] }; }
+export function freshProgress() { return { expansion:freshExpansion(), schoolVisit: freshSchoolVisit(), stage: 0, collected: [], position: { x: 0, z: 19 }, yaw: 0, pitch: .38, interactions: {}, adventure:freshAdventure(), living: freshLiving(), campaign: freshCampaign(), doors: [false, false] }; }
 export function validateProgress(raw) {
   const p = freshProgress();
   if (!raw || typeof raw !== 'object') return p;
@@ -33,6 +34,7 @@ export function validateProgress(raw) {
   p.schoolVisit = validateSchoolVisit(raw.schoolVisit);
   p.living = validateLiving(raw.living);
   p.campaign = validateCampaign(raw.campaign);
+  p.expansion = validateExpansion(raw.expansion);
   return p;
 }
 export function validateSettings(raw = {}) {

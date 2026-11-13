@@ -38,6 +38,7 @@ export class Adventure {
   this.notebook=()=>this.story.world.objects.find(o=>o.id==='study-notebook');
  }
  start(id){
+  if(this.story.expansion?.current){this.notify('Conclua a missão da expansão antes de iniciar outra aventura.');return false;}
   if(id==='first-encounter'&&this.getProgress().stage<2){this.notify('Conclua o prólogo das três lembranças com Maria. A aventura acontece depois dele.');this.story.close();this.startGame();return false;}
   const c=this.current;if(c){if(c.id!==id){this.notify('Conclua a aventura em andamento antes de começar outra.');return false;}this.story.close();this.startGame();this.autoKey='';return true;}
   if(!this.director.start(id)){this.notify('Conclua Primeiro Encontro para liberar esta aventura.');return false;}
