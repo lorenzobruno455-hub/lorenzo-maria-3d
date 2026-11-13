@@ -36,6 +36,7 @@ import { registerStateReader,registerNavigationReader } from './systems/diagnost
 import {createSchoolExterior} from './systems/school-exterior.js';
 import {schoolBoundsToLocal} from './systems/world-coordinates.js';
 import { Audio } from './systems/audio.js';
+import { mountLorenzoMariaRadio } from './radio/radio.js';
 import { blocked, resolveSpawn, relativeMovement, moveWithCollisions, clamp } from './systems/physics.js';
 import { loadSave, saveProgress, freshProgress, collect, objective, mariaDialogue } from './systems/progress.js';
 
@@ -70,6 +71,7 @@ world.collectibles.forEach(c => c.taken = progress.collected.includes(c.id));
 const motionPreference=matchMedia('(prefers-reduced-motion:reduce)');
 const follow = new FollowCamera(camera, world.occluders, progress.yaw, progress.pitch);
 const quality = new Quality(renderer, sun, settings), audio = new Audio(settings);
+const disposeRadio = mountLorenzoMariaRadio({ onPlaybackChange: playing => audio.setRadioPlaying(playing) });
 const visualEffects = new VisualEffects();
 const interactionAccent=new InteractionAccent(scene);
 const active = () => started && !paused && !dialog && !panelOpen && !document.hidden && !adventure?.busy && !school?.loading;
@@ -382,6 +384,6 @@ if(new URLSearchParams(location.search).has('debug')){addEventListener('keydown'
 
 export function dispose() {
   document.removeEventListener('click',uiSound);schoolExterior?.dispose();overdriveP0?.dispose();school?.narrative?.dispose();school?.dispose();adventure?.dispose();ink.dispose();interactionAccent.dispose();validator.dispose();interactions.dispose();visualEffects.dispose();
-  disposed = true; cancelAnimationFrame(frame); controls.clear(); save(); story?.dispose(); living?.dispose(); dialogues?.dispose(); lorenzo.dispose(); maria.dispose(); assets.dispose(); world.dispose(); audio.dispose(); renderer.dispose();
+  disposed = true; cancelAnimationFrame(frame); controls.clear(); save(); disposeRadio(); story?.dispose(); living?.dispose(); dialogues?.dispose(); lorenzo.dispose(); maria.dispose(); assets.dispose(); world.dispose(); audio.dispose(); renderer.dispose();
 }
 if (import.meta.hot) import.meta.hot.dispose(dispose);

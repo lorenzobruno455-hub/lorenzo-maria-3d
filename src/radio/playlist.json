@@ -1,0 +1,108 @@
+{
+  "lorenzo": [
+    {
+      "title": "Radio Ga Ga",
+      "artist": "Queen",
+      "file": "lorenzo/01.mp3"
+    },
+    {
+      "title": "Under Pressure",
+      "artist": "Queen & David Bowie",
+      "file": "lorenzo/02.mp3"
+    },
+    {
+      "title": "Champagne Supernova",
+      "artist": "Oasis",
+      "file": "lorenzo/03.mp3"
+    },
+    {
+      "title": "Brain Stew",
+      "artist": "Green Day",
+      "file": "lorenzo/04.mp3"
+    },
+    {
+      "title": "Creep",
+      "artist": "Radiohead",
+      "file": "lorenzo/05.mp3"
+    }
+  ],
+  "maria": [
+    {
+      "title": "WHERE IS MY HUSBAND?",
+      "artist": "RAYE",
+      "file": "maria/01.mp3"
+    },
+    {
+      "title": "i like the way you kiss me",
+      "artist": "Artemas",
+      "file": "maria/02.mp3"
+    },
+    {
+      "title": "Trevo (Tu)",
+      "artist": "ANAVITÓRIA feat. Tiago Iorc",
+      "file": "maria/03.mp3"
+    },
+    {
+      "title": "Rude",
+      "artist": "MAGIC!",
+      "file": "maria/04.mp3"
+    },
+    {
+      "title": "Cherry Pie",
+      "artist": "Warrant",
+      "file": "maria/05.mp3"
+    }
+  ],
+  "juntos": [
+    {
+      "title": "Accidentally in Love",
+      "artist": "Counting Crows",
+      "file": "juntos/01.mp3"
+    },
+    {
+      "title": "Still Into You",
+      "artist": "Paramore",
+      "file": "juntos/02.mp3"
+    },
+    {
+      "title": "Kiss Me",
+      "artist": "Sixpence None the Richer",
+      "file": "juntos/03.mp3"
+    },
+    {
+      "title": "Everlong (Acoustic)",
+      "artist": "Foo Fighters",
+      "file": "juntos/04.mp3"
+    },
+    {
+      "title": "The Only Exception",
+      "artist": "Paramore",
+      "file": "juntos/05.mp3"
+    },
+    {
+      "title": "Your Song",
+      "artist": "Elton John",
+      "file": "juntos/06.mp3"
+    },
+    {
+      "title": "Eduardo e Mônica",
+      "artist": "Legião Urbana",
+      "file": "juntos/07.mp3"
+    },
+    {
+      "title": "Until I Found You",
+      "artist": "Stephen Sanchez & Em Beihold",
+      "file": "juntos/08.mp3"
+    },
+    {
+      "title": "Marry You",
+      "artist": "Bruno Mars",
+      "file": "juntos/09.mp3"
+    },
+    {
+      "title": "All You Need Is Love",
+      "artist": "The Beatles",
+      "file": "juntos/10.mp3"
+    }
+  ]
+}

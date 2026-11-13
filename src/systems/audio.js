@@ -1,6 +1,7 @@
 import tracks from '../data/music.json' with { type: 'json' };
 export class Audio {
-  constructor(settings) { this.settings = settings; this.context = null; this.mood = 'exploration'; this.step = 0; this.nextNote = 0; this.nodes = new Set(); }
+  constructor(settings) { this.settings = settings; this.context = null; this.mood = 'exploration'; this.step = 0; this.nextNote = 0; this.nodes = new Set(); this.radioPlaying = false; }
+  setRadioPlaying(playing) { this.radioPlaying = !!playing; }
   unlock() { if (!this.context) this.context = new AudioContext(); if (!this.musicGain) { this.musicGain = this.context.createGain(); this.musicGain.gain.value = 0; this.musicGain.connect(this.context.destination); } this.context.resume().catch(() => {}); }
   play(kind = 'collect') {
     const ctx = this.context;
@@ -43,7 +44,7 @@ export class Audio {
   setMood(mood) { if (this.mood === mood) return; this.mood = mood; this.step = 0; this.nextNote = this.context?.currentTime || 0; if (this.musicGain) { this.musicGain.gain.cancelScheduledValues(this.context.currentTime); this.musicGain.gain.setValueAtTime(0, this.context.currentTime); } }
   update() {
     const ctx = this.context; if (!ctx || !this.musicGain || ctx.state !== 'running') return;
-    const audible = this.settings.sound && !document.hidden;
+    const audible = this.settings.sound && !document.hidden && !this.radioPlaying;
     this.musicGain.gain.setTargetAtTime(audible ? this.settings.volume * (this.settings.musicVolume ?? .5) * .045 : 0, ctx.currentTime, .15);
     if (!audible) { this.nextNote = ctx.currentTime; return; }
     if (this.mood === 'exploration' && ctx.currentTime > (this.nextAmbience || 0)) { this.ambience(); this.nextAmbience = ctx.currentTime + 9; }
