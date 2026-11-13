@@ -1,0 +1,11 @@
+/* Shared touch-swap puzzles; borrows the existing Colorbeat panel and fonts. */
+.expansion-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(190px,100%),1fr));gap:10px;margin:14px 0}
+#story-content.expansion-content button{min-width:44px;min-height:44px;touch-action:manipulation;white-space:normal}
+.comic-overdrive #story-content .expansion-grid button{text-align:left;background:#ffda31;color:#111827;border:3px solid #101426;box-shadow:3px 3px 0 #ff5498;font-weight:800;padding:10px}
+.comic-overdrive #story-content .expansion-grid button[aria-pressed=true]{background:#25e7ed;outline:3px solid #111827;transform:translateY(-2px)}
+.expansion-feedback{padding:10px;border-left:6px solid #ff5498;background:#111827;color:#fff5dc;min-height:44px}
+@media(max-height:500px){.expansion-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.comic-overdrive #story-content .expansion-grid button{font-size:13px;padding:7px}}
+@media(prefers-reduced-motion:reduce){.comic-overdrive #story-content .expansion-grid button{transform:none!important}}
+
+.comic-overdrive #story-content .expansion-grid .expansion-channel-maria{background:#ff579e}
+.comic-overdrive #story-content .expansion-grid .expansion-channel-juntos{background:#27e7ed}

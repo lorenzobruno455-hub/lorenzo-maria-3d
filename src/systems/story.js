@@ -51,6 +51,7 @@ export class Story {
     } else if (name === 'achievements') definitions.forEach(a => { const stamp = this.c.achievements[a.id]; const card = el('article', undefined, 'story-card'); card.append(el('h3', `${stamp ? '★' : '☆'} ${a.secret && !stamp ? 'Conquista secreta' : a.name}`), el('p', a.secret && !stamp ? 'Explore a escola.' : a.description), el('small', stamp ? `Obtida: ${new Date(stamp).toLocaleDateString('pt-BR')}` : a.available ? 'Pendente' : 'Indisponível · atividade planejada')); this.content.append(card); });
     else if (name === 'letter') { this.content.append(el('p', this.c.letter ? rewards.letter.text : 'Conclua os seis capítulos para abrir a carta final.', 'letter-text')); }
     this.living?.renderPage(this.content, name);
+    this.expansion?.renderPage(this.content, name);
     document.getElementById('story-close').focus();
   }
   newCampaign() {
@@ -78,7 +79,7 @@ export class Story {
   }
   maria() {
     const line = { speaker: 'MENU', text: 'Escolha um tema de conversa do jogo Color.', provenance: 'creative-fiction' };
-    this.dialogue.start([line], { instant: true, choices: [...['cotidianas', 'humor', 'filosofia', 'música', 'escola', 'fé', 'memórias', 'especiais'].map(category => ({ label: category[0].toUpperCase() + category.slice(1), action: () => this.chooseDialogue(category) })), { label: 'Dupla Dinâmica', action: () => { if (!this.c.special.includes('duo')) this.c.special.push('duo'); this.changed(); this.dialogue.start([{ speaker: 'SISTEMA', text: 'COMBO: Dupla Dinâmica! Lorenzo +100 de felicidade. Maria +100 de paciência. Duração: indefinida.', provenance: 'creative-fiction' }]); } }, { label: 'Prólogo: três lembranças', action: () => this.tutorial() }] });
+    this.dialogue.start([line], { instant: true, choices: [...(this.expansion?.mariaOptions()||[]), ...['cotidianas', 'humor', 'filosofia', 'música', 'escola', 'fé', 'memórias', 'especiais'].map(category => ({ label: category[0].toUpperCase() + category.slice(1), action: () => this.chooseDialogue(category) })), { label: 'Dupla Dinâmica', action: () => { if (!this.c.special.includes('duo')) this.c.special.push('duo'); this.changed(); this.dialogue.start([{ speaker: 'SISTEMA', text: 'COMBO: Dupla Dinâmica! Lorenzo +100 de felicidade. Maria +100 de paciência. Duração: indefinida.', provenance: 'creative-fiction' }]); } }, { label: 'Prólogo: três lembranças', action: () => this.tutorial() }] });
     this.dialogue.advance();
   }
   memory(m, replay = false, origin = null) {

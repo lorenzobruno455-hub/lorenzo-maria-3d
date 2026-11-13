@@ -1,0 +1,64 @@
+{
+  "baseline": "a178c45",
+  "viewport": {
+    "width": 915,
+    "height": 412
+  },
+  "quality": "low",
+  "shadows": false,
+  "notes": "Same library save and paused camera; headless Chromium/SwiftShader. Renderer counters only, no physical-device FPS.",
+  "before": {
+    "drawCalls": 101,
+    "triangles": 152692,
+    "geometries": 132,
+    "textures": 19,
+    "colorbeat": {
+      "style": "aurora-colorbeat-081",
+      "inkPixels": 2.1,
+      "accent": false,
+      "exposure": 1,
+      "sharedLibrary": true,
+      "materials": 178,
+      "textures": 5,
+      "programs": 27
+    },
+    "x": -6.5,
+    "z": -15.299999999999999,
+    "camera": {
+      "x": -6.5,
+      "y": 3.0078659715345273,
+      "z": -11.399608530578655,
+      "distance": 4.2
+    }
+  },
+  "after": {
+    "drawCalls": 107,
+    "triangles": 152764,
+    "geometries": 132,
+    "textures": 19,
+    "colorbeat": {
+      "style": "aurora-colorbeat-081",
+      "inkPixels": 2.1,
+      "accent": false,
+      "exposure": 1,
+      "sharedLibrary": true,
+      "materials": 181,
+      "textures": 5,
+      "programs": 27
+    },
+    "expansionRuntime": {
+      "props": 3,
+      "visible": 3,
+      "temporaryPages": 0,
+      "sceneTime": 0
+    },
+    "x": -6.5,
+    "z": -15.299999999999999,
+    "camera": {
+      "x": -6.5,
+      "y": 3.0078659715345273,
+      "z": -11.399608530578655,
+      "distance": 4.2
+    }
+  }
+}

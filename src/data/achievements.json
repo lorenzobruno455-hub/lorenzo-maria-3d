@@ -151,5 +151,33 @@
     "available": true,
     "source": "AC",
     "condition": "egg"
+  },
+  {
+    "id": "expansion-plan",
+    "name": "O Estrategista",
+    "description": "Organize o Plano de 14 Etapas · aventura fictícia.",
+    "available": true,
+    "secret": false
+  },
+  {
+    "id": "expansion-letter",
+    "name": "Palavras Guardadas",
+    "description": "Restaure os cinco fragmentos da carta fictícia.",
+    "available": true,
+    "secret": false
+  },
+  {
+    "id": "expansion-frequency",
+    "name": "Na Mesma Frequência",
+    "description": "Recupere a transmissão simbólica com Davi.",
+    "available": true,
+    "secret": false
+  },
+  {
+    "id": "expansion-archive",
+    "name": "Guardião das Memórias",
+    "description": "Restaure o arquivo complementar após as seis memórias históricas.",
+    "available": true,
+    "secret": false
   }
 ]
