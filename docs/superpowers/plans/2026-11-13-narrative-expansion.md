@@ -36,8 +36,8 @@ Legacy/partial save normalization; closing and reopening puzzles; reward idempot
 
 ## M3 — A Frequência Perdida
 
-- [ ] Add Davi interaction, three examinable components with symbolic clues, three-channel tuning puzzle and original confirmation through existing Audio.play. Read station names through existing playlist metadata, no player changes.
-- [ ] Test completion with MP3 requests blocked and radio/control compatibility; commit.
+- [x] Add Davi interaction, three examinable components with symbolic clues, three-channel tuning puzzle and original confirmation through existing Audio.play. Read station names through existing playlist metadata, no player changes.
+- [x] Test completion with MP3 requests blocked and radio/control compatibility; commit.
 
 ## M4 — O Arquivo Aurora / final validation
 
@@ -48,3 +48,5 @@ Legacy/partial save normalization; closing and reopening puzzles; reward idempot
 M1 validation: Node expansion tests 2/2; production build passed. Browser flow reached every stage through Maria; final scene/resume/reward/control restoration passed separately. An intermediate whole-flow run was interrupted by a Vite source reload during development; final regression will rerun the uninterrupted full flow.
 
 M2 validation: full browser flow passed, including all five fragments, visual/plant/letter puzzles, persisted swaps, scene and reload; Node tests 3/3. Corrected outbound HUD routing to the physical reception gate, via stairs when needed.
+
+M3 validation: full browser mission passed with all MP3 requests blocked, through components on three floors, tuning, message, scene and reload. Node tests 4/4. No radio UI/playlist/player changes. Original synthesized confirmation uses Audio.play.

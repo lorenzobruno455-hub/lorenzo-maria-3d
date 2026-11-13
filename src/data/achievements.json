@@ -165,5 +165,12 @@
     "description": "Restaure os cinco fragmentos da carta fictícia.",
     "available": true,
     "secret": false
+  },
+  {
+    "id": "expansion-frequency",
+    "name": "Na Mesma Frequência",
+    "description": "Recupere a transmissão simbólica com Davi.",
+    "available": true,
+    "secret": false
   }
 ]

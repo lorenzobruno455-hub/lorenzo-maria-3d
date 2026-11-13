@@ -9,6 +9,7 @@ const points={
  'plan-pages-a':NARRATIVE_POINTS['school-exercise'],
  'plan-pages-b':{...NARRATIVE_POINTS['shelf-clue'],x:-6.05},
  'plan-pages-c':{floor:0,x:0,z:-8},
+ 'radio-antique':{...NARRATIVE_POINTS.instrument,x:9.45},'radio-coil':{...NARRATIVE_POINTS['science-book'],x:-8.45},'radio-crystal':{...NARRATIVE_POINTS['shelf-clue'],x:-6.1},'radio-antenna':{...NARRATIVE_POINTS.score,x:9.45},
  'letter-envelope':{...NARRATIVE_POINTS.album,x:-7.6},
  'letter-fragment-1':{...NARRATIVE_POINTS['shelf-clue'],x:-6.85},
  'letter-mural':{floor:0,x:0,z:-4},'letter-fragment-2':{floor:0,x:0,z:-4},
@@ -62,6 +63,7 @@ async function solve(page,id){
 }
 for(const mission of EXPANSION)test(`${mission.id}: real world interactions complete and resume the mission`,async({page})=>{
  test.setTimeout(600000);
+ if(mission.id==='frequency')await page.route('**/radio/audio/**',route=>route.abort());
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await seed(page,{stage:2,collected:['notebook','card','photo'],campaign:mission.requiresMemories?{memories:Array.from({length:6},(_,i)=>`memory-${i+1}`)}:{},schoolVisit:{active:true,floor:0,position:{x:-4.7,z:16},yaw:0,pitch:.38}});
  await start(page);await expect.poll(async()=>(await state(page)).school.active).toBe(true);

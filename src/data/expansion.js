@@ -48,5 +48,15 @@ export const EXPANSION = [
   t('scene','scene','letter-envelope','Guardar a carta restaurada na biblioteca'),
  ]},
 
+
+ {id:'frequency',title:'A Frequência Perdida',achievement:'Na Mesma Frequência',item:'Rádio Restaurado',finale:'O rádio cenográfico encontra uma mensagem: “Escutar também é uma forma de guardar.” Davi registra a transmissão fictícia. LorenzoFM, MariaFM e LorenzoeMariaFM continuam disponíveis como sempre.',tasks:[
+  t('radio','examine','radio-antique','Investigar o rádio antigo no salão','O rádio é um objeto cenográfico: nenhuma transmissão externa é captada. Três espaços coloridos aguardam símbolos. Davi reconhece o desenho.'),
+  t('davi','talk','davi','Conversar com Davi no salão','Davi: “Procure a bobina de papel na ciência, o cristal cenográfico na biblioteca e a antena de cartão no salão. Cada etiqueta guarda um símbolo, na ordem em que listei.”',{choices:['Anotar a ordem dos componentes','Perguntar sobre as rádios']}),
+  t('components','collect',null,'Encontrar e examinar os três componentes fictícios','As etiquetas são pistas: bobina = ★ amarelo, LorenzoFM; cristal = ◆ rosa, MariaFM; antena = ♥ ciano, LorenzoeMariaFM. São símbolos de um puzzle, sem equipamento real.',{targets:['radio-coil','radio-crystal','radio-antenna']}),
+  t('tuning','puzzle','radio-antique','Retornar ao rádio e recuperar a sintonia','Coloque os três canais simbólicos na ordem das etiquetas citadas por Davi. Você pode jogar sem ouvir música.',{puzzle:'tuning'}),
+  t('message','examine','radio-antique','Examinar a mensagem recuperada','Transmissão fictícia restaurada: “Escutar também é uma forma de guardar. Quando a conversa encontra espaço, cada voz deixa uma lembrança.” Nenhum fato histórico foi acrescentado.'),
+  t('scene','scene','radio-antique','Celebrar a sintonia no salão'),
+ ]},
+
 ];
 export const missionById=id=>EXPANSION.find(m=>m.id===id);

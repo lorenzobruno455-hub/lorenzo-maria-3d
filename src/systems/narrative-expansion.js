@@ -12,6 +12,11 @@ export const EXPANSION_POINTS={
  'plan-pages-a':at('school-exercise','Páginas · Preparação'),
  'plan-pages-b':at('shelf-clue','Páginas · Logística e Coragem',.45),
  'plan-pages-c':{floor:0,x:0,z:-8,name:'Páginas · Conversa',top:.04},
+ 'radio-antique':at('instrument','Rádio antigo · salão',.45),
+ 'radio-coil':at('science-book','Bobina de papel · ★ LorenzoFM',.45),
+ 'radio-crystal':at('shelf-clue','Cristal cenográfico · ◆ MariaFM',.4),
+ 'radio-antenna':at('score','Antena de cartão · ♥ LorenzoeMariaFM',.45),
+
  'letter-envelope':at('album','Envelope fictício · biblioteca',-.8),
  'letter-fragment-1':at('shelf-clue','Livro com fragmento da carta',-.35),
  'letter-mural':{floor:0,x:0,z:-4,name:'Marcador ilustrado · corredor',top:.04},
@@ -56,7 +61,11 @@ export class NarrativeExpansion {
    const group=new THREE.Group(),r=this.world.resources;
    const shell=r.mesh('box','#101426',[.5,.07,.34]),pages=r.mesh('box','#fff5dc',[.44,.025,.28]),cover=r.mesh('box',id.includes('radio')?'#28e7ef':id.includes('letter')?'#ff5b96':'#ffdc31',[.49,.018,.33]);
    pages.position.y=.045;cover.position.y=.065;group.add(shell,pages,cover);
-   group.userData.cover=cover;group.name=`Aurora ficção · ${id}`;group.userData.inkDynamic=true;
+   if(id==='radio-antique'){
+    shell.scale.set(.65,.42,.3);shell.position.y=.18;pages.scale.set(.55,.28,.025);pages.position.set(0,.2,.165);cover.scale.set(.5,.025,.025);cover.position.set(0,.26,.185);
+    for(const x of [-.17,0,.17]){const knob=r.mesh('cylinder','#101426',[.045,.04,.045]);knob.rotation.x=Math.PI/2;knob.position.set(x,.12,.2);group.add(knob);}
+   }else group.userData.cover=cover;
+   group.traverse(m=>{if(m.isMesh)m.castShadow=false;});group.name=`Aurora ficção · ${id}`;group.userData.inkDynamic=true;
    (this.school.active?this.school.group:this.scene).add(group);
    group.position.set(p.x,(this.school.active?this.school.navigation.floor(p.floor).baseY:0)+(p.top??.05)+.06,p.z);
    this.props.set(key,group);
@@ -121,7 +130,7 @@ export class NarrativeExpansion {
    const card=p.cards.find(card=>card.id===cardId),b=button(`${i+1}. ${card.block?`${card.block} · `:''}${card.label}`,()=>{
     if(this.selected===null){this.selected=i;b.setAttribute('aria-pressed','true');status.textContent=`Cartão ${i+1} selecionado. Toque no destino.`;return;}
     const order=[...c.quest.puzzles[id]];[order[this.selected],order[i]]=[order[i],order[this.selected]];setPuzzleOrder(this.state,id,order);this.save();this.openPuzzle('Posições trocadas e salvas.');
-   });b.dataset.puzzleCard=cardId;b.dataset.slot=i;b.setAttribute('aria-pressed','false');grid.append(b);
+   });if(id==='tuning')b.classList.add(`expansion-channel-${cardId}`);b.dataset.puzzleCard=cardId;b.dataset.slot=i;b.setAttribute('aria-pressed','false');grid.append(b);
   });content.append(grid);
   if(id==='association')content.append(node('p',memories.map((m,i)=>`${i+1}. ${m.date} · ${m.title}`).join(' | ')));
   if(id==='tuning')content.append(node('p','Sintonia simbólica: LorenzoFM, MariaFM e LorenzoeMariaFM permanecem livres no mini player. Nenhum MP3 é necessário para este puzzle.'));
