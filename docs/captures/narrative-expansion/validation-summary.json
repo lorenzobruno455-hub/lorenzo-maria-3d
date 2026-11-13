@@ -1,0 +1,29 @@
+{
+  "unit": {
+    "passed": 186,
+    "failed": 0
+  },
+  "newBrowserScenarios": {
+    "passed": 7,
+    "failed": 0
+  },
+  "radioBrowserScenarios": {
+    "passed": 4,
+    "failed": 0
+  },
+  "generalBrowserRegression": {
+    "total": 112,
+    "passed": 74,
+    "timedOut": 1,
+    "interrupted": 1,
+    "notRun": 36,
+    "complete": false,
+    "reason": "Stopped at owner request to conserve credits; resumed once after environment reconnection without repeating completed scenarios.",
+    "timeout": "tests/colorbeat081.spec.js:4 — 240s on return to campus; expansion inactive",
+    "interruptedCase": "tests/sao-jorge-m2.spec.js:4"
+  },
+  "productionBuild": "passed; existing Three.js chunk warning",
+  "physicalAndroid": "not tested",
+  "merge": false,
+  "deploy": false
+}
