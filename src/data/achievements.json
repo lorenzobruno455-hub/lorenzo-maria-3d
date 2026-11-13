@@ -158,5 +158,12 @@
     "description": "Organize o Plano de 14 Etapas · aventura fictícia.",
     "available": true,
     "secret": false
+  },
+  {
+    "id": "expansion-letter",
+    "name": "Palavras Guardadas",
+    "description": "Restaure os cinco fragmentos da carta fictícia.",
+    "available": true,
+    "secret": false
   }
 ]

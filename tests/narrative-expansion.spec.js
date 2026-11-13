@@ -9,6 +9,12 @@ const points={
  'plan-pages-a':NARRATIVE_POINTS['school-exercise'],
  'plan-pages-b':{...NARRATIVE_POINTS['shelf-clue'],x:-6.05},
  'plan-pages-c':{floor:0,x:0,z:-8},
+ 'letter-envelope':{...NARRATIVE_POINTS.album,x:-7.6},
+ 'letter-fragment-1':{...NARRATIVE_POINTS['shelf-clue'],x:-6.85},
+ 'letter-mural':{floor:0,x:0,z:-4},'letter-fragment-2':{floor:0,x:0,z:-4},
+ 'letter-fragment-3':{...NARRATIVE_POINTS['school-exercise'],x:-6.1},
+ 'letter-fragment-4':{outside:true,x:12,z:23},'letter-box':{outside:true,x:12,z:23},'letter-fragment-5':{outside:true,x:12,z:23},
+
 };
 mkdirSync('docs/captures/narrative-expansion',{recursive:true});
 async function relocate(page,p){
@@ -51,7 +57,7 @@ async function solve(page,id){
  const order=await page.locator('[data-puzzle-card]').evaluateAll(nodes=>nodes.map(n=>n.dataset.puzzleCard));
  await page.locator('#story-close').click();await interact(page);
  expect(await page.locator('[data-puzzle-card]').evaluateAll(nodes=>nodes.map(n=>n.dataset.puzzleCard))).toEqual(order);
- await page.screenshot({path:`docs/captures/narrative-expansion/${id}-puzzle.png`});
+ await page.screenshot({animations:'disabled',path:`docs/captures/narrative-expansion/${id}-puzzle.png`});
  await page.getByRole('button',{name:'Conferir sequência',exact:true}).click();await expect(page.locator('#story-panel')).toBeHidden();
 }
 for(const mission of EXPANSION)test(`${mission.id}: real world interactions complete and resume the mission`,async({page})=>{
@@ -71,7 +77,7 @@ for(const mission of EXPANSION)test(`${mission.id}: real world interactions comp
  }
  await expect.poll(async()=>(await state(page)).expansion.quests[mission.id].completed).toBe(true);
  const saved=await state(page);expect(saved.campaign.achievements[`expansion-${mission.id}`]).toBeTruthy();expect(errors).toEqual([]);
- await page.screenshot({path:`docs/captures/narrative-expansion/${mission.id}-complete.png`});
+ await page.screenshot({animations:'disabled',path:`docs/captures/narrative-expansion/${mission.id}-complete.png`});
  await page.reload();await page.locator('#start').click();await page.evaluate(async()=>window.readGame=(await import('/src/systems/diagnostics.js')).getGameState);
  expect((await state(page)).expansion.quests[mission.id].rewarded).toBe(true);
 });

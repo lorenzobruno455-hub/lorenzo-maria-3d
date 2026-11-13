@@ -33,5 +33,20 @@ export const EXPANSION = [
   t('maria','talk','maria','Conversar com Maria','Maria: “Se a conversa precisa de quatorze etapas, podemos pular o formulário e começar pelo oi?”',{choices:['Dizer oi e ouvir Maria','Mostrar a Bia o plano simplificado']}),
   t('scene','scene','plan-notebook','Concluir a encenação na sala de história'),
  ]},
+
+ {id:'letter',title:'Uma Carta Nunca Entregue',achievement:'Palavras Guardadas',item:'Envelope Restaurado',finale:'Os cinco trechos voltam ao envelope cenográfico. A carta fala de atenção e cuidado; a carta final original permanece guardada no seu próprio lugar no álbum.',tasks:[
+  t('envelope','examine','letter-envelope','Examinar o envelope na biblioteca','Este envelope fictício contém uma pista: um marcador mostra sol → árvore → coração. O primeiro trecho está num livro; Bia conhece o caminho do terceiro.'),
+  t('fragment-1','collect',null,'Encontrar o fragmento no livro','Primeiro fragmento: '+LETTER[0],{targets:['letter-fragment-1']}),
+  t('visual','puzzle','letter-mural','Decifrar o marcador no corredor','O desenho do marcador passa do amanhecer à árvore e termina num coração.',{puzzle:'visual'}),
+  t('fragment-2','collect',null,'Recolher o trecho atrás do marcador','Segundo fragmento: '+LETTER[1],{targets:['letter-fragment-2']}),
+  t('bia','talk','bia','Pedir a Bia a localização do terceiro trecho','Bia: “O terceiro ficou na mesa de história. O quarto está na caixa de leitura do jardim do campus. Saia pelos portões a pé: o jardim ainda é o mesmo.”',{choices:['Anotar a pista do jardim','Confirmar a mesa de história']}),
+  t('fragment-3','collect',null,'Examinar a pasta na sala de história','Terceiro fragmento: '+LETTER[2],{targets:['letter-fragment-3']}),
+  t('fragment-4','collect',null,'Examinar a caixa de leitura no jardim do campus','Quarto fragmento: '+LETTER[3]+' No fundo da caixa há desenhos de uma semente, um broto e uma flor.',{targets:['letter-fragment-4']}),
+  t('box','puzzle','letter-box','Abrir o compartimento de papel no jardim','Organize o crescimento da planta para abrir a aba do envelope cenográfico.',{puzzle:'box'}),
+  t('fragment-5','collect',null,'Recolher o último fragmento no jardim','Quinto fragmento: '+LETTER[4],{targets:['letter-fragment-5']}),
+  t('restore','puzzle','letter-envelope','Montar a carta na biblioteca','As cinco frases formam uma carta fictícia. Organize a ligação entre elas.',{puzzle:'letter'}),
+  t('scene','scene','letter-envelope','Guardar a carta restaurada na biblioteca'),
+ ]},
+
 ];
 export const missionById=id=>EXPANSION.find(m=>m.id===id);

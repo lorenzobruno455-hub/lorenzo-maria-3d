@@ -12,6 +12,15 @@ export const EXPANSION_POINTS={
  'plan-pages-a':at('school-exercise','Páginas · Preparação'),
  'plan-pages-b':at('shelf-clue','Páginas · Logística e Coragem',.45),
  'plan-pages-c':{floor:0,x:0,z:-8,name:'Páginas · Conversa',top:.04},
+ 'letter-envelope':at('album','Envelope fictício · biblioteca',-.8),
+ 'letter-fragment-1':at('shelf-clue','Livro com fragmento da carta',-.35),
+ 'letter-mural':{floor:0,x:0,z:-4,name:'Marcador ilustrado · corredor',top:.04},
+ 'letter-fragment-2':{floor:0,x:0,z:-4,name:'Fragmento do marcador',top:.04},
+ 'letter-fragment-3':at('school-exercise','Pasta com fragmento da carta',.4),
+ 'letter-fragment-4':{outside:true,x:12,z:23,name:'Caixa de leitura · jardim do campus',top:.03},
+ 'letter-box':{outside:true,x:12,z:23,name:'Compartimento de papel · jardim',top:.03},
+ 'letter-fragment-5':{outside:true,x:12,z:23,name:'Último fragmento · jardim',top:.03},
+
 };
 
 /** Adapts existing Story/Adventure systems; no second save, player or frame loop. */
@@ -63,7 +72,7 @@ export class NarrativeExpansion {
  goal(){
   const c=this.current;if(!c)return null;const ids=c.task.type==='collect'?c.task.targets.filter(id=>!c.quest.collected.includes(id)):[c.task.target];
   let p=ids.map(id=>this.point(id)).filter(Boolean).sort((a,b)=>Math.abs((a.floor??0)-this.school.floor)-Math.abs((b.floor??0)-this.school.floor))[0];
-  if(!p){return this.school.active?{...NARRATIVE_POINTS.classroom,name:`${c.mission.title} · saia a pé para o jardim do campus`}:{...this.school.connection.access?.gates.find(g=>g.id==='reception')||this.school.connection.door?.position||{x:49,z:5.5},name:`${c.mission.title} · entre no São Jorge a pé`};}
+  if(!p){return this.school.active?narrativeWaypoint(this.school.navigation,this.school.floor,{floor:0,x:10,z:-5.5,name:`${c.mission.title} · saia a pé para o jardim do campus`}):{...this.school.connection.access?.gates.find(g=>g.id==='reception')||this.school.connection.door?.position||{x:49,z:5.5},name:`${c.mission.title} · entre no São Jorge a pé`};}
   p={...p,name:`${c.mission.title} · ${c.task.title}${c.task.type==='collect'?` (${c.task.targets.filter(id=>c.quest.collected.includes(id)).length}/${c.task.targets.length})`:''}`};
   return this.school.active?narrativeWaypoint(this.school.navigation,this.school.floor,p):p;
  }
@@ -135,7 +144,7 @@ export class NarrativeExpansion {
   return true;
  }
  replay(id){if(!this.state.quests[id]?.completed)return;this.playScene(id,true);}
- showLetter(){this.story.show('expansion-letter');document.getElementById('story-title').textContent='Uma Carta Nunca Entregue · ficção';this.story.content.append(node('p',FICTION),node('p',LETTER.join('\n\n')));}
+ showLetter(){this.story.show('expansion-letter');document.getElementById('story-title').textContent='Uma Carta Nunca Entregue · ficção';const text=node('p',LETTER.join('\n\n'));text.className='letter-text';this.story.content.append(node('p',FICTION),text);}
  mariaOptions(){return this.state.quests.plan?.completed?[{label:'Sobre o caderno dos planos',action:()=>this.story.dialogue.start([{speaker:'MARIA',text:'O melhor plano ainda é prestar atenção na resposta. Vamos deixar o caderno descansar? '+FICTION,provenance:'school-fiction'}],{instant:true})}]:[];}
  renderPage(content,page){
   if(page!=='expansion-puzzle')content.classList.remove('expansion-content');

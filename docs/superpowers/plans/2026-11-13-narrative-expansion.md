@@ -31,8 +31,8 @@ Legacy/partial save normalization; closing and reopening puzzles; reward idempot
 
 ## M2 — Uma Carta Nunca Entregue
 
-- [ ] Add five distinct clue/fragment stages including visual and small logic puzzles, ordering and restored letter in album.
-- [ ] Test partial fragment resume, wrong answer/hint/retry and unique rewards; commit.
+- [x] Add five distinct clue/fragment stages including visual and small logic puzzles, ordering and restored letter in album.
+- [x] Test partial fragment resume, wrong answer/hint/retry and unique rewards; commit.
 
 ## M3 — A Frequência Perdida
 
@@ -46,3 +46,5 @@ Legacy/partial save normalization; closing and reopening puzzles; reward idempot
 - [ ] Record real screenshots, renderer counters, limitations and Android test instructions. Push feature branch and open PR for review only.
 
 M1 validation: Node expansion tests 2/2; production build passed. Browser flow reached every stage through Maria; final scene/resume/reward/control restoration passed separately. An intermediate whole-flow run was interrupted by a Vite source reload during development; final regression will rerun the uninterrupted full flow.
+
+M2 validation: full browser flow passed, including all five fragments, visual/plant/letter puzzles, persisted swaps, scene and reload; Node tests 3/3. Corrected outbound HUD routing to the physical reception gate, via stairs when needed.
