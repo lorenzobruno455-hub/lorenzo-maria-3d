@@ -12,6 +12,6 @@ body.at-welcome .lm-radio,body.modal .lm-radio{visibility:hidden;pointer-events:
 .lm-radio--minimized{width:46px;height:42px;padding:0}
 .lm-radio--minimized .lm-radio__collapse{inset:0;width:100%;height:100%;border:0;border-radius:12px}
 .lm-radio--minimized .lm-radio__station,.lm-radio--minimized .lm-radio__controls,.lm-radio--minimized .lm-radio__title{display:none}
-@media(max-height:500px){.lm-radio{left:max(calc(44px + 104px * var(--controls-size,1)),env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom))}}
+@media(max-height:500px){.lm-radio{left:max(12px,env(safe-area-inset-left));bottom:calc(max(12px,env(safe-area-inset-bottom)) + 104px * var(--controls-size,1) + 12px);padding:4px 8px}.lm-radio__station{height:26px}.lm-radio__controls{height:32px;margin:1px 0}.lm-radio__btn--main{width:32px;height:32px;min-height:32px}.lm-radio__title{font-size:10px;line-height:12px;min-height:12px}}
 @media(min-height:501px) and (max-width:700px),(min-height:501px) and (pointer:coarse){.lm-radio{bottom:calc(36px + 130px * var(--controls-size,1))}}
 @media(max-width:700px) and (orientation:portrait){body:not(.modal):not(.at-welcome) #location{left:auto;right:max(12px,env(safe-area-inset-right));transform:none}}

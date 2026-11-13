@@ -110,6 +110,10 @@ test('radio and virtual movement controls do not overlap in phone portrait or la
   for (const viewport of [{ width: 390, height: 844 }, { width: 844, height: 390 }]) {
     await page.setViewportSize(viewport);
     const radio = await page.locator('.lm-radio').boundingBox();
+    expect(radio.x).toBeLessThan(30);
+    const joystick = await page.locator('#joystick').boundingBox();
+    expect(radio.y + radio.height).toBeLessThanOrEqual(joystick.y);
+    await expect(page.getByRole('button', { name: 'Minimizar rádio' })).toBeVisible();
     const parts = await page.locator('.lm-radio').evaluate(element => [...element.children].map(child => ({ className: child.className || child.tagName, rect: (() => { const r = child.getBoundingClientRect(); return { y: r.y, height: r.height }; })(), css: { height: getComputedStyle(child).height, margin: getComputedStyle(child).margin, padding: getComputedStyle(child).padding } })));
     const run = await page.locator('#run').boundingBox();
     const interact = await page.locator('#interact').boundingBox();
