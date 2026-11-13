@@ -113,7 +113,7 @@ test('radio and virtual movement controls do not overlap in phone portrait or la
     const parts = await page.locator('.lm-radio').evaluate(element => [...element.children].map(child => ({ className: child.className || child.tagName, rect: (() => { const r = child.getBoundingClientRect(); return { y: r.y, height: r.height }; })(), css: { height: getComputedStyle(child).height, margin: getComputedStyle(child).margin, padding: getComputedStyle(child).padding } })));
     const run = await page.locator('#run').boundingBox();
     const interact = await page.locator('#interact').boundingBox();
-    const hud = await Promise.all(['#school-toolbar', '#mission', '#prompt', '#location'].map(async selector => [selector, await page.locator(selector).boundingBox()]));
+    const hud = await Promise.all(['#joystick', '#school-toolbar', '#mission', '#prompt', '#location'].map(async selector => [selector, await page.locator(selector).boundingBox()]));
     for (const [label, control] of [['#run', run], ['#interact', interact], ...hud.filter(([, box]) => box)]) {
       const overlapX = radio.x < control.x + control.width && radio.x + radio.width > control.x;
       const overlapY = radio.y < control.y + control.height && radio.y + radio.height > control.y;
@@ -122,4 +122,23 @@ test('radio and virtual movement controls do not overlap in phone portrait or la
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   }
 });
+});
+
+test('radio minimizes and restores without interrupting playback', async ({ page }) => {
+  await seed(page);
+  await start(page);
+  const radio = page.locator('.lm-radio');
+  await radio.locator('[data-radio-action="toggle"]').click();
+  const audio = radio.locator('audio');
+  await expect.poll(() => audio.evaluate(a => a.currentTime)).toBeGreaterThan(0.2);
+  const source = await audio.evaluate(a => a.src);
+  const title = await radio.locator('.lm-radio__title').textContent();
+  await radio.getByRole('button', { name: 'Minimizar rádio' }).click();
+  await expect(radio.locator('select')).toBeHidden();
+  await expect(radio.getByRole('button', { name: 'Expandir rádio' })).toHaveAttribute('aria-expanded', 'false');
+  expect(await audio.evaluate(a => a.paused)).toBe(false);
+  await radio.getByRole('button', { name: 'Expandir rádio' }).click();
+  await expect(radio.locator('select')).toBeVisible();
+  await expect(radio.locator('.lm-radio__title')).toHaveText(title);
+  expect(await audio.evaluate(a => a.src)).toBe(source);
 });

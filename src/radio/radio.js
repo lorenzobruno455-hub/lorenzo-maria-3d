@@ -20,6 +20,7 @@ export function mountLorenzoMariaRadio({ container = document.body, onPlaybackCh
   root.className = 'lm-radio';
   root.setAttribute('aria-label', 'Rádio do jogo');
   root.innerHTML = `
+    <button type="button" class="lm-radio__collapse" data-radio-action="collapse" aria-label="Minimizar rádio" aria-expanded="true">−</button>
     <select class="lm-radio__station" aria-label="Selecionar rádio">
       ${stations.map(([key, label]) => `<option value="${key}">${label}</option>`).join('')}
     </select>
@@ -134,6 +135,12 @@ export function mountLorenzoMariaRadio({ container = document.body, onPlaybackCh
   function onClick(event) {
     const target = event.target.closest('[data-radio-action]');
     if (!target) return;
+    if (target.dataset.radioAction === 'collapse') {
+      const minimized = root.classList.toggle('lm-radio--minimized');
+      target.setAttribute('aria-expanded', String(!minimized));
+      target.setAttribute('aria-label', minimized ? 'Expandir rádio' : 'Minimizar rádio');
+      target.textContent = minimized ? '♫' : '−';
+    }
     if (target.dataset.radioAction === 'prev') backward();
     if (target.dataset.radioAction === 'next') forward();
     if (target.dataset.radioAction === 'toggle') {
