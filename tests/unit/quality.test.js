@@ -26,3 +26,5 @@ test('very slow rendering still reduces resolution',()=>{
  const q=new Quality({shadowMap:{},setPixelRatio(){},setSize(){}},{shadow:{map:null,mapSize:{set(){}}}},{...DEFAULT_SETTINGS,quality:'medium',adaptive:true});
  for(let i=0;i<8;i++)q.sample(.5);assert(q.scale<1);
 });
+
+test('atomic idempotent buffer resizing and sustained recovery avoid repeated reallocations',()=>{globalThis.innerWidth=915;globalThis.innerHeight=412;globalThis.devicePixelRatio=1;let reallocations=0,legacyCalls=0;const renderer={shadowMap:{},setDrawingBufferSize(){reallocations++;},setPixelRatio(){legacyCalls++;},setSize(){legacyCalls++;}},q=new Quality(renderer,{shadow:{map:null,mapSize:{set(){}}}},{...DEFAULT_SETTINGS,quality:'low',adaptive:true});assert.equal(reallocations,1);q.resize();q.apply(false);assert.equal(reallocations,1);assert.equal(legacyCalls,0);for(let i=0;i<60;i++)q.sample(.5);assert.equal(q.scale,.55);assert.equal(reallocations,2);const low=q.scale;for(let i=0;i<240;i++)q.sample(1/60);assert.equal(q.scale,low,'do not increase resolution again after only one fast window');for(let i=0;i<960;i++)q.sample(1/60);assert(q.scale>low);});
