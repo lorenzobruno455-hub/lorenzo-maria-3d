@@ -13,6 +13,7 @@ export function validateSchoolVisit(raw) {
   // Invalid coordinates return to the corridor; clamping could place a player inside a wall.
   const receptionApron=visit.floor===0&&x>10.8&&x<=11.4&&z>=-6.8&&z<=-4.2;
   if (Number.isFinite(x) && Number.isFinite(z) && (Math.abs(x) <= 10.8||receptionApron) && Math.abs(z) <= 19.4) visit.position = { x, z };
+  if(Number.isFinite(raw.position?.y)&&raw.position.y>=.02&&raw.position.y<=7.24)visit.position.y=raw.position.y;
   visit.yaw = Number.isFinite(raw.yaw) ? raw.yaw % (2 * Math.PI) : 0;
   visit.pitch = Number.isFinite(raw.pitch) ? clamp(raw.pitch, .08, 1.15) : .38;
   const floors={maria:0,bia:0,helena:1,davi:2,caio:2,lia:0};

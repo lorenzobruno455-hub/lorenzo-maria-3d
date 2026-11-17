@@ -51,12 +51,14 @@ export class LivingSchool {
   setMode(mode) { this.state.mode = mode === 'free' ? 'free' : 'campaign'; this.save(); this.notify(this.free ? 'Exploração livre · seu progresso da campanha foi preservado.' : 'Campanha retomada.'); }
   dialogueLine(value) { rememberLine(this.state, value); if (value.source === 'LL' || value.source === 'MM') this.speakingId = 'maria'; }
   targets() {
+    if(this.spatial)return[...this.spatial.targets(),...this.campus.objects.filter(o=>o.mesh.visible)];
     return [ ...this.actors.map(a => ({ id: a.definition.id, name: a.definition.name, kind: a.definition.id === 'maria' ? 'maria' : 'npc', ...a.agent.position })),
       ...this.campus.objects.filter(o => o.mesh.visible) ];
   }
   say(id, lines, options = {}) { this.speakingId = id; this.dialogue.start(lines, options); }
   changed(message = '') { this.save(); if (message) this.notify(message); }
   update(dt, { player, active, dialogueOpen, speaker, playerSpeed = 0 }) {
+    if(this.spatial){this.spatial.update(dt,{player,active,dialogueOpen,speaker,playerSpeed});return;}
     if(this.location){this.state.actorClock=(this.state.actorClock+dt)%86400;this.location.updateActors(dt,{player,active,dialogueOpen,speaker,playerSpeed});return;}
     this.time += dt; this.state.actorClock = (this.state.actorClock + dt) % 86400;
     this.campus.update(dt, this.time, this.state, this.settings.quality);

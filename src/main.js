@@ -1,3 +1,4 @@
+import {ContinuousActors} from './systems/continuous-actors.js';
 import {NarrativeExpansion} from './systems/narrative-expansion.js';
 import {createComicOverdriveP0} from './systems/comic-overdrive-p0.js';
 import './comic-overdrive-p0.css';
@@ -47,7 +48,7 @@ let storage; try { storage = localStorage; } catch { storage = null; }
 const saved = loadSave(storage), settings = saved.settings;
 let progress = saved.progress, started = false, paused = false, dialog = false, dialogDone = null, target = null;
 let adventure, previousBusy=false, scenePausedBeforeGlobal=false;
-let school, expansion;
+let school, expansion, spatialActors;
 let living, story, dialogues, panelOpen = false, needsRender = true;
 let controls, frame = 0, disposed = false, interactionTime = 0, toastTime = 0, saveTimer = 0, lastHUD = '', lastTarget = '', lastLocation = '';
 const scene = new THREE.Scene(); scene.background = new THREE.Color('#90d3eb'); scene.fog = new THREE.Fog('#90d3eb', 55, 115);
@@ -87,6 +88,7 @@ function save() {
   if(school?.active) school.capture();
   else {progress.position = { x: player.position.x, z: player.position.z }; progress.yaw = follow.yaw; progress.pitch = follow.pitch;}
   progress.doors = world.doors.filter(d=>!d.transient).map(d => d.open);
+  spatialActors?.capture();
   const ok = saveProgress(storage, progress, settings);
   $('save-status').textContent = ok ? 'Progresso salvo neste aparelho' : 'Salvamento indisponível neste navegador'; return ok;
 }
@@ -191,6 +193,8 @@ school=new ContinuousSchool({scene,world,frameNodes:[effect,interactionAccent.me
 if(confirmedSchool&&!progress.schoolVisit.active){const p=resolveSchoolExteriorSave(player.position,world.solids,school.rotation);player.position.set(p.x,world.groundHeight(p.x,p.z),p.z);}
 school.narrative=new SchoolNarrative({school,world,story,living,adventure,getProgress:()=>progress});
 expansion=new NarrativeExpansion({school,world,scene,story,adventure,living,character:lorenzo,getProgress:()=>progress,save,notify,audio,effects:visualEffects});
+spatialActors=new ContinuousActors({school,living,world,scene,getProgress:()=>progress,adventure,player});
+school.onFrameChange=()=>{lorenzo.heading=lorenzo.headingTarget=lorenzo.writtenHeading=player.rotation.y;};
 const comicExpanded=comicMode===null||comicMode==='overdrive-20-d2'||comicMode==='overdrive-20-d2-d3'||exteriorPreview;
 const comicProposal=comicExpanded?'b':/^overdrive-20-([ab])$/.exec(comicMode||'')?.[1]||null;
 if(comicProposal)renderer.toneMapping=THREE.NoToneMapping;
@@ -244,7 +248,8 @@ function updateHUD() {
   document.querySelector('[role=progressbar]').setAttribute('aria-valuemax', total);
   $('mission').querySelector('.eyebrow').textContent = expansionQuest?'EXPANSÃO NARRATIVA · FICÇÃO':living?.free ? 'COLÉGIO AURORA · EXPLORAÇÃO LIVRE' : progress.stage === 2 ? `MEMÓRIAS · CAPÍTULO ${Math.min(6, progress.campaign.memories.length + 1)}/6` : 'CAPÍTULO 01 / PRIMEIRO SINAL';
 }
-function nextObjective() {
+function nextObjective(){return school.waypoint(rawNextObjective());}
+function rawNextObjective() {
   if(expansion?.goal())return expansion.goal();
   if(school?.active)return school.narrative.goal();
   if(adventure?.goal())return adventure.goal();
@@ -313,14 +318,14 @@ let last = performance.now(), time = 0, hudTimer = 0;
 function animate(now) {
   if (disposed || document.hidden) { frame = 0; return; }
   frame = requestAnimationFrame(animate); const rawDT = Math.max(.001, (now - last) / 1000), dt = Math.min(rawDT, .1); last = now;
-  let speed = 0;
+  let speed = 0, movementHeading;
   if (active()) {
     time += dt; const input = controls.sample(dt); follow.rotate(input.lookX, input.lookY);
     if(story?.seat&&(Math.hypot(input.x,input.z)>.05)){player.position.set(story.seat.exit.x,(school?.active?school.navigation.floor(school.floor).walkY:world.groundHeight(story.seat.exit.x,story.seat.exit.z)),story.seat.exit.z);story.seat=null;adventure?.actions.play('stand',null);}
     const delta = relativeMovement(input.x, input.z, follow.yaw, input.running ? 6 : 3.5, dt);
     const distance = school?.active ? school.move(delta) : moveWithCollisions(player.position, delta, world.solids); speed = distance / dt;
     if (speed > .01) {
-      const rotation = Math.atan2(delta.x, delta.z), angle = Math.atan2(Math.sin(rotation - player.rotation.y), Math.cos(rotation - player.rotation.y));
+      const rotation = movementHeading = Math.atan2(delta.x, delta.z), angle = Math.atan2(Math.sin(rotation - player.rotation.y), Math.cos(rotation - player.rotation.y));
       player.rotation.y += angle * (1 - Math.exp(-dt * 14));
     }
     interactionTime = Math.max(0, interactionTime - dt); saveTimer += dt; if (saveTimer > 1) { save(); saveTimer = 0; }
@@ -332,8 +337,8 @@ function animate(now) {
     if(!school?.loading&&!school?.inspecting&&!adventure?.cutscenes.active)living.update(panelOpen ? 0 : dt, { player: player.position, active: active(), dialogueOpen: dialog, speaker: $('speaker').textContent, playerSpeed: speed });
     if(adventure?.cutscenes.active)for(const a of living.actors)a.character.update(adventure.cutscenes.paused?0:dt,0,false,false,a.character.cutscenePose||{});
     if (dialog && !adventure?.cutscenes.active && living.partner) { const p = living.partner.agent.position; const angle = Math.atan2(p.x - player.position.x, p.z - player.position.z); player.rotation.y += Math.atan2(Math.sin(angle - player.rotation.y), Math.cos(angle - player.rotation.y)) * (1 - Math.exp(-dt * 8)); }
-    player.position.y=story?.seat?story.seat.height:school?.active?school.navigation.floor(school.floor).walkY:world.groundHeight(player.position.x,player.position.z);
-    lorenzo.update(adventure?.cutscenes.paused?0:dt, speed, dialog && $('speaker').textContent === 'LORENZO', interactionTime > 0,story?.seat?{state:'sit',seatHeight:school?.active?story.seat.height:.8}:{});
+    player.position.y=story?.seat?story.seat.height:school?.active?school.walkHeight():world.groundHeight(player.position.x,player.position.z);
+    lorenzo.update(adventure?.cutscenes.paused?0:dt, speed, dialog && $('speaker').textContent === 'LORENZO', interactionTime > 0,story?.seat?{state:'sit',seatHeight:school?.active?story.seat.height:.8}:{heading:movementHeading});
 
 
     if (effectTime > 0) { effectTime -= dt; particles.forEach((m, i) => { const t = .8 - effectTime; m.position.set(Math.cos(m.userData.angle) * t, t * (1.5 + i % 3 * .2), Math.sin(m.userData.angle) * t); m.scale.setScalar(.035 * Math.max(0, effectTime / .8)); }); if (effectTime <= 0) effect.visible = false; }
@@ -373,11 +378,11 @@ world.quality=settings.quality;world.update(0,0,player.position);living.update(0
 
 // Read-only diagnostic API; no production teleport or mission mutation hooks.
 export function getGameState() {
-  return { x: player.position.x, z: player.position.z, stage: progress.stage, collected: progress.collected.length, items: [...progress.collected], started, paused, dialog,
+  return { playerInstance:player.uuid,x: player.position.x, z: player.position.z, stage: progress.stage, collected: progress.collected.length, items: [...progress.collected], started, paused, dialog,
     yaw: follow.yaw, pitch: follow.pitch, analog: { ...controls.analog }, running: controls.runPointers.size > 0 || controls.keys.has('shift'), animation: lorenzo.state,
     school:school?.state(), y:player.position.y,worldPosition:(()=>{const p=player.getWorldPosition(new THREE.Vector3());return{x:p.x,y:p.y,z:p.z};})(),
     cameraWorld:(()=>{const p=camera.getWorldPosition(new THREE.Vector3());return{x:p.x,y:p.y,z:p.z};})(),cameraFocusWorld:follow.worldFocus?{x:follow.worldFocus.x,y:follow.worldFocus.y,z:follow.worldFocus.z}:null,camera: { x: camera.position.x, y: camera.position.y, z: camera.position.z, distance: follow.actualDistance }, doors: world.doors.map(d => ({ open: d.open, angle: d.angle })),
-    living: structuredClone(progress.living), npcs: living.actors.map(a => ({ id: a.definition.id, rotation:a.agent.rotation,renderRotation:a.character.root.rotation.y,floor:a.agent.position.floor, y:a.character.root.position.y, visible:a.character.root.visible, x: a.agent.position.x, z: a.agent.position.z, state: a.agent.state, model:!!a.character.custom, animation:a.character.state, distance: a.agent.distanceWalked, transitions: a.agent.transitions })),
+    spatialActors:spatialActors?.describe(),living: structuredClone(progress.living), npcs: living.actors.map(a => ({ id: a.definition.id, rotation:a.agent.rotation,renderRotation:a.character.root.rotation.y,floor:a.agent.position.floor, y:a.character.root.position.y, visible:a.character.root.visible, x: a.agent.position.x, z: a.agent.position.z, state: a.agent.state, model:!!a.character.custom, animation:a.character.state, distance: a.agent.distanceWalked, transitions: a.agent.transitions })),
     adventure:adventure?.director.snapshot(),cinematic:{active:!!adventure?.cutscenes.active,paused:!!adventure?.cutscenes.paused,id:adventure?.cutscenes.scene?.id||null},physicalAction:adventure?.actions.active?.kind||null,adventureRhythm:adventure?.activityState?.phase,
     expansion:structuredClone(progress.expansion),expansionRuntime:expansion?.describe(),expansionTargets:expansion?.targets().map(({mesh,...t})=>t),
     campaign: structuredClone(progress.campaign), storyPage: story?.page, rhythm: story?.game?.phase,
@@ -391,7 +396,7 @@ registerNavigationReader(()=>({origin:school.active?{x:60,z:0}:{x:0,z:0},rotatio
 if(new URLSearchParams(location.search).has('debug')){addEventListener('keydown',e=>{if(e.code==='F3'){e.preventDefault();if(validator.visible)validator.clear();else validator.show([...world.placed,...story.world.placed],[player,...living.actors.map(a=>a.character.root)]);needsRender=true;}});}
 
 export function dispose() {
-  expansion?.dispose();document.removeEventListener('click',uiSound);schoolExterior?.dispose();overdriveP0?.dispose();school?.narrative?.dispose();school?.dispose();adventure?.dispose();ink.dispose();interactionAccent.dispose();validator.dispose();interactions.dispose();visualEffects.dispose();
+  spatialActors?.dispose();expansion?.dispose();document.removeEventListener('click',uiSound);schoolExterior?.dispose();overdriveP0?.dispose();school?.narrative?.dispose();school?.dispose();adventure?.dispose();ink.dispose();interactionAccent.dispose();validator.dispose();interactions.dispose();visualEffects.dispose();
   disposed = true; cancelAnimationFrame(frame); controls.clear(); save(); disposeRadio(); story?.dispose(); living?.dispose(); dialogues?.dispose(); lorenzo.dispose(); maria.dispose(); assets.dispose(); world.dispose(); audio.dispose(); renderer.dispose();
 }
 if (import.meta.hot) import.meta.hot.dispose(dispose);
