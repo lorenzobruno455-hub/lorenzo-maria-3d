@@ -6,7 +6,7 @@ import {SCHOOL_ORIGIN} from './world-coordinates.js';
 import {schoolAccessLayout} from './school-access-layout.js';
 const access=schoolAccessLayout(Math.PI);
 export const EXTERIOR_PROPOSAL=Object.freeze({approved:true,schoolRotation:Math.PI,
- facade:'photo-street-side',campusFace:'reception-side',gates:access.gates,
+ facade:'campus-facing-photo-finish',campusFace:'reception-side',gates:access.gates,
  annex:Object.freeze({minX:49,maxX:71,minZ:19,maxZ:35,eave:4.15,rise:1.8}),
  court:access.court,corridorDoor:access.gates.find(g=>g.id==='school'),
 });
@@ -25,20 +25,21 @@ export function createSchoolExterior({scene,world}){
  const r=world.resources,group=new THREE.Group(),annex=new THREE.Group(),owned=[],materials=[],textures=[];
  const frame=new THREE.Group(),roofMeshes=[];frame.position.x=SCHOOL_ORIGIN.x;frame.rotation.y=Math.PI;group.position.x=-SCHOOL_ORIGIN.x;frame.add(group);
  group.name='São Jorge photo exterior';annex.name='São Jorge annex';group.add(annex);scene.add(frame);
- const stats={floors:3,windows:0,label:'COLÉGIO SÃO JORGE',bands:['blue-middle','pink-upper'],fixedInteriorChanges:0,structuralYellowBeams:0};
+ const stats={floors:3,windows:0,label:'COLÉGIO SÃO JORGE',bands:['blue-middle','pink-upper'],fixedInteriorChanges:0,facadeWorldX:48.5,structuralYellowBeams:0};
  function box(parent,color,x,y,z,w,h,d,kind='plain'){
   const m=r.mesh('box',color,[w,h,d],kind);m.position.set(x,y,z);parent.add(m);return m;
  }
  // Thin external finish borrows the existing three-floor footprint and heights.
- const front=SCHOOL_ORIGIN.x-11.30;
+ const front=SCHOOL_ORIGIN.x-11.30,facade=new THREE.Group();facade.name='Campus-facing facade finish';facade.position.x=120;facade.scale.x=-1;group.add(facade);
  for(let floor=0;floor<3;floor++){
   const base=floor*3.6;
-  box(group,'#FFF1D6',front,base+1.8,0,.10,3.6,38);
-  if(floor>0)box(group,floor===2?'#FF3194':'#2250FF',front-.065,base+1.98,0,.06,1.64,38);
+  if(floor===0){for(const[lo,hi]of[[-19,-6.8],[-4.2,19]])box(facade,'#FFF1D6',front,1.8,(lo+hi)/2,.10,3.6,hi-lo);box(facade,'#FFF1D6',front,3.1,-5.5,.10,1,2.6);}else box(facade,'#FFF1D6',front,base+1.8,0,.10,3.6,38);
+  if(floor>0)box(facade,floor===2?'#FF3194':'#2250FF',front-.065,base+1.98,0,.06,1.64,38);
   for(const z of [-16,-12,-8,-4,0,4,8,12,16]){
-   box(group,'#101521',front-.10,base+1.98,z,.06,1.49,2.64);
-   box(group,'#A9CED5',front-.14,base+1.98,z,.025,1.31,2.46,'glass');
-   for(const dz of [-1.25,0,1.25])box(group,'#FFF8E9',front-.17,base+1.98,z+dz,.035,1.38,.045,'emissive');
+   if(floor===0&&z+1.32> -6.8&&z-1.32< -4.2)continue;
+   box(facade,'#101521',front-.10,base+1.98,z,.06,1.49,2.64);
+   box(facade,'#A9CED5',front-.14,base+1.98,z,.025,1.31,2.46,'glass');
+   for(const dz of [-1.25,0,1.25])box(facade,'#FFF8E9',front-.17,base+1.98,z+dz,.035,1.38,.045,'emissive');
    stats.windows++;
   }
  }
@@ -85,10 +86,11 @@ export function createSchoolExterior({scene,world}){
  }
  const uv=labelGeometry.attributes.uv;for(let i=0;i<uv.count;i++)uv.setY(i,.5+uv.getY(i)*.5);
  const labelMaterial=new THREE.MeshBasicMaterial({map,color:map?'#ffffff':'#FFF1D6',toneMapped:false});materials.push(labelMaterial);
- const label=new THREE.Mesh(labelGeometry,labelMaterial);label.name='Photo reference school name';label.position.set(front-.20,10.35,-2);group.add(label);
+ const label=new THREE.Mesh(labelGeometry,labelMaterial);label.name='Photo reference school name';label.position.set(120-front+.20,10.35,-2);label.rotation.y=Math.PI;group.add(label);
  const receptionGeometry=new THREE.PlaneGeometry(2.6,.34);receptionGeometry.rotateY(Math.PI/2);const ruv=receptionGeometry.attributes.uv;for(let i=0;i<ruv.count;i++)ruv.setY(i,ruv.getY(i)*.5);owned.push(receptionGeometry);const receptionLabel=new THREE.Mesh(receptionGeometry,labelMaterial);receptionLabel.position.set(71.20,2.87,-5.5);group.add(receptionLabel);
  // Batch only primitives; roof and label own their buffers separately.
  batchMeshes(group,group.children.filter(m=>m.isMesh&&m!==label&&m!==receptionLabel),owned);
+ batchMeshes(facade,facade.children.filter(m=>m.isMesh),owned);
  batchMeshes(annex,annex.children.filter(m=>m.isMesh&&m.geometry===r.geometry('box')),owned);
  let disposed=false;
  return{group:frame,setReview(view){for(const mesh of roofMeshes)mesh.visible=view!=='entry';},state(){return{...stats,proposal:EXTERIOR_PROPOSAL,draws:group.children.length+annex.children.length-1};},dispose(){if(disposed)return;disposed=true;frame.removeFromParent();owned.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());}};

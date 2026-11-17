@@ -38,7 +38,7 @@ import { VisualEffects } from './systems/visual-effects.js';
 import {resolveSchoolExteriorSave} from './systems/school-save-placement.js';
 import { registerStateReader,registerNavigationReader } from './systems/diagnostics.js';
 import {createSchoolExterior} from './systems/school-exterior.js';
-import {schoolBoundsToLocal} from './systems/world-coordinates.js';
+import {schoolBoundsToLocal,schoolPointToWorld} from './systems/world-coordinates.js';
 import { Audio } from './systems/audio.js';
 import { mountLorenzoMariaRadio } from './radio/radio.js';
 import { blocked, resolveSpawn, motionHeading, relativeMovement, moveWithCollisions, clamp } from './systems/physics.js';
@@ -131,10 +131,10 @@ function nearestTarget() {
   school.narrative.targets().forEach(o=>add(o.original||o,o.kind||'item',o.kind==='adventure'?2.6:o.kind==='memory-book'?1.1:2.2,{height:o.height??school.navigation.floor(school.floor).walkY+1.5,priority:narrativePriority(o.kind)}));
   const t=interactions.nearest(pos);return t?{...t,ref:t.original}:null;
  }
- adventure?.targets().forEach(o=>add(o,'adventure',2.6,{...(Number.isFinite(o.height)?{height:o.height}:{}),priority:3}));
+ adventure?.targets().filter(o=>['maria','bia','davi'].includes(o.id)).forEach(o=>add(o,'adventure',2.6,{...(Number.isFinite(o.height)?{height:o.height}:{}),priority:3}));
  living?.targets().forEach(o=>add(o,o.kind,o.kind==='maria'?2.5:2.4));
  world.doors.filter(d=>!d.transient).forEach(o=>add(o,'door',3.1,{height:1.4,ignoreCollider:o.bounds}));
- if(progress.stage===1&&!living?.free)world.collectibles.filter(o=>!o.taken).forEach(o=>add(o,'item',2));
+ if(progress.stage===1&&!living?.free)world.collectibles.filter(o=>!o.taken&&o.id==='photo').forEach(o=>add(o,'item',2));
  world.points.forEach(o=>add(o,'point',2.4,{height:1.5}));
  story?.world.objects.filter(o=>(!o.mesh||o.mesh.visible)&&(o.kind!=='memory'||progress.stage===2)).forEach(o=>add(o,o.kind,o.kind==='memory-book'?2.1:2.3,{height:o.height,ignoreCollider:o.ignoreCollider}));
  const t=interactions.nearest(pos);return t?{...t,ref:t.original}:null;
@@ -193,7 +193,7 @@ const confirmedSchool=comicMode===null||exteriorPreview;
 const legacyRoots=scene.children.filter(node=>node!==player&&node!==sun&&!node.isHemisphereLight&&!node.isCamera);
 school=new ContinuousSchool({scene,world,frameNodes:[effect,interactionAccent.mesh],legacyRoots,player,follow,pool:assets,layout:schoolLayout,rotation:confirmedSchool?Math.PI:0,threeGates:confirmedSchool,getState:()=>progress.schoolVisit,onStatus:notify,onChange:event=>{if(!event?.preserveInput)controls.clear();target=null;lastHUD='';lastLocation='';lastTarget='';syncSchoolUI();syncModal();needsRender=true;if(!school?.loading&&!event?.deferSave)save();}});
 if(confirmedSchool&&!progress.schoolVisit.active){const p=resolveSchoolExteriorSave(player.position,world.solids,school.rotation);player.position.set(p.x,world.groundHeight(p.x,p.z),p.z);}
-school.narrative=new SchoolNarrative({school,world,story,living,adventure,getProgress:()=>progress});
+story.schoolOnlyNarrative=true;adventure.schoolOnlyNarrative=true;school.narrative=new SchoolNarrative({school,world,story,living,adventure,getProgress:()=>progress});
 expansion=new NarrativeExpansion({school,world,scene,story,adventure,living,character:lorenzo,getProgress:()=>progress,save,notify,audio,effects:visualEffects});
 spatialActors=new ContinuousActors({school,living,world,scene,getProgress:()=>progress,adventure,player});
 school.onFrameChange=()=>{lorenzo.heading=lorenzo.headingTarget=lorenzo.writtenHeading=player.rotation.y;};
@@ -250,7 +250,7 @@ function updateHUD() {
   document.querySelector('[role=progressbar]').setAttribute('aria-valuemax', total);
   $('mission').querySelector('.eyebrow').textContent = expansionQuest?'EXPANSÃO NARRATIVA · FICÇÃO':living?.free ? 'COLÉGIO AURORA · EXPLORAÇÃO LIVRE' : progress.stage === 2 ? `MEMÓRIAS · CAPÍTULO ${Math.min(6, progress.campaign.memories.length + 1)}/6` : 'CAPÍTULO 01 / PRIMEIRO SINAL';
 }
-function nextObjective(){return school.waypoint(rawNextObjective());}
+function nextObjective(){let next=rawNextObjective();if(!school.active&&next){const step=adventure.current?.step,p=step&&!['maria','bia','davi'].includes(step.target)?school.narrative.point(step.target):next.id&&next.id!=='photo'?school.narrative.point(next.id):progress.stage===2&&!living.free&&!step?school.narrative.visitPoint():null;if(p)next={...next,...schoolPointToWorld(p,school.rotation)};}return school.waypoint(next);}
 function rawNextObjective() {
   if(expansion?.goal())return expansion.goal();
   if(school?.active)return school.narrative.goal();
@@ -362,7 +362,7 @@ function animate(now) {
   if(previousBusy!==!!adventure?.busy){previousBusy=!!adventure?.busy;controls.clear();syncModal();}
   expansion?.update(paused?0:dt);
   interactionAccent.update(active()&&!school?.inspecting?target:null,time,{reducedMotion:motionPreference.matches,floorY:player.position.y});
-  camera.updateMatrixWorld();
+  school.narrative.hideCampusDuplicates();camera.updateMatrixWorld();
   ink.update(settings.quality,player.position,camera,{width:innerWidth,height:innerHeight});
   hudTimer += dt; if (hudTimer > .08) {
     const hudAt=performanceProbe?performance.now():0;updateHUD(); updateTarget(); updateMarker();

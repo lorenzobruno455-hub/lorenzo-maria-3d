@@ -1,3 +1,4 @@
+import{legacyQuestOwns}from'./narrative-identity.js';
 import * as THREE from 'three';
 import {QuestDirector,freshAdventure} from './quest-director.js';
 import {ADVENTURES} from '../data/adventures.js';
@@ -38,6 +39,7 @@ export class Adventure {
   this.notebook=()=>this.story.world.objects.find(o=>o.id==='study-notebook');
  }
  start(id){
+  if(legacyQuestOwns(this.getProgress(),id)){this.notify('Este encontro já existe no seu save. Retome ou relembre pela conversa com Bia ou Davi.');return false;}
   if(this.story.expansion?.current){this.notify('Conclua a missão da expansão antes de iniciar outra aventura.');return false;}
   if(id==='first-encounter'&&this.getProgress().stage<2){this.notify('Conclua o prólogo das três lembranças com Maria. A aventura acontece depois dele.');this.story.close();this.startGame();return false;}
   const c=this.current;if(c){if(c.id!==id){this.notify('Conclua a aventura em andamento antes de começar outra.');return false;}this.story.close();this.startGame();this.autoKey='';return true;}
@@ -47,7 +49,7 @@ export class Adventure {
  }
  show(){this.story.show('adventures');$('story-title').textContent='Aventuras do Aurora · 0.7B';const content=this.story.content;
   content.append(node('p','Encenações fictícias e atividades da escola. As memórias originais continuam identificadas e preservadas.'));
-  for(const d of ADVENTURES){const c=this.director.current(d.id),card=node('article');card.className='story-card';card.append(node('h3',d.title),node('p',c.status==='completed'?'✓ Aventura concluída':c.status==='active'?c.step.title:'Uma aventura de exploração, escolhas e descobertas.'),button(c.status==='completed'?'Rever conclusão':c.status==='active'?`Retomar: ${d.title}`:`Iniciar: ${d.title}`,()=>c.status==='completed'?this.replay(d.id):this.start(d.id)));content.append(card);}
+  for(const d of ADVENTURES){const c=this.director.current(d.id),card=node('article');card.className='story-card';card.append(node('h3',d.title),node('p',c.status==='completed'?'✓ Aventura concluída':c.status==='active'?c.step.title:'Uma aventura de exploração, escolhas e descobertas.'),button(legacyQuestOwns(this.getProgress(),d.id)?'Retomar encontro pelo personagem':c.status==='completed'?'Rever conclusão':c.status==='active'?`Retomar: ${d.title}`:`Iniciar: ${d.title}`,()=>c.status==='completed'?this.replay(d.id):this.start(d.id)));content.append(card);}
  }
  replay(id){this.story.close();this.startGame();const sceneId={'first-encounter':'first-finale','lost-book':'book-finale','familiar-music':'music-finale'}[id],point=this.location?.scenePoint(sceneId);if(point&&point.floor!==this.location.floor){this.story.tracked={...point,name:'Rever conclusão · volte ao ambiente da cena'};this.notify(`Vá ao ${point.floor+1}º andar e selecione Rever conclusão novamente.`);return;}this.replaying=true;this.playScene(sceneId);}
  reward({questId,reward}){
@@ -128,7 +130,7 @@ export class Adventure {
   const s=c.step,key=`${c.id}:${c.node}`;
   if(s.type==='scene'&&this.autoKey!==key){this.autoKey=key;this.playScene(s.target);return;}
   if(s.type==='choice'&&this.autoKey!==key&&(!this.location||this.target(s)?.floor===this.location.floor)){this.autoKey=key;this.dialogue.start([fiction('ESCOLHA DA AVENTURA',s.title)],{instant:true,choices:s.choices.map(option=>({label:option.label,action:()=>this.director.choose(option.id)}))});this.dialogue.advance();return;}
-  if(s.type==='visit'&&active){const t=this.target(s);if((!this.location||t.floor===this.location.floor)&&Math.hypot(this.player.position.x-t.x,this.player.position.z-t.z)<2.5)this.director.emit('visit',s.target);}
+  if(s.type==='visit'&&active&&(!this.schoolOnlyNarrative||this.location)){const t=this.target(s);if((!this.location||t.floor===this.location.floor)&&Math.hypot(this.player.position.x-t.x,this.player.position.z-t.z)<2.5)this.director.emit('visit',s.target);}
  }
  updateActivity(dt){if(this.activityId!=='music-rhythm'||!this.story.open||this.story.page!=='adventure-activity')return;const s=this.activityState;s.time+=dt;s.phase=(s.time%1.6)/1.6;const round=Math.floor(s.time/1.6);if(round!==s.round){s.round=round;s.pressed=false;}const mark=$('adventure-note');if(mark)mark.style.left=`${s.phase*94}%`;const status=$('adventure-rhythm-status');if(status)status.textContent=`${s.hits}/4 notas · compasso ${round%8+1}/8`;if(round>=8){s.time=0;s.round=-1;s.hits=0;s.attempts=0;this.drawActivity('Vamos ensaiar novamente. A partitura continua com você.');}}
  dispose(){this.cutscenes.dispose();this.actions.dispose();document.removeEventListener('keydown',this.key);this.owned.forEach(o=>o.removeFromParent());this.photoMaterial?.dispose();this.photoMap?.dispose();}

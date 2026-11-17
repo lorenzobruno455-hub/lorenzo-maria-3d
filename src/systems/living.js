@@ -1,3 +1,4 @@
+import{legacyQuestOwns}from'./narrative-identity.js';
 import { Character } from './character.js';
 import { NPC_CHARACTER_ASSETS } from '../character-assets.js';
 import { RoutineAgent } from './npcs.js';
@@ -114,14 +115,15 @@ export class LivingSchool {
     const npc = NPC_DATA.find(n => n.id === id); if (!npc) return;
     const event = EVENT_DATA.find(e => e.npc === id), state = event && this.state.events[event.id];
     const choices = [ { label: 'Como está o dia?', action: () => this.say(id, [line(npc.name.toUpperCase(), npc.lines[1])], { done: () => { befriend(this.state, id, `conversation:${id}`); this.changed('Conversa registrada.'); } }) } ];
-    if(this.adventure&&['bia','davi'].includes(id))choices.push({label:`Aventura: ${id==='bia'?'O Livro Perdido':'Uma Música Conhecida'}`,action:()=>this.adventure.start(id==='bia'?'lost-book':'familiar-music')});
-    if (event) {
+    const adventureOwns=this.adventure&&['bia','davi'].includes(id)&&!legacyQuestOwns(this.getProgress(),event?.id);
+    if(adventureOwns)choices.push({label:`Aventura: ${id==='bia'?'O Livro Perdido':'Uma Música Conhecida'}`,action:()=>this.adventure.start(id==='bia'?'lost-book':'familiar-music')});
+    if (event&&!adventureOwns) {
       if (!state) choices.push({ label: `Ajudar: ${event.title}`, action: () => this.beginEvent(event) });
       else if (state === 'found') choices.push({ label: event.id === 'lost-book' ? 'Devolver o livro' : 'Compartilhar a partitura', action: () => this.finishEvent(event) });
       else if (state === 'answered' && event.id === 'physics-question') choices.push({ label: 'Ouvir a explicação', action: () => this.explainPhysics(this.state.decisions['physics-question']) });
       else if (state === 'active' && event.id === 'physics-question') choices.push({ label: 'Responder ao enigma', action: () => this.physicsQuestion() });
       else if (state === 'active') choices.push({ label: 'Lembrar o objetivo', action: () => this.say(id, [line(npc.name.toUpperCase(), event.description)]) });
-      else if (state === 'done' && this.free) choices.push({ label: 'Repetir este encontro', action: () => { this.state.events[event.id] = 'active'; this.beginEvent(event); } });
+      else if (state === 'done' && this.free) choices.push({label:'Relembrar este encontro',action:()=>this.finishEvent(event)});
     }
     if ((this.state.reputation[id] || 0) >= 2) choices.push({ label: 'Conversa de amizade', action: () => this.friendConversation(npc) });
     if (id === 'lia') choices.push({ label: 'Ver cardápio', action: () => this.canteen() });

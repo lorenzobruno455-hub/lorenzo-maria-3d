@@ -13,6 +13,7 @@ export class SchoolNarrative {
  }
  get floor(){return this.school.floor;}
  get base(){return this.school.navigation.floor(this.floor).baseY;}
+ hideCampusDuplicates(){if(this.school.active)return;for(const o of [...this.story.world.objects.filter(o=>o.kind==='memory-book'||points[o.id]),...this.world.collectibles.filter(o=>o.id!=='photo'),...this.living.campus.objects.filter(o=>['lost-book','familiar-music'].includes(o.id)),this.adventure.photo])if(o?.mesh)o.mesh.visible=false;}
  bookObjects(){return this.story.world.objects.filter(o=>o.kind==='memory-book');}
  point(id){return points[id]||null;}
  actorPoint(id){const actor=this.living.actors.find(a=>a.definition.id===id);return actor?{...actor.agent.position,floor:actor.agent.position.floor??ACTOR_ROUTES[id].floor,name:actor.definition.name,height:this.spatial?actor.spatial.position.y+1.5:this.school.navigation.floor(ACTOR_ROUTES[id].floor).walkY+1.5}:null;}
@@ -32,8 +33,8 @@ export class SchoolNarrative {
   this.oldTracked=this.story.tracked;this.story.tracked=null;this.story.location=this;this.living.location=this;this.adventure.location=this;
   try{
    for(const o of this.story.world.objects){const p=o.kind==='memory-book'?bookPoint(this.bookObjects().indexOf(o)):points[o.id];if(p)this.moveObject(o,p,o.kind==='memory-book'?.54:.6);}
-   for(const o of this.world.collectibles)this.moveObject(o,points[o.id],.6);
-   for(const o of this.living.campus.objects)this.moveObject(o,points[o.id==='familiar-music'?'score':o.id],o.id==='ball'?1:.5);
+   for(const o of this.world.collectibles)if(o.id!=='photo')this.moveObject(o,points[o.id],.6);
+   for(const o of this.living.campus.objects)if(!['ball','canteen','note'].includes(o.id))this.moveObject(o,points[o.id==='familiar-music'?'score':o.id],o.id==='ball'?1:.5);
    if(this.adventure.photo)this.moveObject(this.adventure.photo,points['classroom-photo'],.7);
    if(!this.spatial)for(const actor of this.living.actors){
     const rig=actor.character.root,route=ACTOR_ROUTES[actor.definition.id];if(!route)continue;
