@@ -12,11 +12,13 @@ export class SpatialRoutePlanner{
   boxes=boxes.filter(b=>(b.minY??walkY(f))<walkY(f)+1.72&&(b.maxY??walkY(f)+3)>walkY(f)+.1);if(this.cache.size>8)this.cache.clear();this.cache.set(key,boxes);return boxes;
  }
  horizontal(a,b,f){this.searches++;const grid=this.inside(a)&&this.inside(b)?.5:1,path=findPath(a,b,this.obstacles(f),{grid});return path.map(p=>({...p,y:walkY(f)}));}
- plan(from,to){let path=[],p={...from},floor=this.inside(p)?floorAt(p.y):0;const finalFloor=this.inside(to)?floorAt(to.y):0,local=this.local(p),ramp=stairAt(local);
+ plan(from,to){const route=this.legs(from,to);let step=route.next();while(!step.done){const leg=step.value;step=route.next(this.horizontal(leg.from,leg.to,leg.floor));}return step.value;}
+ async planAsync(from,to,pathfinder){const route=this.legs(from,to);let step=route.next();while(!step.done){const leg=step.value,grid=this.inside(leg.from)&&this.inside(leg.to)?.5:1;this.searches++;const path=await pathfinder.find(leg.from,leg.to,this.obstacles(leg.floor),grid);step=route.next(path.map(p=>({...p,y:walkY(leg.floor)})));}return step.value;}
+ *legs(from,to){let path=[],p={...from},floor=this.inside(p)?floorAt(p.y):0;const finalFloor=this.inside(to)?floorAt(to.y):0,local=this.local(p),ramp=stairAt(local);
   if(ramp!==null){const up=to.y>=p.y,all=stairPath(ramp,up).map(q=>this.worldPoint(q));let best=0,d=Infinity;for(let i=0;i<all.length-1;i++){const a=all[i],b=all[i+1],v={x:b.x-a.x,y:b.y-a.y,z:b.z-a.z},t=Math.max(0,Math.min(1,((p.x-a.x)*v.x+(p.y-a.y)*v.y+(p.z-a.z)*v.z)/(v.x*v.x+v.y*v.y+v.z*v.z)));const dist=Math.hypot(p.x-a.x-v.x*t,p.y-a.y-v.y*t,p.z-a.z-v.z*t);if(dist<d){d=dist;best=i+1;}}
    path.push(...all.slice(best));p={...all.at(-1)};floor=up?ramp+1:ramp;
   }
-  while(floor!==finalFloor){const up=finalFloor>floor,r=up?floor:floor-1,points=stairPath(r,up).map(q=>this.worldPoint(q)),lead=this.horizontal(p,points[0],floor);if(!lead.length)return[];path.push(...lead,...points.slice(1));p={...points.at(-1)};floor+=up?1:-1;}
-  const tail=this.horizontal(p,to,floor);return tail.length?[...path,...tail]:[];
+  while(floor!==finalFloor){const up=finalFloor>floor,r=up?floor:floor-1,points=stairPath(r,up).map(q=>this.worldPoint(q)),lead=yield{from:p,to:points[0],floor};if(!lead.length)return[];path.push(...lead,...points.slice(1));p={...points.at(-1)};floor+=up?1:-1;}
+  const tail=yield{from:p,to,floor};return tail.length?[...path,...tail]:[];
  }
 }

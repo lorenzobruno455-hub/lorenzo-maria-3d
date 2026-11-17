@@ -27,10 +27,12 @@ export function findPath(from, to, obstacles, {grid=1}={}) {
       while (parents.has(current)) { const p = parents.get(current); path.unshift({ x: p.x, z: p.z }); current = p.key; }
       if (clearSegment(path.at(-1), to, obstacles)) path.push({ x: to.x, z: to.z }); return path;
     }
+    // Every neighbour segment lies in this small square; distant AABBs cannot intersect it.
+    const radius=grid+.33,nearby=obstacles.filter(b=>b.maxX>=n.x-radius&&b.minX<=n.x+radius&&b.maxZ>=n.z-radius&&b.minZ<=n.z+radius);
     for (const [dx, dz] of [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]]) {
       const x = n.x + dx*grid, z = n.z + dz*grid; if (x < BOUNDS.minX || x > BOUNDS.maxX || z < BOUNDS.minZ || z > BOUNDS.maxZ) continue;
-      const k = key(x, z); if (visited.has(k) || !clearSegment(n, { x, z }, obstacles)) continue;
-      if (dx && dz && (blocked(n.x + dx*grid, n.z, obstacles) || blocked(n.x, n.z + dz*grid, obstacles))) continue;
+      const k = key(x, z); if (visited.has(k) || !clearSegment(n, { x, z }, nearby)) continue;
+      if (dx && dz && (blocked(n.x + dx*grid, n.z, nearby) || blocked(n.x, n.z + dz*grid, nearby))) continue;
       const g = n.g + Math.hypot(dx, dz)*grid; if (g >= (costs.get(k) ?? Infinity)) continue;
       costs.set(k, g); parents.set(k, n); open.push({ x, z, key: k, g, f: g + Math.hypot(x - end.x, z - end.z) });
     }
