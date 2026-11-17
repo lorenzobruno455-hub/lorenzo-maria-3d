@@ -100,6 +100,7 @@ export class LivingSchool {
   interaction(target) {
     if (target.kind === 'npc') return this.npc(target.id);
     if (target.id === 'canteen') return this.canteen();
+    if(target.id==='ball'&&this.sports){const p=this.player.getWorldPosition(this.ballPlayer||(this.ballPlayer=this.player.position.clone()));this.sports.kick(p);return;}
     if (target.id === 'ball'&&this.location){this.location.kick();return;}
     if (target.id === 'ball') { this.campus.kick(this.player.position); this.actors.forEach(a => { if (Math.hypot(a.agent.position.x - target.x, a.agent.position.z - target.z) < 5) a.reaction = .9; }); this.audio.play('ball'); this.notify('Bola em jogo! Caio aprova a iniciativa.'); return; }
     if (target.id === 'note') { this.say(null, [line('BILHETE FICTÍCIO', 'Se encontrar minha concentração, favor devolver antes da prova. Assinado: alguém que veio só buscar um lápis.')]); return; }

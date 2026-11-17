@@ -1,3 +1,4 @@
+import{createSportsCourt}from'./systems/sports-court.js';
 import {createPerformanceProbe} from './systems/performance-probe.js';
 import {ContinuousActors} from './systems/continuous-actors.js';
 import {NarrativeExpansion} from './systems/narrative-expansion.js';
@@ -50,7 +51,7 @@ let storage; try { storage = localStorage; } catch { storage = null; }
 const saved = loadSave(storage), settings = saved.settings;
 let progress = saved.progress, started = false, paused = false, dialog = false, dialogDone = null, target = null;
 let adventure, previousBusy=false, scenePausedBeforeGlobal=false;
-let school, expansion, spatialActors, performanceProbe;
+let school, expansion, spatialActors, performanceProbe,sports;
 let living, story, dialogues, panelOpen = false, needsRender = true;
 let controls, frame = 0, disposed = false, interactionTime = 0, toastTime = 0, saveTimer = 0, lastHUD = '', lastTarget = '', lastLocation = '';
 const scene = new THREE.Scene(); scene.background = new THREE.Color('#90d3eb'); scene.fog = new THREE.Fog('#90d3eb', 55, 115);
@@ -131,6 +132,7 @@ function nearestTarget() {
   school.narrative.targets().forEach(o=>add(o.original||o,o.kind||'item',o.kind==='adventure'?2.6:o.kind==='memory-book'?1.1:2.2,{height:o.height??school.navigation.floor(school.floor).walkY+1.5,priority:narrativePriority(o.kind)}));
   const t=interactions.nearest(pos);return t?{...t,ref:t.original}:null;
  }
+ sports?.targets().forEach(o=>add(o,'court',2.8,{height:o.height}));
  adventure?.targets().filter(o=>['maria','bia','davi'].includes(o.id)).forEach(o=>add(o,'adventure',2.6,{...(Number.isFinite(o.height)?{height:o.height}:{}),priority:3}));
  living?.targets().forEach(o=>add(o,o.kind,o.kind==='maria'?2.5:2.4));
  world.doors.filter(d=>!d.transient).forEach(o=>add(o,'door',3.1,{height:1.4,ignoreCollider:o.bounds}));
@@ -143,6 +145,7 @@ function handleInteraction(target) {
 
   if (!target) return;
   audio.unlock();
+  if(target.kind==='court'){sports.handle(target);return;}
   if(target.kind==='school-stair'){void school.useStair(target.id);return;}
   if(expansion?.handle(target))return;
   if(adventure?.handle(target))return;
@@ -202,6 +205,7 @@ const comicProposal=comicExpanded?'b':/^overdrive-20-([ab])$/.exec(comicMode||''
 if(comicProposal)renderer.toneMapping=THREE.NoToneMapping;
 const overdriveP0=comicMode==='legacy'?null:createComicOverdriveP0({scene,resources:world.resources,school,ink,global:comicMode!=='overdrive-p0',finishing:comicMode!=='overdrive-p1-p2',proposal:comicProposal,expanded:comicExpanded,depth:comicMode===null||comicMode==='overdrive-20-d2-d3'||exteriorPreview});
 const schoolExterior=confirmedSchool?createSchoolExterior({scene,world}):null;
+sports=createSportsCourt({scene,world,living,audio,notify});living.sports=sports;const sportsPlayer=new THREE.Vector3();
 const exteriorReview=exteriorPreview?({overview:{x:60,y:3.5,z:-7,distance:50,yaw:2.1,pitch:.30},entry:{x:60,y:2,z:-9,distance:52,yaw:-2.1,pitch:.55}}[new URLSearchParams(location.search).get('exterior-view')]||null):null;
 schoolExterior?.setReview?.(exteriorPreview?new URLSearchParams(location.search).get('exterior-view'):null);
 function syncSchoolUI(){if(!school)return;document.body.classList.toggle('school-visit',school.active);document.body.classList.toggle('school-inspecting',school.active&&school.inspecting);$('school-toolbar').hidden=!school.active&&!school.loading;$('school-floor-title').textContent=school.loading?'Carregando São Jorge…':school.inspecting?'Inspeção · coordenadas de jogo':`${school.navigation.floor(school.floor).label} · São Jorge`;$('school-inspect').textContent=school.inspecting?'Explorar':'Andares';$('school-inspect').disabled=school.loading;$('school-floor-view').hidden=!school.inspecting;$('school-floor-view').value=String(school.view);$('school-floor-view').disabled=school.loading;$('story-menu').disabled=school.loading;document.querySelectorAll('[data-story]').forEach(b=>b.disabled=school.loading);$('restart').disabled=school.active||school.loading;interactions.world=school.active?{occluders:school.navigation.obstacles(school.floor)}:world;}
@@ -352,7 +356,7 @@ function animate(now) {
   const shadowCenter=exteriorPreview||school.active||player.position.x>44?60:0;if(sun.target.position.x!==shadowCenter){sun.position.x=-20+shadowCenter;sun.target.position.x=shadowCenter;sun.target.updateMatrixWorld();}
   updateColorbeatLighting({renderer,sun,hemisphere,indoors,dt:paused?0:dt,cinematic:!!adventure?.cutscenes.active});
   player.visible=!school?.inspecting&&!(dialog&&story?.focus?.hidePlayer);document.body.classList.toggle('reading-memory',!player.visible);
-  follow.reducedMotion=motionPreference.matches;
+  follow.ceilingY=school.active?school.cameraCeiling():undefined;follow.reducedMotion=motionPreference.matches;
   follow.partner = living.partner?.agent.position;
   follow.focusObject = school?.active ? (school.focus()||(dialog?story?.focus:null)) : dialog ? story?.focus : null; follow.conversation = dialog && !story?.focus;
   if(exteriorReview&&!school.active&&!dialog&&!adventure?.cutscenes.active){follow.focusObject=exteriorReview;follow.obstacles=[];}else if(!school.active)follow.obstacles=world.occluders;
@@ -369,7 +373,7 @@ function animate(now) {
     const zone = school?.active ? `${school.navigation.floor(school.floor).label} · ${school.room()?.name||'Corredor'} · SÃO JORGE` : player.position.x>38?'CAMINHO DO SÃO JORGE': player.position.z < -18 && Math.abs(player.position.x) < 6 ? 'CANTINA' : player.position.x < -28 && player.position.z < 10 ? 'QUADRA' : player.position.x > 28 && player.position.z < -6 ? 'SALA DE MÚSICA' : player.position.z < -6 && Math.abs(player.position.x) > 6 ? (player.position.x < 0 ? 'SALA DE LITERATURA' : 'BIBLIOTECA') : player.position.z > 17 ? 'JARDIM DA ESCOLA' : 'PÁTIO CENTRAL';
     if (lastLocation !== zone) { $('location').firstChild.textContent = `${zone} `; lastLocation = zone; } hudTimer = 0;performanceProbe?.record('HUD',performance.now()-hudAt);
   }
-  school.presentWorld();if(schoolExterior)schoolExterior.group.visible=!school.active||(!school.inspecting&&school.floor===0&&school.portalDistance()<5);overdriveP0?.update(camera,settings.quality,renderer.getPixelRatio());
+  sports.update(paused?0:dt,player.getWorldPosition(sportsPlayer));school.presentWorld();if(schoolExterior)schoolExterior.group.visible=!school.active||(!school.inspecting&&school.floor===0&&school.portalDistance()<5);overdriveP0?.update(camera,settings.quality,renderer.getPixelRatio());
   // Frozen pause/welcome scenes need only redraw on resize, settings or camera settling.
   if (active() || dialog || adventure?.busy || (panelOpen && started && story?.game) || needsRender) { renderer.render(scene, camera); needsRender = false; }
   audio.update?.(); if (active()) quality.sample(rawDT);performanceProbe?.end();
@@ -392,14 +396,14 @@ export function getGameState() {
     visual:{theme:'aurora-comic',edition:'0.7C',heroInk:ink.actorInk.filter(i=>i.actor.root===player&&i.mesh.isSkinnedMesh&&i.mesh.visible).length,fallbackInk:ink.actorInk.filter(i=>i.actor.root===player&&!i.mesh.isSkinnedMesh).length,models:{lorenzo:!!lorenzo.custom,maria:!!maria.custom},clips:{lorenzo:Object.keys(lorenzo.actions),maria:Object.keys(maria.actions)},toon:world.resources.material('#eadfc8').isMeshToonMaterial,outlineVertices:ink.staticInk.geometry.attributes.position?.count||0},
     spatial:validator.inspect(world.placed), memoryBooks:story.world.books.map(b=>({id:b.id,x:b.x,z:b.z,unlocked:b.unlocked,angle:b.mesh.userData.cover.rotation.z})),
     colorbeat:{style:'aurora-colorbeat-081',inkPixels:ink.actorMaterial.userData.inkUniforms.cbInkPixels.value,accent:interactionAccent.mesh.visible,exposure:renderer.toneMappingExposure,sharedLibrary:school?.materials?.library===world.resources.colorbeat,materials:world.resources.materials.size,textures:world.resources.textures.size,programs:renderer.info.programs?.length},
-    schoolExterior:schoolExterior?.state()||null,overdrive:overdriveP0?.state()||null,quality: settings.quality, resolutionScale: quality.scale, outlines: ink.actorInk.filter(s=>s.mesh.visible).length, fps: Math.round(quality.fps), drawCalls: renderer.info.render.calls, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures, triangles: renderer.info.render.triangles, drawingBuffer:{width:renderer.domElement.width,height:renderer.domElement.height} };
+    court:sports?.state(),schoolExterior:schoolExterior?.state()||null,overdrive:overdriveP0?.state()||null,quality: settings.quality, resolutionScale: quality.scale, outlines: ink.actorInk.filter(s=>s.mesh.visible).length, fps: Math.round(quality.fps), drawCalls: renderer.info.render.calls, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures, triangles: renderer.info.render.triangles, drawingBuffer:{width:renderer.domElement.width,height:renderer.domElement.height} };
 }
 registerStateReader(getGameState);
 registerNavigationReader(()=>({origin:school.active?{x:60,z:0}:{x:0,z:0},rotation:school.active?school.rotation:0,floor:school.active?school.floor:null,position:{x:player.position.x,z:player.position.z},solids:(school.active?(school.floor===0?world.solids.map(b=>schoolBoundsToLocal(b,school.rotation)):school.navigation.movementObstacles(school.floor)):world.solids).map(b=>({...b}))}));
 if(new URLSearchParams(location.search).has('debug')){addEventListener('keydown',e=>{if(e.code==='F3'){e.preventDefault();if(validator.visible)validator.clear();else validator.show([...world.placed,...story.world.placed],[player,...living.actors.map(a=>a.character.root)]);needsRender=true;}});}
 
 export function dispose() {
-  spatialActors?.dispose();expansion?.dispose();document.removeEventListener('click',uiSound);schoolExterior?.dispose();overdriveP0?.dispose();school?.narrative?.dispose();school?.dispose();adventure?.dispose();ink.dispose();interactionAccent.dispose();validator.dispose();interactions.dispose();visualEffects.dispose();
+  performanceProbe?.dispose();sports?.dispose();spatialActors?.dispose();expansion?.dispose();document.removeEventListener('click',uiSound);schoolExterior?.dispose();overdriveP0?.dispose();school?.narrative?.dispose();school?.dispose();adventure?.dispose();ink.dispose();interactionAccent.dispose();validator.dispose();interactions.dispose();visualEffects.dispose();
   disposed = true; cancelAnimationFrame(frame); controls.clear(); save(); disposeRadio(); story?.dispose(); living?.dispose(); dialogues?.dispose(); lorenzo.dispose(); maria.dispose(); assets.dispose(); world.dispose(); audio.dispose(); renderer.dispose();
 }
 if (import.meta.hot) import.meta.hot.dispose(dispose);

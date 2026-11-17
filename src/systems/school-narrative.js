@@ -103,7 +103,7 @@ export class SchoolNarrative {
  scenePoint(id){return id?.startsWith('first')?points.classroom:this.actorPoint(id==='book-finale'?'bia':'davi');}
  eventGoal(){const event=eventObjective(this.getProgress().living);return !event?null:event.returnToNPC||event.id==='physics-question'?{...this.actorPoint(event.npc),name:event.label}:{...points[event.id==='familiar-music'?'score':event.id],name:event.label};}
  kick(){const ball=this.living.campus.objects.find(o=>o.id==='ball');if(!ball)return;ball.vx=2;ball.vz=-3;this.living.audio.play('ball');}
- updateBall(dt){const ball=this.living.campus.objects.find(o=>o.id==='ball');if(!ball)return;ball.x=THREE.MathUtils.clamp(ball.x+(ball.vx||0)*dt,-7,7);ball.z=THREE.MathUtils.clamp(ball.z+(ball.vz||0)*dt,9,15);ball.vx=(ball.vx||0)*Math.exp(-dt*1.6);ball.vz=(ball.vz||0)*Math.exp(-dt*1.6);ball.mesh.position.set(ball.x,this.school.navigation.floor(2).walkY+.24,ball.z);}
+ updateBall(dt){const ball=this.living.campus.objects.find(o=>o.id==='ball');if(!ball||ball.externalCourt)return;ball.x=THREE.MathUtils.clamp(ball.x+(ball.vx||0)*dt,-7,7);ball.z=THREE.MathUtils.clamp(ball.z+(ball.vz||0)*dt,9,15);ball.vx=(ball.vx||0)*Math.exp(-dt*1.6);ball.vz=(ball.vz||0)*Math.exp(-dt*1.6);ball.mesh.position.set(ball.x,this.school.navigation.floor(2).walkY+.24,ball.z);}
 
  visitPoint(){const chapter=currentChapter(this.getProgress().campaign);return chapter?points[`memory-${memories.findIndex(m=>m.quest===chapter.id)+1}`]:null;}
  storyGoal(){

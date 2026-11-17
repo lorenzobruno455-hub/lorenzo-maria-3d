@@ -64,8 +64,8 @@ export function createCampusWorld(scene, world) {
     lostBook.mesh.visible = living.events['lost-book'] === 'active'; score.mesh.visible = living.events['familiar-music'] === 'active';
     for (const fan of fans) fan.rotation.z += dt * (quality === 'low' ? 1 : 2.5);
     clock.visible = quality !== 'low'; clock.rotation.z = -time / 60; ambient.intensity = quality === 'low' ? 4 : 8;
-    ball.x = THREE.MathUtils.clamp(ball.x + ball.vx * dt, -36.4, -29.6); ball.z = THREE.MathUtils.clamp(ball.z + ball.vz * dt, -.1, 8.4);
-    ball.vx *= Math.exp(-dt * 1.6); ball.vz *= Math.exp(-dt * 1.6); ball.mesh.position.set(ball.x, .27, ball.z); ball.mesh.rotation.x += ball.vz * dt * 2; ball.mesh.rotation.z -= ball.vx * dt * 2;
+    if(!ball.externalCourt){ball.x = THREE.MathUtils.clamp(ball.x + ball.vx * dt, -36.4, -29.6); ball.z = THREE.MathUtils.clamp(ball.z + ball.vz * dt, -.1, 8.4);
+    ball.vx *= Math.exp(-dt * 1.6); ball.vz *= Math.exp(-dt * 1.6); ball.mesh.position.set(ball.x, .27, ball.z); ball.mesh.rotation.x += ball.vz * dt * 2; ball.mesh.rotation.z -= ball.vx * dt * 2;}
   }
   function kick(player) { const length = Math.hypot(ball.x - player.x, ball.z - player.z); ball.vx = length > .01 ? (ball.x - player.x) / length * 4 : 2; ball.vz = length > .01 ? (ball.z - player.z) / length * 4 : 1; }
   return { objects, update, kick, dispose() { group.removeFromParent(); owned.forEach(g => g.dispose()); flowers.dispose(); } };

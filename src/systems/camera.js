@@ -19,7 +19,9 @@ export class FollowCamera {
     const distance = this.focusObject ? (this.focusObject.distance||3.2) : this.conversation ? 3.8 : (this.interiorDistance || this.distance);
     const viewYaw = this.focusObject?.yaw ?? (this.conversation && this.partner ? Math.atan2(this.partner.x - player.x, this.partner.z - player.z) + 1.1 : this.yaw);
     this.renderYaw = !this.initialized || snap ? viewYaw : this.renderYaw + Math.atan2(Math.sin(viewYaw - this.renderYaw), Math.cos(viewYaw - this.renderYaw)) * (1 - Math.exp(-dt * 12));
-    const requestedPitch=this.focusObject?.pitch??this.pitch;
+    const manualPitch=this.focusObject?.pitch??this.pitch;
+    const ceilingPitch=Number.isFinite(this.ceilingY)&&!this.focusObject&&!this.conversation?Math.asin(clamp((this.ceilingY-.28-this.focus.y)/distance,.08,.99)):1.15;
+    const requestedPitch=Math.min(manualPitch,ceilingPitch);
     this.renderPitch=!this.initialized||snap?requestedPitch:THREE.MathUtils.damp(this.renderPitch,requestedPitch,12,dt);
     const viewPitch=this.renderPitch;
     this.desired.set(Math.sin(this.renderYaw) * Math.cos(viewPitch), Math.sin(viewPitch), Math.cos(this.renderYaw) * Math.cos(viewPitch)).multiplyScalar(distance).add(this.focus);
