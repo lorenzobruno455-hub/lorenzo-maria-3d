@@ -1,3 +1,4 @@
+import {stairAt,stairBarriers} from './physical-stairs.js';
 import { blocked, clamp, moveWithCollisions, resolveSpawn } from './physics.js';
 
 // These bounds and landings belong to the fictional game layout, not the school.
@@ -21,7 +22,7 @@ export class SchoolNavigation {
   movementObstacles(index) {
     const floor = this.floor(index);
     // Legacy X/Z physics needs explicit vertical filtering for door lintels.
-    return [...floor.colliders.filter(b => b.minY < floor.walkY + 1.8 && b.maxY > floor.walkY), ...perimeter];
+    return [...floor.colliders.filter(b => b.minY < floor.walkY + 1.8 && b.maxY > floor.walkY), ...perimeter,...(this.layout.physicalStairs?stairBarriers(index):[])];
   }
   obstacles(index) {
     const floor = this.floor(index), base = floor.baseY;
@@ -30,6 +31,7 @@ export class SchoolNavigation {
       plane('floor',base-.15,base),plane('ceiling',base+3.4,base+3.55)];
   }
   resolve(index, position) {
+    if(this.layout.physicalStairs&&Number.isFinite(position?.y)&&stairAt(position)!==null)return {...position,floor:index};
     const floor = this.floor(index), obstacles = this.movementObstacles(floor.index);
     let point = finitePoint(position) ? {x:clamp(position.x,-HALF_X+.32,HALF_X-.32),z:clamp(position.z,-HALF_Z+.32,HALF_Z-.32)} : {...floor.spawn};
     point = resolveSpawn(point,obstacles,floor.spawn);
@@ -52,6 +54,7 @@ export class SchoolNavigation {
     return moveWithCollisions(position,delta,this.movementObstacles(index));
   }
   transition(index, stairId, position) {
+    if(this.layout.physicalStairs)return null;
     const stair=this.targets(index,position).find(s=>s.id===stairId);
     if(!finitePoint(position)||!stair||!this.layout.floors.some(f=>f.index===stair.destination)) return null;
     return this.resolve(stair.destination,stair.spawn);
@@ -62,6 +65,7 @@ export class SchoolNavigation {
   }
   targets(index,position) {
     const floor=this.floor(index);
+    if(this.layout.physicalStairs)return[...(index<2?[{id:`physical-up-${index}`,x:-3.1,z:1.3,destination:index+1,label:'Suba pela escada interna',kind:'stairs'}]:[]),...(index>0?[{id:`physical-down-${index}`,x:-3.1,z:3.7,destination:index-1,label:'Desça pela escada interna',kind:'stairs'}]:[])];
     return floor.stairs.filter(s=>position===undefined||(finitePoint(position)&&Math.hypot(position.x-s.x,position.z-s.z)<=2.2))
       .map(s=>({...s,y:floor.walkY,kind:'stairs',label:s.label??`Ir ao ${s.destination+1}º andar`}));
   }

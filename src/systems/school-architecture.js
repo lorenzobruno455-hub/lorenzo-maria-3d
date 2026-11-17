@@ -1,3 +1,4 @@
+import {splitOpening} from './physical-stairs.js';
 import * as THREE from 'three';
 import {COLORBEAT_STYLE} from './colorbeat-materials.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
@@ -218,7 +219,7 @@ export function createSchoolArchitecture({ resources, materials, floor, structur
   if(edgeGeometries.length){const geometry=mergeGeometries(edgeGeometries,false);edgeGeometries.forEach(g=>g.dispose());owned.push(geometry);edges=new THREE.LineSegments(geometry,edgeMaterial);edges.name='selective-wall-edges';group.add(edges);}
   // Kept separate so inspection reveals rooms without changing static batches.
   const ceiling = new THREE.Mesh(resources.geometry('box'), materials.get('#F4F4F1', 'plain'));
-  ceiling.name = 'school-ceiling'; ceiling.position.set(0,3.45,0); ceiling.scale.set(22,.1,38);
+  ceiling.name = 'school-ceiling';if(floor.physicalStairs&&floor.index<2){const parts=splitOpening({minX:-11,maxX:11,minZ:-19,maxZ:19}).map(p=>{const g=new THREE.BoxGeometry(p.maxX-p.minX,.1,p.maxZ-p.minZ);g.translate((p.minX+p.maxX)/2,3.45,(p.minZ+p.maxZ)/2);return g;});const g=mergeGeometries(parts,false);parts.forEach(p=>p.dispose());owned.push(g);ceiling.geometry=g;}else{ceiling.position.set(0,3.45,0);ceiling.scale.set(22,.1,38);}
   ceiling.castShadow = ceiling.receiveShadow = true; group.add(ceiling);
   const capGeometries=[];
   for(const wall of floor.colliders.filter(c=>c.kind==='wall')) {

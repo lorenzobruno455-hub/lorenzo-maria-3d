@@ -313,14 +313,14 @@ let last = performance.now(), time = 0, hudTimer = 0;
 function animate(now) {
   if (disposed || document.hidden) { frame = 0; return; }
   frame = requestAnimationFrame(animate); const rawDT = Math.max(.001, (now - last) / 1000), dt = Math.min(rawDT, .1); last = now;
-  let speed = 0;
+  let speed = 0, movementHeading;
   if (active()) {
     time += dt; const input = controls.sample(dt); follow.rotate(input.lookX, input.lookY);
     if(story?.seat&&(Math.hypot(input.x,input.z)>.05)){player.position.set(story.seat.exit.x,(school?.active?school.navigation.floor(school.floor).walkY:world.groundHeight(story.seat.exit.x,story.seat.exit.z)),story.seat.exit.z);story.seat=null;adventure?.actions.play('stand',null);}
     const delta = relativeMovement(input.x, input.z, follow.yaw, input.running ? 6 : 3.5, dt);
     const distance = school?.active ? school.move(delta) : moveWithCollisions(player.position, delta, world.solids); speed = distance / dt;
     if (speed > .01) {
-      const rotation = Math.atan2(delta.x, delta.z), angle = Math.atan2(Math.sin(rotation - player.rotation.y), Math.cos(rotation - player.rotation.y));
+      const rotation = movementHeading = Math.atan2(delta.x, delta.z), angle = Math.atan2(Math.sin(rotation - player.rotation.y), Math.cos(rotation - player.rotation.y));
       player.rotation.y += angle * (1 - Math.exp(-dt * 14));
     }
     interactionTime = Math.max(0, interactionTime - dt); saveTimer += dt; if (saveTimer > 1) { save(); saveTimer = 0; }
@@ -332,8 +332,8 @@ function animate(now) {
     if(!school?.loading&&!school?.inspecting&&!adventure?.cutscenes.active)living.update(panelOpen ? 0 : dt, { player: player.position, active: active(), dialogueOpen: dialog, speaker: $('speaker').textContent, playerSpeed: speed });
     if(adventure?.cutscenes.active)for(const a of living.actors)a.character.update(adventure.cutscenes.paused?0:dt,0,false,false,a.character.cutscenePose||{});
     if (dialog && !adventure?.cutscenes.active && living.partner) { const p = living.partner.agent.position; const angle = Math.atan2(p.x - player.position.x, p.z - player.position.z); player.rotation.y += Math.atan2(Math.sin(angle - player.rotation.y), Math.cos(angle - player.rotation.y)) * (1 - Math.exp(-dt * 8)); }
-    player.position.y=story?.seat?story.seat.height:school?.active?school.navigation.floor(school.floor).walkY:world.groundHeight(player.position.x,player.position.z);
-    lorenzo.update(adventure?.cutscenes.paused?0:dt, speed, dialog && $('speaker').textContent === 'LORENZO', interactionTime > 0,story?.seat?{state:'sit',seatHeight:school?.active?story.seat.height:.8}:{});
+    player.position.y=story?.seat?story.seat.height:school?.active?school.walkHeight():world.groundHeight(player.position.x,player.position.z);
+    lorenzo.update(adventure?.cutscenes.paused?0:dt, speed, dialog && $('speaker').textContent === 'LORENZO', interactionTime > 0,story?.seat?{state:'sit',seatHeight:school?.active?story.seat.height:.8}:{heading:movementHeading});
 
 
     if (effectTime > 0) { effectTime -= dt; particles.forEach((m, i) => { const t = .8 - effectTime; m.position.set(Math.cos(m.userData.angle) * t, t * (1.5 + i % 3 * .2), Math.sin(m.userData.angle) * t); m.scale.setScalar(.035 * Math.max(0, effectTime / .8)); }); if (effectTime <= 0) effect.visible = false; }

@@ -11,3 +11,11 @@ Decisão arquitetônica: duas escadarias retas de dois lances com patamar interm
 Plano de execução: M2 geometria/vãos/motor/câmera/save Y, testes de continuidade/parada/inversão; M3 um gerenciador compartilhado de rotas 3D para os atores existentes, posições mundiais persistentes e atualização escalonada; M4 adaptação de objetivos e registros de navegação, regressão focada e build. Cada marco recebe commit, sem pausa de aprovação entre marcos conforme instrução do proprietário.
 
 Os testes antigos que acionam E em um patamar não validam mais escadas e precisam de cobertura por caminhada física; não serão mantidos como atalhos ocultos. Saves antigos conservam os domínios narrativos; somente posições inválidas após a abertura de um vão são recuperadas pelo resolvedor já existente. Saves novos registram Y e estado espacial dos NPCs.
+
+## Correção arquitetônica solicitada pelo proprietário
+
+A proposta inicial no corredor foi descartada antes da entrega. O proprietário determinou escadas dentro da sala de escadas e autorizou reorganizar ambientes inteiros para obter um encaixe coerente. A escadaria em U agora ocupa X -10.3..-3.1, Z 0.6..4.4, dentro da sala existente do térreo X -11..-2, Z -0.5..5.5. O vão no salão e no segundo piso coincide com essa área, fora do corredor X -2..2.
+
+Segundo piso: Sala B passa de Z 5..12 para 5.5..12; banheiro masculino vai para -8..-4.25; banheiro feminino para -4.25..-0.5; sala de escadas passa para -0.5..5.5. Os quatro ambientes mantêm seus IDs e funções, com paredes, portas, pisos e mobiliário remapeados integralmente. A sala de ciências, os ambientes da direita, os corredores e a arquitetura do térreo não são deslocados. A matriz JSON original permanece intacta; a adaptação é explícita no carregamento e não deixa partes de cômodos antigos.
+
+M2 validado em navegador: subida pelos dois lances de cada piso, parada/inversão, reload em uma altura intermediária preservada, chegada ao salão e descida física pelos mesmos lances até o térreo. Duas capturas reais registradas. O teste usa somente teclas e leitura de diagnóstico, sem API de teletransporte. O controlador antigo de patamares não está disponível no modo físico.
