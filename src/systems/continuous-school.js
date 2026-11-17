@@ -28,7 +28,9 @@ export class ContinuousSchool extends SchoolVisit{
  cameraDistance(){return this.floor===0?THREE.MathUtils.lerp(this.follow.distance,4.2,THREE.MathUtils.clamp(this.portalDistance()/5,0,1)):4.2;}
  cameraObstacles(){
   const slabs=this.layout.floors.flatMap(f=>{const b={kind:'floor',minX:-11.275,maxX:11.275,minZ:-19.275,maxZ:19.275,minY:f.baseY-.42,maxY:f.baseY+.07};return f.index?splitOpening(b):[b];});
-  return [...this.layout.floors.flatMap(f=>f.colliders),...slabs,...this.physicalStairs.colliders,...(this.connection.schoolDoors||[this.connection.door]).map(d=>schoolBoundsToLocal(d.bounds,this.rotation))];
+  // Ceiling fixtures are visual geometry above walking height, but still occlude the camera.
+  const fixtures=[...this.details].flatMap(([i,d])=>(d.architecture?.stats.parts||[]).filter(p=>p.name==='fixture-housing'||p.name==='fixture-diffuser').map(p=>({...p,minY:p.minY+this.layout.floors[i].baseY,maxY:p.maxY+this.layout.floors[i].baseY})));
+  return [...this.layout.floors.flatMap(f=>f.colliders),...fixtures,...slabs,...this.physicalStairs.colliders,...(this.connection.schoolDoors||[this.connection.door]).map(d=>schoolBoundsToLocal(d.bounds,this.rotation))];
  }
  bodyObstacles(p){
   const doors=(this.connection.schoolDoors||[this.connection.door]).map(d=>schoolBoundsToLocal(d.bounds,this.rotation));

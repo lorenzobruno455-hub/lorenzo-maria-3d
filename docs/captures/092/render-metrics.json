@@ -1,0 +1,26 @@
+{
+  "cold": {
+    "geometries": 203,
+    "textures": 23
+  },
+  "cycles": [
+    {
+      "geometries": 209,
+      "textures": 23,
+      "drawCalls": 192,
+      "triangles": 276834
+    },
+    {
+      "geometries": 209,
+      "textures": 23,
+      "drawCalls": 192,
+      "triangles": 276834
+    },
+    {
+      "geometries": 209,
+      "textures": 23,
+      "drawCalls": 192,
+      "triangles": 276834
+    }
+  ]
+}

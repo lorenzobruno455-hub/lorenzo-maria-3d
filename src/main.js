@@ -378,7 +378,7 @@ world.quality=settings.quality;world.update(0,0,player.position);living.update(0
 
 // Read-only diagnostic API; no production teleport or mission mutation hooks.
 export function getGameState() {
-  return { x: player.position.x, z: player.position.z, stage: progress.stage, collected: progress.collected.length, items: [...progress.collected], started, paused, dialog,
+  return { playerInstance:player.uuid,x: player.position.x, z: player.position.z, stage: progress.stage, collected: progress.collected.length, items: [...progress.collected], started, paused, dialog,
     yaw: follow.yaw, pitch: follow.pitch, analog: { ...controls.analog }, running: controls.runPointers.size > 0 || controls.keys.has('shift'), animation: lorenzo.state,
     school:school?.state(), y:player.position.y,worldPosition:(()=>{const p=player.getWorldPosition(new THREE.Vector3());return{x:p.x,y:p.y,z:p.z};})(),
     cameraWorld:(()=>{const p=camera.getWorldPosition(new THREE.Vector3());return{x:p.x,y:p.y,z:p.z};})(),cameraFocusWorld:follow.worldFocus?{x:follow.worldFocus.x,y:follow.worldFocus.y,z:follow.worldFocus.z}:null,camera: { x: camera.position.x, y: camera.position.y, z: camera.position.z, distance: follow.actualDistance }, doors: world.doors.map(d => ({ open: d.open, angle: d.angle })),
