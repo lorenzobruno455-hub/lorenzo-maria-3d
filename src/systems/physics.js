@@ -73,3 +73,6 @@ export function cameraFraction(from, to, obstacles, padding = .24) {
   }
   return fraction;
 }
+
+// Express the direction of actual displacement in the frame used after a portal crossing.
+export function motionHeading(dx,dz,fromRotation=0,toRotation=fromRotation){return Math.hypot(dx,dz)>1e-6?Math.atan2(dx,dz)+fromRotation-toRotation:undefined;}

@@ -41,7 +41,7 @@ import {createSchoolExterior} from './systems/school-exterior.js';
 import {schoolBoundsToLocal} from './systems/world-coordinates.js';
 import { Audio } from './systems/audio.js';
 import { mountLorenzoMariaRadio } from './radio/radio.js';
-import { blocked, resolveSpawn, relativeMovement, moveWithCollisions, clamp } from './systems/physics.js';
+import { blocked, resolveSpawn, motionHeading, relativeMovement, moveWithCollisions, clamp } from './systems/physics.js';
 import { loadSave, saveProgress, freshProgress, collect, objective, mariaDialogue } from './systems/progress.js';
 
 const $ = id => document.getElementById(id);
@@ -322,19 +322,18 @@ let last = performance.now(), time = 0, hudTimer = 0;
 function animate(now) {
   if (disposed || document.hidden) { frame = 0; return; }
   frame = requestAnimationFrame(animate); const rawDT = Math.max(.001, (now - last) / 1000), dt = Math.min(rawDT, .1); last = now;performanceProbe?.begin(rawDT*1000);
-  let speed = 0, movementHeading;
+  let speed = 0, movementHeading,worldMovementHeading;
   if (active()) {
     time += dt; const input = controls.sample(dt); follow.rotate(input.lookX, input.lookY);
     if(story?.seat&&(Math.hypot(input.x,input.z)>.05)){player.position.set(story.seat.exit.x,(school?.active?school.navigation.floor(school.floor).walkY:world.groundHeight(story.seat.exit.x,story.seat.exit.z)),story.seat.exit.z);story.seat=null;adventure?.actions.play('stand',null);}
     const delta = relativeMovement(input.x, input.z, follow.yaw, input.running ? 6 : 3.5, dt);
+    const beforeX=player.position.x,beforeZ=player.position.z,fromRotation=school?.active?school.rotation:0;
     const distance = school?.active ? school.move(delta) : moveWithCollisions(player.position, delta, world.solids); speed = distance / dt;
-    if (speed > .01) {
-      const rotation = movementHeading = Math.atan2(delta.x, delta.z), angle = Math.atan2(Math.sin(rotation - player.rotation.y), Math.cos(rotation - player.rotation.y));
-      player.rotation.y += angle * (1 - Math.exp(-dt * 14));
-    }
+    if(speed>.01)worldMovementHeading=motionHeading(player.position.x-beforeX,player.position.z-beforeZ,fromRotation,0);
     interactionTime = Math.max(0, interactionTime - dt); saveTimer += dt; if (saveTimer > 1) { save(); saveTimer = 0; }
   }
   if(started){school.quality=settings.quality;school.tick(paused?0:dt,time);}
+  movementHeading=Number.isFinite(worldMovementHeading)?worldMovementHeading-(school.active?school.rotation:0):undefined;
   dialogues.update(adventure?.cutscenes.paused?0:dt);
   if(!school?.loading&&!school?.inspecting)story?.update(paused || document.hidden ? 0 : dt, player.position, active());
   if (!paused && started) {
@@ -382,7 +381,7 @@ world.quality=settings.quality;world.update(0,0,player.position);living.update(0
 
 // Read-only diagnostic API; no production teleport or mission mutation hooks.
 export function getGameState() {
-  return { playerInstance:player.uuid,x: player.position.x, z: player.position.z, stage: progress.stage, collected: progress.collected.length, items: [...progress.collected], started, paused, dialog,
+  return { playerHeading:player.rotation.y,playerWorldHeading:player.rotation.y+(school?.active?school.rotation:0),actorInstances:(()=>{const ids=[];scene.traverse(o=>{if(o.userData.inkActor)ids.push(o.uuid);});return ids;})(),playerInstance:player.uuid,x: player.position.x, z: player.position.z, stage: progress.stage, collected: progress.collected.length, items: [...progress.collected], started, paused, dialog,
     yaw: follow.yaw, pitch: follow.pitch, analog: { ...controls.analog }, running: controls.runPointers.size > 0 || controls.keys.has('shift'), animation: lorenzo.state,
     school:school?.state(), y:player.position.y,worldPosition:(()=>{const p=player.getWorldPosition(new THREE.Vector3());return{x:p.x,y:p.y,z:p.z};})(),
     cameraWorld:(()=>{const p=camera.getWorldPosition(new THREE.Vector3());return{x:p.x,y:p.y,z:p.z};})(),cameraFocusWorld:follow.worldFocus?{x:follow.worldFocus.x,y:follow.worldFocus.y,z:follow.worldFocus.z}:null,camera: { x: camera.position.x, y: camera.position.y, z: camera.position.z, distance: follow.actualDistance }, doors: world.doors.map(d => ({ open: d.open, angle: d.angle })),
