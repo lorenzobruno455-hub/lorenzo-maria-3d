@@ -1,3 +1,4 @@
+import{legacyQuestOwns}from'./narrative-identity.js';
 import { Character } from './character.js';
 import { NPC_CHARACTER_ASSETS } from '../character-assets.js';
 import { RoutineAgent } from './npcs.js';
@@ -99,6 +100,7 @@ export class LivingSchool {
   interaction(target) {
     if (target.kind === 'npc') return this.npc(target.id);
     if (target.id === 'canteen') return this.canteen();
+    if(target.id==='ball'&&this.sports){const p=this.player.getWorldPosition(this.ballPlayer||(this.ballPlayer=this.player.position.clone()));this.sports.kick(p);return;}
     if (target.id === 'ball'&&this.location){this.location.kick();return;}
     if (target.id === 'ball') { this.campus.kick(this.player.position); this.actors.forEach(a => { if (Math.hypot(a.agent.position.x - target.x, a.agent.position.z - target.z) < 5) a.reaction = .9; }); this.audio.play('ball'); this.notify('Bola em jogo! Caio aprova a iniciativa.'); return; }
     if (target.id === 'note') { this.say(null, [line('BILHETE FICTÍCIO', 'Se encontrar minha concentração, favor devolver antes da prova. Assinado: alguém que veio só buscar um lápis.')]); return; }
@@ -114,14 +116,15 @@ export class LivingSchool {
     const npc = NPC_DATA.find(n => n.id === id); if (!npc) return;
     const event = EVENT_DATA.find(e => e.npc === id), state = event && this.state.events[event.id];
     const choices = [ { label: 'Como está o dia?', action: () => this.say(id, [line(npc.name.toUpperCase(), npc.lines[1])], { done: () => { befriend(this.state, id, `conversation:${id}`); this.changed('Conversa registrada.'); } }) } ];
-    if(this.adventure&&['bia','davi'].includes(id))choices.push({label:`Aventura: ${id==='bia'?'O Livro Perdido':'Uma Música Conhecida'}`,action:()=>this.adventure.start(id==='bia'?'lost-book':'familiar-music')});
-    if (event) {
+    const adventureOwns=this.adventure&&['bia','davi'].includes(id)&&!legacyQuestOwns(this.getProgress(),event?.id);
+    if(adventureOwns)choices.push({label:`Aventura: ${id==='bia'?'O Livro Perdido':'Uma Música Conhecida'}`,action:()=>this.adventure.start(id==='bia'?'lost-book':'familiar-music')});
+    if (event&&!adventureOwns) {
       if (!state) choices.push({ label: `Ajudar: ${event.title}`, action: () => this.beginEvent(event) });
       else if (state === 'found') choices.push({ label: event.id === 'lost-book' ? 'Devolver o livro' : 'Compartilhar a partitura', action: () => this.finishEvent(event) });
       else if (state === 'answered' && event.id === 'physics-question') choices.push({ label: 'Ouvir a explicação', action: () => this.explainPhysics(this.state.decisions['physics-question']) });
       else if (state === 'active' && event.id === 'physics-question') choices.push({ label: 'Responder ao enigma', action: () => this.physicsQuestion() });
       else if (state === 'active') choices.push({ label: 'Lembrar o objetivo', action: () => this.say(id, [line(npc.name.toUpperCase(), event.description)]) });
-      else if (state === 'done' && this.free) choices.push({ label: 'Repetir este encontro', action: () => { this.state.events[event.id] = 'active'; this.beginEvent(event); } });
+      else if (state === 'done' && this.free) choices.push({label:'Relembrar este encontro',action:()=>this.finishEvent(event)});
     }
     if ((this.state.reputation[id] || 0) >= 2) choices.push({ label: 'Conversa de amizade', action: () => this.friendConversation(npc) });
     if (id === 'lia') choices.push({ label: 'Ver cardápio', action: () => this.canteen() });
@@ -173,7 +176,7 @@ export class LivingSchool {
     if(this.location)return this.location.eventGoal();
     const e = eventObjective(this.state); if (!e) return null;
     const actor = this.actors.find(a => a.definition.id === e.npc);
-    return { ...(e.returnToNPC || e.id === 'physics-question' ? actor.agent.position : e.position), name: e.label };
+    return { ...(e.returnToNPC || e.id === 'physics-question' ? actor.agent.position : e.position), id:e.returnToNPC||e.id==='physics-question'?e.npc:e.id,name: e.label };
   }
   renderPage(content, page) {
     if (page === 'history') {

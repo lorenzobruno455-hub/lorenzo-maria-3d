@@ -36,7 +36,7 @@ export class Story {
         const unlocked = i <= this.c.memories.length; card.append(el('p', this.c.memories.length > i ? '✓ Concluído' : unlocked ? 'Disponível após o prólogo' : 'Conclua o capítulo anterior'));
         for (const step of chapter.steps) card.append(el('p', `${(this.c.steps[chapter.id] || []).includes(step.id) ? '✓' : '○'} ${step.label}`)); this.content.append(card); });
       this.content.append(el('h3', 'Missões secundárias · atividades opcionais'));
-      catalogue.filter(g => g.playable).forEach(g => { const card = el('article', undefined, 'story-card'); card.append(el('h3', g.title), el('p', `${this.c.results[g.id]?.completed ? '✓ Concluída' : '○ Objetivo: concluir a atividade'} · ${g.environment}`), button('Acompanhar objetivo', () => { this.tracked = (this.location?.gamePosition(g.id)||{ ...g.position, name: g.environment }); this.close(); this.start(); })); this.content.append(card); });
+      catalogue.filter(g => g.playable).forEach(g => { const card = el('article', undefined, 'story-card'); card.append(el('h3', g.title), el('p', `${this.c.results[g.id]?.completed ? '✓ Concluída' : '○ Objetivo: concluir a atividade'} · ${g.environment}`), button('Acompanhar objetivo', () => { this.tracked = (this.location?.gamePosition(g.id)||{ ...g.position, id:g.id,name: g.environment }); this.close(); this.start(); })); this.content.append(card); });
     } else if (name === 'album') this.album();
     else if (name === 'inventory') {
       this.content.append(el('h3', `Cartas e memórias · ${this.c.memories.length}/6`));
@@ -47,7 +47,7 @@ export class Story {
     } else if (name === 'games') {
       catalogue.forEach(g => { const card = el('article', undefined, 'story-card'); card.append(el('h3', g.title), el('p', g.playable ? `${g.environment} · atividade disponível no objeto da escola` : 'Planejado · indisponível nesta versão'));
         const result = this.c.results[g.id]; if (result) card.append(el('p', `Melhor pontuação: ${result.score}${result.completed ? ' · concluído' : ''}`));
-        if (g.playable) card.append(button('Localizar na escola', () => { this.tracked = (this.location?.gamePosition(g.id)||{ ...g.position, name: g.environment }); this.close(); this.start(); this.notify(`Vá para: ${g.environment}`); })); this.content.append(card); });
+        if (g.playable) card.append(button('Localizar na escola', () => { this.tracked = (this.location?.gamePosition(g.id)||{ ...g.position, id:g.id,name: g.environment }); this.close(); this.start(); this.notify(`Vá para: ${g.environment}`); })); this.content.append(card); });
     } else if (name === 'achievements') definitions.forEach(a => { const stamp = this.c.achievements[a.id]; const card = el('article', undefined, 'story-card'); card.append(el('h3', `${stamp ? '★' : '☆'} ${a.secret && !stamp ? 'Conquista secreta' : a.name}`), el('p', a.secret && !stamp ? 'Explore a escola.' : a.description), el('small', stamp ? `Obtida: ${new Date(stamp).toLocaleDateString('pt-BR')}` : a.available ? 'Pendente' : 'Indisponível · atividade planejada')); this.content.append(card); });
     else if (name === 'letter') { this.content.append(el('p', this.c.letter ? rewards.letter.text : 'Conclua os seis capítulos para abrir a carta final.', 'letter-text')); }
     this.living?.renderPage(this.content, name);
@@ -128,7 +128,7 @@ export class Story {
   update(dt, position, active) {
     this.time += dt; this.world.update(this.c, this.time, this.focus,dt,position,this.living.settings.quality);this.location?.updateObjects();
     if (this.focus && !this.dialogue.open) this.focus = null;
-    if (active && !this.living.free && this.getProgress().stage === 2) {
+    if (active && (!this.schoolOnlyNarrative||this.location) && !this.living.free && this.getProgress().stage === 2) {
       const step = nextStep(this.c),visit=this.location?.visitPoint()||step?.position; if (step?.type === 'visit' && (!this.location||visit?.floor===this.location.floor) && Math.hypot(position.x - (visit.approach||visit).x, position.z - (visit.approach||visit).z) < (this.location?1.5:3)) { const chapter = currentChapter(this.c); questEvent(this.c, 'visit'); if (chapter?.id === 'chapter-2' && !this.c.special.includes('garden-letter')) this.c.special.push('garden-letter'); if (chapter?.id === 'chapter-5' && !this.c.special.includes('flowers')) this.c.special.push('flowers'); this.changed(); this.notify(nextStep(this.c)?.label || 'Explore a memória.'); }
     }
     if (this.game && this.gameReady && !document.hidden) {
@@ -143,7 +143,7 @@ export class Story {
     if (this.living.free) return null;
     if (this.getProgress().stage !== 2) return null;
     const step = nextStep(this.c), chapter = currentChapter(this.c);
-    return step ? { ...(step.type === 'talk' ? this.living.mariaPosition : memories.find(m => m.quest === chapter.id).position), name: step.label } : null;
+    return step ? { ...(step.type === 'talk' ? {...this.living.mariaPosition,id:'maria'} : {...memories.find(m => m.quest === chapter.id).position,id:memories.find(m=>m.quest===chapter.id).id}), name: step.label } : null;
   }
   objective() { if (this.living.goal()) return this.living.goal().name; if (this.living.free) return this.living.goal()?.name || 'Exploração livre · converse com a turma, visite a cantina e descubra os encontros da escola.'; const chapter = currentChapter(this.c); return chapter ? `Capítulo ${this.c.memories.length + 1} · ${chapter.title}\n${nextStep(this.c)?.label || ''}` : 'Seis memórias descobertas! Abra a carta final no menu.'; }
   dispose() { document.removeEventListener('keydown', this.key); this.close(); this.world.dispose(); }

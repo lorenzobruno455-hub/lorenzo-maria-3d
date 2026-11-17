@@ -16,3 +16,5 @@ test('photo facade keeps observed bands/name and does not create an invented cre
  assert.equal(s.label,'COLÉGIO SÃO JORGE');assert.deepEqual(s.bands,['blue-middle','pink-upper']);assert.equal(s.fixedInteriorChanges,0);assert.equal(s.structuralYellowBeams,0);assert.equal(s.proposal.gates.length,3);assert.equal(s.proposal.court.maxZ,-19);assert.equal(s.proposal.corridorDoor.z,-19);
  exterior.dispose();resources.dispose();
 });
+
+test('photo name faces the campus without rotating rooms or closing reception gate',()=>{const resources=new Resources(),scene=new THREE.Scene(),exterior=createSchoolExterior({scene,world:{resources,solids:[]}}),label=exterior.group.getObjectByName('Photo reference school name');scene.updateMatrixWorld(true);const position=label.getWorldPosition(new THREE.Vector3());assert(position.x<49);const normal=new THREE.Vector3(-1,0,0).transformDirection(label.matrixWorld);assert(normal.x<-.99);assert.equal(EXTERIOR_PROPOSAL.schoolRotation,Math.PI);assert.equal(EXTERIOR_PROPOSAL.gates.length,3);exterior.dispose();resources.dispose();});

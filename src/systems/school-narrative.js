@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import{schoolPointToWorld}from'./world-coordinates.js';
 import {schoolActorPresentation} from './school-presentation.js';
 import {NARRATIVE_POINTS as points,ACTOR_ROUTES,bookPoint,sameFloor,narrativeWaypoint} from './school-narrative-map.js';
 import {nextStep,currentChapter,memories} from './quests.js';
@@ -13,6 +14,7 @@ export class SchoolNarrative {
  }
  get floor(){return this.school.floor;}
  get base(){return this.school.navigation.floor(this.floor).baseY;}
+ hideCampusDuplicates(){if(this.school.active)return;for(const o of [...this.story.world.objects.filter(o=>o.kind==='memory-book'||points[o.id]),...this.world.collectibles.filter(o=>o.id!=='photo'),...this.living.campus.objects.filter(o=>['lost-book','familiar-music'].includes(o.id)),this.adventure.photo])if(o?.mesh)o.mesh.visible=false;}
  bookObjects(){return this.story.world.objects.filter(o=>o.kind==='memory-book');}
  point(id){return points[id]||null;}
  actorPoint(id){const actor=this.living.actors.find(a=>a.definition.id===id);return actor?{...actor.agent.position,floor:actor.agent.position.floor??ACTOR_ROUTES[id].floor,name:actor.definition.name,height:this.spatial?actor.spatial.position.y+1.5:this.school.navigation.floor(ACTOR_ROUTES[id].floor).walkY+1.5}:null;}
@@ -29,11 +31,11 @@ export class SchoolNarrative {
  }
  enter(){
   if(this.active)return;this.active=true;this.shadowStates=new WeakMap();this.group.visible=true;this.borrowed=[];this.actorSnapshots=[];
-  this.oldTracked=this.story.tracked;this.story.tracked=null;this.story.location=this;this.living.location=this;this.adventure.location=this;
+  this.oldTracked=this.story.tracked;if(this.spatial){const p=points[this.oldTracked?.id];if(p)this.story.tracked={...p,id:this.oldTracked.id,name:this.oldTracked.name};}else this.story.tracked=null;this.story.location=this;this.living.location=this;this.adventure.location=this;
   try{
    for(const o of this.story.world.objects){const p=o.kind==='memory-book'?bookPoint(this.bookObjects().indexOf(o)):points[o.id];if(p)this.moveObject(o,p,o.kind==='memory-book'?.54:.6);}
-   for(const o of this.world.collectibles)this.moveObject(o,points[o.id],.6);
-   for(const o of this.living.campus.objects)this.moveObject(o,points[o.id==='familiar-music'?'score':o.id],o.id==='ball'?1:.5);
+   for(const o of this.world.collectibles)if(o.id!=='photo')this.moveObject(o,points[o.id],.6);
+   for(const o of this.living.campus.objects)if(!['ball','canteen','note'].includes(o.id))this.moveObject(o,points[o.id==='familiar-music'?'score':o.id],o.id==='ball'?1:.5);
    if(this.adventure.photo)this.moveObject(this.adventure.photo,points['classroom-photo'],.7);
    if(!this.spatial)for(const actor of this.living.actors){
     const rig=actor.character.root,route=ACTOR_ROUTES[actor.definition.id];if(!route)continue;
@@ -53,7 +55,7 @@ export class SchoolNarrative {
  }
  capture(){if(this.spatial){this.spatial.capture();return;}if(!this.active)return;this.school.getState().actors=Object.fromEntries(this.living.actors.filter(a=>ACTOR_ROUTES[a.definition.id]).map(a=>[a.definition.id,{...a.agent.position,index:a.agent.index,rotation:a.agent.rotation}]));}
  leave(){
-  if(!this.active)return;this.capture();this.active=false;this.story.focus=null;this.story.seat=null;this.story.tracked=this.oldTracked;this.story.location=null;this.living.location=null;this.adventure.location=null;this.living.speakingId=null;
+  if(!this.active)return;this.capture();this.active=false;this.story.focus=null;this.story.seat=null;this.story.tracked=this.spatial?(this.story.tracked?schoolPointToWorld(this.story.tracked,this.school.rotation):null):this.oldTracked;this.story.location=null;this.living.location=null;this.adventure.location=null;this.living.speakingId=null;
   for(const s of this.actorSnapshots){Object.assign(s.actor.agent,s.agent);const root=s.actor.character.root;s.parent?.add(root);root.position.copy(s.position);root.quaternion.copy(s.quaternion);root.visible=s.visible;}
   for(const {object,values,mesh,snapshot} of this.borrowed){for(const[k,s]of Object.entries(values)){if(s.had)object[k]=s.value;else delete object[k];}if(mesh){snapshot.parent?.add(mesh);mesh.position.copy(snapshot.position);mesh.quaternion.copy(snapshot.quaternion);mesh.scale.copy(snapshot.scale);mesh.visible=snapshot.visible;}}
   this.instrument?.mesh.removeFromParent();this.instrument=null;this.group.visible=false;this.borrowed=[];this.actorSnapshots=[];
@@ -102,7 +104,7 @@ export class SchoolNarrative {
  scenePoint(id){return id?.startsWith('first')?points.classroom:this.actorPoint(id==='book-finale'?'bia':'davi');}
  eventGoal(){const event=eventObjective(this.getProgress().living);return !event?null:event.returnToNPC||event.id==='physics-question'?{...this.actorPoint(event.npc),name:event.label}:{...points[event.id==='familiar-music'?'score':event.id],name:event.label};}
  kick(){const ball=this.living.campus.objects.find(o=>o.id==='ball');if(!ball)return;ball.vx=2;ball.vz=-3;this.living.audio.play('ball');}
- updateBall(dt){const ball=this.living.campus.objects.find(o=>o.id==='ball');if(!ball)return;ball.x=THREE.MathUtils.clamp(ball.x+(ball.vx||0)*dt,-7,7);ball.z=THREE.MathUtils.clamp(ball.z+(ball.vz||0)*dt,9,15);ball.vx=(ball.vx||0)*Math.exp(-dt*1.6);ball.vz=(ball.vz||0)*Math.exp(-dt*1.6);ball.mesh.position.set(ball.x,this.school.navigation.floor(2).walkY+.24,ball.z);}
+ updateBall(dt){const ball=this.living.campus.objects.find(o=>o.id==='ball');if(!ball||ball.externalCourt)return;ball.x=THREE.MathUtils.clamp(ball.x+(ball.vx||0)*dt,-7,7);ball.z=THREE.MathUtils.clamp(ball.z+(ball.vz||0)*dt,9,15);ball.vx=(ball.vx||0)*Math.exp(-dt*1.6);ball.vz=(ball.vz||0)*Math.exp(-dt*1.6);ball.mesh.position.set(ball.x,this.school.navigation.floor(2).walkY+.24,ball.z);}
 
  visitPoint(){const chapter=currentChapter(this.getProgress().campaign);return chapter?points[`memory-${memories.findIndex(m=>m.quest===chapter.id)+1}`]:null;}
  storyGoal(){
@@ -114,6 +116,7 @@ export class SchoolNarrative {
   if(!this.active)return null;
   let target=this.adventure.goal();const p=this.getProgress();
   if(!target)target=p.stage<2?(p.stage!==1||p.collected.length===3?this.actorPoint('maria'):this.world.collectibles.filter(o=>!o.taken).sort((a,b)=>Math.abs(a.floor-this.floor)-Math.abs(b.floor-this.floor))[0]):this.storyGoal();
+  if(target?.id==='photo'&&!Number.isInteger(target.floor))target={floor:0,x:10.1,z:-5.5,name:'Saia pela recepção · fotografia no jardim'};
   return narrativeWaypoint(this.school.navigation,this.floor,target);
  }
  sit(){const p=points['reflection-seat'];this.story.seat={height:this.school.navigation.floor(p.floor).baseY+p.top,exit:{x:this.school.player.position.x,z:this.school.player.position.z}};this.school.player.position.set(p.x,this.story.seat.height,p.z);this.school.player.rotation.y=0;}

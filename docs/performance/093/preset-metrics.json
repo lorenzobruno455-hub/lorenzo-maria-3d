@@ -1,0 +1,35 @@
+[
+  {
+    "quality": "low",
+    "drawCalls": 168,
+    "triangles": 221406,
+    "geometries": 82,
+    "textures": 19,
+    "drawingBuffer": {
+      "width": 640,
+      "height": 360
+    }
+  },
+  {
+    "quality": "medium",
+    "drawCalls": 192,
+    "triangles": 237054,
+    "geometries": 83,
+    "textures": 34,
+    "drawingBuffer": {
+      "width": 640,
+      "height": 360
+    }
+  },
+  {
+    "quality": "high",
+    "drawCalls": 200,
+    "triangles": 246994,
+    "geometries": 83,
+    "textures": 34,
+    "drawingBuffer": {
+      "width": 640,
+      "height": 360
+    }
+  }
+]

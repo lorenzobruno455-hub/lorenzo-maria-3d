@@ -1,3 +1,6 @@
+import{campusObjective}from'./systems/objective-placement.js';
+import{createSportsCourt}from'./systems/sports-court.js';
+import {createPerformanceProbe} from './systems/performance-probe.js';
 import {ContinuousActors} from './systems/continuous-actors.js';
 import {NarrativeExpansion} from './systems/narrative-expansion.js';
 import {createComicOverdriveP0} from './systems/comic-overdrive-p0.js';
@@ -24,6 +27,7 @@ import './style.css';
 import './comic.css';
 import './colorbeat-effects.css';
 import './comic-overdrive.css';
+import './polish093.css';
 import { Story } from './systems/story.js';
 import { Dialogue } from './systems/dialogue.js';
 import { createWorld } from './systems/world.js';
@@ -36,10 +40,10 @@ import { VisualEffects } from './systems/visual-effects.js';
 import {resolveSchoolExteriorSave} from './systems/school-save-placement.js';
 import { registerStateReader,registerNavigationReader } from './systems/diagnostics.js';
 import {createSchoolExterior} from './systems/school-exterior.js';
-import {schoolBoundsToLocal} from './systems/world-coordinates.js';
+import {schoolBoundsToLocal,schoolPointToWorld} from './systems/world-coordinates.js';
 import { Audio } from './systems/audio.js';
 import { mountLorenzoMariaRadio } from './radio/radio.js';
-import { blocked, resolveSpawn, relativeMovement, moveWithCollisions, clamp } from './systems/physics.js';
+import { blocked, resolveSpawn, motionHeading, relativeMovement, moveWithCollisions, clamp } from './systems/physics.js';
 import { loadSave, saveProgress, freshProgress, collect, objective, mariaDialogue } from './systems/progress.js';
 
 const $ = id => document.getElementById(id);
@@ -48,7 +52,7 @@ let storage; try { storage = localStorage; } catch { storage = null; }
 const saved = loadSave(storage), settings = saved.settings;
 let progress = saved.progress, started = false, paused = false, dialog = false, dialogDone = null, target = null;
 let adventure, previousBusy=false, scenePausedBeforeGlobal=false;
-let school, expansion, spatialActors;
+let school, expansion, spatialActors, performanceProbe,sports;
 let living, story, dialogues, panelOpen = false, needsRender = true;
 let controls, frame = 0, disposed = false, interactionTime = 0, toastTime = 0, saveTimer = 0, lastHUD = '', lastTarget = '', lastLocation = '';
 const scene = new THREE.Scene(); scene.background = new THREE.Color('#90d3eb'); scene.fog = new THREE.Fog('#90d3eb', 55, 115);
@@ -89,7 +93,7 @@ function save() {
   else {progress.position = { x: player.position.x, z: player.position.z }; progress.yaw = follow.yaw; progress.pitch = follow.pitch;}
   progress.doors = world.doors.filter(d=>!d.transient).map(d => d.open);
   spatialActors?.capture();
-  const ok = saveProgress(storage, progress, settings);
+  const saveAt=performanceProbe?performance.now():0;const ok = saveProgress(storage, progress, settings);performanceProbe?.record('save',performance.now()-saveAt);
   $('save-status').textContent = ok ? 'Progresso salvo neste aparelho' : 'Salvamento indisponível neste navegador'; return ok;
 }
 function syncModal() {
@@ -115,7 +119,7 @@ document.addEventListener('keydown', e => {
   if (e.key !== 'Tab') return;
   const modal = paused ? $('pause') : adventure?.cutscenes.active ? $('cinematic') : panelOpen ? $('story-panel') : paused ? $('pause') : dialog ? $('dialog') : !started ? $('welcome') : null;
   if (!modal) return;
-  const buttons = [...modal.querySelectorAll('button,input,select')].filter(el => !el.disabled && el.getClientRects().length);
+  const buttons = [...modal.querySelectorAll('button,input,select,[tabindex="0"]')].filter(el => !el.disabled && el.getClientRects().length);
   const first = buttons[0], last = buttons.at(-1);
   if (e.shiftKey && (document.activeElement === first || !modal.contains(document.activeElement))) { e.preventDefault(); last?.focus(); }
   else if (!e.shiftKey && (document.activeElement === last || !modal.contains(document.activeElement))) { e.preventDefault(); first?.focus(); }
@@ -123,16 +127,17 @@ document.addEventListener('keydown', e => {
 function nearestTarget() {
  const pos=player.position;interactions.entries.clear();
  const add=(o,kind,distance,extra={})=>interactions.register({id:`${kind}:${o.id}`,object:{...o,kind,original:o},distance,height:o.height??(o.mesh?new THREE.Box3().setFromObject(o.mesh).max.y+.04:1.4),priority:kind==='seat'?-1.2:['item','memory','game','album','memory-book'].includes(kind)?.5:0,...extra,action:t=>handleInteraction({...t,ref:o})});
- expansion?.targets().forEach(o=>add(o,'expansion',2.6,{height:o.height,priority:4}));
+ expansion?.targets().forEach(o=>add(o,'expansion',2.6,{height:o.height,priority:expansion.current?6:4}));
  if(school?.active){
   school.targets().forEach(o=>add(o,'school-stair',2.2));
-  school.narrative.targets().forEach(o=>add(o.original||o,o.kind||'item',o.kind==='adventure'?2.6:o.kind==='memory-book'?1.1:2.2,{height:o.height??school.navigation.floor(school.floor).walkY+1.5,priority:narrativePriority(o.kind)}));
+  school.narrative.targets().forEach(o=>add(o.original||o,o.kind||'item',o.kind==='adventure'?2.6:o.kind==='memory-book'?1.1:2.2,{height:o.height??school.navigation.floor(school.floor).walkY+1.5,priority:o.kind==='memory'&&!progress.campaign.memories.includes(o.id)?5:narrativePriority(o.kind)}));
   const t=interactions.nearest(pos);return t?{...t,ref:t.original}:null;
  }
- adventure?.targets().forEach(o=>add(o,'adventure',2.6,{...(Number.isFinite(o.height)?{height:o.height}:{}),priority:3}));
+ sports?.targets().forEach(o=>add(o,'court',2.8,{height:o.height}));
+ adventure?.targets().filter(o=>['maria','bia','davi'].includes(o.id)).forEach(o=>add(o,'adventure',2.6,{...(Number.isFinite(o.height)?{height:o.height}:{}),priority:3}));
  living?.targets().forEach(o=>add(o,o.kind,o.kind==='maria'?2.5:2.4));
  world.doors.filter(d=>!d.transient).forEach(o=>add(o,'door',3.1,{height:1.4,ignoreCollider:o.bounds}));
- if(progress.stage===1&&!living?.free)world.collectibles.filter(o=>!o.taken).forEach(o=>add(o,'item',2));
+ if(progress.stage===1&&!living?.free)world.collectibles.filter(o=>!o.taken&&o.id==='photo').forEach(o=>add(o,'item',2));
  world.points.forEach(o=>add(o,'point',2.4,{height:1.5}));
  story?.world.objects.filter(o=>(!o.mesh||o.mesh.visible)&&(o.kind!=='memory'||progress.stage===2)).forEach(o=>add(o,o.kind,o.kind==='memory-book'?2.1:2.3,{height:o.height,ignoreCollider:o.ignoreCollider}));
  const t=interactions.nearest(pos);return t?{...t,ref:t.original}:null;
@@ -141,6 +146,7 @@ function handleInteraction(target) {
 
   if (!target) return;
   audio.unlock();
+  if(target.kind==='court'){sports.handle(target);return;}
   if(target.kind==='school-stair'){void school.useStair(target.id);return;}
   if(expansion?.handle(target))return;
   if(adventure?.handle(target))return;
@@ -191,7 +197,7 @@ const confirmedSchool=comicMode===null||exteriorPreview;
 const legacyRoots=scene.children.filter(node=>node!==player&&node!==sun&&!node.isHemisphereLight&&!node.isCamera);
 school=new ContinuousSchool({scene,world,frameNodes:[effect,interactionAccent.mesh],legacyRoots,player,follow,pool:assets,layout:schoolLayout,rotation:confirmedSchool?Math.PI:0,threeGates:confirmedSchool,getState:()=>progress.schoolVisit,onStatus:notify,onChange:event=>{if(!event?.preserveInput)controls.clear();target=null;lastHUD='';lastLocation='';lastTarget='';syncSchoolUI();syncModal();needsRender=true;if(!school?.loading&&!event?.deferSave)save();}});
 if(confirmedSchool&&!progress.schoolVisit.active){const p=resolveSchoolExteriorSave(player.position,world.solids,school.rotation);player.position.set(p.x,world.groundHeight(p.x,p.z),p.z);}
-school.narrative=new SchoolNarrative({school,world,story,living,adventure,getProgress:()=>progress});
+story.schoolOnlyNarrative=true;adventure.schoolOnlyNarrative=true;school.narrative=new SchoolNarrative({school,world,story,living,adventure,getProgress:()=>progress});
 expansion=new NarrativeExpansion({school,world,scene,story,adventure,living,character:lorenzo,getProgress:()=>progress,save,notify,audio,effects:visualEffects});
 spatialActors=new ContinuousActors({school,living,world,scene,getProgress:()=>progress,adventure,player});
 school.onFrameChange=()=>{lorenzo.heading=lorenzo.headingTarget=lorenzo.writtenHeading=player.rotation.y;};
@@ -200,6 +206,7 @@ const comicProposal=comicExpanded?'b':/^overdrive-20-([ab])$/.exec(comicMode||''
 if(comicProposal)renderer.toneMapping=THREE.NoToneMapping;
 const overdriveP0=comicMode==='legacy'?null:createComicOverdriveP0({scene,resources:world.resources,school,ink,global:comicMode!=='overdrive-p0',finishing:comicMode!=='overdrive-p1-p2',proposal:comicProposal,expanded:comicExpanded,depth:comicMode===null||comicMode==='overdrive-20-d2-d3'||exteriorPreview});
 const schoolExterior=confirmedSchool?createSchoolExterior({scene,world}):null;
+sports=createSportsCourt({scene,world,living,audio,notify});living.sports=sports;const sportsPlayer=new THREE.Vector3();
 const exteriorReview=exteriorPreview?({overview:{x:60,y:3.5,z:-7,distance:50,yaw:2.1,pitch:.30},entry:{x:60,y:2,z:-9,distance:52,yaw:-2.1,pitch:.55}}[new URLSearchParams(location.search).get('exterior-view')]||null):null;
 schoolExterior?.setReview?.(exteriorPreview?new URLSearchParams(location.search).get('exterior-view'):null);
 function syncSchoolUI(){if(!school)return;document.body.classList.toggle('school-visit',school.active);document.body.classList.toggle('school-inspecting',school.active&&school.inspecting);$('school-toolbar').hidden=!school.active&&!school.loading;$('school-floor-title').textContent=school.loading?'Carregando São Jorge…':school.inspecting?'Inspeção · coordenadas de jogo':`${school.navigation.floor(school.floor).label} · São Jorge`;$('school-inspect').textContent=school.inspecting?'Explorar':'Andares';$('school-inspect').disabled=school.loading;$('school-floor-view').hidden=!school.inspecting;$('school-floor-view').value=String(school.view);$('school-floor-view').disabled=school.loading;$('story-menu').disabled=school.loading;document.querySelectorAll('[data-story]').forEach(b=>b.disabled=school.loading);$('restart').disabled=school.active||school.loading;interactions.world=school.active?{occluders:school.navigation.obstacles(school.floor)}:world;}
@@ -248,14 +255,14 @@ function updateHUD() {
   document.querySelector('[role=progressbar]').setAttribute('aria-valuemax', total);
   $('mission').querySelector('.eyebrow').textContent = expansionQuest?'EXPANSÃO NARRATIVA · FICÇÃO':living?.free ? 'COLÉGIO AURORA · EXPLORAÇÃO LIVRE' : progress.stage === 2 ? `MEMÓRIAS · CAPÍTULO ${Math.min(6, progress.campaign.memories.length + 1)}/6` : 'CAPÍTULO 01 / PRIMEIRO SINAL';
 }
-function nextObjective(){return school.waypoint(rawNextObjective());}
+function nextObjective(){const next=rawNextObjective();return school.waypoint(school.active?next:campusObjective(next,{expansion:!!expansion?.goal(),adventureStep:adventure.current?.step,point:id=>school.narrative.point(id),rotation:school.rotation}));}
 function rawNextObjective() {
   if(expansion?.goal())return expansion.goal();
   if(school?.active)return school.narrative.goal();
   if(adventure?.goal())return adventure.goal();
   if (story?.goal()) return story.goal();
   if (living?.free) return null;
-  if (progress.stage !== 1 || progress.collected.length === 3) return { ...living.mariaPosition, name: 'MARIA' };
+  if (progress.stage !== 1 || progress.collected.length === 3) return { ...living.mariaPosition,id:'maria',name: 'MARIA' };
   return world.collectibles.filter(c => !c.taken).sort((a, b) => Math.hypot(a.x - player.position.x, a.z - player.position.z) - Math.hypot(b.x - player.position.x, b.z - player.position.z))[0];
 }
 function updateMarker() {
@@ -314,23 +321,24 @@ Promise.allSettled(heroLoads).then(() => {
 });
 function uiSound(event){if(event.target.closest?.('button,select')&&!event.target.closest('[disabled]'))audio.play('ui');}
 document.addEventListener('click',uiSound);
+performanceProbe=createPerformanceProbe(new URLSearchParams(location.search).has('profile'));if(performanceProbe)window.auroraPerformance.state=getGameState;
+for(const [object,key,label]of [[renderer,'render','render'],[spatialActors,'update','NPC.update'],[spatialActors?.planner,'horizontal','Astar'],[school,'moveBodyWorld','collision'],[school,'ensureFloor','floor.request'],[world.resources,'geometry','geometry.request'],[world.resources,'material','material.request'],[quality,'resize','resolution.change'],[audio,'update','audio.update']])performanceProbe?.wrap(object,key,label);
 let last = performance.now(), time = 0, hudTimer = 0;
 function animate(now) {
   if (disposed || document.hidden) { frame = 0; return; }
-  frame = requestAnimationFrame(animate); const rawDT = Math.max(.001, (now - last) / 1000), dt = Math.min(rawDT, .1); last = now;
-  let speed = 0, movementHeading;
+  frame = requestAnimationFrame(animate); const rawDT = Math.max(.001, (now - last) / 1000), dt = Math.min(rawDT, .1); last = now;performanceProbe?.begin(rawDT*1000);
+  let speed = 0, movementHeading,worldMovementHeading;
   if (active()) {
     time += dt; const input = controls.sample(dt); follow.rotate(input.lookX, input.lookY);
     if(story?.seat&&(Math.hypot(input.x,input.z)>.05)){player.position.set(story.seat.exit.x,(school?.active?school.navigation.floor(school.floor).walkY:world.groundHeight(story.seat.exit.x,story.seat.exit.z)),story.seat.exit.z);story.seat=null;adventure?.actions.play('stand',null);}
     const delta = relativeMovement(input.x, input.z, follow.yaw, input.running ? 6 : 3.5, dt);
+    const beforeX=player.position.x,beforeZ=player.position.z,fromRotation=school?.active?school.rotation:0;
     const distance = school?.active ? school.move(delta) : moveWithCollisions(player.position, delta, world.solids); speed = distance / dt;
-    if (speed > .01) {
-      const rotation = movementHeading = Math.atan2(delta.x, delta.z), angle = Math.atan2(Math.sin(rotation - player.rotation.y), Math.cos(rotation - player.rotation.y));
-      player.rotation.y += angle * (1 - Math.exp(-dt * 14));
-    }
+    if(speed>.01)worldMovementHeading=motionHeading(player.position.x-beforeX,player.position.z-beforeZ,fromRotation,0);
     interactionTime = Math.max(0, interactionTime - dt); saveTimer += dt; if (saveTimer > 1) { save(); saveTimer = 0; }
   }
   if(started){school.quality=settings.quality;school.tick(paused?0:dt,time);}
+  movementHeading=Number.isFinite(worldMovementHeading)?worldMovementHeading-(school.active?school.rotation:0):undefined;
   dialogues.update(adventure?.cutscenes.paused?0:dt);
   if(!school?.loading&&!school?.inspecting)story?.update(paused || document.hidden ? 0 : dt, player.position, active());
   if (!paused && started) {
@@ -349,7 +357,7 @@ function animate(now) {
   const shadowCenter=exteriorPreview||school.active||player.position.x>44?60:0;if(sun.target.position.x!==shadowCenter){sun.position.x=-20+shadowCenter;sun.target.position.x=shadowCenter;sun.target.updateMatrixWorld();}
   updateColorbeatLighting({renderer,sun,hemisphere,indoors,dt:paused?0:dt,cinematic:!!adventure?.cutscenes.active});
   player.visible=!school?.inspecting&&!(dialog&&story?.focus?.hidePlayer);document.body.classList.toggle('reading-memory',!player.visible);
-  follow.reducedMotion=motionPreference.matches;
+  follow.ceilingY=school.active?school.cameraCeiling():undefined;follow.reducedMotion=motionPreference.matches;
   follow.partner = living.partner?.agent.position;
   follow.focusObject = school?.active ? (school.focus()||(dialog?story?.focus:null)) : dialog ? story?.focus : null; follow.conversation = dialog && !story?.focus;
   if(exteriorReview&&!school.active&&!dialog&&!adventure?.cutscenes.active){follow.focusObject=exteriorReview;follow.obstacles=[];}else if(!school.active)follow.obstacles=world.occluders;
@@ -359,17 +367,17 @@ function animate(now) {
   if(previousBusy!==!!adventure?.busy){previousBusy=!!adventure?.busy;controls.clear();syncModal();}
   expansion?.update(paused?0:dt);
   interactionAccent.update(active()&&!school?.inspecting?target:null,time,{reducedMotion:motionPreference.matches,floorY:player.position.y});
-  camera.updateMatrixWorld();
+  school.narrative.hideCampusDuplicates();performanceProbe?.applyView(camera);camera.updateMatrixWorld();
   ink.update(settings.quality,player.position,camera,{width:innerWidth,height:innerHeight});
   hudTimer += dt; if (hudTimer > .08) {
-    updateHUD(); updateTarget(); updateMarker();
+    const hudAt=performanceProbe?performance.now():0;updateHUD(); updateTarget(); updateMarker();
     const zone = school?.active ? `${school.navigation.floor(school.floor).label} · ${school.room()?.name||'Corredor'} · SÃO JORGE` : player.position.x>38?'CAMINHO DO SÃO JORGE': player.position.z < -18 && Math.abs(player.position.x) < 6 ? 'CANTINA' : player.position.x < -28 && player.position.z < 10 ? 'QUADRA' : player.position.x > 28 && player.position.z < -6 ? 'SALA DE MÚSICA' : player.position.z < -6 && Math.abs(player.position.x) > 6 ? (player.position.x < 0 ? 'SALA DE LITERATURA' : 'BIBLIOTECA') : player.position.z > 17 ? 'JARDIM DA ESCOLA' : 'PÁTIO CENTRAL';
-    if (lastLocation !== zone) { $('location').firstChild.textContent = `${zone} `; lastLocation = zone; } hudTimer = 0;
+    if (lastLocation !== zone) { $('location').firstChild.textContent = `${zone} `; lastLocation = zone; } hudTimer = 0;performanceProbe?.record('HUD',performance.now()-hudAt);
   }
-  school.presentWorld();if(schoolExterior)schoolExterior.group.visible=!school.active||(!school.inspecting&&school.floor===0&&school.portalDistance()<5);overdriveP0?.update(camera,settings.quality,renderer.getPixelRatio());
+  sports.update(paused?0:dt,player.getWorldPosition(sportsPlayer));school.presentWorld();if(schoolExterior)schoolExterior.group.visible=!school.active||(!school.inspecting&&school.floor===0&&school.portalDistance()<5);overdriveP0?.update(camera,settings.quality,renderer.getPixelRatio());
   // Frozen pause/welcome scenes need only redraw on resize, settings or camera settling.
   if (active() || dialog || adventure?.busy || (panelOpen && started && story?.game) || needsRender) { renderer.render(scene, camera); needsRender = false; }
-  audio.update?.(); if (active()) quality.sample(rawDT);
+  audio.update?.(); if (active()) quality.sample(rawDT);performanceProbe?.end();
 }
 
 addEventListener('resize', () => needsRender = true);
@@ -378,7 +386,7 @@ world.quality=settings.quality;world.update(0,0,player.position);living.update(0
 
 // Read-only diagnostic API; no production teleport or mission mutation hooks.
 export function getGameState() {
-  return { playerInstance:player.uuid,x: player.position.x, z: player.position.z, stage: progress.stage, collected: progress.collected.length, items: [...progress.collected], started, paused, dialog,
+  return { playerHeading:player.rotation.y,playerWorldHeading:player.rotation.y+(school?.active?school.rotation:0),actorInstances:(()=>{const ids=[];scene.traverse(o=>{if(o.userData.inkActor)ids.push(o.uuid);});return ids;})(),playerInstance:player.uuid,x: player.position.x, z: player.position.z, stage: progress.stage, collected: progress.collected.length, items: [...progress.collected], started, paused, dialog,
     yaw: follow.yaw, pitch: follow.pitch, analog: { ...controls.analog }, running: controls.runPointers.size > 0 || controls.keys.has('shift'), animation: lorenzo.state,
     school:school?.state(), y:player.position.y,worldPosition:(()=>{const p=player.getWorldPosition(new THREE.Vector3());return{x:p.x,y:p.y,z:p.z};})(),
     cameraWorld:(()=>{const p=camera.getWorldPosition(new THREE.Vector3());return{x:p.x,y:p.y,z:p.z};})(),cameraFocusWorld:follow.worldFocus?{x:follow.worldFocus.x,y:follow.worldFocus.y,z:follow.worldFocus.z}:null,camera: { x: camera.position.x, y: camera.position.y, z: camera.position.z, distance: follow.actualDistance }, doors: world.doors.map(d => ({ open: d.open, angle: d.angle })),
@@ -389,14 +397,14 @@ export function getGameState() {
     visual:{theme:'aurora-comic',edition:'0.7C',heroInk:ink.actorInk.filter(i=>i.actor.root===player&&i.mesh.isSkinnedMesh&&i.mesh.visible).length,fallbackInk:ink.actorInk.filter(i=>i.actor.root===player&&!i.mesh.isSkinnedMesh).length,models:{lorenzo:!!lorenzo.custom,maria:!!maria.custom},clips:{lorenzo:Object.keys(lorenzo.actions),maria:Object.keys(maria.actions)},toon:world.resources.material('#eadfc8').isMeshToonMaterial,outlineVertices:ink.staticInk.geometry.attributes.position?.count||0},
     spatial:validator.inspect(world.placed), memoryBooks:story.world.books.map(b=>({id:b.id,x:b.x,z:b.z,unlocked:b.unlocked,angle:b.mesh.userData.cover.rotation.z})),
     colorbeat:{style:'aurora-colorbeat-081',inkPixels:ink.actorMaterial.userData.inkUniforms.cbInkPixels.value,accent:interactionAccent.mesh.visible,exposure:renderer.toneMappingExposure,sharedLibrary:school?.materials?.library===world.resources.colorbeat,materials:world.resources.materials.size,textures:world.resources.textures.size,programs:renderer.info.programs?.length},
-    schoolExterior:schoolExterior?.state()||null,overdrive:overdriveP0?.state()||null,quality: settings.quality, resolutionScale: quality.scale, outlines: ink.actorInk.filter(s=>s.mesh.visible).length, fps: Math.round(quality.fps), drawCalls: renderer.info.render.calls, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures, triangles: renderer.info.render.triangles, drawingBuffer:{width:renderer.domElement.width,height:renderer.domElement.height} };
+    court:sports?.state(),schoolExterior:schoolExterior?.state()||null,overdrive:overdriveP0?.state()||null,quality: settings.quality, resolutionScale: quality.scale, outlines: ink.actorInk.filter(s=>s.mesh.visible).length, fps: Math.round(quality.fps), drawCalls: renderer.info.render.calls, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures, triangles: renderer.info.render.triangles, drawingBuffer:{width:renderer.domElement.width,height:renderer.domElement.height} };
 }
 registerStateReader(getGameState);
 registerNavigationReader(()=>({origin:school.active?{x:60,z:0}:{x:0,z:0},rotation:school.active?school.rotation:0,floor:school.active?school.floor:null,position:{x:player.position.x,z:player.position.z},solids:(school.active?(school.floor===0?world.solids.map(b=>schoolBoundsToLocal(b,school.rotation)):school.navigation.movementObstacles(school.floor)):world.solids).map(b=>({...b}))}));
 if(new URLSearchParams(location.search).has('debug')){addEventListener('keydown',e=>{if(e.code==='F3'){e.preventDefault();if(validator.visible)validator.clear();else validator.show([...world.placed,...story.world.placed],[player,...living.actors.map(a=>a.character.root)]);needsRender=true;}});}
 
 export function dispose() {
-  spatialActors?.dispose();expansion?.dispose();document.removeEventListener('click',uiSound);schoolExterior?.dispose();overdriveP0?.dispose();school?.narrative?.dispose();school?.dispose();adventure?.dispose();ink.dispose();interactionAccent.dispose();validator.dispose();interactions.dispose();visualEffects.dispose();
+  performanceProbe?.dispose();sports?.dispose();spatialActors?.dispose();expansion?.dispose();document.removeEventListener('click',uiSound);schoolExterior?.dispose();overdriveP0?.dispose();school?.narrative?.dispose();school?.dispose();adventure?.dispose();ink.dispose();interactionAccent.dispose();validator.dispose();interactions.dispose();visualEffects.dispose();
   disposed = true; cancelAnimationFrame(frame); controls.clear(); save(); disposeRadio(); story?.dispose(); living?.dispose(); dialogues?.dispose(); lorenzo.dispose(); maria.dispose(); assets.dispose(); world.dispose(); audio.dispose(); renderer.dispose();
 }
 if (import.meta.hot) import.meta.hot.dispose(dispose);

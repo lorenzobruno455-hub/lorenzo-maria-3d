@@ -25,7 +25,8 @@ export class ContinuousSchool extends SchoolVisit{
  }
  portalDistance(p=this.player.position){return Math.min(Math.hypot(p.x,p.z-19),this.threeGates?Math.hypot(p.x-11,p.z+5.5):Infinity);}
  outsidePortal(p=this.player.position){return p.z>19.2||(this.threeGates&&p.x>11.2&&p.z>=-6.8&&p.z<=-4.2);}
- cameraDistance(){return this.floor===0?THREE.MathUtils.lerp(this.follow.distance,4.2,THREE.MathUtils.clamp(this.portalDistance()/5,0,1)):4.2;}
+ cameraCeiling(){return stairAt(this.player.position)===null?this.navigation.floor(this.floor).baseY+3.05:undefined;}
+ cameraDistance(){return this.floor===0?THREE.MathUtils.lerp(this.follow.distance,5.4,THREE.MathUtils.clamp(this.portalDistance()/5,0,1)):5.4;}
  cameraObstacles(){
   const slabs=this.layout.floors.flatMap(f=>{const b={kind:'floor',minX:-11.275,maxX:11.275,minZ:-19.275,maxZ:19.275,minY:f.baseY-.42,maxY:f.baseY+.07};return f.index?splitOpening(b):[b];});
   // Ceiling fixtures are visual geometry above walking height, but still occlude the camera.

@@ -39,6 +39,6 @@ test('movable mission props cannot leave permanent ink after collection',async()
 });
 test('narrative camera zooms smoothly but reduced motion cuts directly to and from the book',async()=>{
  const {FollowCamera}=await import('../../src/systems/camera.js');const camera=new THREE.PerspectiveCamera(),f=new FollowCamera(camera,[]),p={x:0,z:0};f.update(p,0,true);
- f.focusObject={x:0,y:1.42,z:0,distance:1.8,yaw:0,pitch:.65};f.update(p,.016);assert(f.actualDistance>1.8&&f.actualDistance<7,'narrative zoom jumped');
- f.reducedMotion=true;f.update(p,.016);assert.equal(f.actualDistance,1.8);f.focusObject=null;f.update(p,.016);assert.equal(f.actualDistance,7);
+ f.focusObject={x:0,y:1.42,z:0,distance:1.8,yaw:0,pitch:.65};f.update(p,.016);assert(f.actualDistance>1.8&&f.actualDistance<8,'narrative zoom jumped');
+ f.reducedMotion=true;f.update(p,.016);assert.equal(f.actualDistance,1.8);f.focusObject=null;f.update(p,.016);assert.equal(f.actualDistance,8);
 });

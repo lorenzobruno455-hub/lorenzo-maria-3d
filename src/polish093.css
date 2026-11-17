@@ -1,0 +1,16 @@
+/* Compact dialogue keeps the full text and every choice reachable. */
+#dialog,body.reading-memory #dialog{left:50%;right:auto;bottom:max(8px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(900px,calc(100vw - 24px));max-height:42dvh;padding:6px 10px;gap:9px;overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+#dialog>div:last-child{min-width:0;flex:1}
+#dialog .portrait{width:32px;height:32px;font-size:19px;align-self:center}
+#dialog small{font-size:14px;letter-spacing:.5px}
+#dialog small.dialogue-source{display:inline;margin:0 0 0 9px;font:10px/1.2 var(--cb-body);letter-spacing:0}
+#dialog p,body.reading-memory #dialog p{font-size:14px;line-height:1.3;margin:3px 0 5px;max-height:14em;overflow:auto;white-space:pre-wrap}
+#dialog .dialogue-actions{display:flex;gap:6px;flex-wrap:wrap}
+#dialog button,#dialog #dialogue-speed,#dialog #dialogue-exit,body.reading-memory #dialog button{min-width:44px;min-height:44px;padding:6px 10px;margin:0;font-size:12px;line-height:1.15}
+#dialog .dialogue-choices{margin:4px 0;gap:6px}
+@media(orientation:portrait){#dialog,body.reading-memory #dialog{max-height:48dvh}#dialog .portrait{display:none}}
+@media(max-height:360px){#dialog .portrait{display:none}#dialog{max-height:48dvh}}
+
+#dialog #speaker{font-size:13px;padding:1px 7px;line-height:16px}
+#dialog #speech,body.reading-memory #dialog #speech{font-size:14px;line-height:1.3!important;margin:3px 0 5px!important}
+#dialog #dialogue-speed,#dialog #dialogue-exit{margin:0!important;font-size:12px!important}

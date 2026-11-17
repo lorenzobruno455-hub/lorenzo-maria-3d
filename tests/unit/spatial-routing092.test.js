@@ -17,3 +17,5 @@ test('a real routine actor travels to the hall and descends without replacing it
  for(let i=0;i<9000;i++){engine.update(.05);const y=actor.spatial.position.y;assert.ok(Math.abs(y-prev)<.04);if(y>7.1)high=true;if(high&&y<1)down=true;if(y>.5&&y<3.1)mid=true;prev=y;if(down)break;}
  assert.ok(high&&mid&&down,JSON.stringify(actor.spatial));assert.equal(root.uuid,uuid);assert.equal(scene.children.filter(r=>r===root).length,1);engine.capture();assert.equal(p.living.spatialActors.davi.y,actor.spatial.position.y);assert.ok(engine.planner.searches<100);engine.dispose();f.dispose();
 });
+
+test('async shared-worker legs preserve exact synchronous route and floor heights',async()=>{const{findPath}=await import('../../src/systems/navigation.js');const f=fixture(),planner=new SpatialRoutePlanner(f.school,f.world),a={x:47,y:.03,z:5.5},b=schoolPointToWorld({x:6,y:7.23,z:0},Math.PI);const sync=planner.plan(a,b),asyncRoute=await planner.planAsync(a,b,{find:async(from,to,obstacles,grid)=>findPath(from,to,obstacles,{grid})});assert.deepEqual(asyncRoute,sync);f.dispose();});
