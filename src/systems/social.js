@@ -1,9 +1,11 @@
+import {validateSpatialActors} from './spatial-progress.js';
 import activities from '../data/activities.json' with { type: 'json' };
 import npcs from '../data/npcs.json' with { type: 'json' };
 import events from '../data/events.json' with { type: 'json' };
-export function freshLiving() { return { mode: 'campaign', events: {}, reputation: {}, grants: [], achievements: {}, decisions: {}, history: [], snacks: [], actorClock: 0 }; }
+export function freshLiving() { return { spatialActors: {}, mode: 'campaign', events: {}, reputation: {}, grants: [], achievements: {}, decisions: {}, history: [], snacks: [], actorClock: 0 }; }
 export function validateLiving(raw = {}) {
   const s = freshLiving(); if (!raw || typeof raw !== 'object') return s;
+  s.spatialActors=validateSpatialActors(raw.spatialActors);
   s.mode = raw.mode === 'free' ? 'free' : 'campaign';
   for (const e of events) { const state = raw.events?.[e.id]; if (['active', 'found', 'answered', 'done'].includes(state)) s.events[e.id] = state; }
   for (const n of npcs) if (Number.isFinite(raw.reputation?.[n.id])) s.reputation[n.id] = Math.max(0, Math.min(5, Math.floor(raw.reputation[n.id])));

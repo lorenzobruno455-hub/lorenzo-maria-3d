@@ -27,7 +27,8 @@ export function extendThreeGateConnection(base,world,rotation){
  const oldGround=world.groundHeight;world.groundHeight=(x,z)=>x>=48.8&&x<=71.2&&z>=-35.2&&z<=-18.8?.03:paths.some(([cx,cz,w,d])=>Math.abs(x-cx)<=w/2&&Math.abs(z-cz)<=d/2)?.03:oldGround(x,z);
  const install=base.installFloor.bind(base);base.installFloor=boxes=>{install(boxes);receptionSeal.enabled=false;};
  base.access=access;base.gateDoors=doors;base.schoolDoors=[base.door,doors.get('reception')];base.exteriorOccluders=occluders;
- base.updateGates=(position,ready)=>{for(const g of access.gates){
+ base.updateGates=(positions,ready)=>{const probes=Array.isArray(positions)?positions:[positions];for(const g of access.gates){
+  const position=probes.filter(p=>(p.y??0)<2.7).reduce((a,p)=>!a||Math.hypot(p.x-g.x,p.z-g.z)<Math.hypot(a.x-g.x,a.z-g.z)?p:a,null)||{x:Infinity,z:Infinity};
   const d=doors.get(g.id),near=Math.hypot(position.x-g.x,position.z-g.z)<5&&(g.id==='court'||ready);
   // Pick the free side only from rest; never reverse a leaf while it is moving.
   // This also lets a near-door save reopen without sweeping into its owner.

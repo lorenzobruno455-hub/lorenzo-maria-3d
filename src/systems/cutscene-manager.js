@@ -48,8 +48,8 @@ export class CutsceneManager {
         requested:actor.requestedAction, pending:actor.controller?.pending,
       });
       if (command.state) { actor.cutscenePose = {state:command.state}; actor.requestAction?.(command.state, { duration:this.duration }); }
-      if (vector(command.position)) actor.root.position.fromArray(command.position);
-      if (vector(command.lookAt)) lookLocal(actor.root,command.lookAt);
+      if (vector(command.position)&&!this.preserveActorPositions) actor.root.position.fromArray(command.position);
+      if (vector(command.lookAt)) {if(this.preserveActorPositions){const p=new Vector3(...command.lookAt);this.camera.parent?.localToWorld(p);actor.root.lookAt(p);}else lookLocal(actor.root,command.lookAt);}
     }
     if (shot.light && this.light) {
       if (Number.isFinite(shot.light.intensity)) this.light.intensity = shot.light.intensity;

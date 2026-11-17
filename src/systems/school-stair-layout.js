@@ -24,7 +24,7 @@ export function refitStairRooms(model,floor){
  if(floor.index!==1)return{dispose(){}};const owned=[],restore=[];
  for(const name of['structure','furniture','floors']){
   const mesh=model.getObjectByName(name),boxes=decodeFurnitureBoxes(mesh);if(!boxes)throw Error('Geometria incompatível com reorganização das salas');const original=mesh.geometry,parts=[];
-  const values=boxes.flatMap(b=>{const c={minX:b.min[0],maxX:b.max[0],minY:b.min[1],maxY:b.max[1],minZ:b.min[2],maxZ:b.max[2]};return name==='structure'?keepWall(c):mapFurniture(c,floor).map(p=>({...p,color:b.color}));});
+  const values=boxes.flatMap(b=>{const c={minX:b.min[0],maxX:b.max[0],minY:b.min[1],maxY:b.max[1],minZ:b.min[2],maxZ:b.max[2],color:b.color};return name==='structure'?keepWall(c):mapFurniture(c,floor).map(p=>({...p,color:b.color}));});
   if(name==='structure')values.push(...newWalls(0,floor.rooms));
   for(const b of values){const g=new THREE.BoxGeometry(b.maxX-b.minX,b.maxY-b.minY,b.maxZ-b.minZ).toNonIndexed();g.deleteAttribute('uv');g.translate((b.minX+b.maxX)/2,(b.minY+b.maxY)/2,(b.minZ+b.maxZ)/2);const color=new THREE.Color(b.color||'#f4f4f1'),a=new Float32Array(g.attributes.position.count*3);for(let i=0;i<a.length;i+=3)a.set([color.r,color.g,color.b],i);g.setAttribute('color',new THREE.BufferAttribute(a,3));parts.push(g);}
   const g=mergeGeometries(parts,false);parts.forEach(p=>p.dispose());mesh.geometry=g;owned.push(g);restore.push(()=>mesh.geometry=original);

@@ -15,7 +15,7 @@ export class SchoolNarrative {
  get base(){return this.school.navigation.floor(this.floor).baseY;}
  bookObjects(){return this.story.world.objects.filter(o=>o.kind==='memory-book');}
  point(id){return points[id]||null;}
- actorPoint(id){const actor=this.living.actors.find(a=>a.definition.id===id);return actor?{...actor.agent.position,floor:ACTOR_ROUTES[id].floor,name:actor.definition.name,height:this.school.navigation.floor(ACTOR_ROUTES[id].floor).walkY+1.5}:null;}
+ actorPoint(id){const actor=this.living.actors.find(a=>a.definition.id===id);return actor?{...actor.agent.position,floor:actor.agent.position.floor??ACTOR_ROUTES[id].floor,name:actor.definition.name,height:this.spatial?actor.spatial.position.y+1.5:this.school.navigation.floor(ACTOR_ROUTES[id].floor).walkY+1.5}:null;}
  remember(o){
   const values=Object.fromEntries(['x','z','floor','height','ignoreCollider','displayScale','vx','vz'].map(k=>[k,{had:Object.hasOwn(o,k),value:o[k]}]));
   const mesh=o.mesh,snapshot=mesh?{parent:mesh.parent,position:mesh.position.clone(),quaternion:mesh.quaternion.clone(),scale:mesh.scale.clone(),visible:mesh.visible}:null;
@@ -35,7 +35,7 @@ export class SchoolNarrative {
    for(const o of this.world.collectibles)this.moveObject(o,points[o.id],.6);
    for(const o of this.living.campus.objects)this.moveObject(o,points[o.id==='familiar-music'?'score':o.id],o.id==='ball'?1:.5);
    if(this.adventure.photo)this.moveObject(this.adventure.photo,points['classroom-photo'],.7);
-   for(const actor of this.living.actors){
+   if(!this.spatial)for(const actor of this.living.actors){
     const rig=actor.character.root,route=ACTOR_ROUTES[actor.definition.id];if(!route)continue;
     const saved={actor,agent:structuredClone({...actor.agent}),parent:rig.parent,position:rig.position.clone(),quaternion:rig.quaternion.clone(),visible:this.school.legacy?.visibility.find(([r])=>r===rig)?.[1]??rig.visible};this.actorSnapshots.push(saved);
     actor.agent.definition={...actor.definition,route:structuredClone(route.route)};
@@ -51,7 +51,7 @@ export class SchoolNarrative {
   part('#25344b',[.7,.07,.34],0,.035,0);for(let i=0;i<10;i++){part(i%3?'#eee9dd':'#141824',[.058,.025,.2],-.3+i*.065,.082,.02);}
   group.position.set(p.x,this.school.navigation.floor(p.floor).baseY+p.top,p.z);this.group.add(group);this.instrument={...p,mesh:group};
  }
- capture(){if(!this.active)return;this.school.getState().actors=Object.fromEntries(this.living.actors.filter(a=>ACTOR_ROUTES[a.definition.id]).map(a=>[a.definition.id,{...a.agent.position,index:a.agent.index,rotation:a.agent.rotation}]));}
+ capture(){if(this.spatial){this.spatial.capture();return;}if(!this.active)return;this.school.getState().actors=Object.fromEntries(this.living.actors.filter(a=>ACTOR_ROUTES[a.definition.id]).map(a=>[a.definition.id,{...a.agent.position,index:a.agent.index,rotation:a.agent.rotation}]));}
  leave(){
   if(!this.active)return;this.capture();this.active=false;this.story.focus=null;this.story.seat=null;this.story.tracked=this.oldTracked;this.story.location=null;this.living.location=null;this.adventure.location=null;this.living.speakingId=null;
   for(const s of this.actorSnapshots){Object.assign(s.actor.agent,s.agent);const root=s.actor.character.root;s.parent?.add(root);root.position.copy(s.position);root.quaternion.copy(s.quaternion);root.visible=s.visible;}
@@ -72,6 +72,7 @@ export class SchoolNarrative {
   if(this.instrument)this.instrument.mesh.visible=this.floor===2&&!this.school.inspecting;
  }
  updateActors(dt,{dialogueOpen=false,speaker='',active=false,playerSpeed=0}={}){
+  if(this.spatial){this.spatial.present(0,dialogueOpen);return;}
   if(!this.active)return;const p=this.getProgress(),player=(this.school.player||this.living.player).position,current=this.adventure.current,obstacles=this.school.navigation.movementObstacles(this.floor),others=this.living.actors.filter(a=>ACTOR_ROUTES[a.definition.id]?.floor===this.floor).map(a=>a.agent);this.shadowStates ||= new WeakMap();
   for(const {actor} of this.actorSnapshots){const id=actor.definition.id,floor=ACTOR_ROUTES[id].floor,shown=floor===this.floor&&!this.school.inspecting,agent=actor.agent,root=actor.character.root;
    const view=schoolActorPresentation({id,floor,currentFloor:this.floor,distance:Math.hypot(agent.position.x-player.x,agent.position.z-player.z),quality:this.school.quality,inspection:this.school.inspecting});

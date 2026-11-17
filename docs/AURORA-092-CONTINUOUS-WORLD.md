@@ -19,3 +19,11 @@ A proposta inicial no corredor foi descartada antes da entrega. O proprietário 
 Segundo piso: Sala B passa de Z 5..12 para 5.5..12; banheiro masculino vai para -8..-4.25; banheiro feminino para -4.25..-0.5; sala de escadas passa para -0.5..5.5. Os quatro ambientes mantêm seus IDs e funções, com paredes, portas, pisos e mobiliário remapeados integralmente. A sala de ciências, os ambientes da direita, os corredores e a arquitetura do térreo não são deslocados. A matriz JSON original permanece intacta; a adaptação é explícita no carregamento e não deixa partes de cômodos antigos.
 
 M2 validado em navegador: subida pelos dois lances de cada piso, parada/inversão, reload em uma altura intermediária preservada, chegada ao salão e descida física pelos mesmos lances até o térreo. Duas capturas reais registradas. O teste usa somente teclas e leitura de diagnóstico, sem API de teletransporte. O controlador antigo de patamares não está disponível no modo físico.
+
+## M3 — atores e navegação
+
+Um único coordenador atualiza os seis atores já existentes. Não cria Character, RoutineAgent, clone de rig ou listener. A posição canônica é mundial; agent.position é apenas a projeção no referencial usado pela UI atual. Entrada/saída não substitui estado nem retorna o NPC à posição anterior. Rotas pessoais passam por campus, recepção, corredores, biblioteca, ciência e salão; destinos verticais usam o mesmo U físico. O A* existente ganhou malha opcional de 0.5 para portas e patamares. Planejamento é escalonado e o grafo reutilizado, sem A* por ator por frame. Uma reserva por escadaria evita encontros frontais; obstáculos bloqueiam/replanejam, nunca reposicionam o ator.
+
+O domínio opcional living.spatialActors preserva XYZ, cursor, tempo e direção; saves antigos usam os spawns/posições existentes na primeira migração. Portões consideram jogador e NPCs, inclusive quando o jogador está em outro piso. Cenas mantêm suas falas e poses mas não podem reposicionar personagens para uma marca de encenação.
+
+Validação M3: testes unitários percorreram campus → salão → descida com continuidade de Y e mesma instância; os três testes de navegador de entrada, subida, descida e retomada passaram. Capturas reais de Davi subindo/descendo foram mostradas no chat. Teste adicional da entrada com jogador longe do portão será incluído na revisão final.

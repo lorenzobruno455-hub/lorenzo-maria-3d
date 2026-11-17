@@ -1,0 +1,2 @@
+import{BOUNDS}from'./physics.js';
+export function validateSpatialActors(raw){const out={};if(!raw||typeof raw!=='object')return out;for(const id of['maria','bia','caio','helena','davi','lia']){const p=raw[id];if(!p||![p.x,p.y,p.z].every(Number.isFinite)||p.x<BOUNDS.minX||p.x>BOUNDS.maxX||p.z<BOUNDS.minZ||p.z>BOUNDS.maxZ||p.y<-.1||p.y>7.25)continue;out[id]={x:p.x,y:p.y,z:p.z,index:Number.isInteger(p.index)&&p.index>=0?p.index%3:0,timer:Number.isFinite(p.timer)?Math.max(0,Math.min(60,p.timer)):0,rotation:Number.isFinite(p.rotation)?p.rotation:0};}return out;}

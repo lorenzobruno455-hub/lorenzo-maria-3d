@@ -41,6 +41,10 @@ export class ContinuousSchool extends SchoolVisit{
   const distance=moveOnSurfaces(local,{x:end.x-local.x,z:end.z-local.z},{inside:p=>Math.abs(p.x)<11.28&&Math.abs(p.z)<19.28,move:moveWithCollisions,obstacles:p=>this.bodyObstacles(p),ready:(f,y)=>this.leases.has(f)||y<walkY(f)-1.7});
   const world=schoolPointToWorld(local,this.rotation);Object.assign(position,{x:world.x,y:local.y,z:world.z});return distance;
  }
+ waypoint(target){if(!target)return target;
+  if(this.active){if(Number.isInteger(target.floor)&&target.floor!==this.floor){const d=target.floor>this.floor?this.floor+1:this.floor-1,s=this.navigation.targets(this.floor).find(s=>s.destination===d);return s?{...s,name:`${s.label} · ${target.name}`}:target;}if(this.floor===0&&(Math.abs(target.x)>11.28||Math.abs(target.z)>19.3))return{x:10.1,z:-5.5,floor:0,name:`Saia pela recepção · ${target.name}`};}
+  else{const p=schoolPointToLocal(target,this.rotation);if(Math.abs(p.x)<11.28&&Math.abs(p.z)<19.3)return{...schoolPointToWorld({x:12,z:-5.5},this.rotation),name:`Entre pela recepção · ${target.name}`};}return target;
+ }
  walkHeight(){return this.player.position.y;}
  targets(){return[];}
  async useStair(){return false;}
@@ -62,7 +66,7 @@ export class ContinuousSchool extends SchoolVisit{
  activate(){
   if(this.active)return;this.legacy={visibility:this.legacyRoots.map(r=>[r,r.visible])};this.active=true;this.floor=0;this.view=0;this.inspecting=false;this.group.visible=true;
   changeFrame(this.player,this.group,this.follow,this.origin);for(const n of this.frameNodes)this.group.attach(n);
-  this.narrative?.enter();this.follow.obstacles=this.cameraObstacles();this.showFloors();this.capture();this.onChange({preserveInput:true});
+  this.narrative?.enter();this.onFrameChange?.();this.follow.obstacles=this.cameraObstacles();this.showFloors();this.capture();this.onChange({preserveInput:true});
  }
  exit({recover=false}={}){
   // Normal travel still requires the physical door. Recovery is an explicit
@@ -70,7 +74,7 @@ export class ContinuousSchool extends SchoolVisit{
   if(!recover&&(!this.active||this.floor!==0||!this.outsidePortal()||this.inspecting))return false;
   if(recover){++this.token;this.loading=false;}
   if(this.active){this.capture();this.narrative?.leave();changeFrame(this.player,this.scene,this.follow,{x:-this.origin.x,z:-this.origin.z});for(const n of this.frameNodes)this.scene.attach(n);}
-  this.active=false;this.inspecting=false;this.getState().active=false;this.follow.obstacles=this.world.occluders;this.follow.focusObject=null;this.follow.interiorDistance=null;this.restoreCampus();this.showFloors();this.onChange({preserveInput:true,deferSave:recover});return true;
+  this.active=false;this.inspecting=false;this.spatial?.present();this.onFrameChange?.();this.getState().active=false;this.follow.obstacles=this.world.occluders;this.follow.focusObject=null;this.follow.interiorDistance=null;this.restoreCampus();this.showFloors();this.onChange({preserveInput:true,deferSave:recover});return true;
  }
  move(delta){
   if(this.inspecting)return 0;const p=schoolPointToWorld(this.player.position,this.rotation);p.y=this.player.position.y;
@@ -79,8 +83,10 @@ export class ContinuousSchool extends SchoolVisit{
  }
  tick(dt,time){
   const p=this.player.getWorldPosition(new THREE.Vector3()),local=schoolPointToLocal(p,this.rotation),entrances=this.threeGates?this.connection.access.gates.filter(g=>g.id!=='court'):[ENTRANCE],near=Math.min(...entrances.map(g=>Math.hypot(p.x-g.x,p.z-g.z)));this.detailNear=near<15;this.entranceDistance=near;
-  if(!this.active&&!this.loading&&near<18&&!this.leases.has(0)&&!this.prefetching&&time>=this.retryAt){this.prefetching=true;void this.ensureFloor(0).catch(()=>{this.retryAt=time+5;this.onStatus('Não foi possível carregar São Jorge. Aproxime-se novamente para tentar.');}).finally(()=>{this.prefetching=false;this.showFloors();});}
-  if(this.threeGates)this.connection.updateGates(p,this.leases.has(0));else this.connection.door.open=near<5&&this.leases.has(0);
+  const actorNear=(this.spatial?.positions||[]).some(a=>entrances.some(g=>Math.hypot(a.x-g.x,a.z-g.z)<18));
+  this.spatial?.openDoors();
+  if(!this.loading&&(near<18||actorNear)&&!this.leases.has(0)&&!this.prefetching&&time>=this.retryAt){this.prefetching=true;void this.ensureFloor(0).catch(()=>{this.retryAt=time+5;this.onStatus('Não foi possível carregar São Jorge. Aproxime-se novamente para tentar.');}).finally(()=>{this.prefetching=false;this.showFloors();});}
+  if(this.threeGates)this.connection.updateGates([p,...(this.spatial?.positions||[])],this.leases.has(0));else this.connection.door.open=near<5&&this.leases.has(0);
   if(!this.active&&this.leases.has(0)&&Math.abs(local.x)<10.7&&local.z<18.88&&local.z>-18.8)this.activate();
   if(this.active&&this.floor===0&&this.outsidePortal())this.exit();
   if(this.active&&local.x< -1.2&&local.z>-.8&&local.z<5.8){const flight=stairAt(this.player.position),floors=flight===null?[this.floor,Math.min(2,this.floor+1)]:[flight,flight+1];for(const i of floors)if(!this.leases.has(i)&&!this.pending.has(i))void this.ensureFloor(i).catch(()=>this.onStatus('Piso ainda indisponível; aguarde no patamar.'));}
