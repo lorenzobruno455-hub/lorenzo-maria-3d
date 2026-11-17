@@ -4,7 +4,7 @@ import { clamp, cameraFraction } from './physics.js';
 export class FollowCamera {
   constructor(camera, obstacles, yaw = 0, pitch = .38) {
     this.camera = camera; this.obstacles = obstacles; this.yaw = yaw; this.pitch = pitch;
-    this.probe = new THREE.Vector3(); this.distance = 7; this.actualDistance = 7; this.focus = new THREE.Vector3(); this.desired = new THREE.Vector3(); this.position = new THREE.Vector3(); this.initialized = false;
+    this.probe = new THREE.Vector3(); this.distance = 8; this.actualDistance = 8; this.focus = new THREE.Vector3(); this.desired = new THREE.Vector3(); this.position = new THREE.Vector3(); this.initialized = false;
   }
   rotate(x, y) { this.yaw = (this.yaw + x) % (Math.PI * 2); this.pitch = clamp(this.pitch + y, .08, 1.15); }
   update(player, dt, snap = false) {

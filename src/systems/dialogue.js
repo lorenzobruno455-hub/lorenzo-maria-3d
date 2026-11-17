@@ -7,6 +7,7 @@ export class Dialogue {
     this.tag = document.createElement('small'); this.tag.className = 'dialogue-source'; speaker.after(this.tag);
     const speed = document.createElement('button'); speed.id = 'dialogue-speed'; speed.textContent = 'Mostrar texto'; next.after(speed); speed.onclick = () => this.reveal();
     const exit = document.createElement('button'); exit.id = 'dialogue-exit'; exit.textContent = 'Encerrar conversa'; speed.after(exit); exit.onclick = () => this.close(false);
+    this.actions=document.createElement('div');this.actions.className='dialogue-actions';next.before(this.actions);this.actions.append(next,speed,exit);speech.tabIndex=0;
     this.onKey = e => { if (this.open && e.key === ' ' && !/BUTTON|INPUT|SELECT/.test(document.activeElement?.tagName)) { e.preventDefault(); this.reveal(); } };
     document.addEventListener('keydown', this.onKey);
   }
