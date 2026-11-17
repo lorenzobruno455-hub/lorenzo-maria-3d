@@ -176,7 +176,7 @@ export class LivingSchool {
     if(this.location)return this.location.eventGoal();
     const e = eventObjective(this.state); if (!e) return null;
     const actor = this.actors.find(a => a.definition.id === e.npc);
-    return { ...(e.returnToNPC || e.id === 'physics-question' ? actor.agent.position : e.position), name: e.label };
+    return { ...(e.returnToNPC || e.id === 'physics-question' ? actor.agent.position : e.position), id:e.returnToNPC||e.id==='physics-question'?e.npc:e.id,name: e.label };
   }
   renderPage(content, page) {
     if (page === 'history') {

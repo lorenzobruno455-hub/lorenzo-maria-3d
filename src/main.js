@@ -1,3 +1,4 @@
+import{campusObjective}from'./systems/objective-placement.js';
 import{createSportsCourt}from'./systems/sports-court.js';
 import {createPerformanceProbe} from './systems/performance-probe.js';
 import {ContinuousActors} from './systems/continuous-actors.js';
@@ -118,7 +119,7 @@ document.addEventListener('keydown', e => {
   if (e.key !== 'Tab') return;
   const modal = paused ? $('pause') : adventure?.cutscenes.active ? $('cinematic') : panelOpen ? $('story-panel') : paused ? $('pause') : dialog ? $('dialog') : !started ? $('welcome') : null;
   if (!modal) return;
-  const buttons = [...modal.querySelectorAll('button,input,select')].filter(el => !el.disabled && el.getClientRects().length);
+  const buttons = [...modal.querySelectorAll('button,input,select,[tabindex="0"]')].filter(el => !el.disabled && el.getClientRects().length);
   const first = buttons[0], last = buttons.at(-1);
   if (e.shiftKey && (document.activeElement === first || !modal.contains(document.activeElement))) { e.preventDefault(); last?.focus(); }
   else if (!e.shiftKey && (document.activeElement === last || !modal.contains(document.activeElement))) { e.preventDefault(); first?.focus(); }
@@ -126,10 +127,10 @@ document.addEventListener('keydown', e => {
 function nearestTarget() {
  const pos=player.position;interactions.entries.clear();
  const add=(o,kind,distance,extra={})=>interactions.register({id:`${kind}:${o.id}`,object:{...o,kind,original:o},distance,height:o.height??(o.mesh?new THREE.Box3().setFromObject(o.mesh).max.y+.04:1.4),priority:kind==='seat'?-1.2:['item','memory','game','album','memory-book'].includes(kind)?.5:0,...extra,action:t=>handleInteraction({...t,ref:o})});
- expansion?.targets().forEach(o=>add(o,'expansion',2.6,{height:o.height,priority:4}));
+ expansion?.targets().forEach(o=>add(o,'expansion',2.6,{height:o.height,priority:expansion.current?6:4}));
  if(school?.active){
   school.targets().forEach(o=>add(o,'school-stair',2.2));
-  school.narrative.targets().forEach(o=>add(o.original||o,o.kind||'item',o.kind==='adventure'?2.6:o.kind==='memory-book'?1.1:2.2,{height:o.height??school.navigation.floor(school.floor).walkY+1.5,priority:narrativePriority(o.kind)}));
+  school.narrative.targets().forEach(o=>add(o.original||o,o.kind||'item',o.kind==='adventure'?2.6:o.kind==='memory-book'?1.1:2.2,{height:o.height??school.navigation.floor(school.floor).walkY+1.5,priority:o.kind==='memory'&&!progress.campaign.memories.includes(o.id)?5:narrativePriority(o.kind)}));
   const t=interactions.nearest(pos);return t?{...t,ref:t.original}:null;
  }
  sports?.targets().forEach(o=>add(o,'court',2.8,{height:o.height}));
@@ -254,14 +255,14 @@ function updateHUD() {
   document.querySelector('[role=progressbar]').setAttribute('aria-valuemax', total);
   $('mission').querySelector('.eyebrow').textContent = expansionQuest?'EXPANSÃO NARRATIVA · FICÇÃO':living?.free ? 'COLÉGIO AURORA · EXPLORAÇÃO LIVRE' : progress.stage === 2 ? `MEMÓRIAS · CAPÍTULO ${Math.min(6, progress.campaign.memories.length + 1)}/6` : 'CAPÍTULO 01 / PRIMEIRO SINAL';
 }
-function nextObjective(){let next=rawNextObjective();if(!school.active&&next){const step=adventure.current?.step,p=step&&!['maria','bia','davi'].includes(step.target)?school.narrative.point(step.target):next.id&&next.id!=='photo'?school.narrative.point(next.id):progress.stage===2&&!living.free&&!step?school.narrative.visitPoint():null;if(p)next={...next,...schoolPointToWorld(p,school.rotation)};}return school.waypoint(next);}
+function nextObjective(){const next=rawNextObjective();return school.waypoint(school.active?next:campusObjective(next,{expansion:!!expansion?.goal(),adventureStep:adventure.current?.step,point:id=>school.narrative.point(id),rotation:school.rotation}));}
 function rawNextObjective() {
   if(expansion?.goal())return expansion.goal();
   if(school?.active)return school.narrative.goal();
   if(adventure?.goal())return adventure.goal();
   if (story?.goal()) return story.goal();
   if (living?.free) return null;
-  if (progress.stage !== 1 || progress.collected.length === 3) return { ...living.mariaPosition, name: 'MARIA' };
+  if (progress.stage !== 1 || progress.collected.length === 3) return { ...living.mariaPosition,id:'maria',name: 'MARIA' };
   return world.collectibles.filter(c => !c.taken).sort((a, b) => Math.hypot(a.x - player.position.x, a.z - player.position.z) - Math.hypot(b.x - player.position.x, b.z - player.position.z))[0];
 }
 function updateMarker() {
@@ -366,7 +367,7 @@ function animate(now) {
   if(previousBusy!==!!adventure?.busy){previousBusy=!!adventure?.busy;controls.clear();syncModal();}
   expansion?.update(paused?0:dt);
   interactionAccent.update(active()&&!school?.inspecting?target:null,time,{reducedMotion:motionPreference.matches,floorY:player.position.y});
-  school.narrative.hideCampusDuplicates();camera.updateMatrixWorld();
+  school.narrative.hideCampusDuplicates();performanceProbe?.applyView(camera);camera.updateMatrixWorld();
   ink.update(settings.quality,player.position,camera,{width:innerWidth,height:innerHeight});
   hudTimer += dt; if (hudTimer > .08) {
     const hudAt=performanceProbe?performance.now():0;updateHUD(); updateTarget(); updateMarker();

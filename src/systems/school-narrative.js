@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import{schoolPointToWorld}from'./world-coordinates.js';
 import {schoolActorPresentation} from './school-presentation.js';
 import {NARRATIVE_POINTS as points,ACTOR_ROUTES,bookPoint,sameFloor,narrativeWaypoint} from './school-narrative-map.js';
 import {nextStep,currentChapter,memories} from './quests.js';
@@ -30,7 +31,7 @@ export class SchoolNarrative {
  }
  enter(){
   if(this.active)return;this.active=true;this.shadowStates=new WeakMap();this.group.visible=true;this.borrowed=[];this.actorSnapshots=[];
-  this.oldTracked=this.story.tracked;this.story.tracked=null;this.story.location=this;this.living.location=this;this.adventure.location=this;
+  this.oldTracked=this.story.tracked;if(this.spatial){const p=points[this.oldTracked?.id];if(p)this.story.tracked={...p,id:this.oldTracked.id,name:this.oldTracked.name};}else this.story.tracked=null;this.story.location=this;this.living.location=this;this.adventure.location=this;
   try{
    for(const o of this.story.world.objects){const p=o.kind==='memory-book'?bookPoint(this.bookObjects().indexOf(o)):points[o.id];if(p)this.moveObject(o,p,o.kind==='memory-book'?.54:.6);}
    for(const o of this.world.collectibles)if(o.id!=='photo')this.moveObject(o,points[o.id],.6);
@@ -54,7 +55,7 @@ export class SchoolNarrative {
  }
  capture(){if(this.spatial){this.spatial.capture();return;}if(!this.active)return;this.school.getState().actors=Object.fromEntries(this.living.actors.filter(a=>ACTOR_ROUTES[a.definition.id]).map(a=>[a.definition.id,{...a.agent.position,index:a.agent.index,rotation:a.agent.rotation}]));}
  leave(){
-  if(!this.active)return;this.capture();this.active=false;this.story.focus=null;this.story.seat=null;this.story.tracked=this.oldTracked;this.story.location=null;this.living.location=null;this.adventure.location=null;this.living.speakingId=null;
+  if(!this.active)return;this.capture();this.active=false;this.story.focus=null;this.story.seat=null;this.story.tracked=this.spatial?(this.story.tracked?schoolPointToWorld(this.story.tracked,this.school.rotation):null):this.oldTracked;this.story.location=null;this.living.location=null;this.adventure.location=null;this.living.speakingId=null;
   for(const s of this.actorSnapshots){Object.assign(s.actor.agent,s.agent);const root=s.actor.character.root;s.parent?.add(root);root.position.copy(s.position);root.quaternion.copy(s.quaternion);root.visible=s.visible;}
   for(const {object,values,mesh,snapshot} of this.borrowed){for(const[k,s]of Object.entries(values)){if(s.had)object[k]=s.value;else delete object[k];}if(mesh){snapshot.parent?.add(mesh);mesh.position.copy(snapshot.position);mesh.quaternion.copy(snapshot.quaternion);mesh.scale.copy(snapshot.scale);mesh.visible=snapshot.visible;}}
   this.instrument?.mesh.removeFromParent();this.instrument=null;this.group.visible=false;this.borrowed=[];this.actorSnapshots=[];
@@ -115,6 +116,7 @@ export class SchoolNarrative {
   if(!this.active)return null;
   let target=this.adventure.goal();const p=this.getProgress();
   if(!target)target=p.stage<2?(p.stage!==1||p.collected.length===3?this.actorPoint('maria'):this.world.collectibles.filter(o=>!o.taken).sort((a,b)=>Math.abs(a.floor-this.floor)-Math.abs(b.floor-this.floor))[0]):this.storyGoal();
+  if(target?.id==='photo'&&!Number.isInteger(target.floor))target={floor:0,x:10.1,z:-5.5,name:'Saia pela recepção · fotografia no jardim'};
   return narrativeWaypoint(this.school.navigation,this.floor,target);
  }
  sit(){const p=points['reflection-seat'];this.story.seat={height:this.school.navigation.floor(p.floor).baseY+p.top,exit:{x:this.school.player.position.x,z:this.school.player.position.z}};this.school.player.position.set(p.x,this.story.seat.height,p.z);this.school.player.rotation.y=0;}

@@ -55,7 +55,7 @@ export class NarrativeExpansion {
   }
   const p=EXPANSION_POINTS[id];if(!p||p.outside===true&&this.school.active||p.outside!==true&&!this.school.active)return null;return p;
  }
- rawTargets(){const c=this.current;if(c)return c.task.type==='collect'?c.task.targets.filter(id=>!c.quest.collected.includes(id)):[c.task.target];return EXPANSION.filter(m=>!this.state.quests[m.id]?.completed&&(!m.requiresMemories||this.getProgress().campaign.memories.length===6)).map(m=>m.tasks[0].target);}
+ rawTargets(){if(this.getProgress().stage<2)return[];const c=this.current;if(c)return c.task.type==='collect'?c.task.targets.filter(id=>!c.quest.collected.includes(id)):[c.task.target];return EXPANSION.filter(m=>!this.state.quests[m.id]?.completed&&(!m.requiresMemories||this.getProgress().campaign.memories.length===6)).map(m=>m.tasks[0].target);}
  ensureProp(id,p){
   if(['maria','bia','davi'].includes(id))return null;
   const key=id;
