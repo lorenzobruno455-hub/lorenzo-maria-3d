@@ -51,14 +51,14 @@ export class NarrativeExpansion {
   if(id.startsWith('archive-symbol-')){
    const i=Number(id.split('-').at(-1))-1;
    const source=NARRATIVE_POINTS[`memory-${i+1}`];
-   return this.school.active?{...source,x:source.x+.35,name:`Símbolo ${SYMBOLS[i]} · ${memories[i].title}`}:{...memories[i].position,floor:null,top:.05,name:`Símbolo ${SYMBOLS[i]} · ${memories[i].title}`};
+   return this.school.active?{...source,x:source.x+.35,name:`Símbolo ${SYMBOLS[i]} · ${memories[i].title}`}:null;
   }
   const p=EXPANSION_POINTS[id];if(!p||p.outside===true&&this.school.active||p.outside!==true&&!this.school.active)return null;return p;
  }
  rawTargets(){const c=this.current;if(c)return c.task.type==='collect'?c.task.targets.filter(id=>!c.quest.collected.includes(id)):[c.task.target];return EXPANSION.filter(m=>!this.state.quests[m.id]?.completed&&(!m.requiresMemories||this.getProgress().campaign.memories.length===6)).map(m=>m.tasks[0].target);}
  ensureProp(id,p){
   if(['maria','bia','davi'].includes(id))return null;
-  const key=`${this.school.active?'school':'campus'}:${id}`;
+  const key=id;
   if(!this.props.has(key)){
    const group=new THREE.Group(),r=this.world.resources;
    const shell=r.mesh('box','#101426',[.5,.07,.34]),pages=r.mesh('box','#fff5dc',[.44,.025,.28]),cover=r.mesh('box',id.includes('radio')?'#28e7ef':id.includes('letter')?'#ff5b96':'#ffdc31',[.49,.018,.33]);
