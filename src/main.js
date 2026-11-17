@@ -1,3 +1,4 @@
+import {createPerformanceProbe} from './systems/performance-probe.js';
 import {ContinuousActors} from './systems/continuous-actors.js';
 import {NarrativeExpansion} from './systems/narrative-expansion.js';
 import {createComicOverdriveP0} from './systems/comic-overdrive-p0.js';
@@ -48,7 +49,7 @@ let storage; try { storage = localStorage; } catch { storage = null; }
 const saved = loadSave(storage), settings = saved.settings;
 let progress = saved.progress, started = false, paused = false, dialog = false, dialogDone = null, target = null;
 let adventure, previousBusy=false, scenePausedBeforeGlobal=false;
-let school, expansion, spatialActors;
+let school, expansion, spatialActors, performanceProbe;
 let living, story, dialogues, panelOpen = false, needsRender = true;
 let controls, frame = 0, disposed = false, interactionTime = 0, toastTime = 0, saveTimer = 0, lastHUD = '', lastTarget = '', lastLocation = '';
 const scene = new THREE.Scene(); scene.background = new THREE.Color('#90d3eb'); scene.fog = new THREE.Fog('#90d3eb', 55, 115);
@@ -89,7 +90,7 @@ function save() {
   else {progress.position = { x: player.position.x, z: player.position.z }; progress.yaw = follow.yaw; progress.pitch = follow.pitch;}
   progress.doors = world.doors.filter(d=>!d.transient).map(d => d.open);
   spatialActors?.capture();
-  const ok = saveProgress(storage, progress, settings);
+  const saveAt=performanceProbe?performance.now():0;const ok = saveProgress(storage, progress, settings);performanceProbe?.record('save',performance.now()-saveAt);
   $('save-status').textContent = ok ? 'Progresso salvo neste aparelho' : 'Salvamento indisponível neste navegador'; return ok;
 }
 function syncModal() {
@@ -314,10 +315,12 @@ Promise.allSettled(heroLoads).then(() => {
 });
 function uiSound(event){if(event.target.closest?.('button,select')&&!event.target.closest('[disabled]'))audio.play('ui');}
 document.addEventListener('click',uiSound);
+performanceProbe=createPerformanceProbe(new URLSearchParams(location.search).has('profile'));if(performanceProbe)window.auroraPerformance.state=getGameState;
+for(const [object,key,label]of [[renderer,'render','render'],[spatialActors,'update','NPC.update'],[spatialActors?.planner,'horizontal','Astar'],[school,'moveBodyWorld','collision'],[school,'ensureFloor','floor.request'],[world.resources,'geometry','geometry.request'],[world.resources,'material','material.request'],[quality,'resize','resolution.change'],[audio,'update','audio.update']])performanceProbe?.wrap(object,key,label);
 let last = performance.now(), time = 0, hudTimer = 0;
 function animate(now) {
   if (disposed || document.hidden) { frame = 0; return; }
-  frame = requestAnimationFrame(animate); const rawDT = Math.max(.001, (now - last) / 1000), dt = Math.min(rawDT, .1); last = now;
+  frame = requestAnimationFrame(animate); const rawDT = Math.max(.001, (now - last) / 1000), dt = Math.min(rawDT, .1); last = now;performanceProbe?.begin(rawDT*1000);
   let speed = 0, movementHeading;
   if (active()) {
     time += dt; const input = controls.sample(dt); follow.rotate(input.lookX, input.lookY);
@@ -362,14 +365,14 @@ function animate(now) {
   camera.updateMatrixWorld();
   ink.update(settings.quality,player.position,camera,{width:innerWidth,height:innerHeight});
   hudTimer += dt; if (hudTimer > .08) {
-    updateHUD(); updateTarget(); updateMarker();
+    const hudAt=performanceProbe?performance.now():0;updateHUD(); updateTarget(); updateMarker();
     const zone = school?.active ? `${school.navigation.floor(school.floor).label} · ${school.room()?.name||'Corredor'} · SÃO JORGE` : player.position.x>38?'CAMINHO DO SÃO JORGE': player.position.z < -18 && Math.abs(player.position.x) < 6 ? 'CANTINA' : player.position.x < -28 && player.position.z < 10 ? 'QUADRA' : player.position.x > 28 && player.position.z < -6 ? 'SALA DE MÚSICA' : player.position.z < -6 && Math.abs(player.position.x) > 6 ? (player.position.x < 0 ? 'SALA DE LITERATURA' : 'BIBLIOTECA') : player.position.z > 17 ? 'JARDIM DA ESCOLA' : 'PÁTIO CENTRAL';
-    if (lastLocation !== zone) { $('location').firstChild.textContent = `${zone} `; lastLocation = zone; } hudTimer = 0;
+    if (lastLocation !== zone) { $('location').firstChild.textContent = `${zone} `; lastLocation = zone; } hudTimer = 0;performanceProbe?.record('HUD',performance.now()-hudAt);
   }
   school.presentWorld();if(schoolExterior)schoolExterior.group.visible=!school.active||(!school.inspecting&&school.floor===0&&school.portalDistance()<5);overdriveP0?.update(camera,settings.quality,renderer.getPixelRatio());
   // Frozen pause/welcome scenes need only redraw on resize, settings or camera settling.
   if (active() || dialog || adventure?.busy || (panelOpen && started && story?.game) || needsRender) { renderer.render(scene, camera); needsRender = false; }
-  audio.update?.(); if (active()) quality.sample(rawDT);
+  audio.update?.(); if (active()) quality.sample(rawDT);performanceProbe?.end();
 }
 
 addEventListener('resize', () => needsRender = true);
