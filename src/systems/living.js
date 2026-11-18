@@ -98,6 +98,7 @@ export class LivingSchool {
     if (active && playerSpeed > .15) { this.lastStepSound += dt * playerSpeed; if (this.lastStepSound > 1.4) { this.lastStepSound = 0; this.audio.play('step'); } }
   }
   interaction(target) {
+    if(this.journey&&['lost-book','familiar-music'].includes(target.id)){if(!this.journey.allowed('adventure',target.id))return;if(!legacyQuestOwns(this.getProgress(),target.id)){if(this.adventure.current?.id===target.id)return this.adventure.handle(target);return;}}
     if (target.kind === 'npc') return this.npc(target.id);
     if (target.id === 'canteen') return this.canteen();
     if(target.id==='ball'&&this.sports){const p=this.player.getWorldPosition(this.ballPlayer||(this.ballPlayer=this.player.position.clone()));this.sports.kick(p);return;}
@@ -113,6 +114,7 @@ export class LivingSchool {
     }
   }
   npc(id) {
+    if(this.journey)return this.journey.npc(id);
     const npc = NPC_DATA.find(n => n.id === id); if (!npc) return;
     const event = EVENT_DATA.find(e => e.npc === id), state = event && this.state.events[event.id];
     const choices = [...(this.script?.conversationOptions(id)||[]), { label: 'Como está o dia?', action: () => this.say(id, [line(npc.name.toUpperCase(), npc.lines[1])], { done: () => { befriend(this.state, id, `conversation:${id}`); this.changed('Conversa registrada.'); } }) } ];
@@ -147,9 +149,9 @@ export class LivingSchool {
   explainPhysics(choice) {
     this.say('helena', [line('PROF. HELENA', `${choice === 'together' ? 'Boa hipótese!' : 'Parece intuitivo, mas vamos testar essa ideia.'} Sem resistência do ar, ambas têm a mesma aceleração gravitacional. Por isso chegam juntas. Com ar, forma e resistência também importam.`)], { done: () => this.completeEvent('physics-question') });
   }
-  finishEvent(event) {
+  finishEvent(event,{replay=false}={}) {
     const message = event.id === 'lost-book' ? 'Você encontrou! Obrigada por trazer de volta. Agora posso terminar o capítulo — e você ganhou uma parceira para conversar sobre livros.' : 'Você percebeu as pausas! É nelas que a melodia respira. Obrigado por compartilhar a descoberta; quando quiser, o jogo de ritmo está no pavilhão.';
-    this.say(event.npc, [line(event.npc === 'bia' ? 'BIA' : 'DAVI', message)], { done: () => this.completeEvent(event.id) });
+    this.say(event.npc, [line(event.npc === 'bia' ? 'BIA' : 'DAVI', message)], { done: replay ? null : () => this.completeEvent(event.id) });
   }
   completeEvent(id) {
     if (eventAction(this.state, id, 'complete')) { const event = EVENT_DATA.find(e => e.id === id); this.audio.setMood('completion'); this.changed(`★ ${event.achievement} · encontro concluído`); }

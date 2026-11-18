@@ -34,6 +34,7 @@ export class DefinitiveScript{
  get current(){const a=this.state.active;return a?groupScenes(a.group)[a.index]:null;}
  stops(){const s=this.current;if(!s)return[];const done=this.state.collected[s.id]||[];return sceneStops(s.id).filter(p=>!done.includes(p.stopId));}
  start(group,replay=false){
+  if(this.journey)return this.journey.openScript(group,replay);
   if(this.state.active){this.story.close();this.story.start();this.notify('Roteiro retomado · siga o objetivo.');return false;}
   const p=this.getProgress(),n=Number(group.split('-')[1]);
   if(group.startsWith('chapter-')&&(p.stage<2||n>p.campaign.memories.length+1)){this.notify('Conclua o prólogo e o capítulo anterior.');return false;}
@@ -48,7 +49,7 @@ export class DefinitiveScript{
   if(p.outside?this.school.active:!this.school.active||p.floor!==this.school.floor)return[];
   return[{...p,x:(p.approach||p).x,z:(p.approach||p).z,id:`script:${s.id}`,kind:'script',height:(p.outside?0:this.school.navigation.floor(p.floor).baseY)+(p.top??.8)+.25,name:`${s.title} · ${p.name}`}];
  }
- goal(){const s=this.current,p=this.stops()[0];if(!s||!p)return null;const target={...p,name:`Roteiro · ${s.title} · ${p.name}`};
+ goal(){const s=this.current,p=this.stops()[0];if(!s||!p)return null;const target={...p,name:`${s.title} · ${p.name}`};
   if(p.outside&&!this.school.active)return target;
   if(p.outside)return narrativeWaypoint(this.school.navigation,this.school.floor,{floor:0,x:10,z:-5.5,name:`${s.title} · saia a pé para o jardim`});
   if(!this.school.active)return{...this.school.connection.access.gates.find(g=>g.id==='reception'),name:`${s.title} · entre na recepção a pé`};
@@ -108,8 +109,8 @@ export class DefinitiveScript{
   if(this.state.active){this.save();this.notify(this.current.title);return;}
   // Commit scene, canonical memory and reward together before the first write.
   DefinitiveScript.prototype.completeChapter.call(this,group,replay);
-  if(group==='epilogue')this.living.setMode('free');this.save();
-  this.notify(group==='epilogue'?'A próxima página · exploração livre disponível.':'Página guardada · roteiro concluído.');
+  if(group==='epilogue'&&!replay)this.living.setMode('free');if(replay&&this.journey){this.journey.endReview();return;}this.save();
+  this.notify(group==='epilogue'?'A próxima página · exploração livre disponível.':'Página guardada · capítulo concluído.');
   if(group==='prologue'&&!replay&&!this.recovering&&this.getProgress().stage===2&&this.getProgress().adventure.quests['first-encounter'].status==='available')this.adventure.start('first-encounter');
  }
  openReflection(message=''){
@@ -127,16 +128,16 @@ export class DefinitiveScript{
  }
  rhythmComplete(){const id=this.awaitRhythm;if(!id||this.current?.id!==id)return false;this.awaitRhythm=null;this.state.puzzles[id]=['complete'];this.collectStop(id);return true;}
  readBook(id,origin){const book=corpus.books.find(b=>b.memoryId===id);if(!book)return;const index=memories.findIndex(m=>m.id===id);if(origin)this.story.focus={x:origin.x,z:origin.z,y:(origin.height||1.1)+.4,distance:1.8,yaw:0,pitch:.65,hidePlayer:true};this.story.dialogue.start([{speaker:'BIBLIOTECA DAS MEMÓRIAS',speakerId:'narrator',text:`${memories[index].date} · ${book.title}`,provenance:index===0?'adapted':'pending_verification'},{speaker:'NARRAÇÃO',speakerId:'narrator',text:book.text,provenance:index===0?'adapted':'pending_verification'}]);}
- talkCategory(category){const list=this.freeConversations('maria'),last=this.getProgress().campaign.lastDialogue[category],pool=list.filter(c=>c.id!==last);const chosen=(pool.length?pool:list)[Math.floor(Math.random()*(pool.length||list.length))];if(!chosen){this.notify('Esta conversa estará disponível depois da fase correspondente da história.');return;}this.story.dialogue.start(chosen.lines.map(l=>({...l,speaker:SPEAKERS[l.speakerId],provenance:l.sourceKind})),{done:()=>{const c=this.getProgress().campaign;c.lastDialogue[category]=chosen.id;c.talks+=chosen.lines.length;if(nextStep(c)?.type==='talk')questEvent(c,'talk');this.story.changed();}});}
+ talkCategory(category){const list=this.freeConversations('maria'),last=this.getProgress().campaign.lastDialogue[category],pool=list.filter(c=>c.id!==last);const chosen=(pool.length?pool:list)[Math.floor(Math.random()*(pool.length||list.length))];if(!chosen){this.notify('Esta conversa estará disponível depois da fase correspondente da história.');return;}this.story.dialogue.start(chosen.lines.map(l=>({...l,speaker:SPEAKERS[l.speakerId],provenance:l.sourceKind})),{done:()=>{const c=this.getProgress().campaign;c.lastDialogue[category]=chosen.id;c.talks+=chosen.lines.length;if(!this.journey&&nextStep(c)?.type==='talk')questEvent(c,'talk');this.story.changed();}});}
  missionLines(id,step){return scriptLines(MISSION_SCENES[`${id}:${step}`]||[]);}
  freeConversations(id){return corpus.conversations.filter(c=>c.lines.some(l=>l.speakerId===id)&&this.conversationAvailable(c));}
  conversationAvailable(c){const p=this.getProgress(),cond=c.condition;return cond.includes('livre')||cond.includes('fase escolar')&&(this.state.completed.includes('CAP01-CENA10')||p.campaign.memories.length>=1)||cond.includes('fase posterior')&&(this.state.completed.includes('CAP01-CENA11')||p.campaign.memories.length>=1)||cond==='epílogo'&&this.state.completed.includes('EP-CENA02')||cond==='fim do jogo'&&this.state.completed.includes('EP-CENA02')||cond.includes('após memória 6')&&p.campaign.memories.length===6||cond.includes('após CAP03')&&p.campaign.memories.includes('memory-3')||cond.includes('após plano')&&p.expansion.quests.plan?.completed||cond.includes('durante AV05')&&p.expansion.active==='letter'||cond.includes('antes AV02')&&p.adventure.quests['lost-book'].status!=='completed'||cond.includes('após AV02')&&p.adventure.quests['lost-book'].status==='completed'||cond.includes('após AV03')&&p.adventure.quests['familiar-music'].status==='completed'||cond.includes('após AV06')&&p.expansion.quests.frequency?.completed;}
  conversationOptions(id){return this.freeConversations(id).map(c=>({label:`Conversa · ${c.id}`,action:()=>this.story.dialogue.start(c.lines.map(l=>({...l,speaker:SPEAKERS[l.speakerId],provenance:l.sourceKind})),{done:()=>{this.getProgress().living.decisions[`script:${c.id}`]='heard';this.save();}})}));}
- renderPage(content,page){if(page==='menu')content.prepend(button('Roteiro definitivo · capítulos e epílogo',()=>this.show()));
+ renderPage(content,page){if(page==='menu'&&!this.journey)content.prepend(button('Roteiro definitivo · capítulos e epílogo',()=>this.show()));
   if(page==='chapters')for(const c of chapters)content.append(button(`${this.getProgress().campaign.memories.includes(`memory-${chapters.indexOf(c)+1}`)?'Rever':'Jogar'} roteiro: ${c.title}`,()=>this.start(c.id,this.getProgress().campaign.memories.includes(`memory-${chapters.indexOf(c)+1}`))));
   if(page==='album'){if(this.state.endingTitle)content.append(node('h3',`DIÁRIO DE BORDO · ${this.state.endingTitle}`));for(const entry of corpus.album){const flags={'ALB-INTRO':'PRO-CENA01','ALB-2023':'CAP01-CENA02','ALB-0607':'CAP01-CENA05','ALB-1908':'CAP01-CENA09','ALB-2008':'CAP01-CENA10','ALB-2025':'CAP02-CENA04','ALB-730':'EP-CENA01','ALB-FINAL':'EP-CENA01'};const allowed=this.state.completed.includes(flags[entry.id]);if(allowed)content.append(node('p',entry.text));}if(this.getProgress().expansion.quests.archive?.completed)content.append(button('Rever epílogo · A próxima página',()=>this.start('epilogue',true)));}
  }
- show(){this.story.show('script');document.getElementById('story-title').textContent='Roteiro definitivo · Diário de Bordo';const c=this.story.content;
+ show(){if(this.journey&&!this.journey.developer)return this.journey.missions();this.story.show('script');document.getElementById('story-title').textContent='Roteiro definitivo · Diário de Bordo';const c=this.story.content;
   c.append(node('p','Cenas dramatizadas e ficção são identificadas. As datas históricas são preservadas; capítulos com lacunas permanecem em revisão.'));
   if(this.current)c.append(node('h3',`Em andamento: ${this.current.title}`),button('Retomar roteiro',()=>{this.story.close();this.story.start();}));
   c.append(button('Prólogo · Uma página em branco',()=>this.start('prologue',this.state.completed.includes('PRO-CENA01'))));

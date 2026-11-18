@@ -18,13 +18,14 @@ export class Story {
     document.getElementById('welcome-free').onclick = () => { this.living.setMode('free'); this.close(); this.start(); };
     document.getElementById('story-close').onclick = () => this.close();
     document.querySelectorAll('[data-story]').forEach(b => b.onclick = () => this.show(b.dataset.story));
-    this.key = e => { if (this.gameReady && this.game instanceof RhythmGame && e.code === 'Space' && !e.repeat) { e.preventDefault(); this.game.hit(); this.audio.play('collect'); } };
+    this.key = e => { if(e.altKey&&e.shiftKey&&e.code==='KeyD')this.journey?.developerPanel(); if (this.gameReady && this.game instanceof RhythmGame && e.code === 'Space' && !e.repeat) { e.preventDefault(); this.game.hit(); this.audio.play('collect'); } };
     document.addEventListener('keydown', this.key);
   }
   get c() { return this.getProgress().campaign; }
   changed() { const achievements = checkAchievements(this.c); this.save(); if (achievements.length) this.notify(`★ ${achievements.map(a => a.name).join(' · ')}`); }
-  close() { this.game = null; this.open = false; this.panel.hidden = true; this.content.replaceChildren(); this.onPanel(false); this.audio.setMood?.('exploration'); }
+  close() { this.content.classList.remove('journey-content');this.game = null; this.open = false; this.panel.hidden = true; this.content.replaceChildren(); this.onPanel(false); this.audio.setMood?.('exploration'); }
   show(name) {
+    if(this.journey?.show(name))return;
     this.game = null; this.open = true; this.panel.hidden = false; this.content.replaceChildren(); this.onPanel(true); this.audio.setMood?.('conversation');
     const title = { menu: 'Memórias de uma história', album: 'Álbum de memórias', chapters: 'Capítulos', inventory: 'Inventário', games: 'Minijogos', achievements: 'Conquistas', letter: 'Para a Maria', campus: 'O Colégio Vivo', history: 'Histórico de conversas' }[name];
     document.getElementById('story-title').textContent = title; this.page = name;
@@ -47,7 +48,7 @@ export class Story {
       this.content.append(el('h3', 'Vales virtuais · sem compras ou transações')); rewards.vouchers.filter(v => this.c.vouchers.includes(v.id)).forEach(v => this.content.append(el('p', `Vale: ${v.name}`)));
       this.content.append(el('h3', `Conquistas · ${Object.keys(this.c.achievements).length}`)); this.content.append(button('Ver conquistas', () => this.show('achievements')));
     } else if (name === 'games') {
-      catalogue.forEach(g => { const card = el('article', undefined, 'story-card'); card.append(el('h3', g.title), el('p', g.playable ? `${g.environment} · atividade disponível no objeto da escola` : 'Planejado · indisponível nesta versão'));
+      catalogue.filter(g=>!this.journey||g.playable).forEach(g => { const card = el('article', undefined, 'story-card'); card.append(el('h3', g.title), el('p', g.playable ? `${g.environment} · atividade disponível no objeto da escola` : 'Planejado · indisponível nesta versão'));
         const result = this.c.results[g.id]; if (result) card.append(el('p', `Melhor pontuação: ${result.score}${result.completed ? ' · concluído' : ''}`));
         if (g.playable) card.append(button('Localizar na escola', () => { this.tracked = (this.location?.gamePosition(g.id)||{ ...g.position, id:g.id,name: g.environment }); this.close(); this.start(); this.notify(`Vá para: ${g.environment}`); })); this.content.append(card); });
     } else if (name === 'achievements') definitions.forEach(a => { const stamp = this.c.achievements[a.id]; const card = el('article', undefined, 'story-card'); card.append(el('h3', `${stamp ? '★' : '☆'} ${a.secret && !stamp ? 'Conquista secreta' : a.name}`), el('p', a.secret && !stamp ? 'Explore a escola.' : a.description), el('small', stamp ? `Obtida: ${new Date(stamp).toLocaleDateString('pt-BR')}` : a.available ? 'Pendente' : 'Indisponível · atividade planejada')); this.content.append(card); });
@@ -59,7 +60,7 @@ export class Story {
   }
   newCampaign() {
     this.content.replaceChildren(el('p', 'Iniciar uma nova campanha? O prólogo e suas configurações serão mantidos; memórias, conquistas e resultados desta campanha serão reiniciados.'));
-    this.content.append(button('Confirmar nova campanha', () => { this.adventure?.reset(); this.getProgress().campaign = freshCampaign();this.getProgress().script=freshScript();this.getProgress().expansion=freshExpansion(); this.living.setMode('campaign'); this.changed(); this.close(); this.start(); }), button('Cancelar', () => this.show('menu')));
+    this.content.append(button('Confirmar nova campanha', () => { this.adventure?.reset(); this.getProgress().campaign = freshCampaign();this.getProgress().script=freshScript();this.getProgress().expansion=freshExpansion();this.getProgress().journey={version:1,suspendedScript:{}}; this.living.setMode('campaign'); this.changed(); this.close(); this.start(); }), button('Cancelar', () => this.show('menu')));
   }
   album() {
     const toolbar = el('div', undefined, 'album-filters'), rarity = el('select'), order = el('select'), date = el('select'); date.setAttribute('aria-label', 'Filtrar por data');
@@ -72,6 +73,7 @@ export class Story {
     toolbar.append(rarity, date, order); this.content.append(toolbar, grid); rarity.onchange = date.onchange = order.onchange = draw; draw();
   }
   async chooseDialogue(category) {
+    if(this.journey)return this.journey.casual('maria');
     if(this.script){this.script.talkCategory(category);return;}
     this.dialogueData ||= (await import('../data/dialogues.json')).default;
     const c = this.c, key = category, rows = this.dialogueData.filter(d => category === 'memórias' ? d.source === 'NN' : d.category === category);
@@ -82,11 +84,13 @@ export class Story {
     this.dialogue.start([first, ...(second ? [second] : [])], { done: () => { c.lastSpoken = second?.id || first.id; c.talks += second ? 2 : 1; if (first.source === 'NN') { if (!c.special.includes('reflection')) c.special.push('reflection'); } if (!this.living.free) questEvent(c, 'talk'); this.changed(); } });
   }
   maria() {
+    if(this.journey)return this.journey.maria();
     const line = { speaker: 'MENU', text: 'Escolha um tema de conversa do jogo Color.', provenance: 'creative-fiction' };
     this.dialogue.start([line], { instant: true, choices: [...(this.script?.conversationOptions('maria')||[]), ...(this.expansion?.mariaOptions()||[]), ...['cotidianas', 'humor', 'filosofia', 'música', 'escola', 'fé', 'memórias', 'especiais'].map(category => ({ label: category[0].toUpperCase() + category.slice(1), action: () => this.chooseDialogue(category) })), { label: 'Dupla Dinâmica', action: () => { if (!this.c.special.includes('duo')) this.c.special.push('duo'); this.changed(); this.dialogue.start([{ speaker: 'SISTEMA', text: 'COMBO: Dupla Dinâmica! Lorenzo +100 de felicidade. Maria +100 de paciência. Duração: indefinida.', provenance: 'creative-fiction' }]); } }, { label: 'Prólogo: três lembranças', action: () => this.tutorial() }] });
     this.dialogue.advance();
   }
   memory(m, replay = false, origin = null) {
+    if(this.journey){if(this.c.memories.includes(m.id)){this.world.openBook(m.id);this.script.readBook(m.id,origin);}else this.notify('Continue a missão atual para descobrir esta lembrança.');return;}
     if(this.script){this.script.start(m.quest,replay||this.c.memories.includes(m.id));return;}
     if(!replay&&this.adventure?.current?.id==='first-encounter'){this.notify('Conclua a encenação de Primeiro Encontro para revelar esta memória.');return;}
     if (this.living.free && !replay) { this.notify('Retome a campanha para desbloquear novas memórias.'); return; }
@@ -142,6 +146,7 @@ export class Story {
     }
   }
   goal() {
+    if(this.journey)return this.journey.goal();
     if(this.script?.goal())return this.script.goal();
     if(this.location)return this.location.storyGoal();
     if (this.tracked) return this.tracked;
@@ -151,6 +156,6 @@ export class Story {
     const step = nextStep(this.c), chapter = currentChapter(this.c);
     return step ? { ...(step.type === 'talk' ? {...this.living.mariaPosition,id:'maria'} : {...memories.find(m => m.quest === chapter.id).position,id:memories.find(m=>m.quest===chapter.id).id}), name: step.label } : null;
   }
-  objective() { if(this.script?.goal())return this.script.goal().name; if (this.living.goal()) return this.living.goal().name; if (this.living.free) return this.living.goal()?.name || 'Exploração livre · converse com a turma, visite a cantina e descubra os encontros da escola.'; const chapter = currentChapter(this.c); return chapter ? `Capítulo ${this.c.memories.length + 1} · ${chapter.title}\n${nextStep(this.c)?.label || ''}` : 'Seis memórias descobertas! Abra a carta final no menu.'; }
+  objective() { if(this.journey)return this.journey.summary().objective; if(this.script?.goal())return this.script.goal().name; if (this.living.goal()) return this.living.goal().name; if (this.living.free) return this.living.goal()?.name || 'Exploração livre · converse com a turma, visite a cantina e descubra os encontros da escola.'; const chapter = currentChapter(this.c); return chapter ? `Capítulo ${this.c.memories.length + 1} · ${chapter.title}\n${nextStep(this.c)?.label || ''}` : 'Seis memórias descobertas! Abra a carta final no menu.'; }
   dispose() { document.removeEventListener('keydown', this.key); this.close(); this.world.dispose(); }
 }

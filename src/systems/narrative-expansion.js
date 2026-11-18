@@ -55,7 +55,7 @@ export class NarrativeExpansion {
   }
   const p=EXPANSION_POINTS[id];if(!p||p.outside===true&&this.school.active||p.outside!==true&&!this.school.active)return null;return p;
  }
- rawTargets(){if(this.getProgress().stage<2)return[];const c=this.current;if(c)return c.task.type==='collect'?c.task.targets.filter(id=>!c.quest.collected.includes(id)):[c.task.target];return EXPANSION.filter(m=>!this.state.quests[m.id]?.completed&&(!m.requiresMemories||this.getProgress().campaign.memories.length===6)).map(m=>m.tasks[0].target);}
+ rawTargets(){if(this.journey&&!this.journey.allowed('expansion',this.state.active))return[];if(this.getProgress().stage<2)return[];const c=this.current;if(c)return c.task.type==='collect'?c.task.targets.filter(id=>!c.quest.collected.includes(id)):[c.task.target];return EXPANSION.filter(m=>!this.state.quests[m.id]?.completed&&(!m.requiresMemories||this.getProgress().campaign.memories.length===6)).map(m=>m.tasks[0].target);}
  ensureProp(id,p){
   if(['maria','bia','davi'].includes(id))return null;
   const key=id;
@@ -88,10 +88,11 @@ export class NarrativeExpansion {
   return this.school.active?narrativeWaypoint(this.school.navigation,this.school.floor,p):p;
  }
  start(id){
+  if(this.journey&&!this.journey.allowed('expansion',id))return false;
   if(this.script?.current){this.notify('Conclua o capítulo em andamento antes de iniciar outra aventura.');return false;}
   if(this.adventure.current){this.notify('Conclua a aventura em andamento antes de iniciar a expansão.');return false;}
   if(!startExpansion(this.state,id,this.getProgress().campaign)){this.notify('Arquivo Aurora requer as seis memórias históricas. Outra missão ativa deve ser concluída primeiro.');return false;}
-  this.story.close();this.story.start();this.save();this.notify(`${missionById(id).title} · siga o objetivo no HUD`);return true;
+  this.story.close();this.story.start();this.save();this.notify(`${missionById(id).title} · siga o objetivo indicado`);return true;
  }
  handle(target){
   if(target.kind!=='expansion')return false;
@@ -113,6 +114,7 @@ export class NarrativeExpansion {
   return true;
  }
  show(){
+  if(this.journey&&!this.journey.developer)return this.journey.missions();
   this.story.show('expansion');document.getElementById('story-title').textContent='Aventuras · Expansão narrativa';
   const content=this.story.content;content.append(node('p',FICTION));
   for(const m of EXPANSION){const q=this.state.quests[m.id],card=node('article');card.className='story-card';card.append(node('h3',m.title),node('p',q?.completed?'✓ Concluída':q?m.tasks[q.step].title:'Explore, encontre pistas e resolva os puzzles.'));
@@ -167,7 +169,7 @@ export class NarrativeExpansion {
  mariaOptions(){return this.state.quests.plan?.completed?[{label:'Sobre o caderno dos planos',action:()=>this.story.dialogue.start([{speaker:'MARIA',text:'O melhor plano ainda é prestar atenção na resposta. Vamos deixar o caderno descansar? '+FICTION,provenance:'school-fiction'}],{instant:true})}]:[];}
  renderPage(content,page){
   if(page!=='expansion-puzzle')content.classList.remove('expansion-content');
-  if(page==='menu')content.prepend(button('Expansão narrativa · quatro missões',()=>this.show()));
+  if(page==='menu'&&!this.journey)content.prepend(button('Expansão narrativa · quatro missões',()=>this.show()));
   if(page==='inventory')for(const m of EXPANSION)if(this.state.quests[m.id]?.completed)content.append(node('p',`◆ ${m.item} · ficção narrativa`));
   if(page==='album')for(const m of EXPANSION)if(this.state.quests[m.id]?.completed){const card=node('article');card.className='story-card';card.append(node('h3',m.title),node('p',FICTION),button(m.id==='letter'?'Ler carta fictícia':'Rever conclusão',()=>m.id==='letter'?this.showLetter():this.replay(m.id)));content.append(card);}
  }
