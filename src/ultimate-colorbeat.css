@@ -1,0 +1,33 @@
+/* Aurora's own print palette; existing semantics, touch targets and menu hierarchy stay intact. */
+body.comic-overdrive{--aurora-paper:#fff3d7;--aurora-ink:#111629;--aurora-muted:#35446a}
+body.comic-overdrive :is(.settings-panel,.story-window){border:3px solid var(--aurora-ink);border-top:6px solid #ffe433;box-shadow:6px 6px 0 #111629,9px 9px 0 #22dfe1}
+body.comic-overdrive .story-heading{border-bottom:2px solid var(--aurora-ink);gap:12px;margin-bottom:12px;background:var(--aurora-paper)}
+body.comic-overdrive .story-heading h2{font-size:clamp(22px,3.2vw,34px);line-height:1.12;margin:6px 0}
+body.comic-overdrive .journey-intro{color:var(--aurora-muted);font-size:16px;line-height:1.5}
+body.comic-overdrive #story-content.journey-content[data-journey-page=menu]>button{background:#ffe433;color:var(--aurora-ink);display:flex;align-items:center;gap:16px;min-height:52px;border:3px solid var(--aurora-ink);border-radius:0;box-shadow:3px 3px 0 var(--aurora-ink);letter-spacing:.025em;line-height:1.2}
+body.comic-overdrive #story-content.journey-content[data-journey-page=menu]>button::before{content:"";width:6px;height:22px;background:currentColor;flex-shrink:0;opacity:.75}
+body.comic-overdrive #story-content.journey-content[data-journey-page=menu]>button:nth-of-type(2){background:#22dfe1}
+body.comic-overdrive #story-content.journey-content[data-journey-page=menu]>button:nth-of-type(3){background:#ff6aab}
+body.comic-overdrive #story-content.journey-content[data-journey-page=menu]>button:nth-of-type(4){background:#2452dc;color:#fff3d7}
+body.comic-overdrive #story-content.journey-content[data-journey-page=menu]>button:nth-of-type(5){background:var(--aurora-paper)}
+body.comic-overdrive #story-content .story-card{color:var(--aurora-ink);background:var(--aurora-paper);background-image:linear-gradient(135deg,transparent 94%,#2452dc 94%);border:2px solid var(--aurora-ink);border-left:6px solid #2452dc;padding:16px;box-shadow:2px 3px 0 #11162926}
+body.comic-overdrive #story-content .story-card :is(h3,strong,p){color:var(--aurora-ink);line-height:1.2}
+body.comic-overdrive #story-content .story-card h3{font-family:inherit;font-weight:700;font-size:clamp(21px,2.6vw,27px);line-height:1.15;margin:8px 0 12px}
+body.comic-overdrive #story-content .story-card small{color:var(--aurora-muted)!important;font-weight:700;letter-spacing:.025em}
+body.comic-overdrive #story-content .journey-current{border-left-color:#ff543f;background-color:#fff2bd}
+body.comic-overdrive .journey-tabs{background:var(--aurora-ink);border:2px solid var(--aurora-ink);gap:6px;padding:6px}
+body.comic-overdrive #story-content .journey-tabs button{color:var(--aurora-paper);background:#263351;border:2px solid transparent;border-radius:0;min-height:44px;line-height:1.15}
+body.comic-overdrive #story-content .journey-tabs button[aria-pressed=true]{background:#ffe433;color:var(--aurora-ink);border-color:var(--aurora-paper)}
+body.comic-overdrive #mission{border:2px solid var(--aurora-ink);border-left:6px solid #ff543f;background:var(--aurora-paper);box-shadow:3px 3px 0 #11162960}
+body.comic-overdrive #mission :is(p,small){color:var(--aurora-ink)}
+body.comic-overdrive #mission .progress{border:1px solid var(--aurora-ink);background:#c6c4b6;height:8px}
+body.comic-overdrive #dialog{border-top:4px solid #22dfe1;box-shadow:4px 4px 0 var(--aurora-ink)}
+body.comic-overdrive #dialog .dialogue-source{color:var(--aurora-muted);font-size:10px;line-height:1.3}
+body.comic-overdrive :is(button,select,input):focus-visible{outline:3px solid #2452dc;outline-offset:3px}
+body.comic-overdrive .settings-panel .check{min-height:44px}
+body.comic-overdrive .settings-panel input[type=checkbox]{width:22px;height:22px;accent-color:#2452dc}
+@media(min-width:760px){body.comic-overdrive .journey-content:has(>.journey-tabs){grid-template-columns:repeat(2,minmax(0,1fr))}body.comic-overdrive .journey-content:has(>.journey-tabs)>:not(.story-card){grid-column:1/-1}}
+@media(max-height:500px){body.comic-overdrive :is(.settings-panel,.story-window){box-shadow:3px 3px 0 var(--aurora-ink)}body.comic-overdrive .story-heading{margin-bottom:6px;padding:6px 0}body.comic-overdrive #story-content.journey-content[data-journey-page=menu]>button{min-height:44px;padding:6px 12px}body.comic-overdrive #story-content .story-card{padding:12px}body.comic-overdrive #mission p{line-height:1.35}}
+body.reduce-motion *,body.reduce-motion *::before,body.reduce-motion *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+body.reduce-effects .colorbeat-burst{display:none}
+@media(forced-colors:active){body.comic-overdrive :is(.settings-panel,.story-window,#mission,#dialog,.journey-tabs),body.comic-overdrive #story-content .story-card{background:Canvas;border-color:CanvasText;box-shadow:none;color:CanvasText}body.comic-overdrive #story-content .story-card :is(small,strong,h3){color:CanvasText!important}body.comic-overdrive :is(button,select,input):focus-visible{outline-color:Highlight}}

@@ -1,3 +1,4 @@
+import {createActorContacts} from './systems/actor-contacts.js';
 import {Journey,cleanObjective} from './systems/journey.js';
 import {narrativeOccluders} from './systems/narrative-identity.js';
 import {DefinitiveScript} from './systems/definitive-script.js';
@@ -32,6 +33,7 @@ import './comic.css';
 import './colorbeat-effects.css';
 import './comic-overdrive.css';
 import './polish093.css';
+import './ultimate-colorbeat.css';
 import { Story } from './systems/story.js';
 import { Dialogue } from './systems/dialogue.js';
 import { createWorld } from './systems/world.js';
@@ -84,7 +86,8 @@ const motionPreference=matchMedia('(prefers-reduced-motion:reduce)');
 const follow = new FollowCamera(camera, world.occluders, progress.yaw, progress.pitch);
 const quality = new Quality(renderer, sun, settings), audio = new Audio(settings);
 const disposeRadio = mountLorenzoMariaRadio({ onPlaybackChange: playing => audio.setRadioPlaying(playing) });
-const visualEffects = new VisualEffects();
+const reduceMotion=()=>settings.reducedMotion||motionPreference.matches;
+const visualEffects = new VisualEffects(document.body,()=>reduceMotion()||!settings.visualEffects);
 const interactionAccent=new InteractionAccent(scene);
 const active = () => started && !paused && !dialog && !panelOpen && !document.hidden && !adventure?.busy && !school?.loading;
 const markerPosition = new THREE.Vector3(), effect = new THREE.Group(); scene.add(effect);
@@ -117,7 +120,7 @@ function speak(speaker, text, done) {
   dialogues.start([{ speaker, text }], { instant: true, done: () => { done?.(); save(); } });
 }
 dialogues = new Dialogue({ root: $('dialog'), speaker: $('speaker'), speech: $('speech'), next: $('next'),
-  reducedMotion: () => matchMedia('(prefers-reduced-motion:reduce)').matches,
+  reducedMotion: reduceMotion,
   onLine: value => living?.dialogueLine(value),
   onState: open => { dialog = open; if (!open) { story && (story.focus = null); if (living) living.speakingId = null; } syncModal(); if (!open) save(); audio.setMood?.(open ? 'conversation' : 'exploration'); },
 });
@@ -171,7 +174,7 @@ function handleInteraction(target) {
     else notify('Dê um passo para trás para movimentar a porta.');
   } else if (target.kind === 'point') speak(target.name.toUpperCase(), target.text);
   else if (collect(progress, target.id)) {
-    const c = target.ref; c.taken = true; interactionTime = .6; effect.position.set(c.x, (school?.active?school.navigation.floor(school.floor).baseY:0)+1, c.z); effectTime = motionPreference.matches ? 0 : .8; effect.visible = !motionPreference.matches;
+    const c = target.ref; c.taken = true; interactionTime = .6; effect.position.set(c.x, (school?.active?school.navigation.floor(school.floor).baseY:0)+1, c.z); effectTime = reduceMotion()||!settings.visualEffects ? 0 : .8; effect.visible = !reduceMotion()&&settings.visualEffects;
     audio.play('discover'); notify(`${c.name} encontrado!`); visualEffects.burst('DESCOBERTA!'); updateHUD(); save();
   }
 }
@@ -191,6 +194,7 @@ $('start').textContent = saved.exists ? 'Continuar a explorar →' : 'Começar a
 $('start').onclick = () => { started = true; $('welcome').hidden = true; $('start').blur(); audio.unlock(); syncModal(); save(); if(progress.schoolVisit.active&&!school?.active&&!school?.loading)void openSchool(); };
 living = new LivingSchool({ scene, world, maria, player, getProgress: () => progress, settings, dialogue: dialogues, save, notify, audio });
 recoverPlayerPosition();
+const actorContacts=createActorContacts({scene,actors:[player,...living.actors.map(a=>a.character.root)],groundHeight:(x,z)=>world.groundHeight(x,z),schoolRotation:()=>school?.rotation??Math.PI});
 const preferences=installPreferences(settings, save, controls);
 story = new Story({ player, living, scene, world, getProgress: () => progress, save, notify, dialogue: dialogues, audio, effects: visualEffects,
   start: () => { if (!started) $('start').click(); if (paused) setPause(false); },
@@ -204,7 +208,8 @@ const ink=new InkOutlines(scene,world.resources,[lorenzo,...living.actors.map(a=
 const comicMode=new URLSearchParams(location.search).get('comic');
 const exteriorPreview=comicMode==='overdrive-20-d3-preview';
 const confirmedSchool=comicMode===null||exteriorPreview;
-const legacyRoots=scene.children.filter(node=>node!==player&&node!==sun&&!node.isHemisphereLight&&!node.isCamera);
+const legacyRoots=scene.children.filter(node=>node!==actorContacts.mesh&&node!==player&&node!==sun&&!node.isHemisphereLight&&!node.isCamera);
+adventure.cutscenes.reducedMotion=reduceMotion;
 school=new ContinuousSchool({scene,world,frameNodes:[effect,interactionAccent.mesh],legacyRoots,player,follow,pool:assets,layout:schoolLayout,rotation:confirmedSchool?Math.PI:0,threeGates:confirmedSchool,getState:()=>progress.schoolVisit,onStatus:notify,onChange:event=>{if(!event?.preserveInput)controls.clear();target=null;lastHUD='';lastLocation='';lastTarget='';syncSchoolUI();syncModal();needsRender=true;if(!school?.loading&&!event?.deferSave)save();}});
 if(confirmedSchool&&!progress.schoolVisit.active){const p=resolveSchoolExteriorSave(player.position,world.solids,school.rotation);player.position.set(p.x,world.groundHeight(p.x,p.z),p.z);}
 story.schoolOnlyNarrative=true;adventure.schoolOnlyNarrative=true;school.narrative=new SchoolNarrative({school,world,story,living,adventure,getProgress:()=>progress});
@@ -366,6 +371,7 @@ function animate(now) {
     lorenzo.update(adventure?.cutscenes.paused?0:dt, speed, dialog && $('speaker').textContent === 'LORENZO', interactionTime > 0,story?.seat?{state:'sit',seatHeight:school?.active?story.seat.height:.8}:{heading:movementHeading});
 
 
+    if(reduceMotion()||!settings.visualEffects){effectTime=0;effect.visible=false;}
     if (effectTime > 0) { effectTime -= dt; particles.forEach((m, i) => { const t = .8 - effectTime; m.position.set(Math.cos(m.userData.angle) * t, t * (1.5 + i % 3 * .2), Math.sin(m.userData.angle) * t); m.scale.setScalar(.035 * Math.max(0, effectTime / .8)); }); if (effectTime <= 0) effect.visible = false; }
   }
   if (toastTime > 0) { toastTime -= dt; if (toastTime <= 0) $('toast').hidden = true; }
@@ -374,7 +380,7 @@ function animate(now) {
   const shadowCenter=exteriorPreview||school.active||player.position.x>44?60:0;if(sun.target.position.x!==shadowCenter){sun.position.x=-20+shadowCenter;sun.target.position.x=shadowCenter;sun.target.updateMatrixWorld();}
   updateColorbeatLighting({renderer,sun,hemisphere,indoors,dt:paused?0:dt,cinematic:!!adventure?.cutscenes.active});
   player.visible=!school?.inspecting&&!(dialog&&!adventure?.cutscenes.active&&story?.focus?.hidePlayer);document.body.classList.toggle('reading-memory',!player.visible);
-  follow.ceilingY=school.active?school.cameraCeiling():undefined;follow.reducedMotion=motionPreference.matches;
+  follow.ceilingY=school.active?school.cameraCeiling():undefined;follow.reducedMotion=reduceMotion();
   follow.partner = living.partner?.agent.position;
   follow.focusObject = school?.active ? (school.focus()||(dialog?story?.focus:null)) : dialog ? story?.focus : null; follow.conversation = dialog && !story?.focus;
   if(exteriorReview&&!school.active&&!dialog&&!adventure?.cutscenes.active){follow.focusObject=exteriorReview;follow.obstacles=[];}else if(!school.active)follow.obstacles=world.occluders;
@@ -385,7 +391,7 @@ function animate(now) {
   expansion?.update(paused?0:dt);
   script?.update();
   journey?.update(paused?0:dt,{started,blocked:paused||dialog||panelOpen||adventure?.busy||school?.loading||school?.inspecting});
-  interactionAccent.update(active()&&!school?.inspecting?target:null,time,{reducedMotion:motionPreference.matches,floorY:player.position.y});
+  interactionAccent.update(active()&&!school?.inspecting?target:null,time,{reducedMotion:reduceMotion()||!settings.visualEffects,floorY:player.position.y});
   school.narrative.hideCampusDuplicates();performanceProbe?.applyView(camera);camera.updateMatrixWorld();
   ink.update(settings.quality,player.position,camera,{width:innerWidth,height:innerHeight});
   hudTimer += dt; if (hudTimer > .08) {
@@ -393,7 +399,7 @@ function animate(now) {
     const zone = school?.active ? `${school.navigation.floor(school.floor).label} · ${school.room()?.name||'Corredor'} · SÃO JORGE` : player.position.x>38?'CAMINHO DO SÃO JORGE': player.position.z < -18 && Math.abs(player.position.x) < 6 ? 'CANTINA' : player.position.x < -28 && player.position.z < 10 ? 'QUADRA' : player.position.x > 28 && player.position.z < -6 ? 'SALA DE MÚSICA' : player.position.z < -6 && Math.abs(player.position.x) > 6 ? (player.position.x < 0 ? 'SALA DE LITERATURA' : 'BIBLIOTECA') : player.position.z > 17 ? 'JARDIM DA ESCOLA' : 'PÁTIO CENTRAL';
     if (lastLocation !== zone) { $('location').firstChild.textContent = `${zone} `; lastLocation = zone; } hudTimer = 0;performanceProbe?.record('HUD',performance.now()-hudAt);
   }
-  sports.update(paused?0:dt,player.getWorldPosition(sportsPlayer));landscape.update(sportsPlayer,settings.quality,!school.active||school.floor===0&&school.portalDistance()<5);school.presentWorld();if(schoolExterior)schoolExterior.group.visible=!school.active||(!school.inspecting&&school.floor===0&&school.portalDistance()<5);overdriveP0?.update(camera,settings.quality,renderer.getPixelRatio());
+  player.getWorldPosition(sportsPlayer);actorContacts.update(sportsPlayer,settings.quality);sports.update(paused?0:dt,sportsPlayer);landscape.update(sportsPlayer,settings.quality,!school.active||school.floor===0&&school.portalDistance()<5);school.presentWorld();if(schoolExterior)schoolExterior.group.visible=!school.active||(!school.inspecting&&school.floor===0&&school.portalDistance()<5);overdriveP0?.update(camera,settings.quality,renderer.getPixelRatio());
   // Frozen pause/welcome scenes need only redraw on resize, settings or camera settling.
   if (active() || dialog || adventure?.busy || (panelOpen && started && story?.game) || needsRender) { renderer.render(scene, camera); needsRender = false; }
   audio.update?.(); if (active()) quality.sample(rawDT);performanceProbe?.end();
@@ -416,7 +422,7 @@ export function getGameState() {
     visual:{theme:'aurora-comic',edition:'0.7C',heroInk:ink.actorInk.filter(i=>i.actor.root===player&&i.mesh.isSkinnedMesh&&i.mesh.visible).length,fallbackInk:ink.actorInk.filter(i=>i.actor.root===player&&!i.mesh.isSkinnedMesh).length,models:{lorenzo:!!lorenzo.custom,maria:!!maria.custom},clips:{lorenzo:Object.keys(lorenzo.actions),maria:Object.keys(maria.actions)},toon:world.resources.material('#eadfc8').isMeshToonMaterial,outlineVertices:ink.staticInk.geometry.attributes.position?.count||0},
     spatial:validator.inspect(world.placed), memoryBooks:story.world.books.map(b=>({id:b.id,x:b.x,z:b.z,unlocked:b.unlocked,angle:b.mesh.userData.cover.rotation.z})),
     colorbeat:{style:'aurora-colorbeat-081',inkPixels:ink.actorMaterial.userData.inkUniforms.cbInkPixels.value,accent:interactionAccent.mesh.visible,exposure:renderer.toneMappingExposure,sharedLibrary:school?.materials?.library===world.resources.colorbeat,materials:world.resources.materials.size,textures:world.resources.textures.size,programs:renderer.info.programs?.length},
-    landscape:landscape?.state(),court:sports?.state(),schoolExterior:schoolExterior?.state()||null,overdrive:overdriveP0?.state()||null,quality: settings.quality, resolutionScale: quality.scale, outlines: ink.actorInk.filter(s=>s.mesh.visible).length, fps: Math.round(quality.fps), drawCalls: renderer.info.render.calls, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures, triangles: renderer.info.render.triangles, drawingBuffer:{width:renderer.domElement.width,height:renderer.domElement.height} };
+    actorContacts:{instances:actorContacts.mesh.count,visible:actorContacts.mesh.visible,capacity:actorContacts.mesh.instanceMatrix.count},landscape:landscape?.state(),court:sports?.state(),schoolExterior:schoolExterior?.state()||null,overdrive:overdriveP0?.state()||null,quality: settings.quality, resolutionScale: quality.scale, outlines: ink.actorInk.filter(s=>s.mesh.visible).length, fps: Math.round(quality.fps), drawCalls: renderer.info.render.calls, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures, triangles: renderer.info.render.triangles, drawingBuffer:{width:renderer.domElement.width,height:renderer.domElement.height} };
 }
 registerStateReader(getGameState);
 registerNavigationReader(()=>({origin:school.active?{x:60,z:0}:{x:0,z:0},rotation:school.active?school.rotation:0,floor:school.active?school.floor:null,position:{x:player.position.x,z:player.position.z},solids:(school.active?(school.floor===0?world.solids.map(b=>schoolBoundsToLocal(b,school.rotation)):school.navigation.movementObstacles(school.floor)):world.solids).map(b=>({...b}))}));
@@ -424,7 +430,7 @@ if(new URLSearchParams(location.search).has('debug')){listen(window,'keydown',e=
 
 export function dispose() {
   if(disposed)return;for(const off of lifecycleListeners)off();lifecycleListeners.length=0;controls.dispose();preferences.dispose();
-  performanceProbe?.dispose();journey?.dispose();script?.dispose();landscape?.dispose();sports?.dispose();spatialActors?.dispose();expansion?.dispose();document.removeEventListener('click',uiSound);schoolExterior?.dispose();overdriveP0?.dispose();school?.narrative?.dispose();school?.dispose();adventure?.dispose();ink.dispose();interactionAccent.dispose();validator.dispose();interactions.dispose();visualEffects.dispose();
+  actorContacts.dispose();performanceProbe?.dispose();journey?.dispose();script?.dispose();landscape?.dispose();sports?.dispose();spatialActors?.dispose();expansion?.dispose();document.removeEventListener('click',uiSound);schoolExterior?.dispose();overdriveP0?.dispose();school?.narrative?.dispose();school?.dispose();adventure?.dispose();ink.dispose();interactionAccent.dispose();validator.dispose();interactions.dispose();visualEffects.dispose();
   disposed = true; cancelAnimationFrame(frame); controls.clear(); save(); disposeRadio(); story?.dispose(); living?.dispose(); dialogues?.dispose(); lorenzo.dispose(); maria.dispose(); assets.dispose(); world.dispose(); audio.dispose(); renderer.dispose();
 }
 if (import.meta.hot) import.meta.hot.dispose(dispose);

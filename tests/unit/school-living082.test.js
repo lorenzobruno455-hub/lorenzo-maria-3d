@@ -55,3 +55,12 @@ test('corridor dressing preserves door apertures and existing player clearance',
  }
  result.dispose();}
 });
+test('classroom finishing adds supported study sets without intersecting other desk props',()=>{
+ const resources=new Resources();let studySets=0;
+ for(const floor of floors.slice(0,2)){const source=furnitureSource(floor),result=createSchoolFurniture({resources,materials,floor,source});
+ for(const prop of result.supports.filter(s=>['study-folder','eraser'].includes(s.role))){studySets++;assert.equal(prop.bounds.minY,prop.parentSurfaceY);
+  for(const other of result.supports.filter(s=>s!==prop&&s.sourceBox===prop.sourceBox)){
+   const a=prop.bounds,b=other.bounds;assert.ok(a.maxX<=b.minX+1e-6||a.minX>=b.maxX-1e-6||a.maxZ<=b.minZ+1e-6||a.minZ>=b.maxZ-1e-6||a.maxY<=b.minY+1e-6||a.minY>=b.maxY-1e-6,'new study props occupy free desk space');
+  }
+ }result.dispose();source.geometry.dispose();}assert.ok(studySets>=8);resources.dispose();
+});

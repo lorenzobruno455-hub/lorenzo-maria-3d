@@ -1,12 +1,17 @@
 export function installPreferences(settings, save, controls) {
   const cleanup=[];let ownedNav=null;
   const ranges = [ ['controls-size', 'controlsSize'], ['controls-opacity', 'controlsOpacity'], ['music-volume', 'musicVolume'], ['effects-volume', 'effectsVolume'] ];
+  const toggles=[['reduced-motion','reducedMotion'],['visual-effects','visualEffects']];
   function apply() {
+    document.body?.classList.toggle('reduce-motion',!!settings.reducedMotion);
+    document.body?.classList.toggle('reduce-effects',settings.visualEffects===false);
+    for(const [id,key]of toggles){const input=document.getElementById(id);if(input)input.checked=settings[key];}
     document.documentElement.style.setProperty('--controls-size', settings.controlsSize);
     document.documentElement.style.setProperty('--controls-opacity', settings.controlsOpacity);
     for (const [id, key] of ranges) document.getElementById(id).value = settings[key];
   }
   for (const [id, key] of ranges) {const input=document.getElementById(id),handler=e=>{settings[key]=Number(e.target.value);controls.clear();apply();save();};input.addEventListener('input',handler);cleanup.push(()=>input.removeEventListener('input',handler));}
+  for(const [id,key]of toggles){const input=document.getElementById(id);if(!input)continue;const handler=()=>{settings[key]=input.checked;controls.clear();apply();save();};input.addEventListener('change',handler);cleanup.push(()=>input.removeEventListener('change',handler));}
   if (!document.querySelector('.settings-jumps')) {
     const nav=document.createElement('nav');ownedNav=nav; nav.className='settings-jumps'; nav.setAttribute('aria-label','Seções das configurações');
     for (const [label,id] of [['Gráficos','quality'],['Som','music-volume'],['Controles','controls-size']]) {
