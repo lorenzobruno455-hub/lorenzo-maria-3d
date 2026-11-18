@@ -31,3 +31,17 @@ for(const [label,id,group] of [['A','CAP01-CENA02','chapter-1'],['B','CAP01-CENA
  const saved=await state(page);await page.reload();await page.locator('#start').click();await page.evaluate(async()=>window.readGame=(await import('/src/systems/diagnostics.js')).getGameState);
  expect((await state(page)).scriptScene).toBe(saved.scriptScene);expect((await state(page)).campaign.memories).toEqual(saved.campaign.memories);expect(errors).toEqual([]);
 });
+
+test('nearby cast: acceptance is reader-paced, can finish naturally and restores touch ownership',async({page})=>{
+ const id='CAP01-CENA09',p=sceneStops(id)[0],pos=p.approach||p;
+ // Save fixture: Maria is already in the same classroom. No runtime actor relocation.
+ await seed(page,{stage:2,collected:['notebook','card','photo'],campaign:{memories:Array.from({length:6},(_,i)=>`memory-${i+1}`)},script:{active:{group:'chapter-1',index:8,replay:true}},living:{spatialActors:{maria:{x:60-(pos.x+1.3),y:.03,z:-pos.z,index:0}}},schoolVisit:{active:true,floor:0,position:{x:pos.x,z:pos.z},yaw:0,pitch:.38}});
+ await start(page);await expect.poll(async()=>(await state(page)).npcs.find(a=>a.id==='maria').model).toBe(true);
+ await page.keyboard.press('e');await expect(page.locator('#dialog')).toBeVisible();
+ await page.evaluate(()=>{for(let i=0;i<20&&document.getElementById('speech').textContent!=='Pode ser.';i++){document.getElementById('dialogue-speed').click();document.getElementById('next').click();}});
+ await expect(page.locator('#speech')).toHaveText('Pode ser.');await page.screenshot({path:'docs/captures/aurora11/C-nearby-cast.png'});
+ expect((await state(page)).npcs.find(a=>a.id==='maria').visible).toBe(true);
+ await page.evaluate(()=>{for(let i=0;i<8&&!document.getElementById('dialog').hidden;i++){document.getElementById('dialogue-speed').click();document.getElementById('next').click();}});
+ await expect.poll(async()=>(await state(page)).cinematic.active).toBe(false);expect((await state(page)).scriptScene).toBe('CAP01-CENA10');
+ expect(await page.locator('#touch').evaluate(e=>e.inert)).toBe(false);
+});

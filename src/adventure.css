@@ -7,3 +7,9 @@
 #dialog[data-cinematic-mode="messages"]{border-color:#090b18;box-shadow:6px 6px 0 #f22c8a,0 0 0 3px #23e1ef}
 body:has(#cinematic:not([hidden])) .lm-radio{visibility:hidden}
 @media(max-height:500px){#cinematic{border-top-width:3vh;border-bottom-width:3vh}#cinematic>div{top:0}#scene-title{font-size:18px}#scene-subtitle{font-size:10px;margin:1px 0}#cinematic-beat{bottom:0;padding:4px 8px;font-size:10px;width:48vw}#cinematic nav{bottom:0;gap:6px}#cinematic nav button{font-size:15px;min-height:44px;padding:4px 10px}body:has(#cinematic:not([hidden])) #dialog{bottom:60px}}
+
+#cinematic-beat[data-mode="diary"]{top:48px;bottom:auto;width:min(620px,65vw)}
+#cinematic-beat .cinematic-memories span{font-size:11px}
+body #dialog[data-cinematic-mode="messages"]{left:auto;right:max(14px,env(safe-area-inset-right));width:min(410px,48vw);border:5px solid #0b1020;border-radius:18px;padding:10px 14px;box-shadow:5px 5px 0 #f22c8a,0 0 0 3px #23e1ef}
+body #dialog[data-cinematic-mode="messages"] #speech{background:#d5f8f0;border:2px solid #0b1020;border-radius:10px 10px 2px 10px;padding:8px;color:#11172a}
+@media(max-width:550px) and (min-height:501px){body #dialog[data-cinematic-mode="messages"]{width:calc(100vw - 28px)}#cinematic-beat[data-mode="diary"]{width:calc(100vw - 56px)}}

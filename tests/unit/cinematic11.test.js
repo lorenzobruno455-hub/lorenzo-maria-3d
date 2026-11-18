@@ -45,3 +45,14 @@ test('head gaze stays bounded on the authored rig and releases after a scene',as
  actor.gazeTarget=null;for(let i=0;i<160;i++)actor.update(.016);
  assert(Math.abs(head.rotation.y)<.001);actor.dispose();resources.dispose();
 });
+
+test('nearby Maria gets the acceptance reaction without changing either actor position',()=>{
+ const lorenzo={root:new Group()},maria={root:new Group()};maria.root.position.set(1.5,0,0);
+ const lines=Array.from({length:9},(_,i)=>({speakerId:i===7?'maria':'lorenzo',text:String(i)}));
+ const scene=buildCinematicScene('CAP01-CENA09',lines,{camera:new PerspectiveCamera(),actors:{lorenzo,maria},point:{x:0,y:0,z:0}});
+ const beat=scene.shots[1].beats[7];assert.equal(beat.actors.find(a=>a.id==='maria').state,'react');assert.deepEqual(maria.root.position.toArray(),[1.5,0,0]);assert(beat.actors.every(a=>!a.position));
+});
+
+test('idle characters do not allocate or apply gaze work before any cinematic look target',async()=>{
+ const {Character}=await import('../../src/systems/character.js'),{Resources}=await import('../../src/systems/resources.js');const r=new Resources(),actor=new Character(r);actor.update(.016);assert.equal(actor.gazeRotation,undefined);actor.dispose();r.dispose();
+});

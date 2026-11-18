@@ -106,6 +106,7 @@ export class Character {
     if(this.gazeApplied&&this.gazeJoint){this.gazeJoint.quaternion.multiply(this.gazeApplied.invert());this.gazeApplied=null;}
   }
   applyGaze(dt){
+    if(!this.gazeTarget&&Math.abs(this.gazeYaw||0)<.0001&&Math.abs(this.gazePitch||0)<.0001)return;
     const joint=this.gazeJoint||this.joints.head;if(!joint)return;
     this.gazePoint ||= new THREE.Vector3();
     let yaw=0,pitch=0;
