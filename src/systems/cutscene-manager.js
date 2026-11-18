@@ -57,14 +57,15 @@ export class CutsceneManager {
       const actor = this.actors instanceof Map ? this.actors.get(command.id) : this.actors[command.id];
       if (!actor?.root) continue;
       if (!this.snapshot.actors.has(actor)) this.snapshot.actors.set(actor, {
-        position:actor.root.position.clone(), quaternion:actor.root.quaternion.clone(),
+        visible:actor.root.visible,position:actor.root.position.clone(), quaternion:actor.root.quaternion.clone(),
         pose:actor.cutscenePose, hadPose:Object.hasOwn(actor,'cutscenePose'),
         requested:actor.requestedAction, pending:actor.controller?.pending, gaze:actor.gazeTarget, heading:actor.heading, headingTarget:actor.headingTarget, writtenHeading:actor.writtenHeading,
       });
       if(vector(command.gaze)){actor.gazeTarget=new Vector3(...command.gaze);this.camera.parent?.localToWorld(actor.gazeTarget);}
       if (command.state) { actor.cutscenePose = {state:command.state}; actor.requestAction?.(command.state, { duration:this.duration }); }
-      if (vector(command.position)&&!this.preserveActorPositions) actor.root.position.fromArray(command.position);
-      if (vector(command.lookAt)) {if(this.preserveActorPositions){const p=new Vector3(...command.lookAt);this.camera.parent?.localToWorld(p);actor.root.lookAt(p);}else lookLocal(actor.root,command.lookAt);}
+      if (vector(command.position)&&!this.preserveActorPositions){const p=new Vector3(...command.position);if(this.actorCoordinateFrame){this.camera.parent?.localToWorld(p);actor.root.parent?.worldToLocal(p);}actor.root.position.copy(p);}
+      actor.root.visible=true;
+      if (vector(command.lookAt)) {if(this.preserveActorPositions||this.actorCoordinateFrame){const p=new Vector3(...command.lookAt);this.camera.parent?.localToWorld(p);actor.root.lookAt(p);}else lookLocal(actor.root,command.lookAt);}
     }
   }
   setCamera(command) {
@@ -122,7 +123,7 @@ export class CutsceneManager {
     safely(() => { if (snapshot.position) this.camera.position.copy(snapshot.position); if (snapshot.quaternion) this.camera.quaternion.copy(snapshot.quaternion); });
     safely(() => { if (this.light) { this.light.intensity = snapshot.intensity; if (snapshot.color) this.light.color.copy(snapshot.color); } });
     for (const [actor, saved] of snapshot.actors) safely(() => {
-      actor.root.position.copy(saved.position); actor.root.quaternion.copy(saved.quaternion);
+      actor.root.visible=saved.visible;actor.root.position.copy(saved.position); actor.root.quaternion.copy(saved.quaternion);
       if (saved.hadPose) actor.cutscenePose = saved.pose; else delete actor.cutscenePose;
       actor.requestedAction = saved.requested; actor.gazeTarget=saved.gaze;
       for(const key of ['heading','headingTarget','writtenHeading'])if(saved[key]!==undefined)actor[key]=saved[key];

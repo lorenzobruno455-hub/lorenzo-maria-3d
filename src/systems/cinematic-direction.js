@@ -1,5 +1,6 @@
 import {Vector3} from 'three';
-import {cameraFraction} from './physics.js';
+import {cameraFraction,blocked} from './physics.js';
+import {clearSegment} from './navigation.js';
 
 // Direction only: no canonical lines, historical assertions or saved progress here.
 export const CINEMATIC_DIRECTIONS=Object.freeze({
@@ -20,12 +21,22 @@ export function protectCinematicCamera(focus,desired,previous,obstacles=[]){
  return safe;
 }
 
-export function buildCinematicScene(id,lines,{camera,actors,point,toLocal=p=>p,obstacles=()=>[],onBeat=()=>{},onEnd=()=>{}}){
- const direction=CINEMATIC_DIRECTIONS[id];if(!direction)return null;
+export function buildCinematicScene(id,lines,{camera,actors,point,toLocal=p=>p,obstacles=()=>[],onBeat=()=>{},onEnd=()=>{},stageCast=false,title='Nossa história'}){
+ const direction=CINEMATIC_DIRECTIONS[id]||(stageCast?{label:'conversation',mode:'conversation',object:title,tail:.2}:null);if(!direction)return null;
  const origin=new Vector3(point.x,point.y||0,point.z),player=actors.lorenzo;
- const localActor=actor=>toLocal(actor.root.getWorldPosition(new Vector3()));
+ const staged=new Map();
+ const localActor=actor=>staged.has(actor)?staged.get(actor).clone():toLocal(actor.root.getWorldPosition(new Vector3()));
  const playerPos=player?localActor(player):origin.clone();
- const nearby=Object.entries(actors).filter(([,a])=>a?.root&&a.root.visible&&localActor(a).distanceTo(playerPos)<6&&Math.abs(localActor(a).y-playerPos.y)<1.5);
+ if(stageCast){
+  const needed=new Set(lines.map(l=>l.speakerId)),occupied=[playerPos];
+  const solids=obstacles().filter(b=>(b.minY??-Infinity)<playerPos.y+1.72&&(b.maxY??Infinity)>playerPos.y+.1);
+  for(const [id,actor]of Object.entries(actors)){if(actor===player||!needed.has(id)||!actor?.root)continue;
+   const current=localActor(actor);if(actor.root.visible&&current.distanceTo(playerPos)<2.8&&Math.abs(current.y-playerPos.y)<.3){occupied.push(current);continue;}
+   let placement;for(const radius of[1.3,1.8,2.4]){for(let i=0;i<16;i++){const angle=i*Math.PI/8,p=playerPos.clone().add(new Vector3(Math.cos(angle)*radius,0,Math.sin(angle)*radius));if(!blocked(p.x,p.z,solids,.38)&&clearSegment(playerPos,p,solids)&&occupied.every(q=>q.distanceTo(p)>.9)){placement=p;break;}}if(placement)break;}
+   if(placement){staged.set(actor,placement);occupied.push(placement);}
+  }
+ }
+ const nearby=Object.entries(actors).filter(([,a])=>a?.root&&(a.root.visible||staged.has(a))&&localActor(a).distanceTo(playerPos)<6&&Math.abs(localActor(a).y-playerPos.y)<1.5);
  const cast=Object.fromEntries(nearby);
  let serial=0;
  const framing=(focus,distance=3.2,side=1)=>{
@@ -50,7 +61,7 @@ export function buildCinematicScene(id,lines,{camera,actors,point,toLocal=p=>p,o
   return {line:index,camera:framing(focus,reaction?2.25:direction.mode==='object'||direction.mode==='document'?2.9:3.5,index%2?-.4:.4),actors:actorCommands,effect:()=>onBeat({direction,line,index,serial:++serial})};
  });
  return {id:`script:${id}`,direction:direction.label,obstacles,shots:[
-  {duration:.65,camera:framing(direction.mode==='conversation'?focusPlayer:objectFocus,4.2),actors:nearby.map(([key])=>({id:key,state:'observe'}))},
+  {duration:.65,camera:framing(direction.mode==='conversation'?focusPlayer:objectFocus,4.2),actors:nearby.map(([key,a])=>({id:key,state:'observe',...(staged.has(a)?{position:staged.get(a).toArray()}:{} )}))},
   {duration:.15,waitForDialogue:true,interruptOnClose:true,dialogue:lines,beats},
   {duration:direction.tail,camera:framing(objectFocus,3.5),actors:nearby.map(([key])=>({id:key,state:'observe'})),effect:()=>onEnd(direction)},
  ]};

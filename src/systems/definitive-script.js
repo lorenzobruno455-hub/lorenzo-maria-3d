@@ -58,17 +58,17 @@ export class DefinitiveScript{
  handle(target){if(target.kind!=='script')return false;const s=this.current;if(!s||target.id!==`script:${s.id}`)return true;
   const done=this.state.collected[s.id]||[];
   if(done.length){this.collectStop(s.id);return true;}
-  if(CINEMATIC_DIRECTIONS[s.id]){
+  if(CINEMATIC_DIRECTIONS[s.id]||scriptLines([s.id]).some(line=>this.adventure.cutscenes.actors[line.speakerId])){
    const p=this.stops()[0],y=p.outside?this.world.groundHeight(p.x,p.z):this.school.navigation.floor(p.floor).walkY;
    const manager=this.adventure.cutscenes,camera=this.adventure.camera;
    const scene=buildCinematicScene(s.id,scriptLines([s.id]),{
-    camera,actors:manager.actors,point:{...p,y},
+    camera,actors:manager.actors,stageCast:true,title:s.title,point:{...p,y},
     toLocal:point=>camera.parent?camera.parent.worldToLocal(point):point,
     obstacles:()=>this.school.active?this.school.cameraObstacles():this.world.occluders,
     onBeat:event=>{this.cinematicUI.beat(event);if(event.index===0&&event.direction.mode==='object')this.adventure.audio.play('object');},
     onEnd:direction=>{if(direction.bell)this.adventure.audio.play('bell');},
    });
-   this.cinematicUI.show(CINEMATIC_DIRECTIONS[s.id]);
+   this.cinematicUI.show(CINEMATIC_DIRECTIONS[s.id]||{mode:'conversation',object:s.title});
    manager.play(scene);
    document.getElementById('scene-pause').textContent='Pausar cena';
    document.getElementById('scene-title').textContent=s.title;document.getElementById('scene-subtitle').textContent=sourceLabel(s.sourceKind)+' · cena pulável';
