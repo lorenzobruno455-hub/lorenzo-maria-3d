@@ -15,5 +15,5 @@ export function eventObjective(s) {
   const e = EVENT_DATA.find(e => s.events[e.id] && s.events[e.id] !== 'done');
   if (!e) return null;
   const state = s.events[e.id];
-  return { ...e, returnToNPC: ['found', 'answered'].includes(state), label: state === 'active' ? e.description : `Volte a conversar com ${e.npc === 'bia' ? 'Bia' : e.npc === 'davi' ? 'Davi' : 'Helena'}.` };
+  return { ...e, returnToNPC: ['found', 'answered'].includes(state), label: state === 'active' ? e.description : `Volte a conversar com ${e.npc === 'bia' ? 'Rafaella' : e.npc === 'davi' ? 'Bassarab' : 'Prof Newmara'}.` };
 }

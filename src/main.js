@@ -1,3 +1,5 @@
+import {narrativeOccluders} from './systems/narrative-identity.js';
+import {DefinitiveScript} from './systems/definitive-script.js';
 import{createCampusLandscape}from'./systems/campus-landscape.js';
 import{campusObjective}from'./systems/objective-placement.js';
 import{createSportsCourt}from'./systems/sports-court.js';
@@ -53,7 +55,7 @@ let storage; try { storage = localStorage; } catch { storage = null; }
 const saved = loadSave(storage), settings = saved.settings;
 let progress = saved.progress, started = false, paused = false, dialog = false, dialogDone = null, target = null;
 let adventure, previousBusy=false, scenePausedBeforeGlobal=false;
-let school, expansion, spatialActors, performanceProbe,sports,landscape;
+let script, school, expansion, spatialActors, performanceProbe,sports,landscape;
 let living, story, dialogues, panelOpen = false, needsRender = true;
 let controls, frame = 0, disposed = false, interactionTime = 0, toastTime = 0, saveTimer = 0, lastHUD = '', lastTarget = '', lastLocation = '';
 const scene = new THREE.Scene(); scene.background = new THREE.Color('#90d3eb'); scene.fog = new THREE.Fog('#90d3eb', 55, 115);
@@ -67,7 +69,7 @@ const sun = new THREE.DirectionalLight('#fff0cf', 2.1); sun.position.set(-20, 35
 Object.assign(sun.shadow.camera, { left: -39, right: 39, top: 36, bottom: -36, near: 1, far: 90 }); scene.add(sun);
 const world = createWorld(scene);
 const assets = new GLBAssets(world.resources);
-const interactions=new InteractionRegistry(world,()=>progress),validator=new EnvironmentValidator(scene,world);
+const interactions=new InteractionRegistry({get occluders(){return narrativeOccluders(world,school,follow);}},()=>progress),validator=new EnvironmentValidator(scene,world);
 world.restoreDoors(progress.doors);
 const lorenzo = new Character(world.resources, '#dbdbcf'), maria = new Character(world.resources, '#8faaa0');
 const player = lorenzo.root; player.position.set(progress.position.x, .08, progress.position.z); maria.root.position.set(5, .08, 5); maria.root.rotation.y = -.8; scene.add(player, maria.root);
@@ -128,6 +130,7 @@ document.addEventListener('keydown', e => {
 function nearestTarget() {
  const pos=player.position;interactions.entries.clear();
  const add=(o,kind,distance,extra={})=>interactions.register({id:`${kind}:${o.id}`,object:{...o,kind,original:o},distance,height:o.height??(o.mesh?new THREE.Box3().setFromObject(o.mesh).max.y+.04:1.4),priority:kind==='seat'?-1.2:['item','memory','game','album','memory-book'].includes(kind)?.5:0,...extra,action:t=>handleInteraction({...t,ref:o})});
+ script?.targets().forEach(o=>add(o,'script',2.6,{height:o.height,priority:9}));
  expansion?.targets().forEach(o=>add(o,'expansion',2.6,{height:o.height,priority:expansion.current?6:4}));
  if(school?.active){
   school.targets().forEach(o=>add(o,'school-stair',2.2));
@@ -147,6 +150,7 @@ function handleInteraction(target) {
 
   if (!target) return;
   audio.unlock();
+  if(script?.handle(target))return;
   if(target.kind==='court'){sports.handle(target);return;}
   if(target.kind==='school-stair'){void school.useStair(target.id);return;}
   if(expansion?.handle(target))return;
@@ -156,7 +160,7 @@ function handleInteraction(target) {
   if (target.kind === 'maria') {
     living.speakingId = 'maria';
     if (living.free || progress.stage === 2 || (progress.stage === 1 && progress.collected.length < 3)) { story.maria(); return; }
-    const line = mariaDialogue(progress); speak('MARIA', line.text, () => { progress.stage = line.nextStage; updateHUD(); });
+    const line = mariaDialogue(progress); speak('MARIA', line.text, () => { progress.stage = line.nextStage; updateHUD();if(progress.stage===2&&!progress.script.completed.includes('PRO-CENA01'))script.start('prologue'); });
   } else if (target.kind === 'door') {
     if (world.toggleDoor(target.ref, player.position)) { lorenzo.requestAction('interact',{duration:.65}); interactionTime = .65; audio.play('door'); save(); }
     else notify('Dê um passo para trás para movimentar a porta.');
@@ -185,7 +189,7 @@ recoverPlayerPosition();
 installPreferences(settings, save, controls);
 story = new Story({ player, living, scene, world, getProgress: () => progress, save, notify, dialogue: dialogues, audio, effects: visualEffects,
   start: () => { if (!started) $('start').click(); if (paused) setPause(false); },
-  tutorial: () => { living.setMode('campaign'); const line = mariaDialogue(progress); speak('MARIA', line.text, () => { progress.stage = line.nextStage; updateHUD(); }); },
+  tutorial: () => { living.setMode('campaign'); const line = mariaDialogue(progress); speak('MARIA', line.text, () => { progress.stage = line.nextStage; updateHUD();if(progress.stage===2&&!progress.script.completed.includes('PRO-CENA01'))script.start('prologue'); }); },
   onPanel: open => { panelOpen = open; controls.clear(); if (open) { dialogues.close(); if (paused) setPause(false); } syncModal(); needsRender = true; },
 });
 recoverPlayerPosition();
@@ -200,6 +204,7 @@ school=new ContinuousSchool({scene,world,frameNodes:[effect,interactionAccent.me
 if(confirmedSchool&&!progress.schoolVisit.active){const p=resolveSchoolExteriorSave(player.position,world.solids,school.rotation);player.position.set(p.x,world.groundHeight(p.x,p.z),p.z);}
 story.schoolOnlyNarrative=true;adventure.schoolOnlyNarrative=true;school.narrative=new SchoolNarrative({school,world,story,living,adventure,getProgress:()=>progress});
 expansion=new NarrativeExpansion({school,world,scene,story,adventure,living,character:lorenzo,getProgress:()=>progress,save,notify,audio,effects:visualEffects});
+script=new DefinitiveScript({story,adventure,expansion,school,living,world,scene,getProgress:()=>progress,save,notify});
 spatialActors=new ContinuousActors({school,living,world,scene,getProgress:()=>progress,adventure,player});
 school.onFrameChange=()=>{lorenzo.heading=lorenzo.headingTarget=lorenzo.writtenHeading=player.rotation.y;};
 const comicExpanded=comicMode===null||comicMode==='overdrive-20-d2'||comicMode==='overdrive-20-d2-d3'||exteriorPreview;
@@ -242,13 +247,13 @@ $('safe-checkpoint').onclick=()=>{
 $('restart').onclick = () => { $('reset-confirm').hidden = false; $('confirm-reset').focus(); };
 $('cancel-reset').onclick = () => { $('reset-confirm').hidden = true; $('restart').focus(); };
 $('confirm-reset').onclick = () => {
-  dialogues.close(); const campaign = progress.campaign, adventureProgress=progress.adventure, expansionProgress=progress.expansion; progress = freshProgress(); progress.campaign = campaign; progress.adventure=adventureProgress; progress.expansion=expansionProgress; player.position.set(0, .08, 19); player.rotation.y = 0; follow.yaw = 0; follow.pitch = .38;
+  dialogues.close(); const campaign = progress.campaign, adventureProgress=progress.adventure, expansionProgress=progress.expansion,scriptProgress=progress.script; progress = freshProgress(); progress.campaign = campaign; progress.adventure=adventureProgress; progress.expansion=expansionProgress;progress.script=scriptProgress; player.position.set(0, .08, 19); player.rotation.y = 0; follow.yaw = 0; follow.pitch = .38;
   world.restoreDoors(progress.doors); world.collectibles.forEach(c => c.taken = false); dialog = false; dialogDone = null; $('dialog').hidden = true;
   interactionTime = effectTime = 0; effect.visible = false; updateHUD(); save(); setPause(false); follow.update(player.position, 0, true);
 };
 function updateHUD() {
-  const key = `${school?.active}:${school?.floor}:${school?.narrative?.goal()?.name}:${JSON.stringify(progress.adventure)}:${JSON.stringify(progress.expansion)}:${progress.living.mode}:${JSON.stringify(progress.living.events)}:${progress.stage}:${progress.collected.join(',')}:${progress.campaign.memories.join(',')}:${JSON.stringify(progress.campaign.steps)}`; if (key === lastHUD) return; lastHUD = key;
-  $('objective').textContent = expansion?.goal()?.name || (school?.active?school.narrative.goal()?.name:null) || adventure?.goal()?.name || (((living?.free || living?.goal() || progress.stage===2)&&story)?story.objective():objective(progress));
+  const key = `${script?.current?.id}:${JSON.stringify(progress.script)}:${school?.active}:${school?.floor}:${school?.narrative?.goal()?.name}:${JSON.stringify(progress.adventure)}:${JSON.stringify(progress.expansion)}:${progress.living.mode}:${JSON.stringify(progress.living.events)}:${progress.stage}:${progress.collected.join(',')}:${progress.campaign.memories.join(',')}:${JSON.stringify(progress.campaign.steps)}`; if (key === lastHUD) return; lastHUD = key;
+  $('objective').textContent = script?.goal()?.name || expansion?.goal()?.name || (school?.active?school.narrative.goal()?.name:null) || adventure?.goal()?.name || (((living?.free || living?.goal() || progress.stage===2)&&story)?story.objective():objective(progress));
   const expansionQuest=expansion?.current;
   $('count').textContent = expansionQuest?`${expansionQuest.quest.step}/${expansionQuest.mission.tasks.length} objetivos · ficção narrativa`:progress.stage === 2 ? `${progress.campaign.memories.length} de 6 memórias · prólogo concluído` : `${progress.collected.length} de 3 lembranças`;
   const total = expansionQuest?expansionQuest.mission.tasks.length:progress.stage === 2 ? 6 : 3, amount = expansionQuest?expansionQuest.quest.step:progress.stage === 2 ? progress.campaign.memories.length : progress.collected.length;
@@ -257,8 +262,9 @@ function updateHUD() {
   document.querySelector('[role=progressbar]').setAttribute('aria-valuemax', total);
   $('mission').querySelector('.eyebrow').textContent = expansionQuest?'EXPANSÃO NARRATIVA · FICÇÃO':living?.free ? 'COLÉGIO AURORA · EXPLORAÇÃO LIVRE' : progress.stage === 2 ? `MEMÓRIAS · CAPÍTULO ${Math.min(6, progress.campaign.memories.length + 1)}/6` : 'CAPÍTULO 01 / PRIMEIRO SINAL';
 }
-function nextObjective(){const next=rawNextObjective();return school.waypoint(school.active?next:campusObjective(next,{expansion:!!expansion?.goal(),adventureStep:adventure.current?.step,point:id=>school.narrative.point(id),rotation:school.rotation}));}
+function nextObjective(){const next=rawNextObjective();return school.waypoint(school.active?next:campusObjective(next,{expansion:!!(script?.goal()||expansion?.goal()),adventureStep:adventure.current?.step,point:id=>school.narrative.point(id),rotation:school.rotation}));}
 function rawNextObjective() {
+  if(script?.goal())return script.goal();
   if(expansion?.goal())return expansion.goal();
   if(school?.active)return school.narrative.goal();
   if(adventure?.goal())return adventure.goal();
@@ -368,6 +374,7 @@ function animate(now) {
   if(!paused&&!school?.loading&&!school?.inspecting)adventure?.updateActivity(dt);
   if(previousBusy!==!!adventure?.busy){previousBusy=!!adventure?.busy;controls.clear();syncModal();}
   expansion?.update(paused?0:dt);
+  script?.update();
   interactionAccent.update(active()&&!school?.inspecting?target:null,time,{reducedMotion:motionPreference.matches,floorY:player.position.y});
   school.narrative.hideCampusDuplicates();performanceProbe?.applyView(camera);camera.updateMatrixWorld();
   ink.update(settings.quality,player.position,camera,{width:innerWidth,height:innerHeight});
@@ -394,7 +401,7 @@ export function getGameState() {
     cameraWorld:(()=>{const p=camera.getWorldPosition(new THREE.Vector3());return{x:p.x,y:p.y,z:p.z};})(),cameraFocusWorld:follow.worldFocus?{x:follow.worldFocus.x,y:follow.worldFocus.y,z:follow.worldFocus.z}:null,camera: { x: camera.position.x, y: camera.position.y, z: camera.position.z, distance: follow.actualDistance }, doors: world.doors.map(d => ({ open: d.open, angle: d.angle })),
     spatialActors:spatialActors?.describe(),living: structuredClone(progress.living), npcs: living.actors.map(a => ({ id: a.definition.id, rotation:a.agent.rotation,renderRotation:a.character.root.rotation.y,floor:a.agent.position.floor, y:a.character.root.position.y, visible:a.character.root.visible, x: a.agent.position.x, z: a.agent.position.z, state: a.agent.state, model:!!a.character.custom, animation:a.character.state, distance: a.agent.distanceWalked, transitions: a.agent.transitions })),
     adventure:adventure?.director.snapshot(),cinematic:{active:!!adventure?.cutscenes.active,paused:!!adventure?.cutscenes.paused,id:adventure?.cutscenes.scene?.id||null},physicalAction:adventure?.actions.active?.kind||null,adventureRhythm:adventure?.activityState?.phase,
-    expansion:structuredClone(progress.expansion),expansionRuntime:expansion?.describe(),expansionTargets:expansion?.targets().map(({mesh,...t})=>t),
+    script:structuredClone(progress.script),scriptScene:script?.current?.id,scriptTargets:script?.targets(),expansion:structuredClone(progress.expansion),expansionRuntime:expansion?.describe(),expansionTargets:expansion?.targets().map(({mesh,...t})=>t),
     campaign: structuredClone(progress.campaign), storyPage: story?.page, rhythm: story?.game?.phase,
     visual:{theme:'aurora-comic',edition:'0.7C',heroInk:ink.actorInk.filter(i=>i.actor.root===player&&i.mesh.isSkinnedMesh&&i.mesh.visible).length,fallbackInk:ink.actorInk.filter(i=>i.actor.root===player&&!i.mesh.isSkinnedMesh).length,models:{lorenzo:!!lorenzo.custom,maria:!!maria.custom},clips:{lorenzo:Object.keys(lorenzo.actions),maria:Object.keys(maria.actions)},toon:world.resources.material('#eadfc8').isMeshToonMaterial,outlineVertices:ink.staticInk.geometry.attributes.position?.count||0},
     spatial:validator.inspect(world.placed), memoryBooks:story.world.books.map(b=>({id:b.id,x:b.x,z:b.z,unlocked:b.unlocked,angle:b.mesh.userData.cover.rotation.z})),
@@ -406,7 +413,7 @@ registerNavigationReader(()=>({origin:school.active?{x:60,z:0}:{x:0,z:0},rotatio
 if(new URLSearchParams(location.search).has('debug')){addEventListener('keydown',e=>{if(e.code==='F3'){e.preventDefault();if(validator.visible)validator.clear();else validator.show([...world.placed,...story.world.placed],[player,...living.actors.map(a=>a.character.root)]);needsRender=true;}});}
 
 export function dispose() {
-  performanceProbe?.dispose();landscape?.dispose();sports?.dispose();spatialActors?.dispose();expansion?.dispose();document.removeEventListener('click',uiSound);schoolExterior?.dispose();overdriveP0?.dispose();school?.narrative?.dispose();school?.dispose();adventure?.dispose();ink.dispose();interactionAccent.dispose();validator.dispose();interactions.dispose();visualEffects.dispose();
+  performanceProbe?.dispose();script?.dispose();landscape?.dispose();sports?.dispose();spatialActors?.dispose();expansion?.dispose();document.removeEventListener('click',uiSound);schoolExterior?.dispose();overdriveP0?.dispose();school?.narrative?.dispose();school?.dispose();adventure?.dispose();ink.dispose();interactionAccent.dispose();validator.dispose();interactions.dispose();visualEffects.dispose();
   disposed = true; cancelAnimationFrame(frame); controls.clear(); save(); disposeRadio(); story?.dispose(); living?.dispose(); dialogues?.dispose(); lorenzo.dispose(); maria.dispose(); assets.dispose(); world.dispose(); audio.dispose(); renderer.dispose();
 }
 if (import.meta.hot) import.meta.hot.dispose(dispose);

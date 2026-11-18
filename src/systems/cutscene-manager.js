@@ -77,7 +77,7 @@ export class CutsceneManager {
       this.elapsed += dt;
       this.moveCamera(this.reducedMotion() ? 1 : Math.min(1, this.elapsed / this.duration));
       if (this.ownsDialogue && this.dialogue?.open === false) this.dialogueDone = true;
-      if (this.elapsed < this.duration || (!this.dialogueDone && this.elapsed < this.waitLimit)) return;
+      if (this.elapsed < this.duration || (!this.dialogueDone && (this.shot.waitForDialogue || this.elapsed < this.waitLimit))) return;
       this.closeDialogue();
       if (++this.index >= this.scene.shots.length) this.finish('complete'); else this.enter();
     } catch (error) { this.fail(error); }

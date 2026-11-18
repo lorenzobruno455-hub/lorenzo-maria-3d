@@ -12,13 +12,13 @@ export class Dialogue {
     document.addEventListener('keydown', this.onKey);
   }
   start(lines, { done = null, choices = [], instant = false } = {}) {
-    this.lines = lines; this.index = 0; this.done = done; this.options = choices; this.instant = instant; this.open = true;
+    this.lines = lines.map(line=>({...line,speaker:({'BIA':'RAFAELLA','CAIO':'PORVA','PROF. HELENA':'PROF NEWMARA','HELENA':'PROF NEWMARA','DAVI':'BASSARAB','LIA':'HELÔ',bia:'RAFAELLA',caio:'PORVA',helena:'PROF NEWMARA',davi:'BASSARAB',lia:'HELÔ'})[line.speaker]||line.speaker})); this.index = 0; this.done = done; this.options = choices; this.instant = instant; this.open = true;
     this.root.hidden = false; this.onState(true); this.showLine(); this.next.onclick = () => this.advance(); this.next.focus();
   }
   showLine() {
     const line = this.lines[this.index]; this.elapsed = 0; this.visible = 0; this.speaker.textContent = line.speaker;
     this.root.querySelector('.portrait').textContent = line.speaker[0];
-    this.tag.textContent = line.provenance === 'school-fiction' ? 'Personagem ou acontecimento fictício · Colégio Aurora' : line.provenance === 'creative-fiction' ? 'Diálogo criativo do jogo Color · não é transcrição' : line.provenance === 'author-reported-memory' ? 'Memória relatada pelo autor' : '';
+    this.tag.textContent = ({real_report:'Relato do autor · resposta recordada',documentary_summary:'Resumo documental',adapted:'Cena dramatizada · falas recriadas',fictional:'Ficção narrativa · não é registro histórico',pending_verification:'Ficção documental · contexto histórico pendente'})[line.provenance] || (line.provenance === 'school-fiction' ? 'Personagem ou acontecimento fictício · Colégio Aurora' : line.provenance === 'creative-fiction' ? 'Diálogo criativo do jogo Color · não é transcrição' : line.provenance === 'author-reported-memory' ? 'Memória relatada pelo autor' : '');
     this.speech.textContent = ''; this.choices.replaceChildren(); this.next.hidden = false;
     this.onLine?.(line); if (this.instant || this.reducedMotion()) this.reveal();
   }

@@ -38,7 +38,7 @@ export function createCampusWorld(scene, world) {
     const fan = new THREE.Group(); fan.position.set(x, 3.8, -16.3); group.add(fan); fans.push(fan);
     for (let i = 0; i < 3; i++) { const blade = resources.mesh('box', '#8eaaa7', [.65, .08, .06]); blade.rotation.z = i * Math.PI / 3; fan.add(blade); }
   }
-  world.sign('CLUBE DE CIÊNCIAS · PERGUNTE À HELENA', -21, 3.3, -6.35, 4).rotation.y=Math.PI;
+  world.sign('CLUBE DE CIÊNCIAS · PROF NEWMARA', -21, 3.3, -6.35, 4).rotation.y=Math.PI;
   world.sign('RECADOS · O RECREIO TAMBÉM É APRENDIZADO', 7, 2.3, -2.5, 4);
   const clockFace = mesh('cylinder', '#eee8db', [.42, .05, .42], 0, 2.7, -24.3); clockFace.rotation.x = Math.PI / 2;
   const clock = box(0, 2.7, -24.22, .025, .35, .025, '#31564a'); dynamic.add(clock);
@@ -50,7 +50,7 @@ export function createCampusWorld(scene, world) {
 
     const o = { id, name, x, z, kind, mesh: m }; objects.push(o); return o;
   };
-  const lostBook = addObject('lost-book', 'Livro de Bia', 21, -15, '#a88b76');
+  const lostBook = addObject('lost-book', 'Livro de Rafaella', 21, -15, '#a88b76');
   const score = addObject('familiar-music', 'Partitura do ensaio', 31, -12, '#eadfc8');
   addObject('canteen', 'Cardápio da cantina', 0, -23, '#bc9a63');
   addObject('note', 'Bilhete no corredor', -22, -2, '#eadfc8');

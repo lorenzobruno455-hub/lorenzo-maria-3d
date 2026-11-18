@@ -50,7 +50,7 @@ export class LivingSchool {
   get free() { return this.state.mode === 'free'; }
   syncOccupants() { this.world.occupants = this.actors.map(a => a.agent.position); }
   setMode(mode) { this.state.mode = mode === 'free' ? 'free' : 'campaign'; this.save(); this.notify(this.free ? 'Exploração livre · seu progresso da campanha foi preservado.' : 'Campanha retomada.'); }
-  dialogueLine(value) { rememberLine(this.state, value); if (value.source === 'LL' || value.source === 'MM') this.speakingId = 'maria'; }
+  dialogueLine(value) { if(value.speakerId&&this.actors.some(a=>a.definition.id===value.speakerId))this.speakingId=value.speakerId; rememberLine(this.state, value); if (value.source === 'LL' || value.source === 'MM') this.speakingId = 'maria'; }
   targets() {
     if(this.spatial)return[...this.spatial.targets(),...this.campus.objects.filter(o=>o.mesh.visible)];
     return [ ...this.actors.map(a => ({ id: a.definition.id, name: a.definition.name, kind: a.definition.id === 'maria' ? 'maria' : 'npc', ...a.agent.position })),
@@ -102,20 +102,20 @@ export class LivingSchool {
     if (target.id === 'canteen') return this.canteen();
     if(target.id==='ball'&&this.sports){const p=this.player.getWorldPosition(this.ballPlayer||(this.ballPlayer=this.player.position.clone()));this.sports.kick(p);return;}
     if (target.id === 'ball'&&this.location){this.location.kick();return;}
-    if (target.id === 'ball') { this.campus.kick(this.player.position); this.actors.forEach(a => { if (Math.hypot(a.agent.position.x - target.x, a.agent.position.z - target.z) < 5) a.reaction = .9; }); this.audio.play('ball'); this.notify('Bola em jogo! Caio aprova a iniciativa.'); return; }
+    if (target.id === 'ball') { this.campus.kick(this.player.position); this.actors.forEach(a => { if (Math.hypot(a.agent.position.x - target.x, a.agent.position.z - target.z) < 5) a.reaction = .9; }); this.audio.play('ball'); this.notify('Bola em jogo! Porva aprova a iniciativa.'); return; }
     if (target.id === 'note') { this.say(null, [line('BILHETE FICTÍCIO', 'Se encontrar minha concentração, favor devolver antes da prova. Assinado: alguém que veio só buscar um lápis.')]); return; }
     if (target.id === 'lost-book') {
-      this.say(null, [line('BIBLIOTECA', 'O livro está identificado com o nome de Bia. Entre as páginas, um marcador pede: “Não dobre a ponta, ela também tem sentimentos.”')], { done: () => { eventAction(this.state, target.id, 'find'); this.changed('Livro encontrado · devolva-o a Bia.'); } }); return;
+      this.say(null, [line('BIBLIOTECA', 'O livro está identificado com o nome de Rafaella. Entre as páginas, um marcador pede: “Não dobre a ponta, ela também tem sentimentos.”')], { done: () => { eventAction(this.state, target.id, 'find'); this.changed('Livro encontrado · devolva-o a Rafaella.'); } }); return;
     }
     if (target.id === 'familiar-music') {
       this.audio.setMood('memory');
-      this.say(null, [line('PARTITURA', 'Uma pequena melodia original do jogo. Davi marcou as pausas do ensaio nesta folha.'), { speaker: 'NARRADOR', text: 'A trilha sonora muda. O protagonista reconhece os primeiros acordes de uma música favorita e começa a associá-los a Maria.', provenance: 'creative-fiction' }], { done: () => { eventAction(this.state, target.id, 'find'); this.changed('Partitura ouvida · converse com Davi.'); } });
+      this.say(null, [line('PARTITURA', 'Uma pequena melodia original do jogo. Bassarab marcou as pausas do ensaio nesta folha.'), { speaker: 'NARRADOR', text: 'A trilha sonora muda. O protagonista reconhece os primeiros acordes de uma música favorita e começa a associá-los a Maria.', provenance: 'creative-fiction' }], { done: () => { eventAction(this.state, target.id, 'find'); this.changed('Partitura ouvida · converse com Bassarab.'); } });
     }
   }
   npc(id) {
     const npc = NPC_DATA.find(n => n.id === id); if (!npc) return;
     const event = EVENT_DATA.find(e => e.npc === id), state = event && this.state.events[event.id];
-    const choices = [ { label: 'Como está o dia?', action: () => this.say(id, [line(npc.name.toUpperCase(), npc.lines[1])], { done: () => { befriend(this.state, id, `conversation:${id}`); this.changed('Conversa registrada.'); } }) } ];
+    const choices = [...(this.script?.conversationOptions(id)||[]), { label: 'Como está o dia?', action: () => this.say(id, [line(npc.name.toUpperCase(), npc.lines[1])], { done: () => { befriend(this.state, id, `conversation:${id}`); this.changed('Conversa registrada.'); } }) } ];
     const adventureOwns=this.adventure&&['bia','davi'].includes(id)&&!legacyQuestOwns(this.getProgress(),event?.id);
     if(adventureOwns)choices.push({label:`Aventura: ${id==='bia'?'O Livro Perdido':'Uma Música Conhecida'}`,action:()=>this.adventure.start(id==='bia'?'lost-book':'familiar-music')});
     if (event&&!adventureOwns) {

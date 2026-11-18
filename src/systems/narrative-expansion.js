@@ -38,7 +38,7 @@ export class NarrativeExpansion {
   adventure.cutscenes.onFinish=event=>{
    if(event.id.startsWith('expansion-')){
     const id=event.id.slice('expansion-'.length);this.sceneAnimation?.pages?.removeFromParent();if(this.sceneAnimation?.mesh)this.sceneAnimation.mesh.rotation.z=this.sceneAnimation.base;this.sceneAnimation=null;
-    if(['complete','skipped'].includes(event.reason)&&finishExpansion(this.state,id))this.reward(id);
+    if(['complete','skipped'].includes(event.reason)&&finishExpansion(this.state,id)){this.reward(id);if(id==='archive')this.script?.start('epilogue');}
    }else this.onSceneFinish?.(event);
   };
   story.expansion=this;
@@ -88,6 +88,7 @@ export class NarrativeExpansion {
   return this.school.active?narrativeWaypoint(this.school.navigation,this.school.floor,p):p;
  }
  start(id){
+  if(this.script?.current){this.notify('Conclua o capítulo em andamento antes de iniciar outra aventura.');return false;}
   if(this.adventure.current){this.notify('Conclua a aventura em andamento antes de iniciar a expansão.');return false;}
   if(!startExpansion(this.state,id,this.getProgress().campaign)){this.notify('Arquivo Aurora requer as seis memórias históricas. Outra missão ativa deve ser concluída primeiro.');return false;}
   this.story.close();this.story.start();this.save();this.notify(`${missionById(id).title} · siga o objetivo no HUD`);return true;
@@ -103,10 +104,10 @@ export class NarrativeExpansion {
   this.character.requestAction(t.type==='collect'?'pickup':'openbook',{duration:.85});
   if(t.type==='talk'){
    const actor=this.living.actors.find(a=>a.definition.id===target.id);this.living.speakingId=target.id;actor?.character.requestAction('talk',{duration:1.5});
-   this.story.dialogue.start([{speaker:target.id.toUpperCase(),text:t.text,provenance:'school-fiction'}],{instant:true,choices:t.choices.map(choice=>({label:choice,action:()=>done(choice)}))});
+   this.story.dialogue.start(this.script?.missionLines(c.mission.id,t.id).length?this.script.missionLines(c.mission.id,t.id):[{speaker:target.id.toUpperCase(),text:t.text,provenance:'school-fiction'}],{instant:true,choices:t.choices.map(choice=>({label:choice,action:()=>done(choice)}))});
   }else{
    this.adventure.actions.play(t.type==='collect'&&!this.school.active?'pickup':'book',target.mesh,()=>{
-    this.story.dialogue.start([{speaker:'DESCOBERTA FICTÍCIA',text:`${t.text||target.name} ${FICTION}`,provenance:'school-fiction'}],{instant:true,done:()=>done()});
+    this.story.dialogue.start(this.script?.missionLines(c.mission.id,t.id).length?this.script.missionLines(c.mission.id,t.id):[{speaker:'DESCOBERTA FICTÍCIA',text:`${t.text||target.name} ${FICTION}`,provenance:'school-fiction'}],{instant:true,done:()=>done()});
    });
   }
   return true;
@@ -156,7 +157,7 @@ export class NarrativeExpansion {
   }
   this.adventure.cutscenes.play({id:`expansion-${id}`,shots:[
    {duration:1.4,camera:{from:[p.x+1.8,y+1.5,p.z+2],to:[p.x+1.1,y+1.1,p.z+1.5],lookAt:[p.x,y+.15,p.z]},actors:[{id:'lorenzo',state:'observe'}],effect:'PÁGINAS VIVAS'},
-   {duration:1.4,actors:[{id:'lorenzo',state:'react'}],dialogue:{speaker:'EPÍLOGO FICTÍCIO',text:`${m.finale} ${FICTION}`,provenance:'school-fiction'}},
+   {duration:1.4,waitForDialogue:true,actors:[{id:'lorenzo',state:'react'}],dialogue:this.script?.missionLines(id,'scene').length?this.script.missionLines(id,'scene'):{speaker:'EPÍLOGO FICTÍCIO',text:`${m.finale} ${FICTION}`,provenance:'school-fiction'}},
   ]});
   document.getElementById('scene-title').textContent=m.title;document.getElementById('scene-subtitle').textContent=`${replay?'Revisão · ':''}Ficção narrativa · cena pulável`;
   return true;
