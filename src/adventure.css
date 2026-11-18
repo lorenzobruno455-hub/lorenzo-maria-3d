@@ -13,3 +13,14 @@ body:has(#cinematic:not([hidden])) .lm-radio{visibility:hidden}
 body #dialog[data-cinematic-mode="messages"]{left:auto;right:max(14px,env(safe-area-inset-right));width:min(410px,48vw);border:5px solid #0b1020;border-radius:18px;padding:10px 14px;box-shadow:5px 5px 0 #f22c8a,0 0 0 3px #23e1ef}
 body #dialog[data-cinematic-mode="messages"] #speech{background:#d5f8f0;border:2px solid #0b1020;border-radius:10px 10px 2px 10px;padding:8px;color:#11172a}
 @media(max-width:550px) and (min-height:501px){body #dialog[data-cinematic-mode="messages"]{width:calc(100vw - 28px)}#cinematic-beat[data-mode="diary"]{width:calc(100vw - 56px)}}
+/* One narrative hierarchy; the original minigame/cutscene controls remain intact. */
+.journey-content{display:grid;gap:12px}.journey-content>button{min-height:52px;text-align:left;padding:12px 18px;font-size:22px;border:3px solid #101425;background:#ffdf31;color:#101425;box-shadow:4px 4px 0 #111729}.journey-content>button:nth-of-type(2n){background:#39dfdf}.journey-intro{margin:0 0 8px}.journey-tabs{display:flex;gap:8px;flex-wrap:wrap;position:sticky;top:0;background:#171d32;padding:8px;z-index:1}.journey-tabs button{min-height:44px;flex:1;font-size:16px}.journey-tabs button[aria-pressed=true]{background:#ffdc32;color:#101425}.journey-current{border-left:8px solid #ffdf31}.journey-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 14px!important}.journey-row small{color:#ddd!important}.journey-content .story-card button{min-height:44px;margin:4px}.welcome-content>button{min-height:44px}
+@media(max-height:500px){.journey-content{gap:8px}.journey-content>button{min-height:48px;padding:8px 14px;font-size:20px}.journey-row{font-size:14px}.journey-tabs{padding:5px}.journey-tabs button{font-size:13px}}
+
+#dialog[data-maria-menu] .dialogue-actions{display:none}
+
+body:has(#welcome:not([hidden])) #dialog:not([hidden]){z-index:19}
+
+#story-content[data-journey-page="menu"]{gap:6px}
+#story-content[data-journey-page="menu"]>button{margin:0;min-height:44px;height:44px;padding:5px 14px;font-size:19px;line-height:1.1}
+#story-content[data-journey-page="menu"]>.journey-intro{margin:0;font-size:13px;line-height:1.4}

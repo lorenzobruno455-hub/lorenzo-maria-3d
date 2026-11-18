@@ -1,3 +1,4 @@
+import {freshJourney,validateJourney} from './journey-progress.js';
 import {freshScript,validateScript} from './script-progress.js';
 import {freshExpansion,validateExpansion} from './expansion-progress.js';
 import { freshSchoolVisit, validateSchoolVisit } from './school-progress.js';
@@ -8,6 +9,7 @@ import { freshCampaign, validateCampaign } from './quests.js';
 import {BOUNDS} from './physics.js';
 import { clamp } from './physics.js';
 export const SAVE_KEY = 'lorenzo-maria-v04';
+export const PRE115_SAVE_KEY = SAVE_KEY+'-pre115';
 export const PRE08_SAVE_KEY = 'lorenzo-maria-v04-pre08';
 export const PREVIOUS_SAVE_KEY = 'lorenzo-maria-v03';
 export const LEGACY_SAVE_KEY = 'lorenzo-maria-v02';
@@ -17,7 +19,7 @@ export const ITEMS = [
   { id: 'photo', name: 'Fotografia do jardim', x: 10, z: 22 },
 ];
 export const DEFAULT_SETTINGS = { quality: 'medium', sensitivity: 1, volume: .5, sound: false, shadows: true, adaptive: true, controlsSize: 1, controlsOpacity: .8, musicVolume: .5, effectsVolume: .5 };
-export function freshProgress() { return { script:freshScript(), expansion:freshExpansion(), schoolVisit: freshSchoolVisit(), stage: 0, collected: [], position: { x: 0, z: 19 }, yaw: 0, pitch: .38, interactions: {}, adventure:freshAdventure(), living: freshLiving(), campaign: freshCampaign(), doors: [false, false] }; }
+export function freshProgress() { return { journey:freshJourney(), script:freshScript(), expansion:freshExpansion(), schoolVisit: freshSchoolVisit(), stage: 0, collected: [], position: { x: 0, z: 19 }, yaw: 0, pitch: .38, interactions: {}, adventure:freshAdventure(), living: freshLiving(), campaign: freshCampaign(), doors: [false, false] }; }
 export function validateProgress(raw) {
   const p = freshProgress();
   if (!raw || typeof raw !== 'object') return p;
@@ -31,12 +33,15 @@ export function validateProgress(raw) {
   p.pitch = Number.isFinite(raw.pitch) ? clamp(raw.pitch, .08, 1.15) : .38;
   p.doors = [raw.doors?.[0] === true, raw.doors?.[1] === true];
   p.interactions=Object.fromEntries(Object.entries(raw.interactions||{}).filter(([k,v])=>typeof k==='string'&&k.length<100&&v===true).slice(0,100));
-  p.adventure=validateAdventure(raw.adventure);
+  p.campaign = validateCampaign(raw.campaign);
+  p.adventure=validateAdventure(raw.adventure,undefined,p.campaign.memories.includes('memory-1')?['first-encounter']:[]);
   p.schoolVisit = validateSchoolVisit(raw.schoolVisit);
   p.living = validateLiving(raw.living);
   p.campaign = validateCampaign(raw.campaign);
   p.expansion = validateExpansion(raw.expansion);
   p.script = validateScript(raw.script);
+  p.journey=validateJourney(raw.journey);
+  if(p.campaign.memories.length&&p.stage!==2){p.stage=2;p.collected=ITEMS.map(i=>i.id);}
   return p;
 }
 export function validateSettings(raw = {}) {
@@ -52,7 +57,7 @@ export function validateSettings(raw = {}) {
 }
 export function loadSave(storage) {
   for (const key of [SAVE_KEY, PRE08_SAVE_KEY, PREVIOUS_SAVE_KEY, LEGACY_SAVE_KEY]) {
-    try { const raw = JSON.parse(storage?.getItem(key) || 'null'); if (raw?.progress && typeof raw.progress === 'object') return { progress: validateProgress(raw.progress), settings: validateSettings(raw.settings || {}), exists: true }; }
+    try { const text=storage?.getItem(key)||'null',raw=JSON.parse(text);if(raw?.progress&&typeof raw.progress==='object'){if(raw.progress.journey?.version!==1)try{if(!storage.getItem(PRE115_SAVE_KEY))storage.setItem(PRE115_SAVE_KEY,text);}catch{/* A denied backup must not discard a readable save. */}return {progress:validateProgress(raw.progress),settings:validateSettings(raw.settings||{}),exists:true};} }
     catch { /* Try the untouched legacy backup if the new record is corrupt. */ }
   }
   return { progress: freshProgress(), settings: { ...DEFAULT_SETTINGS }, exists: false };

@@ -14,10 +14,10 @@ export class Adventure {
  constructor({scene,world,living,story,player,character,camera,light,dialogue,audio,effects,getProgress,save,notify,startGame,onLock}){
   Object.assign(this,{scene,world,living,story,player,character,camera,dialogue,audio,getProgress,save,notify,startGame,onLock});this.owned=[];this.elapsed=0;
   this.actions=new EnvironmentActions({scene,player,character,audio});
-  this.director=new QuestDirector({getState:()=>getProgress().adventure,save:s=>{getProgress().adventure=s;save();},onReward:r=>this.reward(r),onChange:()=>{this.autoKey='';}});
+  this.director=new QuestDirector({getState:()=>getProgress().adventure,save:s=>{getProgress().adventure=s;save();},onReward:r=>this.reward(r),onChange:()=>{this.autoKey='';},definitions:ADVENTURES.map(d=>({...d,prerequisites:(d.prerequisites||[]).filter(id=>!(id==='first-encounter'&&getProgress().campaign.memories.includes('memory-1')))}))});
   this.cutscenes=new CutsceneManager({camera,actors:{lorenzo:character,...Object.fromEntries(living.actors.map(a=>[a.definition.id,a.character]))},light,dialogue,effects,reducedMotion:()=>matchMedia('(prefers-reduced-motion:reduce)').matches,onLock:value=>{onLock(value);$('cinematic').hidden=!value;if(value){story.close();this.updateSceneCaption();}},onFinish:({id,reason})=>{this.autoKey=reason==='error'?`${this.current?.id}:${this.current?.node}`:'';if(['complete','skipped'].includes(reason))this.director.emit('scene',id);else if(reason==='error')notify('Cena interrompida com segurança. Use Retomar aventura para tentar novamente.');save();},onError:()=>notify('Cena interrompida; os controles foram restaurados.')});
   $('scene-skip').onclick=()=>this.cutscenes.skip();$('scene-pause').onclick=()=>{if(this.cutscenes.paused)this.cutscenes.resume();else this.cutscenes.pause();$('scene-pause').textContent=this.cutscenes.paused?'Retomar cena':'Pausar cena';};
-  $('adventure-open').onclick=()=>this.show();this.key=e=>{if(e.code==='Space'&&!e.repeat&&this.activityId==='music-rhythm'&&this.story.open&&this.story.page==='adventure-activity'){e.preventDefault();this.hit();}if(this.cutscenes.active&&e.code==='Escape'){e.preventDefault();this.cutscenes.skip();}};document.addEventListener('keydown',this.key);
+  if($('adventure-open'))$('adventure-open').onclick=()=>this.show();this.key=e=>{if(e.code==='Space'&&!e.repeat&&this.activityId==='music-rhythm'&&this.story.open&&this.story.page==='adventure-activity'){e.preventDefault();this.hit();}if(this.cutscenes.active&&e.code==='Escape'){e.preventDefault();this.cutscenes.skip();}};document.addEventListener('keydown',this.key);
   living.adventure=this;story.adventure=this;this.makeProps();this.reconcile();
  }
  reset(){this.cutscenes.skip();this.actions.clear();for(const definition of ADVENTURES)if(definition.reward?.eventId)delete this.getProgress().living.events[definition.reward.eventId];this.director.state=freshAdventure();this.getProgress().adventure=this.director.snapshot();this.autoKey='';this.activityId=null;this.save();}
@@ -39,6 +39,7 @@ export class Adventure {
   this.notebook=()=>this.story.world.objects.find(o=>o.id==='study-notebook');
  }
  start(id){
+  if(this.journey&&!this.journey.allowed('adventure',id))return false;
   if(this.script?.current){this.notify('Conclua o capítulo em andamento antes de iniciar outra aventura.');return false;}
   if(legacyQuestOwns(this.getProgress(),id)){this.notify('Este encontro já existe no seu save. Retome ou relembre pela conversa com Rafaella ou Bassarab.');return false;}
   if(this.story.expansion?.current){this.notify('Conclua a missão da expansão antes de iniciar outra aventura.');return false;}
@@ -48,7 +49,7 @@ export class Adventure {
   if(id!=='first-encounter')eventAction(this.getProgress().living,id,'start');
   this.story.close();this.startGame();this.save();return true;
  }
- show(){this.story.show('adventures');$('story-title').textContent='Aventuras do Aurora · 0.7B';const content=this.story.content;
+ show(){if(this.journey&&!this.journey.developer)return this.journey.missions();this.story.show('adventures');$('story-title').textContent='Aventuras do Aurora · 0.7B';const content=this.story.content;
   content.append(node('p','Encenações fictícias e atividades da escola. As memórias originais continuam identificadas e preservadas.'));
   for(const d of ADVENTURES){const c=this.director.current(d.id),card=node('article');card.className='story-card';card.append(node('h3',d.title),node('p',c.status==='completed'?'✓ Aventura concluída':c.status==='active'?c.step.title:'Uma aventura de exploração, escolhas e descobertas.'),button(legacyQuestOwns(this.getProgress(),d.id)?'Retomar encontro pelo personagem':c.status==='completed'?'Rever conclusão':c.status==='active'?`Retomar: ${d.title}`:`Iniciar: ${d.title}`,()=>c.status==='completed'?this.replay(d.id):this.start(d.id)));content.append(card);}
  }
@@ -125,6 +126,7 @@ export class Adventure {
  update(dt,{active,paused}){
   if(this.photo&&!this.location)this.photo.mesh.visible=Math.hypot(this.player.position.x-this.photo.x,this.player.position.z-this.photo.z)<(this.living.settings.quality==='low'?20:55);
   if(paused)return;this.elapsed+=dt;this.actions.update(dt);this.cutscenes.update(dt);
+  if(this.journey&&this.living.free&&!this.getProgress().journey.review)return;
   const c=this.current;
   if(!this.location&&c?.id==='lost-book'&&c.node<5&&!this.actions.active){const o=this.living.campus.objects.find(o=>o.id==='lost-book');if(o)o.mesh.visible=true;}
   if(!this.location&&c?.id==='familiar-music'&&c.node<3&&!this.actions.active){const o=this.living.campus.objects.find(o=>o.id==='familiar-music');if(o)o.mesh.visible=true;}
