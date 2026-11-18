@@ -13,13 +13,17 @@ function freeNode(point, obstacles, grid=1) {
   return null;
 }
 // Connected one-metre waypoints with A*. Diagonals require both adjoining lanes.
-export function findPath(from, to, obstacles, {grid=1}={}) {
+export function findPath(from,to,obstacles,options={}){const search=findPathSteps(from,to,obstacles,options);let result=search.next();while(!result.done)result=search.next();return result.value;}
+
+// One A* implementation: the worker drains it, fallback yields between slices.
+export function* findPathSteps(from, to, obstacles, {grid=1}={}) {
   if (clearSegment(from, to, obstacles)) return [{ x: to.x, z: to.z }];
   const start = freeNode(from, obstacles,grid), end = freeNode(to, obstacles,grid); if (!start || !end) return [];
   const startKey = key(start.x, start.z), endKey = key(end.x, end.z);
   const open = [{ ...start, key: startKey, g: 0, f: 0 }], costs = new Map([[startKey, 0]]), parents = new Map(), visited = new Set();
   let iterations = 0;
   while (open.length && iterations++ < 7000) {
+    if(iterations%16===0)yield;
     let index = 0; for (let i = 1; i < open.length; i++) if (open[i].f < open[index].f) index = i;
     const n = open.splice(index, 1)[0]; if (visited.has(n.key)) continue; visited.add(n.key);
     if (n.key === endKey) {
