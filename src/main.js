@@ -188,7 +188,7 @@ $('start').textContent = saved.exists ? 'Continuar a explorar →' : 'Começar a
 $('start').onclick = () => { started = true; $('welcome').hidden = true; $('start').blur(); audio.unlock(); syncModal(); save(); if(progress.schoolVisit.active&&!school?.active&&!school?.loading)void openSchool(); };
 living = new LivingSchool({ scene, world, maria, player, getProgress: () => progress, settings, dialogue: dialogues, save, notify, audio });
 recoverPlayerPosition();
-installPreferences(settings, save, controls);
+const preferences=installPreferences(settings, save, controls);
 story = new Story({ player, living, scene, world, getProgress: () => progress, save, notify, dialogue: dialogues, audio, effects: visualEffects,
   start: () => { if (!started) $('start').click(); if (paused) setPause(false); },
   tutorial: () => { living.setMode('campaign'); const line = mariaDialogue(progress); speak('MARIA', line.text, () => { progress.stage = line.nextStage; updateHUD();if(progress.stage===2&&!progress.script.completed.includes('PRO-CENA01'))script.start('prologue'); }); },
@@ -415,7 +415,7 @@ registerNavigationReader(()=>({origin:school.active?{x:60,z:0}:{x:0,z:0},rotatio
 if(new URLSearchParams(location.search).has('debug')){listen(window,'keydown',e=>{if(e.code==='F3'){e.preventDefault();if(validator.visible)validator.clear();else validator.show([...world.placed,...story.world.placed],[player,...living.actors.map(a=>a.character.root)]);needsRender=true;}});}
 
 export function dispose() {
-  if(disposed)return;for(const off of lifecycleListeners)off();lifecycleListeners.length=0;controls.dispose();
+  if(disposed)return;for(const off of lifecycleListeners)off();lifecycleListeners.length=0;controls.dispose();preferences.dispose();
   performanceProbe?.dispose();script?.dispose();landscape?.dispose();sports?.dispose();spatialActors?.dispose();expansion?.dispose();document.removeEventListener('click',uiSound);schoolExterior?.dispose();overdriveP0?.dispose();school?.narrative?.dispose();school?.dispose();adventure?.dispose();ink.dispose();interactionAccent.dispose();validator.dispose();interactions.dispose();visualEffects.dispose();
   disposed = true; cancelAnimationFrame(frame); controls.clear(); save(); disposeRadio(); story?.dispose(); living?.dispose(); dialogues?.dispose(); lorenzo.dispose(); maria.dispose(); assets.dispose(); world.dispose(); audio.dispose(); renderer.dispose();
 }
