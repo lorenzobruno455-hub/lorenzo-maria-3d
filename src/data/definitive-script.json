@@ -1,0 +1,4120 @@
+{
+  "version": 1,
+  "source": "PROJECT_AURORA_ROTEIRO_DEFINITIVO_V1.pdf · 18/11/2026",
+  "scenes": [
+    {
+      "id": "PRO-CENA01",
+      "title": "Uma página em branco",
+      "sourceKind": "fictional",
+      "lines": [
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Você veio devolver alguma coisa ou veio aumentar meu trabalho?",
+          "action": "ergue os olhos do livro",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Depende. Esse álbum é seu?",
+          "action": "olha a mesa",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Se fosse, estaria catalogado.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Ele não tá catalogado?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Se estivesse, eu não estaria fazendo essa cara.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Justo. O que tem dentro?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Seis páginas com datas. A sétima veio em branco.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Parece que alguém esqueceu de terminar.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Ou deixou espaço de propósito.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Posso abrir?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Pode. Só não arranque nenhuma página.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Isso foi muito específico.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Conheço meus alunos.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ],
+      "productionNotes": "Local: Biblioteca, presente fictício. Fonte: FICTÍCIO. Gatilho: Novo jogo. Personagens: Lorenzo, Rafaella.\nCâmera: travelling baixo entre estantes, pousa sobre álbum sem texto legível, depois plano médio. Interação:\naproximar-se do álbum.\n\nRAFAELLA [ergue os olhos do livro]: Você veio devolver alguma coisa ou veio aumentar meu trabalho?\nLORENZO [olha a mesa]: Depende. Esse álbum é seu?\nRAFAELLA: Se fosse, estaria catalogado.\nLORENZO: Ele não tá catalogado?\nRAFAELLA: Se estivesse, eu não estaria fazendo essa cara.\nLORENZO: Justo. O que tem dentro?\nRAFAELLA: Seis páginas com datas. A sétima veio em branco.\nLORENZO: Parece que alguém esqueceu de terminar.\nRAFAELLA: Ou deixou espaço de propósito.\nLORENZO: Posso abrir?\nRAFAELLA: Pode. Só não arranque nenhuma página.\nLORENZO: Isso foi muito específico.\nRAFAELLA: Conheço meus alunos.\nESCOLHAS: [Abrir agora] → prosseguir; [Olhar a sala primeiro] → explorar biblioteca, sem alterar linha do\ntempo.\nSAÍDA: AlbumIntroSeen=true; iniciar CAP01-CENA01. DEP.: memory-1 ainda bloqueada.\n\n\nCAPÍTULO 01 | QUANDO A GENTE COMEÇOU\nMarco: 19/08/2024. Arco: atenção → amizade → primeiro não → silêncio → segunda chance → convivência. Nota:\neste é o capítulo com maior evidência direta de Lorenzo. Cenas retrospectivas são simulações, não gravações\nhistóricas."
+    },
+    {
+      "id": "CAP01-CENA01",
+      "title": "A garota que chegou",
+      "sourceKind": "adapted",
+      "lines": [
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Você tá encarando a porta faz tempo.",
+          "action": "curioso",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Tô vendo quem entrou.",
+          "action": "disfarça",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "A porta tem nome agora?",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Nossa, você é insuportável.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Obrigado, eu treino.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Tem gente nova na escola.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Eu percebi. A escola inteira percebeu.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Então para de me olhar e vai estudar.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Você acabou de mandar alguém estudar? Isso merece registro.",
+          "action": "",
+          "sourceKind": "adapted"
+        }
+      ],
+      "productionNotes": "Local: Sala e corredor, São Jorge. Período: 2023. Fonte: ADAPTADO. Gatilho: Interagir com fotografia de 2023.\nCâmera: plano geral da sala, desloca para Lorenzo; Maria conversa no fundo, sem pensamento atribuído.\n\nPORVA [curioso]: Você tá encarando a porta faz tempo.\nLORENZO [disfarça]: Tô vendo quem entrou.\nPORVA: A porta tem nome agora?\nLORENZO: Nossa, você é insuportável.\nPORVA: Obrigado, eu treino.\nLORENZO: Tem gente nova na escola.\nPORVA: Eu percebi. A escola inteira percebeu.\n\n\n\n\n\n\n\n\nLORENZO: Então para de me olhar e vai estudar.\nPORVA: Você acabou de mandar alguém estudar? Isso merece registro.\nESCOLHAS: [Perguntar quem é] → Porva responde “Maria, eu acho”; [Mudar de assunto] → “Tá, eu não vi nada”.\nNenhuma resposta implica que Maria sabe de seus sentimentos.\nINTERAÇÃO: ler quadro de recados e sentar. SAÍDA: transição calendário “alguns meses depois”; intro2023=true."
+    },
+    {
+      "id": "CAP01-CENA02",
+      "title": "Um Chromebook e um sorriso",
+      "sourceKind": "adapted",
+      "lines": [
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Esse Chromebook tá funcionando?",
+          "action": "olha o aparelho",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Acho que não. Deu algum problema.",
+          "action": "fala naturalmente",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "O Block fez ele querer abandonar a escola.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "KKKK, coitado do computador.",
+          "action": "ri",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Acho que ele já tá de férias.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Antes da gente? Injusto.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Se ele voltar a funcionar, avisa que eu também preciso de férias.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Pode deixar.",
+          "action": "",
+          "sourceKind": "adapted"
+        }
+      ],
+      "productionNotes": "Local: Sala, perto do Chromebook. Período: 2023. Fonte: ADAPTADO baseado na carta S2 escrita por Lorenzo e\nconfirmação dele. Gatilho: examinar Chromebook. Câmera: objeto → plano sobre ombro → Maria sorri; sem\nclose exagerado.\n\nLORENZO [olha o aparelho]: Esse Chromebook tá funcionando?\nMARIA [fala naturalmente]: Acho que não. Deu algum problema.\nLORENZO: O Block fez ele querer abandonar a escola.\nMARIA [ri]: KKKK, coitado do computador.\nLORENZO: Acho que ele já tá de férias.\nMARIA: Antes da gente? Injusto.\nLORENZO: Se ele voltar a funcionar, avisa que eu também preciso de férias.\nMARIA: Pode deixar.\nESCOLHAS: [Continuar a brincadeira] → MARIA: “Você não existe”; [Perguntar se precisam de ajuda] → MARIA:\n“Acho que já estão vendo isso”.\nINTERAÇÃO: inspecionar aparelho apenas, sem dano e sem puzzle de invasão. SAÍDA: desbloqueia ícone\n“Primeiro sorriso”. CONFIABILIDADE: a piada é fictícia; primeiro contato e sorriso vêm do relato."
+    },
+    {
+      "id": "CAP01-CENA03",
+      "title": "Conversas de aula",
+      "sourceKind": "adapted",
+      "lines": [
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Você entendeu essa parte?",
+          "action": "indicando caderno",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Entendi o título.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Impressionante. Já é um começo.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Eu tô trabalhando com metas realistas.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Então sua meta agora é entender a pergunta.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Você é muito exigente.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "E você é muito enrolado.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Não enrolado. Metodológico.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Tá bom, senhor metodologia.",
+          "action": "",
+          "sourceKind": "adapted"
+        }
+      ],
+      "productionNotes": "Local: Sala e corredor. Período: 2023. Fonte: ADAPTADO. Gatilho: iniciar atividade escolar curta. Câmera:\npadrão terceira pessoa, pequenas reações de cabeça.\n\nMARIA [indicando caderno]: Você entendeu essa parte?\nLORENZO: Entendi o título.\nMARIA: Impressionante. Já é um começo.\nLORENZO: Eu tô trabalhando com metas realistas.\nMARIA: Então sua meta agora é entender a pergunta.\nLORENZO: Você é muito exigente.\nMARIA: E você é muito enrolado.\nLORENZO: Não enrolado. Metodológico.\nMARIA: Tá bom, senhor metodologia.\nESCOLHAS: [Ajudar na atividade] → +respeito; [Admitir que não sabe] → +sinceridade. INTERAÇÃO: pequeno\npuzzle pedagógico já existente ou botão “concluir tarefa”. SAÍDA: capítulo avança sem criar namoro precoce."
+    },
+    {
+      "id": "CAP01-CENA04",
+      "title": "O celular entra na história",
+      "sourceKind": "adapted",
+      "lines": [
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Oiiii, você conseguiu fazer aquele exercício?",
+          "action": "mensagem",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Consegui metade. A outra metade me venceu.",
+          "action": "mensagem",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "KKKKK socorro.",
+          "action": "mensagem",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Amanhã eu peço revanche.",
+          "action": "mensagem",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Quero ver.",
+          "action": "mensagem",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Você terminou?",
+          "action": "mensagem",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Terminei, mas não confio em nenhuma resposta.",
+          "action": "mensagem",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Então somos dois profissionais.",
+          "action": "mensagem",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Profissionais em desespero.",
+          "action": "mensagem",
+          "sourceKind": "adapted"
+        }
+      ],
+      "productionNotes": "Local: Interface de celular, cenário sala/casa abstrata. Período: início de 2024. Fonte: ADAPTADO; conversas\nfictícias. Gatilho: examinar ícone de mensagem. Câmera: overlay 2D.\n\n\n\n\n\n\n\n\nMARIA [mensagem]: Oiiii, você conseguiu fazer aquele exercício?\nLORENZO [mensagem]: Consegui metade. A outra metade me venceu.\nMARIA [mensagem]: KKKKK socorro.\nLORENZO [mensagem]: Amanhã eu peço revanche.\nMARIA [mensagem]: Quero ver.\nLORENZO [mensagem]: Você terminou?\nMARIA [mensagem]: Terminei, mas não confio em nenhuma resposta.\nLORENZO [mensagem]: Então somos dois profissionais.\nMARIA [mensagem]: Profissionais em desespero.\nESCOLHAS: [Mandar piada] → conversa extra; [Agradecer] → encerra com “De nadaaa”. INTERAÇÃO: avançar\nbolhas de mensagem. SAÍDA: whatsapp2024=true. REGRA: não usar layout que imite captura autêntica sem selo\n“conversa recriada”."
+    },
+    {
+      "id": "CAP01-CENA05",
+      "title": "A pergunta enviada",
+      "sourceKind": "adapted",
+      "lines": [
+        {
+          "speakerId": "narrator",
+          "speaker": "NARRAÇÃO DE INTERFACE",
+          "text": "6 de julho de 2024.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Maria, posso te perguntar uma coisa?",
+          "action": "mensagem dramatizada",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Pode.",
+          "action": "mensagem dramatizada",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Você quer ficar comigo?",
+          "action": "mensagem dramatizada",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "narrator",
+          "speaker": "NARRAÇÃO DE INTERFACE",
+          "text": "A resposta foi não. Maria valorizava a amizade, mas naquele momento não correspondia ao sentimento.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Tá.",
+          "action": "ao fechar o celular, adaptação",
+          "sourceKind": "adapted"
+        }
+      ],
+      "productionNotes": "Local: Celular, fundo silencioso. Período: 06/07/2024. Fonte: REAL (pedido e recusa) + ADAPTADO (encenação).\nGatilho: concluir amizade. Câmera: foco no celular, redução gradual do ambiente.\n\nNARRAÇÃO DE INTERFACE: 6 de julho de 2024.\nLORENZO [mensagem dramatizada]: Maria, posso te perguntar uma coisa?\nMARIA [mensagem dramatizada]: Pode.\nLORENZO [mensagem dramatizada]: Você quer ficar comigo?\nNARRAÇÃO DE INTERFACE: A resposta foi não. Maria valorizava a amizade, mas naquele momento não\ncorrespondia ao sentimento.\nLORENZO [ao fechar o celular, adaptação]: Tá.\nESCOLHAS: [Guardar conversa] ou [Fechar celular]. Ambas respeitam a recusa; nenhuma opção pressiona\nMaria. INTERAÇÃO: toque para fechar. SAÍDA: fade, calendário avança. APROVAÇÃO: inserir mensagem\noriginal do print apenas mediante revisão e autorização; NÃO inventar a resposta literal."
+    },
+    {
+      "id": "CAP01-CENA06",
+      "title": "Sem conversa",
+      "sourceKind": "adapted",
+      "lines": [
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Você tá quieto hoje.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Só tô cansado.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Quer conversar?",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Agora não.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Beleza. Se mudar de ideia, tô por aqui.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "narrator",
+          "speaker": "NARRAÇÃO DE INTERFACE",
+          "text": "Algumas semanas se passaram.",
+          "action": "",
+          "sourceKind": "adapted"
+        }
+      ],
+      "productionNotes": "Local: Corredores/celular. Período: julho a início de agosto de 2024. Fonte: REAL (período sem falar) +\nADAPTADO (montagem). Gatilho: depois da recusa. Câmera: duas passagens de corredor com dias diferentes,\nsem dramatizar culpa.\n\nPORVA: Você tá quieto hoje.\nLORENZO: Só tô cansado.\nPORVA: Quer conversar?\nLORENZO: Agora não.\nPORVA: Beleza. Se mudar de ideia, tô por aqui.\nNARRAÇÃO DE INTERFACE: Algumas semanas se passaram.\nINTERAÇÃO: caminhar até saída da escola. SAÍDA: celular vibra; próximo bloco."
+    },
+    {
+      "id": "CAP01-CENA07",
+      "title": "Uma mensagem normal",
+      "sourceKind": "adapted",
+      "lines": [
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Oi, tudo bem?",
+          "action": "mensagem fictícia",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Tudo sim, e você?",
+          "action": "mensagem fictícia",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Tudo.",
+          "action": "mensagem fictícia",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Como foi a aula?",
+          "action": "mensagem fictícia",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Normal.",
+          "action": "mensagem fictícia",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Entendi.",
+          "action": "mensagem fictícia",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "narrator",
+          "speaker": "NARRAÇÃO DE INTERFACE",
+          "text": "As conversas voltaram, ainda com certa distância.",
+          "action": "",
+          "sourceKind": "adapted"
+        }
+      ],
+      "productionNotes": "Local: Celular. Período: aproximadamente uma semana antes de 19/08/2024. Fonte: REAL (Maria retomou\ncontato; respostas percebidas como secas) + ADAPTADO (palavras).\n\nMARIA [mensagem fictícia]: Oi, tudo bem?\nLORENZO [mensagem fictícia]: Tudo sim, e você?\nMARIA [mensagem fictícia]: Tudo.\nLORENZO [mensagem fictícia]: Como foi a aula?\nMARIA [mensagem fictícia]: Normal.\nLORENZO [mensagem fictícia]: Entendi.\nNARRAÇÃO DE INTERFACE: As conversas voltaram, ainda com certa distância.\nESCOLHAS: [Responder normalmente] ou [Encerrar por hoje]; ambas avançam. SAÍDA: 19/08/2024. REGRA: não\nafirmar que Maria estava envergonhada; é hipótese de Lorenzo."
+    },
+    {
+      "id": "CAP01-CENA08",
+      "title": "As cinco aulas",
+      "sourceKind": "adapted",
+      "lines": [
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Você tá com cara de quem vai apresentar trabalho.",
+          "action": "na primeira aula",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Pior.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Prova surpresa?",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Pior.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Vou parar de perguntar.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Boa ideia.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Oi, Lorenzo. Você viu o que passou no quadro?",
+          "action": "interação escolar fictícia",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Vi. Acho.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Tá bem convincente.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Obrigado.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Não foi elogio.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "narrator",
+          "speaker": "NARRAÇÃO DE INTERFACE",
+          "text": "Recreio. O momento que Lorenzo imaginou para fazer o pedido passou sem o pedido.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "E aí, resolveu o seu mistério?",
+          "action": "no recreio",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Ainda não.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Quer ajuda?",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Nessa parte, não.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "narrator",
+          "speaker": "NARRAÇÃO DE INTERFACE",
+          "text": "Quinta aula. Ainda faltava coragem.",
+          "action": "",
+          "sourceKind": "adapted"
+        }
+      ],
+      "productionNotes": "Local: Sala, corredor e recreio. Período: 19/08/2024, primeira a quinta aulas. Fonte: REAL (hesitação) +\nADAPTADO (interações/NPCs). Gatilho: entrar na escola. Câmera: ciclo curto por relógio/placa de aula, trilha\nrítmica cômica sutil.\n\nPORVA [na primeira aula]: Você tá com cara de quem vai apresentar trabalho.\nLORENZO: Pior.\nPORVA: Prova surpresa?\nLORENZO: Pior.\nPORVA: Vou parar de perguntar.\nLORENZO: Boa ideia.\nMARIA [interação escolar fictícia]: Oi, Lorenzo. Você viu o que passou no quadro?\nLORENZO: Vi. Acho.\nMARIA: Tá bem convincente.\nLORENZO: Obrigado.\nMARIA: Não foi elogio.\nNARRAÇÃO DE INTERFACE: Recreio. O momento que Lorenzo imaginou para fazer o pedido passou sem o\npedido.\nPORVA [no recreio]: E aí, resolveu o seu mistério?\nLORENZO: Ainda não.\nPORVA: Quer ajuda?\nLORENZO: Nessa parte, não.\nNARRAÇÃO DE INTERFACE: Quinta aula. Ainda faltava coragem.\nESCOLHAS: [Puxar assunto] → fala escolar curta; [Esperar] → passa aula. Não é permitido criar uma história\nalternativa em que Maria aceite antes da sexta aula. INTERAÇÃO: três tarefas curtas para simbolizar passagem\ndo dia. SAÍDA: sexta aula, faltando cinco minutos."
+    },
+    {
+      "id": "CAP01-CENA09",
+      "title": "Cinco minutos e duas palavras",
+      "sourceKind": "adapted",
+      "lines": [
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Você viu aquele negócio lá?",
+          "action": "tentando uma conversa sobre bobagem, dramatização",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Que negócio, Lorenzo?",
+          "action": "confusa",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Nem sei explicar direito.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Então por que começou a falar? KKKK",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Justa pergunta.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "E aí?",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Você quer ficar comigo?",
+          "action": "coragem repentina; formulação aproximada",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Pode ser.",
+          "action": "resposta literal recordada",
+          "sourceKind": "real_report"
+        },
+        {
+          "speakerId": "narrator",
+          "speaker": "NARRAÇÃO DE INTERFACE",
+          "text": "19 de agosto de 2024.",
+          "action": "",
+          "sourceKind": "adapted"
+        }
+      ],
+      "productionNotes": "Local: Sala de aula, lados opostos. Período: 19/08/2024, sexta aula. Fonte: REAL na estrutura; ADAPTADO na\nconversa de aproximação. Gatilho: aproximar-se de Maria no final da aula. Câmera: enquadramento por cima\ndos ombros; diminuir música, manter sons da sala; relógio em segundo plano.\n\nLORENZO [tentando uma conversa sobre bobagem, dramatização]: Você viu aquele negócio lá?\nMARIA [confusa]: Que negócio, Lorenzo?\nLORENZO: Nem sei explicar direito.\nMARIA: Então por que começou a falar? KKKK\nLORENZO: Justa pergunta.\nMARIA: E aí?\nLORENZO [coragem repentina; formulação aproximada]: Você quer ficar comigo?\nMARIA [resposta literal recordada]: Pode ser.\nSFX: O sinal toca; a aula acaba.\nNARRAÇÃO DE INTERFACE: 19 de agosto de 2024.\nESCOLHAS: Não há escolha de resposta histórica. O jogador controla apenas a aproximação e o momento de\niniciar a conversa. INTERAÇÃO: chegar à zona de conversa. SAÍDA: fade para o dia seguinte; memory-1-\naccepted=true. NÃO ADICIONAR: beijo, abraço, declaração ou reação grandiosa não documentada."
+    },
+    {
+      "id": "CAP01-CENA10",
+      "title": "Sentar junto",
+      "sourceKind": "adapted",
+      "lines": [
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Oiii, bom dia!",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Bom dia.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Você fez a atividade?",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Fiz quase tudo.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Esse “quase” me preocupa.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Você me julga muito.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "E você me dá motivo.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Lé-lé-lé.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Lorenzo! KKKK",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Nem fiz nada.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Fez sim. E sabe que fez.",
+          "action": "",
+          "sourceKind": "adapted"
+        }
+      ],
+      "productionNotes": "Local: Sala, 20/08/2024. Fonte: REAL (sentaram juntos naturalmente) + ADAPTADO (fala). Gatilho: entrar na sala\nno dia seguinte. Câmera: planos abertos, tom leve; o jogador toma assento.\n\nMARIA: Oiii, bom dia!\nLORENZO: Bom dia.\nMARIA: Você fez a atividade?\nLORENZO: Fiz quase tudo.\nMARIA: Esse “quase” me preocupa.\nLORENZO: Você me julga muito.\nMARIA: E você me dá motivo.\nLORENZO: Lé-lé-lé.\nMARIA: Lorenzo! KKKK\nLORENZO: Nem fiz nada.\nMARIA: Fez sim. E sabe que fez.\nESCOLHAS: [Provocar de novo] → MARIA: “Eu vou ignorar você”; [Ajudar na tarefa] → MARIA: “Tá, isso foi útil”.\nINTERAÇÃO: sentar, abrir caderno. SAÍDA: cena de montagem de rotina."
+    },
+    {
+      "id": "CAP01-CENA11",
+      "title": "Pequenas coisas",
+      "sourceKind": "adapted",
+      "lines": [
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Por que você tá fazendo essa cara?",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Que cara?",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Essa cara. Exatamente essa.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Minha cara normal.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Você sabe que não é.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Então para de olhar.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Nossa, que educação.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Aprendi com você.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Aprendeu errado, então.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "narrator",
+          "speaker": "NARRAÇÃO DE INTERFACE",
+          "text": "Os dias começaram a ter uma rotina nova: sentar perto, conversar, provocar, ouvir.",
+          "action": "",
+          "sourceKind": "adapted"
+        }
+      ],
+      "productionNotes": "Local: Sala e mensagens. Período: agosto a dezembro de 2024. Fonte: ADAPTADO com temas das cartas. Gatilho:\nconcluir CAP01-CENA10.\n\nMARIA: Por que você tá fazendo essa cara?\nLORENZO: Que cara?\n\n\n\n\n\n\n\n\nMARIA: Essa cara. Exatamente essa.\nLORENZO: Minha cara normal.\nMARIA: Você sabe que não é.\nLORENZO: Então para de olhar.\nMARIA: Nossa, que educação.\nLORENZO: Aprendi com você.\nMARIA: Aprendeu errado, então.\nNARRAÇÃO DE INTERFACE: Os dias começaram a ter uma rotina nova: sentar perto, conversar, provocar,\nouvir.\nESCOLHAS: [Guardar lembrança] → álbum destaca “cotidiano”; [Continuar explorando] → explorar cenário.\nSAÍDA: volta ao arquivo."
+    },
+    {
+      "id": "CAP01-CENA12",
+      "title": "Um começo, não uma explicação",
+      "sourceKind": "adapted",
+      "lines": [
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "E então? Qual é a grande descoberta?",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Eu passei um dia inteiro criando coragem.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Pra quê?",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Pra fazer uma pergunta.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "E a resposta?",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Duas palavras.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Você tá brincando.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Queria estar.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Mas funcionou?",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Foi quando tudo começou.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Então não era uma pergunta pequena.",
+          "action": "",
+          "sourceKind": "adapted"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Acho que não.",
+          "action": "",
+          "sourceKind": "adapted"
+        }
+      ],
+      "productionNotes": "Local: Biblioteca, presente. Fonte: FICTÍCIO. Gatilho: após CAP01-CENA11.\n\nRAFAELLA: E então? Qual é a grande descoberta?\nLORENZO: Eu passei um dia inteiro criando coragem.\nRAFAELLA: Pra quê?\nLORENZO: Pra fazer uma pergunta.\nRAFAELLA: E a resposta?\nLORENZO: Duas palavras.\nRAFAELLA: Você tá brincando.\nLORENZO: Queria estar.\nRAFAELLA: Mas funcionou?\nLORENZO: Foi quando tudo começou.\nRAFAELLA: Então não era uma pergunta pequena.\nLORENZO: Acho que não.\nINTERAÇÃO: colocar fotografia no livro. SAÍDA: desbloquear memory-1 e início de capítulo 2; liberar AV01 e\nopcional AV04.\n\n\nCAPÍTULO 02 | SE FOMOS BABAU\nMarco no jogo: 19/05/2025. Fonte histórica: carta de nove meses, cartas posteriores sobre dificuldades,\ndata/causa exata da ruptura PENDENTE. Regra: não atribuir fala histórica ao pai de Maria, não encenar\nvigilância de aparelho nem inventar causa específica. O capítulo usa um arquivo com lacunas, sem substituir\nlacuna por ficção disfarçada."
+    },
+    {
+      "id": "CAP02-CENA01",
+      "title": "A carta dos nove meses",
+      "sourceKind": "pending_verification",
+      "lines": [
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Esse envelope tem data.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Dezenove de maio de 2025.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "E o que tem dentro?",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Uma carta dos nove meses.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Parece uma lembrança boa.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Também foi uma época complicada.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "As duas coisas podem existir juntas.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "É. Acho que podem.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Então não tenta fazer a carta explicar tudo sozinha.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        }
+      ],
+      "productionNotes": "Local: Biblioteca. Fonte: REAL como documento + FICTÍCIO como conversa. Gatilho: selecionar memory-2.\nCâmera: detalhe do envelope, data 19/05/2025.\n\nHELÔ: Esse envelope tem data.\nLORENZO: Dezenove de maio de 2025.\nHELÔ: E o que tem dentro?\n\n\n\n\n\n\n\nLORENZO: Uma carta dos nove meses.\nHELÔ: Parece uma lembrança boa.\nLORENZO: Também foi uma época complicada.\nHELÔ: As duas coisas podem existir juntas.\nLORENZO: É. Acho que podem.\nHELÔ: Então não tenta fazer a carta explicar tudo sozinha.\nINTERAÇÃO: examinar selo, ler resumo aprovado da carta. SAÍDA: obter marcador “Nove meses”."
+    },
+    {
+      "id": "CAP02-CENA02",
+      "title": "Corredor de perguntas",
+      "sourceKind": "pending_verification",
+      "lines": [
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Você tá procurando alguém?",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Tô procurando um jeito de entender uma época.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Isso é mais difícil que achar uma sala vazia.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Tem coisa que eu lembro bem. Tem coisa que ainda tá confusa.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Então começa pela parte que sabe.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Você tá surpreendentemente sensato hoje.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Acontece uma vez por semestre.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Vou marcar no calendário.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Não espalha, tenho reputação a manter.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        }
+      ],
+      "productionNotes": "Local: Corredor e jardim. Fonte: FICTÍCIO metáfora de hesitação. Gatilho: recolher marcador.\n\nPORVA: Você tá procurando alguém?\nLORENZO: Tô procurando um jeito de entender uma época.\nPORVA: Isso é mais difícil que achar uma sala vazia.\nLORENZO: Tem coisa que eu lembro bem. Tem coisa que ainda tá confusa.\nPORVA: Então começa pela parte que sabe.\nLORENZO: Você tá surpreendentemente sensato hoje.\nPORVA: Acontece uma vez por semestre.\nLORENZO: Vou marcar no calendário.\nPORVA: Não espalha, tenho reputação a manter.\nESCOLHAS: [Ler calendário] ou [Inspecionar fotografia]; ambas dão pistas diferentes sobre a passagem do\ntempo, nunca informação histórica nova.\nINTERAÇÃO: coletar três marcadores: tempo, distância, carta. SAÍDA: retornar à biblioteca."
+    },
+    {
+      "id": "CAP02-CENA03",
+      "title": "O que as páginas não dizem",
+      "sourceKind": "pending_verification",
+      "lines": [
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "As três peças estão aqui.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "E a resposta?",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Não apareceu.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Então fiz tudo pra nada?",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Não. Você descobriu onde termina o que sabemos.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Isso parece pouco.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "É melhor do que inventar o que aconteceu.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Essa parte da história merece cuidado.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Exatamente.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        }
+      ],
+      "productionNotes": "Local: Biblioteca. Fonte: FICTÍCIO, comentário de metodologia. Gatilho: entregar três marcadores.\n\nRAFAELLA: As três peças estão aqui.\nLORENZO: E a resposta?\nRAFAELLA: Não apareceu.\nLORENZO: Então fiz tudo pra nada?\nRAFAELLA: Não. Você descobriu onde termina o que sabemos.\nLORENZO: Isso parece pouco.\nRAFAELLA: É melhor do que inventar o que aconteceu.\nLORENZO: Essa parte da história merece cuidado.\nRAFAELLA: Exatamente.\nINTERAÇÃO: escolher “Guardar os fatos confirmados”. SAÍDA: preparar memória 2 em versão documental, sem\ndramatização da separação."
+    },
+    {
+      "id": "CAP02-CENA04",
+      "title": "A distância entre duas páginas",
+      "sourceKind": "pending_verification",
+      "lines": [
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Essa página tem mais espaço vazio do que texto.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Eu sei.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Você quer preencher tudo?",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Queria entender tudo.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Não é a mesma coisa.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Você tá certa.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Eu sei. Mas pode repetir.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Não exagera.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        }
+      ],
+      "productionNotes": "Local: corredor, janela para o pátio. Fonte: FICTÍCIO (composição). Gatilho: concluir CAP02-CENA03. Câmera:\nplano amplo, silêncio curto, texto de cartão “a história continuou mesmo nos períodos difíceis”.\n\n\n\n\n\n\n\n\nHELÔ: Essa página tem mais espaço vazio do que texto.\nLORENZO: Eu sei.\nHELÔ: Você quer preencher tudo?\nLORENZO: Queria entender tudo.\nHELÔ: Não é a mesma coisa.\nLORENZO: Você tá certa.\nHELÔ: Eu sei. Mas pode repetir.\nLORENZO: Não exagera.\nINTERAÇÃO: colocar marcador do tempo no álbum. SAÍDA: memory-2 concluída com selo “reconstituição\nparcial”; liberar capítulo 3 e AV02.\n\n\nCAPÍTULO 03 | UM DOS DIAS MAIS IMPORTANTES DA MINHA VIDA\nMarco: 17/08/2025 no jogo. Evidências: a fé é central nas cartas, mas o evento específico dessa data permanece\nPENDENTE. Estratégia: capítulo reflexivo e escolar, sem simular cerimônia religiosa ou dizer o que Maria disse\nnessa data."
+    },
+    {
+      "id": "CAP03-CENA01",
+      "title": "O livro de perguntas",
+      "sourceKind": "pending_verification",
+      "lines": [
+        {
+          "speakerId": "helena",
+          "speaker": "PROF NEWMARA",
+          "text": "Lorenzo, está procurando algum livro específico?",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Um que explique como as pessoas mudam.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "helena",
+          "speaker": "PROF NEWMARA",
+          "text": "Você tem uma prateleira inteira de filosofia.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Eu tava esperando uma resposta de duas linhas.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "helena",
+          "speaker": "PROF NEWMARA",
+          "text": "Nesse caso, filosofia vai te decepcionar.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Já começou bem.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "helena",
+          "speaker": "PROF NEWMARA",
+          "text": "Procure uma pergunta melhor antes de procurar uma resposta rápida.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Isso eu consigo tentar.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        }
+      ],
+      "productionNotes": "Local: Biblioteca. Fonte: FICTÍCIO, temas inspirados nas cartas. Gatilho: selecionar memória 3.\n\nPROF NEWMARA: Lorenzo, está procurando algum livro específico?\nLORENZO: Um que explique como as pessoas mudam.\nPROF NEWMARA: Você tem uma prateleira inteira de filosofia.\nLORENZO: Eu tava esperando uma resposta de duas linhas.\nPROF NEWMARA: Nesse caso, filosofia vai te decepcionar.\nLORENZO: Já começou bem.\nPROF NEWMARA: Procure uma pergunta melhor antes de procurar uma resposta rápida.\nLORENZO: Isso eu consigo tentar.\nINTERAÇÃO: selecionar livro de reflexão, não escrituras privadas. SAÍDA: abrir desafio de ordenar conceitos."
+    },
+    {
+      "id": "CAP03-CENA02",
+      "title": "Saber não é compreender",
+      "sourceKind": "pending_verification",
+      "lines": [
+        {
+          "speakerId": "helena",
+          "speaker": "PROF NEWMARA",
+          "text": "Qual foi sua conclusão?",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Que saber alguma coisa não significa entender tudo.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "helena",
+          "speaker": "PROF NEWMARA",
+          "text": "Boa diferença.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Eu queria entender por que certas experiências mudam tanto a gente.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "helena",
+          "speaker": "PROF NEWMARA",
+          "text": "Algumas mudam nosso jeito de enxergar as outras pessoas.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "E quando a mudança demora?",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "helena",
+          "speaker": "PROF NEWMARA",
+          "text": "Às vezes ela está acontecendo sem que você perceba.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Vou pensar nisso.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "helena",
+          "speaker": "PROF NEWMARA",
+          "text": "Essa era a atividade.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        }
+      ],
+      "productionNotes": "Local: sala de estudos. Fonte: FICTÍCIO. Gatilho: completar puzzle reflexão.\n\nPROF NEWMARA: Qual foi sua conclusão?\nLORENZO: Que saber alguma coisa não significa entender tudo.\nPROF NEWMARA: Boa diferença.\nLORENZO: Eu queria entender por que certas experiências mudam tanto a gente.\nPROF NEWMARA: Algumas mudam nosso jeito de enxergar as outras pessoas.\nLORENZO: E quando a mudança demora?\nPROF NEWMARA: Às vezes ela está acontecendo sem que você perceba.\nLORENZO: Vou pensar nisso.\nPROF NEWMARA: Essa era a atividade.\nINTERAÇÃO: confirmar reflexão; salvar símbolo “caminho”. SAÍDA: jardim."
+    },
+    {
+      "id": "CAP03-CENA03",
+      "title": "Uma conversa sobre fé",
+      "sourceKind": "pending_verification",
+      "lines": [
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Você anda lendo coisa difícil.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Coisa importante.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Importante também pode ser difícil.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Nas cartas, fé aparece junto com medo, esperança e gratidão.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "E aparece como pergunta ou resposta?",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Acho que as duas coisas.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Então deixa a página mostrar isso.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Sem inventar uma revelação que não aconteceu.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Exato. Uma história não precisa fingir certeza.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        }
+      ],
+      "productionNotes": "Local: jardim da escola, presente fictício. Fonte: FICTÍCIO, sem representar Maria historicamente. Gatilho:\nencontrar Helô.\n\nHELÔ: Você anda lendo coisa difícil.\nLORENZO: Coisa importante.\nHELÔ: Importante também pode ser difícil.\nLORENZO: Nas cartas, fé aparece junto com medo, esperança e gratidão.\nHELÔ: E aparece como pergunta ou resposta?\nLORENZO: Acho que as duas coisas.\nHELÔ: Então deixa a página mostrar isso.\nLORENZO: Sem inventar uma revelação que não aconteceu.\nHELÔ: Exato. Uma história não precisa fingir certeza.\nINTERAÇÃO: escolher um dos três temas no álbum: confiar, mudar, perdoar. Mudam só comentários extras.\nSAÍDA: restaurar símbolo da memória 3."
+    },
+    {
+      "id": "CAP03-CENA04",
+      "title": "Uma data esperando sua história",
+      "sourceKind": "pending_verification",
+      "lines": [
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "A data está preservada.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Mas ainda não descobrimos o acontecimento completo.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Então fica registrado como memória pendente de confirmação.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Prefiro assim.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Quando a informação chegar, a gente complementa. Sem apagar o que já sabemos.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Combinado.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        }
+      ],
+      "productionNotes": "Local: Biblioteca. Fonte: FICTÍCIO com metadado real em aberto. Gatilho: voltar com símbolo.\n\nRAFAELLA: A data está preservada.\nLORENZO: Mas ainda não descobrimos o acontecimento completo.\nRAFAELLA: Então fica registrado como memória pendente de confirmação.\nLORENZO: Prefiro assim.\nRAFAELLA: Quando a informação chegar, a gente complementa. Sem apagar o que já sabemos.\nLORENZO: Combinado.\nINTERAÇÃO: aceitar página parcial. SAÍDA: memory-3 concluída documentalmente; AV05 liberada.\n\n\nCAPÍTULO 04 | O MEU PRIMEIRO BEIJO\nMarco: 31/03/2026 no jogo. INCONSISTÊNCIA: cartas de novembro de 2024 mencionam beijos. Não apresentar\n“primeiro beijo da vida” nem a data como fato sem contextualização. Título é preservado como registro do jogo,\nacompanhado de etiqueta de revisão."
+    },
+    {
+      "id": "CAP04-CENA01",
+      "title": "Uma lembrança com dois sentidos",
+      "sourceKind": "pending_verification",
+      "lines": [
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Aqui tem uma coisa que precisa ser conferida.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "O título?",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Isso. “O meu primeiro beijo”.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Mas há cartas antigas que mencionam beijos.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Então pode ser um primeiro em outro sentido.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Pode. Só não sabemos qual ainda.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Melhor registrar a pergunta do que inventar uma resposta.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        }
+      ],
+      "productionNotes": "Local: álbum, biblioteca. Fonte: FICTÍCIO. Gatilho: selecionar memória 4.\n\nRAFAELLA: Aqui tem uma coisa que precisa ser conferida.\nLORENZO: O título?\nRAFAELLA: Isso. “O meu primeiro beijo”.\nLORENZO: Mas há cartas antigas que mencionam beijos.\nRAFAELLA: Então pode ser um primeiro em outro sentido.\nLORENZO: Pode. Só não sabemos qual ainda.\nRAFAELLA: Melhor registrar a pergunta do que inventar uma resposta.\nINTERAÇÃO: folhear registros conhecidos, sem exibir cartas integrais. SAÍDA: pista “contexto”."
+    },
+    {
+      "id": "CAP04-CENA02",
+      "title": "Intervalo musical",
+      "sourceKind": "pending_verification",
+      "lines": [
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Você parece estar longe.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Tô tentando organizar uma lembrança.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Tá no tempo certo?",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Acho que não entendi a pergunta.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Música também tem começo, pausa e retorno.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "E se eu errar o ritmo?",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Aí escuta de novo. Só não inventa a nota que faltou.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Vocês combinaram de falar isso hoje?",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Não. Mas tá funcionando.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        }
+      ],
+      "productionNotes": "Local: salão. Fonte: FICTÍCIO, conecta AV03.\n\nBASSARAB: Você parece estar longe.\nLORENZO: Tô tentando organizar uma lembrança.\nBASSARAB: Tá no tempo certo?\nLORENZO: Acho que não entendi a pergunta.\nBASSARAB: Música também tem começo, pausa e retorno.\nLORENZO: E se eu errar o ritmo?\nBASSARAB: Aí escuta de novo. Só não inventa a nota que faltou.\nLORENZO: Vocês combinaram de falar isso hoje?\nBASSARAB: Não. Mas tá funcionando.\nINTERAÇÃO: minijogo de ritmo existente, com opção acessível sem áudio. SAÍDA: ganha símbolo “escuta”."
+    },
+    {
+      "id": "CAP04-CENA03",
+      "title": "O capítulo que pede cuidado",
+      "sourceKind": "pending_verification",
+      "lines": [
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Já resolveu a página?",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Ainda não. Mas sei o que não posso fazer.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "O quê?",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Afirmar uma lembrança diferente da que aconteceu.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Então o álbum tá funcionando.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Funcionando de um jeito estranho.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Histórias reais costumam ser mais complicadas que as prontas.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        }
+      ],
+      "productionNotes": "Local: biblioteca. Fonte: FICTÍCIO. Gatilho: símbolo obtido.\n\nHELÔ: Já resolveu a página?\nLORENZO: Ainda não. Mas sei o que não posso fazer.\nHELÔ: O quê?\nLORENZO: Afirmar uma lembrança diferente da que aconteceu.\nHELÔ: Então o álbum tá funcionando.\nLORENZO: Funcionando de um jeito estranho.\nHELÔ: Histórias reais costumam ser mais complicadas que as prontas.\nINTERAÇÃO: salvar metadados e contexto pendente. SAÍDA: memory-4 guardada como registro a conferir;\ncapítulo 5 liberado.\n\n\nCAPÍTULO 05 | O ÚLTIMO DIA (QUE NÃO FOI)\nMarco: 05/09/2026 no jogo, flores e incerteza. Contexto da ocasião PENDENTE. Usar buquê simbólico e percurso\npelo campus; não afirmar encontro, despedida ou frase literal."
+    },
+    {
+      "id": "CAP05-CENA01",
+      "title": "Flores no arquivo",
+      "sourceKind": "pending_verification",
+      "lines": [
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Olha isso. Alguém deixou flores perto do álbum.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Faz parte da quinta lembrança.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Elas estão com uma etiqueta.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "“O último dia (que não foi)”.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Nome de quem não sabe se é fim ou começo.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Tem muito disso nessa história.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Então vamos guardar a dúvida junto com as flores.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        }
+      ],
+      "productionNotes": "Local: jardim e biblioteca. Fonte: FICTÍCIO com objeto do registro do jogo. Gatilho: selecionar memória 5.\n\nHELÔ: Olha isso. Alguém deixou flores perto do álbum.\nLORENZO: Faz parte da quinta lembrança.\nHELÔ: Elas estão com uma etiqueta.\nLORENZO: “O último dia (que não foi)”.\nHELÔ: Nome de quem não sabe se é fim ou começo.\nLORENZO: Tem muito disso nessa história.\nHELÔ: Então vamos guardar a dúvida junto com as flores.\n\n\n\n\n\n\n\n\n\nINTERAÇÃO: recolher etiqueta, observar buquê; sem atribuir ações a Maria. SAÍDA: procurar fitas coloridas\npelo jardim."
+    },
+    {
+      "id": "CAP05-CENA02",
+      "title": "Caminho sem atalhos",
+      "sourceKind": "pending_verification",
+      "lines": [
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Tá procurando o quê?",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Três fitas de uma lembrança.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Esse álbum tá virando caça ao tesouro.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Pelo menos tem lógica.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Se você diz.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Você encontrou alguma coisa vermelha?",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Achei um cartaz. Não sei se conta.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Conta como tentativa.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Então eu tô participando muito.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        }
+      ],
+      "productionNotes": "Local: campus contínuo, portões e jardim. Fonte: FICTÍCIO. Gatilho: coletar flores simbólicas.\n\nPORVA: Tá procurando o quê?\nLORENZO: Três fitas de uma lembrança.\nPORVA: Esse álbum tá virando caça ao tesouro.\nLORENZO: Pelo menos tem lógica.\nPORVA: Se você diz.\nLORENZO: Você encontrou alguma coisa vermelha?\nPORVA: Achei um cartaz. Não sei se conta.\nLORENZO: Conta como tentativa.\nPORVA: Então eu tô participando muito.\nINTERAÇÃO: achar três fitas em locais alcançáveis no mapa. SAÍDA: formar laço para buquê, sem inventar\nevento histórico."
+    },
+    {
+      "id": "CAP05-CENA03",
+      "title": "Nem tudo que parece fim",
+      "sourceKind": "pending_verification",
+      "lines": [
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Trouxe os símbolos?",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Todos.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "E o que significa o nome dessa memória?",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Que a história não acabou ali.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Isso você sabe?",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "O título do registro sugere isso. O resto precisa ser confirmado.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Ótimo. Desta vez você separou interpretação de fato.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Aprendi com a biblioteca mais exigente do Paraná.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Vou aceitar como elogio.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        }
+      ],
+      "productionNotes": "Local: biblioteca. Fonte: FICTÍCIO. Gatilho: devolver laço.\n\nRAFAELLA: Trouxe os símbolos?\nLORENZO: Todos.\nRAFAELLA: E o que significa o nome dessa memória?\nLORENZO: Que a história não acabou ali.\nRAFAELLA: Isso você sabe?\nLORENZO: O título do registro sugere isso. O resto precisa ser confirmado.\nRAFAELLA: Ótimo. Desta vez você separou interpretação de fato.\nLORENZO: Aprendi com a biblioteca mais exigente do Paraná.\nRAFAELLA: Vou aceitar como elogio.\nINTERAÇÃO: preservar título, data e objeto; memory-5 concluída em versão simbólica. SAÍDA: capítulo 6.\n\n\nCAPÍTULO 06 | FINALMENTE\nMarco: 21/09/2026 no jogo, pedido de namoro. DETALHES PENDENTES. O capítulo mostra o sentido de uma\nescolha sem fabricar local, palavras ou resposta literal do pedido."
+    },
+    {
+      "id": "CAP06-CENA01",
+      "title": "Seis marcas no álbum",
+      "sourceKind": "pending_verification",
+      "lines": [
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Chegamos à última data do álbum.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "“Finalmente”.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Um título bem confiante.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Depois de tudo, acho que combina.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "O que aconteceu nessa data?",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "O pedido de namoro que o registro marca.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Então vamos preservar isso e não improvisar o resto.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Fechado.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        }
+      ],
+      "productionNotes": "Local: biblioteca. Fonte: FICTÍCIO. Gatilho: selecionar memória 6.\n\nRAFAELLA: Chegamos à última data do álbum.\nLORENZO: “Finalmente”.\nRAFAELLA: Um título bem confiante.\nLORENZO: Depois de tudo, acho que combina.\n\n\n\n\n\n\n\n\nRAFAELLA: O que aconteceu nessa data?\nLORENZO: O pedido de namoro que o registro marca.\nRAFAELLA: Então vamos preservar isso e não improvisar o resto.\nLORENZO: Fechado.\nINTERAÇÃO: inspecionar seis espaços do álbum. SAÍDA: abrir rota de revisão de memórias."
+    },
+    {
+      "id": "CAP06-CENA02",
+      "title": "O que ficou de cada capítulo",
+      "sourceKind": "pending_verification",
+      "lines": [
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Começou com uma conversa?",
+          "action": "ponto 1",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Antes disso, um sorriso.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Nem toda parte da música é alta.",
+          "action": "ponto 2",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Tem pausa também.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "helena",
+          "speaker": "PROF NEWMARA",
+          "text": "Aprender muda o modo de lembrar.",
+          "action": "ponto 3",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "E de perguntar.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Não precisa explicar o que você ainda não sabe.",
+          "action": "ponto 4",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Eu sei.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Às vezes o título é mais claro que os detalhes.",
+          "action": "ponto 5",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Por enquanto.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        }
+      ],
+      "productionNotes": "Local: seis pontos de memória no mapa. Fonte: FICTÍCIO. Gatilho: interação livre com pontos desbloqueados.\nCâmera: cada ponto mostra plano de 3 a 5 segundos do cenário já conhecido, sem reencenar detalhes não\nconfirmados.\n\nPORVA [ponto 1]: Começou com uma conversa?\nLORENZO: Antes disso, um sorriso.\nBASSARAB [ponto 2]: Nem toda parte da música é alta.\nLORENZO: Tem pausa também.\nPROF NEWMARA [ponto 3]: Aprender muda o modo de lembrar.\nLORENZO: E de perguntar.\nHELÔ [ponto 4]: Não precisa explicar o que você ainda não sabe.\nLORENZO: Eu sei.\nRAFAELLA [ponto 5]: Às vezes o título é mais claro que os detalhes.\nLORENZO: Por enquanto.\nINTERAÇÃO: validar cinco lembranças e voltar ao álbum. SAÍDA: capítulo final."
+    },
+    {
+      "id": "CAP06-CENA03",
+      "title": "Finalmente, uma página completa",
+      "sourceKind": "pending_verification",
+      "lines": [
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "O último capítulo tá aqui.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "E o que você quer escrever nele?",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Só o que a gente tem certeza: a data, o pedido, o significado.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Sem tentar preencher tudo com frases bonitas?",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Sem isso.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Você evoluiu.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Não espalha. O Porva vai me cobrar.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Tarde demais.",
+          "action": "",
+          "sourceKind": "pending_verification"
+        }
+      ],
+      "productionNotes": "Local: biblioteca. Fonte: FICTÍCIO, marco histórico registrado. Gatilho: revisar os marcadores.\n\nLORENZO: O último capítulo tá aqui.\nRAFAELLA: E o que você quer escrever nele?\nLORENZO: Só o que a gente tem certeza: a data, o pedido, o significado.\nRAFAELLA: Sem tentar preencher tudo com frases bonitas?\nLORENZO: Sem isso.\nRAFAELLA: Você evoluiu.\nLORENZO: Não espalha. O Porva vai me cobrar.\nRAFAELLA: Tarde demais.\nINTERAÇÃO: confirmar memória seis. SAÍDA: memory-6 concluída em registro factual parcial; libera AV07\narchive e epílogo."
+    },
+    {
+      "id": "AV01-CENA01",
+      "title": "Caderno, fotografia e coragem",
+      "sourceKind": "fictional",
+      "lines": [
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Tá atrás da sala certa?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Sala de história.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Então é aquela. Tem até placa.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Agradeço a enorme contribuição.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Serviço público gratuito.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Você achou a atividade?",
+          "action": "ao examinar caderno, fala adaptada",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Achei. O complicado é terminar.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Vai por partes.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Vou tentar.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Sem inventar resposta.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Aí ficou difícil.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ],
+      "productionNotes": "Local: sala de história. Fonte: FICTÍCIO como mecânica, referência REAL à data.\n\nPORVA: Tá atrás da sala certa?\nLORENZO: Sala de história.\nPORVA: Então é aquela. Tem até placa.\nLORENZO: Agradeço a enorme contribuição.\nPORVA: Serviço público gratuito.\nMARIA [ao examinar caderno, fala adaptada]: Você achou a atividade?\nLORENZO: Achei. O complicado é terminar.\nMARIA: Vai por partes.\nLORENZO: Vou tentar.\nMARIA: Sem inventar resposta.\nLORENZO: Aí ficou difícil.\nESCOLHAS: [Ouvir Maria] → objetivo exercício; [Perguntar sobre aula] → dica. INTERAÇÃO: classroom, study-\nnotebook, classroom-photo, school-exercise. SAÍDA: primeiro objetivo da cena histórica liberado; first-finale só depois\nde CAP01-CENA09.\n\n\nAV02 | O LIVRO PERDIDO — `lost-book`\nFunção: usar a biblioteca como espaço vivo; mostrar cuidado e cooperação. Etapas existentes: Bia→Rafaella,\npista, estante puzzle, coletar livro, devolver."
+    },
+    {
+      "id": "AV02-CENA01",
+      "title": "Estante errada",
+      "sourceKind": "fictional",
+      "lines": [
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Lorenzo, um livro desapareceu da estante.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Desapareceu mesmo ou você só não achou?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Eu cataloguei essa estante ontem.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Então desapareceu mesmo.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Tem uma pista no marcador que ficou.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Uma pista? Agora melhorou.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Não comemore. A pista só diz onde começar.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Você transforma uma devolução em investigação.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Você é quem tá animado.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ],
+      "productionNotes": "Local: biblioteca. Fonte: FICTÍCIO. Gatilho: falar com Rafaella.\n\nRAFAELLA: Lorenzo, um livro desapareceu da estante.\nLORENZO: Desapareceu mesmo ou você só não achou?\nRAFAELLA: Eu cataloguei essa estante ontem.\nLORENZO: Então desapareceu mesmo.\nRAFAELLA: Tem uma pista no marcador que ficou.\nLORENZO: Uma pista? Agora melhorou.\nRAFAELLA: Não comemore. A pista só diz onde começar.\nLORENZO: Você transforma uma devolução em investigação.\nRAFAELLA: Você é quem tá animado.\n\n\n\n\n\n\n\n\n\nESCOLHAS: [Seguir pistas] → revela estante de referência; [Conferir prateleiras] → uma pista extra. INTERAÇÃO:\nshelf-clue, shelf-puzzle, lost-book."
+    },
+    {
+      "id": "AV02-CENA02",
+      "title": "Devolver também é encontrar",
+      "sourceKind": "fictional",
+      "lines": [
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Encontrado.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Sem amassar?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Inteiro.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "E as estantes?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Relativamente inteiras.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Relativamente?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Tô brincando.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Eu quero acreditar.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Pode acreditar.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Obrigada. O livro tem um lugar. E você também, quando ajuda sem bagunçar.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ],
+      "productionNotes": "Local: balcão biblioteca. Fonte: FICTÍCIO. Gatilho: ter livro.\n\nLORENZO: Encontrado.\nRAFAELLA: Sem amassar?\nLORENZO: Inteiro.\nRAFAELLA: E as estantes?\nLORENZO: Relativamente inteiras.\nRAFAELLA: Relativamente?\nLORENZO: Tô brincando.\nRAFAELLA: Eu quero acreditar.\nLORENZO: Pode acreditar.\nRAFAELLA: Obrigada. O livro tem um lugar. E você também, quando ajuda sem bagunçar.\nINTERAÇÃO: devolver, book-finale. SAÍDA: recompensa marcador de biblioteca, missão concluída.\n\n\nAV03 | UMA MÚSICA CONHECIDA — `familiar-music`\nFunção: escuta, sintonia, relação entre música e memória. Etapas: Davi→Bassarab, partitura, instrumento,\nritmo, retorno, cena final."
+    },
+    {
+      "id": "AV03-CENA01",
+      "title": "Um ritmo que falta",
+      "sourceKind": "fictional",
+      "lines": [
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Precisamos de mais uma pessoa pro ensaio.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Você sabe que eu não vou cantar, né?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Não pedi pra cantar. Pedi pra ouvir.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Ouvir eu consigo.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Então pega a partitura.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Essa folha parece um mapa de outra dimensão.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "É ritmo. Não física quântica.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Ainda bem. A física seria mais fácil.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Faz o teste primeiro e reclama depois.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ],
+      "productionNotes": "Local: salão. Fonte: FICTÍCIO. Gatilho: Bassarab.\n\nBASSARAB: Precisamos de mais uma pessoa pro ensaio.\nLORENZO: Você sabe que eu não vou cantar, né?\nBASSARAB: Não pedi pra cantar. Pedi pra ouvir.\nLORENZO: Ouvir eu consigo.\nBASSARAB: Então pega a partitura.\nLORENZO: Essa folha parece um mapa de outra dimensão.\nBASSARAB: É ritmo. Não física quântica.\nLORENZO: Ainda bem. A física seria mais fácil.\nBASSARAB: Faz o teste primeiro e reclama depois.\nESCOLHAS: [Ensaiar com calma] → tutorial; [Focar no ritmo] → pula tutorial. INTERAÇÃO: score, instrument,\nmusic-rhythm; alternativa sem som e com legendas visuais."
+    },
+    {
+      "id": "AV03-CENA02",
+      "title": "A nota que volta",
+      "sourceKind": "fictional",
+      "lines": [
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Agora sim!",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Eu achei que ia errar tudo.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Errou uma vez e corrigiu. É assim que se ensaia.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Essa frase vale pra outras coisas.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Provavelmente. Mas hoje eu só quero terminar a música.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Justo.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Valeu pela ajuda.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Na próxima eu cobro cachê.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Pago em aplausos.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Exploração trabalhista.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ],
+      "productionNotes": "Local: salão. Fonte: FICTÍCIO. Gatilho: puzzle de ritmo concluído.\n\nBASSARAB: Agora sim!\nLORENZO: Eu achei que ia errar tudo.\nBASSARAB: Errou uma vez e corrigiu. É assim que se ensaia.\n\n\n\n\n\n\n\n\nLORENZO: Essa frase vale pra outras coisas.\nBASSARAB: Provavelmente. Mas hoje eu só quero terminar a música.\nLORENZO: Justo.\nBASSARAB: Valeu pela ajuda.\nLORENZO: Na próxima eu cobro cachê.\nBASSARAB: Pago em aplausos.\nLORENZO: Exploração trabalhista.\nINTERAÇÃO: music-finale. SAÍDA: símbolo “escuta” para álbum.\n\n\nAV04 | O PLANO DE 14 ETAPAS — `plan`\nFunção: comédia sobre pensar demais; NÃO é registro de plano real. Etapas existentes: caderno sala história;\nRafaella biblioteca; três grupos de páginas; ordenar 14 cartões; conversar Maria; finalizar encenação."
+    },
+    {
+      "id": "AV04-CENA01",
+      "title": "Manual de dizer oi",
+      "sourceKind": "fictional",
+      "lines": [
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Quem colocou um manual aqui?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Eu arquivei. Não disse que era bom.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Quatorze etapas para falar com alguém?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "É uma quantidade respeitável de burocracia.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Pelo menos tem método.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Tem quatro blocos: Preparação, Logística, Coragem e Conversa.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Parece trabalho de conclusão de curso.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Para uma palavra: oi.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Se funcionar, você vai agradecer.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Se funcionar, eu vou me surpreender.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ],
+      "productionNotes": "Local: sala história → biblioteca. Fonte: FICTÍCIO. Gatilho: caderno plan.\n\nLORENZO: Quem colocou um manual aqui?\nRAFAELLA: Eu arquivei. Não disse que era bom.\nLORENZO: Quatorze etapas para falar com alguém?\nRAFAELLA: É uma quantidade respeitável de burocracia.\nLORENZO: Pelo menos tem método.\nRAFAELLA: Tem quatro blocos: Preparação, Logística, Coragem e Conversa.\nLORENZO: Parece trabalho de conclusão de curso.\nRAFAELLA: Para uma palavra: oi.\nLORENZO: Se funcionar, você vai agradecer.\nRAFAELLA: Se funcionar, eu vou me surpreender.\nESCOLHAS: [Pedir pista dos blocos] → Rafaella indica ordem parcial; [Admitir que três passos bastavam] →\nresposta “milagre”. INTERAÇÃO: coletar páginas, trocar cartões de posição (puzzle existente)."
+    },
+    {
+      "id": "AV04-CENA02",
+      "title": "Falar antes de planejar",
+      "sourceKind": "fictional",
+      "lines": [
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Por que vocês estão cercados de papel?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Pesquisa aplicada.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Aplicada a quê?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "A dizer oi.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "KKKKK, vocês tão brincando.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Na teoria, é muito sofisticado.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Na prática, você podia só falar comigo.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Oi.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Oi, Lorenzo.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Finalmente. Vou arquivar o resultado.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ],
+      "productionNotes": "Local: sala história. Fonte: FICTÍCIO. Gatilho: puzzle 14 cartões resolvido.\n\nMARIA: Por que vocês estão cercados de papel?\nLORENZO: Pesquisa aplicada.\nMARIA: Aplicada a quê?\nRAFAELLA: A dizer oi.\nMARIA: KKKKK, vocês tão brincando.\nLORENZO: Na teoria, é muito sofisticado.\nMARIA: Na prática, você podia só falar comigo.\nLORENZO: Oi.\nMARIA: Oi, Lorenzo.\n\n\n\n\n\n\n\n\n\nRAFAELLA: Finalmente. Vou arquivar o resultado.\nESCOLHAS: [Ouvir Maria] → final conversa; [Mostrar plano resumido] → Rafaella ri do resumo. SAÍDA: plan /\nscene conclui, conquista preservada expansion-plan.\n\n\nAV05 | UMA CARTA NUNCA ENTREGUE — `letter`\nFunção: dar sentido à escrita, à atenção e a ouvir. REGRA: envelope e seus cinco fragmentos são completamente\nfictícios; nunca exibir como carta autêntica da Maria. Etapas existentes: envelope, livro, marcador\nsol→árvore→coração, sala de história, caixa de leitura do jardim, sequência semente →broto →flor, montar,\nguardar."
+    },
+    {
+      "id": "AV05-CENA01",
+      "title": "O envelope",
+      "sourceKind": "fictional",
+      "lines": [
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Antes de perguntar: não, essa carta não veio do arquivo pessoal de ninguém.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Você já sabia o que eu ia perguntar?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Ela é parte do desafio da biblioteca.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Então por que tá desmontada?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Para você perceber o que acontece quando falta contexto.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Você podia ensinar isso com uma palestra.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Você fugiria na primeira frase.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Justo.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Encontre cinco trechos. E preste atenção aos símbolos.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ],
+      "productionNotes": "Local: biblioteca. Fonte: FICTÍCIO. Gatilho: examinar envelope.\n\nRAFAELLA: Antes de perguntar: não, essa carta não veio do arquivo pessoal de ninguém.\nLORENZO: Você já sabia o que eu ia perguntar?\nRAFAELLA: Ela é parte do desafio da biblioteca.\nLORENZO: Então por que tá desmontada?\nRAFAELLA: Para você perceber o que acontece quando falta contexto.\nLORENZO: Você podia ensinar isso com uma palestra.\nRAFAELLA: Você fugiria na primeira frase.\nLORENZO: Justo.\nRAFAELLA: Encontre cinco trechos. E preste atenção aos símbolos.\nINTERAÇÃO: marcador sol→árvore→coração; início da caça."
+    },
+    {
+      "id": "AV05-CENA02",
+      "title": "Os cinco fragmentos",
+      "sourceKind": "fictional",
+      "lines": [
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Primeiro veio o sol, depois a árvore.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "E depois o coração.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Você viu o desenho da semente?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Vi. Ela vira broto e depois flor.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Então a ordem é simples.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Simples é uma palavra perigosa nesse jogo.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Eu tô tentando ajudar.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "E tá conseguindo.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ],
+      "productionNotes": "Local: livro, corredor, história, jardim. Fonte: FICTÍCIO. Gatilho: coletar trechos.\n\nHELÔ: Primeiro veio o sol, depois a árvore.\nLORENZO: E depois o coração.\nHELÔ: Você viu o desenho da semente?\nLORENZO: Vi. Ela vira broto e depois flor.\nHELÔ: Então a ordem é simples.\nLORENZO: Simples é uma palavra perigosa nesse jogo.\nHELÔ: Eu tô tentando ajudar.\nLORENZO: E tá conseguindo.\nINTERAÇÃO: abrir caixa com sequência visual; guardar quinto fragmento."
+    },
+    {
+      "id": "AV05-CENA03",
+      "title": "Uma carta que é só uma carta",
+      "sourceKind": "fictional",
+      "lines": [
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Terminei.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Lê de novo.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Faz mais sentido agora.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "E o que aprendeu?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Que uma frase solta pode parecer outra coisa.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Exatamente.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Então vou guardar como ficção, não como lembrança verdadeira.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Excelente decisão.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ],
+      "productionNotes": "Local: biblioteca. Fonte: FICTÍCIO. Gatilho: juntar cinco partes.\n\nLORENZO: Terminei.\nRAFAELLA: Lê de novo.\nLORENZO: Faz mais sentido agora.\n\n\n\n\n\n\n\n\n\nRAFAELLA: E o que aprendeu?\nLORENZO: Que uma frase solta pode parecer outra coisa.\nRAFAELLA: Exatamente.\nLORENZO: Então vou guardar como ficção, não como lembrança verdadeira.\nRAFAELLA: Excelente decisão.\nINTERAÇÃO: montar carta fictícia com cinco trechos já documentados na auditoria; letter / return conclui;\nconquista expansion-letter.\n\n\nAV06 | A FREQUÊNCIA PERDIDA — `frequency`\nFunção: transformar três rádios em metáfora jogável de escuta. Etapas existentes: rádio no salão, Bassarab,\nbobina de papel/círculo de ciência, cristal cenográfico biblioteca, antena de cartão salão, associar símbolos ★\namarelo, ◆ rosa,   ♥ ciano, recuperar mensagem; nenhum rádio físico real deve precisar de reparo."
+    },
+    {
+      "id": "AV06-CENA01",
+      "title": "O rádio do salão",
+      "sourceKind": "fictional",
+      "lines": [
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "A frequência do arquivo sumiu.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Rádio velho?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Rádio de brincadeira. É tudo simbólico.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Ainda bem. Eu já ia procurar ferramentas.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Procura três etiquetas: uma na ciência, outra na biblioteca e a última aqui.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Isso é uma caça ao tesouro disfarçada.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Finalmente você entendeu.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "E os símbolos?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Estrela, losango e coração. Nessa ordem.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Beleza.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ],
+      "productionNotes": "Local: salão. Fonte: FICTÍCIO. Gatilho: rádio cenográfico.\n\nBASSARAB: A frequência do arquivo sumiu.\nLORENZO: Rádio velho?\nBASSARAB: Rádio de brincadeira. É tudo simbólico.\nLORENZO: Ainda bem. Eu já ia procurar ferramentas.\nBASSARAB: Procura três etiquetas: uma na ciência, outra na biblioteca e a última aqui.\nLORENZO: Isso é uma caça ao tesouro disfarçada.\nBASSARAB: Finalmente você entendeu.\nLORENZO: E os símbolos?\nBASSARAB: Estrela, losango e coração. Nessa ordem.\nLORENZO: Beleza.\nINTERAÇÃO: localizar os três itens e associar três frequências fictícias: LorenzoFM, MariaFM,\nLorenzoeMariaFM; desafio jogável sem áudio."
+    },
+    {
+      "id": "AV06-CENA02",
+      "title": "Voltar a escutar",
+      "sourceKind": "fictional",
+      "lines": [
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Captou a mensagem.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Deixa eu ouvir.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "radio",
+          "speaker": "RÁDIO",
+          "text": "Escutar também é uma forma de guardar.",
+          "action": "mensagem fictícia",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Curta e boa.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Rádios bons não precisam falar o tempo todo.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Você acabou de fazer uma crítica à minha vida inteira?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Não confirmei nem neguei.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Resposta diplomática.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Trabalhei nela.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ],
+      "productionNotes": "Local: salão. Fonte: FICTÍCIO. Gatilho: puzzle resolvido.\n\nBASSARAB: Captou a mensagem.\nLORENZO: Deixa eu ouvir.\nRÁDIO [mensagem fictícia]: Escutar também é uma forma de guardar.\nLORENZO: Curta e boa.\nBASSARAB: Rádios bons não precisam falar o tempo todo.\nLORENZO: Você acabou de fazer uma crítica à minha vida inteira?\nBASSARAB: Não confirmei nem neguei.\nLORENZO: Resposta diplomática.\nBASSARAB: Trabalhei nela.\n\n\n\n\n\n\n\n\n\nINTERAÇÃO: mensagem fica no álbum; canais existentes continuam funcionando. SAÍDA: conquista expansion-\nfrequency se presente.\n\n\nAV07 | O ARQUIVO AURORA — `archive`\nFunção: puzzle de síntese e saída emocional. Pré-requisito: seis memórias; preservar símbolos, timeline e\nassociação, sem alterar textos originais. Etapas existentes: encontrar arquivo, examinar lacunas, recolher seis\nsímbolos, ordenar datas, associar, restaurar páginas, rever."
+    },
+    {
+      "id": "AV07-CENA01",
+      "title": "Organizar não é reescrever",
+      "sourceKind": "fictional",
+      "lines": [
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "O Arquivo Aurora está aberto.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Agora sim?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Agora você tem seis páginas para organizar.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Na ordem que eu quiser?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Pode revisitar na ordem que quiser. Guardar as datas é diferente.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Porque elas aconteceram numa ordem só.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Exato. Memória não é borracha.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "E as páginas incompletas?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Continuam incompletas. Mas agora estão no lugar correto.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "É justo.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ],
+      "productionNotes": "Local: biblioteca. Fonte: FICTÍCIO. Gatilho: seis memórias registradas.\n\nRAFAELLA: O Arquivo Aurora está aberto.\nLORENZO: Agora sim?\nRAFAELLA: Agora você tem seis páginas para organizar.\nLORENZO: Na ordem que eu quiser?\nRAFAELLA: Pode revisitar na ordem que quiser. Guardar as datas é diferente.\nLORENZO: Porque elas aconteceram numa ordem só.\nRAFAELLA: Exato. Memória não é borracha.\nLORENZO: E as páginas incompletas?\nRAFAELLA: Continuam incompletas. Mas agora estão no lugar correto.\nLORENZO: É justo.\nINTERAÇÃO: timeline original; associar seis símbolos; permitir pista e acessibilidade."
+    },
+    {
+      "id": "AV07-CENA02",
+      "title": "O que ficou",
+      "sourceKind": "fictional",
+      "lines": [
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Você ainda tá andando atrás de símbolo?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Agora são os últimos.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Falou isso no último capítulo.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "E eu quase acreditei.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Às vezes é preciso repetir uma música pra entender o começo.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Ou voltar a um lugar pra perceber o que mudou.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "helena",
+          "speaker": "PROF NEWMARA",
+          "text": "Revisar não diminui o que você aprendeu.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Desde que você não reescreva o que não sabe.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Entendido. Finalmente.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ],
+      "productionNotes": "Local: seis locais do campus. Fonte: FICTÍCIO. Gatilho: ordenar datas.\n\nPORVA: Você ainda tá andando atrás de símbolo?\nLORENZO: Agora são os últimos.\nPORVA: Falou isso no último capítulo.\nLORENZO: E eu quase acreditei.\nBASSARAB: Às vezes é preciso repetir uma música pra entender o começo.\nHELÔ: Ou voltar a um lugar pra perceber o que mudou.\nPROF NEWMARA: Revisar não diminui o que você aprendeu.\nRAFAELLA: Desde que você não reescreva o que não sabe.\nLORENZO: Entendido. Finalmente.\nINTERAÇÃO: recolher seis glifos já disponíveis, cada qual com selo histórico; retornar arquivo."
+    },
+    {
+      "id": "AV07-CENA03",
+      "title": "Páginas restauradas",
+      "sourceKind": "fictional",
+      "lines": [
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Está tudo organizado.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "As datas, os símbolos, as páginas.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "E ainda tem espaço vazio.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Dessa vez eu não vou tentar preencher com qualquer coisa.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Bom.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Mas tem uma página completamente em branco no final.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Essa é a única que não precisa de data antiga.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Então o que eu faço com ela?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Abre.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ],
+      "productionNotes": "Local: biblioteca. Fonte: FICTÍCIO. Gatilho: associação correta.\n\nRAFAELLA: Está tudo organizado.\nLORENZO: As datas, os símbolos, as páginas.\nRAFAELLA: E ainda tem espaço vazio.\n\n\n\n\n\n\n\n\nLORENZO: Dessa vez eu não vou tentar preencher com qualquer coisa.\nRAFAELLA: Bom.\nLORENZO: Mas tem uma página completamente em branco no final.\nRAFAELLA: Essa é a única que não precisa de data antiga.\nLORENZO: Então o que eu faço com ela?\nRAFAELLA: Abre.\nINTERAÇÃO: botão abrir página final. SAÍDA: inicia EP-CENA01; conquista expansion-archive se existente."
+    },
+    {
+      "id": "EP-CENA01",
+      "title": "A página que falta",
+      "sourceKind": "fictional",
+      "lines": [
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Terminou?",
+          "action": "observa o álbum",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "As seis memórias, sim.",
+          "action": "olhando as páginas",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "E o livro?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Parece que não.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Por quê?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Ainda tem uma página.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "E ela tá em branco.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Eu procurei tanto o começo que esqueci que a história continua.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Então não escreve o final.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "O que eu escrevo?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "A próxima página.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "narrator",
+          "speaker": "NARRAÇÃO DE INTERFACE",
+          "text": "Algumas histórias cabem em seis memórias. As mais importantes continuam depois delas.",
+          "action": "texto curto, original",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Ainda tem muita coisa pra viver.",
+          "action": "baixo",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "narrator",
+          "speaker": "NARRAÇÃO DE INTERFACE",
+          "text": "DIÁRIO DE BORDO — A PRÓXIMA PÁGINA.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ],
+      "productionNotes": "Local: biblioteca. Fonte: FICTÍCIO, inspirada no diário de bordo de agosto de 2026. Gatilho: AV07-CENA03.\nCâmera: detalhe do álbum → páginas se encaixam → plano longo da janela do São Jorge. Áudio: som ambiente e\ntrilha original/instrumental licenciada; nunca dependente de música comercial.\n\nRAFAELLA [observa o álbum]: Terminou?\nLORENZO [olhando as páginas]: As seis memórias, sim.\nRAFAELLA: E o livro?\nLORENZO: Parece que não.\nRAFAELLA: Por quê?\nLORENZO: Ainda tem uma página.\nRAFAELLA: E ela tá em branco.\nLORENZO: Eu procurei tanto o começo que esqueci que a história continua.\nRAFAELLA: Então não escreve o final.\nLORENZO: O que eu escrevo?\nRAFAELLA: A próxima página.\nNARRAÇÃO DE INTERFACE [texto curto, original]: Algumas histórias cabem em seis memórias. As mais\nimportantes continuam depois delas.\nINTERAÇÃO: tocar a página em branco; opção de escolher UM título simbólico: “Amanhã”, “Próxima página” ou\n“Nossa história continua”. Escolha altera apenas a capa do epílogo, não fatos.\nLORENZO [baixo]: Ainda tem muita coisa pra viver.\nNARRAÇÃO DE INTERFACE: DIÁRIO DE BORDO — A PRÓXIMA PÁGINA.\nCÂMERA: travessa a estante e revela escola ao entardecer; fade para título PROJECT AURORA. SAÍDA: ending-\nseen=true; modo livre desbloqueado; conteúdo do álbum permanece acessível. NÃO USAR: perda de memória\nmédica como fato, fala da Maria não documentada ou carta íntima integral por padrão."
+    },
+    {
+      "id": "EP-CENA02",
+      "title": "Conversas após os créditos",
+      "sourceKind": "fictional",
+      "lines": [
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Agora sim. Livro devolvido.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Tecnicamente ele nunca saiu da biblioteca.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Não estraga o meu encerramento.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "E aí, quantas etapas precisou pra terminar?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Não começa.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Se quiser música, o salão tá aberto.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Se quiser conversar, a gente também tá aqui.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "helena",
+          "speaker": "PROF NEWMARA",
+          "text": "E se quiser aprender alguma coisa nova, o próximo capítulo começa amanhã.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Vocês não sabem dar descanso, né?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Bem-vindo à escola.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ],
+      "productionNotes": "Local: campus em exploração livre. Fonte: FICTÍCIO. Gatilho: fim do epílogo.\n\nRAFAELLA: Agora sim. Livro devolvido.\nLORENZO: Tecnicamente ele nunca saiu da biblioteca.\nRAFAELLA: Não estraga o meu encerramento.\nPORVA: E aí, quantas etapas precisou pra terminar?\nLORENZO: Não começa.\nBASSARAB: Se quiser música, o salão tá aberto.\nHELÔ: Se quiser conversar, a gente também tá aqui.\nPROF NEWMARA: E se quiser aprender alguma coisa nova, o próximo capítulo começa amanhã.\nLORENZO: Vocês não sabem dar descanso, né?\nRAFAELLA: Bem-vindo à escola.\n\n\n\n\n\n\n\nINTERAÇÃO: explorar sem missão obrigatória; replay de capítulos e aventuras sem reset de saves."
+    }
+  ],
+  "conversations": [
+    {
+      "id": "LIV-RAFA-01",
+      "condition": "antes AV02",
+      "lines": [
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Não tire livros da estante sem guardar o lugar.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Você fala como se eu fosse um desastre ambulante.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Eu apenas trabalho com evidências.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Isso é perseguição.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Isso é catalogação.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ]
+    },
+    {
+      "id": "LIV-RAFA-02",
+      "condition": "após AV02",
+      "lines": [
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Pelo menos agora você sabe onde devolver um livro.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Evolução acadêmica.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Evolução de sobrevivência da biblioteca.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ]
+    },
+    {
+      "id": "LIV-RAFA-03",
+      "condition": "após memória 6",
+      "lines": [
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "As páginas estão em ordem. Não significa que todas estejam completas.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Eu sei. E tá tudo bem não inventar o resto.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "bia",
+          "speaker": "RAFAELLA",
+          "text": "Finalmente, alguém aprendeu o método.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ]
+    },
+    {
+      "id": "LIV-PORV-01",
+      "condition": "livre",
+      "lines": [
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Você já decorou o mapa da escola?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Quase.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Então me explica por que sempre vai pro lado errado.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Pesquisa de campo.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ]
+    },
+    {
+      "id": "LIV-PORV-02",
+      "condition": "após plano",
+      "lines": [
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Soube que você precisou de catorze etapas pra falar oi.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "É uma história distorcida.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Ainda bem. Quinze seria exagero.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ]
+    },
+    {
+      "id": "LIV-PORV-03",
+      "condition": "fim do jogo",
+      "lines": [
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Você terminou tudo?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Tudo que dava pra terminar.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "caio",
+          "speaker": "PORVA",
+          "text": "Resposta de quem ainda tem dez missões escondidas.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ]
+    },
+    {
+      "id": "LIV-BASS-01",
+      "condition": "livre",
+      "lines": [
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Tem música que você percebe primeiro pelo baixo.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "As melhores já chegam com peso.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Então você vai gostar do exercício de ritmo.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ]
+    },
+    {
+      "id": "LIV-BASS-02",
+      "condition": "após AV03",
+      "lines": [
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Hoje o ensaio é livre.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Sem prova?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "Sem prova. Só escuta.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ]
+    },
+    {
+      "id": "LIV-BASS-03",
+      "condition": "após AV06",
+      "lines": [
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "As três frequências estão salvas.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Uma pra cada rádio.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "davi",
+          "speaker": "BASSARAB",
+          "text": "E todas no mesmo mapa.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ]
+    },
+    {
+      "id": "LIV-HELO-01",
+      "condition": "livre",
+      "lines": [
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Você reparou como a escola muda com a luz?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Às vezes parece outro lugar.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Mas é o mesmo. Só mudou o jeito de olhar.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ]
+    },
+    {
+      "id": "LIV-HELO-02",
+      "condition": "durante AV05",
+      "lines": [
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Semente, broto, flor.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Você tá me dando a resposta?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Eu tô te lembrando de observar.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ]
+    },
+    {
+      "id": "LIV-HELO-03",
+      "condition": "epílogo",
+      "lines": [
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Eu gostei da página em branco.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Mesmo sem ter nada escrito?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lia",
+          "speaker": "HELÔ",
+          "text": "Justamente por isso.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ]
+    },
+    {
+      "id": "LIV-NEWM-01",
+      "condition": "livre",
+      "lines": [
+        {
+          "speakerId": "helena",
+          "speaker": "PROF NEWMARA",
+          "text": "Qual é a diferença entre lembrar e concluir?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Lembrar é ter uma informação. Concluir é interpretar.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "helena",
+          "speaker": "PROF NEWMARA",
+          "text": "E interpretar exige cuidado.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ]
+    },
+    {
+      "id": "LIV-NEWM-02",
+      "condition": "após CAP03",
+      "lines": [
+        {
+          "speakerId": "helena",
+          "speaker": "PROF NEWMARA",
+          "text": "A boa pergunta nem sempre traz uma resposta imediata.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Essa eu já aprendi.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "helena",
+          "speaker": "PROF NEWMARA",
+          "text": "Então pode fazer outra pergunta.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ]
+    },
+    {
+      "id": "LIV-NEWM-03",
+      "condition": "epílogo",
+      "lines": [
+        {
+          "speakerId": "helena",
+          "speaker": "PROF NEWMARA",
+          "text": "O melhor trabalho não é o mais longo.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "É o que faz sentido.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "helena",
+          "speaker": "PROF NEWMARA",
+          "text": "Exatamente.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ]
+    },
+    {
+      "id": "LIV-MARIA-01",
+      "condition": "fase escolar pós 20/08/2024",
+      "lines": [
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Você tá prestando atenção?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Totalmente.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Então o que eu acabei de falar?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Algo extremamente importante.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "KKKKK Lorenzo, você não existe.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ]
+    },
+    {
+      "id": "LIV-MARIA-02",
+      "condition": "fase escolar pós 20/08/2024",
+      "lines": [
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Por que você tá me olhando assim?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Porque você tá fazendo aquela cara.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Essa é literalmente minha cara.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Não, não é.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Lé-lé-lé.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Ai, que menino irritante!",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ]
+    },
+    {
+      "id": "LIV-MARIA-03",
+      "condition": "fase posterior, sem data exata",
+      "lines": [
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Eu fiz uma carta enorme e ainda acho que faltou coisa.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Quanto é enorme?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "O suficiente pra você reclamar que escrevi uma bíblia.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Então deve estar boa.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Você nem leu!",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Tô confiando na autora.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ]
+    },
+    {
+      "id": "LIV-MARIA-04",
+      "condition": "fase posterior; reflexão inventada, não citação",
+      "lines": [
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Você já reparou que a gente consegue conversar sobre qualquer bobagem?",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "Até sobre pão.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "Principalmente sobre pão, aparentemente.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "lorenzo",
+          "speaker": "LORENZO",
+          "text": "É um assunto profundo.",
+          "action": "",
+          "sourceKind": "fictional"
+        },
+        {
+          "speakerId": "maria",
+          "speaker": "MARIA",
+          "text": "KKKKK sério, você é impossível.",
+          "action": "",
+          "sourceKind": "fictional"
+        }
+      ]
+    }
+  ],
+  "books": [
+    {
+      "memoryId": "memory-1",
+      "title": "Quando a gente começou",
+      "text": "A história começou em uma escola, antes das datas importantes. Houve uma conversa sobre um Chromebook, um sorriso, uma amizade feita de aulas. Em julho veio uma resposta difícil. Em agosto, depois de cinco aulas de nervosismo e uma última chance, a pergunta voltou. A resposta foi simples: ‘pode ser’. No dia seguinte, dois lugares próximos na sala já pareciam naturais."
+    },
+    {
+      "memoryId": "memory-2",
+      "title": "Se fomos babau",
+      "text": "Maio de 2025 é registrado nas cartas como a marca dos nove meses. Os relatos posteriores falam de dificuldades e de um tempo de espera. Ainda falta documentar em detalhes a relação entre o título desta memória, a data e os acontecimentos. A página guarda aquilo que sabemos e protege aquilo que não sabemos."
+    },
+    {
+      "memoryId": "memory-3",
+      "title": "Um dos dias mais importantes",
+      "text": "Às vezes mudar não significa descobrir de uma vez só. Significa aprender a fazer perguntas com mais cuidado, reconhecer o que importa, escutar e continuar. A fé aparece nas cartas como confiança, reflexão e amadurecimento. O episódio específico ligado a esta data será descrito quando confirmado."
+    },
+    {
+      "memoryId": "memory-4",
+      "title": "O meu primeiro beijo",
+      "text": "31 de março de 2026. Este título aparece no arquivo, mas seu sentido histórico ainda exige contexto: cartas anteriores já mencionavam beijos. Um arquivo honesto não apaga a dúvida. Preserva a data, deixa a pergunta visível e espera a lembrança correta."
+    },
+    {
+      "memoryId": "memory-5",
+      "title": "O último dia (que não foi)",
+      "text": "Flores, uma data e um título que se recusa a ser definitivo. O objeto está registrado, mas o contexto completo não foi reconstituído. A lembrança fica aqui, sem que uma despedida inventada tome o lugar da real."
+    },
+    {
+      "memoryId": "memory-6",
+      "title": "Finalmente",
+      "text": "21 de setembro de 2026: o arquivo marca um pedido de namoro. Os detalhes da ocasião ainda aguardam conferência, mas a importância do capítulo permanece. ‘Finalmente’ não é uma resposta para todas as perguntas. É um nome para uma etapa da história."
+    }
+  ],
+  "objects": [
+    {
+      "id": "OBJ-CADERNO",
+      "text": "Há anotações de aula e o peso imaginário de uma pergunta ainda não feita."
+    },
+    {
+      "id": "OBJ-CHROMEBOOK",
+      "text": "Um computador com problemas. Uma primeira conversa que Lorenzo nunca esqueceu."
+    },
+    {
+      "id": "OBJ-FOTOGRAFIA",
+      "text": "A escola de 2023. Algumas lembranças começam antes da primeira palavra."
+    },
+    {
+      "id": "OBJ-RELOGIO",
+      "text": "Faltam poucos minutos para o sinal."
+    },
+    {
+      "id": "OBJ-CELULAR",
+      "text": "Conversas recriadas para o jogo. Não representam capturas originais."
+    },
+    {
+      "id": "OBJ-ENVELOPE",
+      "text": "Carta cenográfica. Cinco fragmentos, uma ordem."
+    },
+    {
+      "id": "OBJ-RADIO",
+      "text": "Três canais simbólicos. Nenhuma transmissão externa."
+    },
+    {
+      "id": "OBJ-FLORES",
+      "text": "Objeto associado à memória de setembro de 2026; circunstâncias a confirmar."
+    },
+    {
+      "id": "OBJ-ALBUM",
+      "text": "Cada página preserva uma data e os limites do que se sabe."
+    },
+    {
+      "id": "OBJ-DIARIO",
+      "text": "Diário de Bordo. A última página espera pelo que ainda virá."
+    }
+  ],
+  "album": [
+    {
+      "id": "ALB-INTRO",
+      "text": "Seis datas. Seis lugares. Uma pergunta: o que torna uma lembrança nossa?"
+    },
+    {
+      "id": "ALB-2023",
+      "text": "O primeiro sorriso começou com um computador que não cooperava."
+    },
+    {
+      "id": "ALB-0607",
+      "text": "Uma resposta sincera também faz parte da história."
+    },
+    {
+      "id": "ALB-1908",
+      "text": "Cinco aulas tentando criar coragem. Cinco minutos para perguntar."
+    },
+    {
+      "id": "ALB-2008",
+      "text": "No dia seguinte, sentar junto aconteceu sem planejamento."
+    },
+    {
+      "id": "ALB-2025",
+      "text": "A história teve períodos difíceis, e alguns detalhes ainda exigem cuidado."
+    },
+    {
+      "id": "ALB-730",
+      "text": "O diário de dois anos inspira a moldura desta aventura."
+    },
+    {
+      "id": "ALB-FINAL",
+      "text": "Uma página está em branco porque a história ainda está acontecendo."
+    }
+  ]
+}

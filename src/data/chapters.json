@@ -17,7 +17,7 @@
       {
         "id": "talk",
         "type": "talk",
-        "label": "Converse com Maria no pátio"
+        "label": "Converse com Maria na escola"
       },
       {
         "id": "discover",
@@ -26,7 +26,7 @@
         "memory": "memory-1"
       }
     ],
-    "conclusion": "Aula de história. Eu estava extremamente envergonhado, mas pedi para ficar com você.",
+    "conclusion": "A história começou em uma escola, antes das datas importantes. Houve uma conversa sobre um Chromebook, um sorriso, uma amizade feita de aulas. Em julho veio uma resposta difícil. Em agosto, depois de cinco aulas de nervosismo e uma última chance, a pergunta voltou. A resposta foi simples: ‘pode ser’. No dia seguinte, dois lugares próximos na sala já pareciam naturais.",
     "reward": "vale-1"
   },
   {
@@ -47,7 +47,7 @@
       {
         "id": "talk",
         "type": "talk",
-        "label": "Converse com Maria no pátio"
+        "label": "Converse com Maria na escola"
       },
       {
         "id": "discover",
@@ -56,7 +56,7 @@
         "memory": "memory-2"
       }
     ],
-    "conclusion": "O dia em que você disse que a gente não poderia ficar mais, por ora. (Spoiler: o ‘por ora’ acabou.)",
+    "conclusion": "Maio de 2025 é registrado nas cartas como a marca dos nove meses. Os relatos posteriores falam de dificuldades e de um tempo de espera. Ainda falta documentar em detalhes a relação entre o título desta memória, a data e os acontecimentos. A página guarda aquilo que sabemos e protege aquilo que não sabemos.",
     "reward": "vale-2"
   },
   {
@@ -81,7 +81,7 @@
         "memory": "memory-3"
       }
     ],
-    "conclusion": "Foi quando percebi que você significava mais do que alguém, e que Deus estava na minha vida.",
+    "conclusion": "Às vezes mudar não significa descobrir de uma vez só. Significa aprender a fazer perguntas com mais cuidado, reconhecer o que importa, escutar e continuar. A fé aparece nas cartas como confiança, reflexão e amadurecimento. O episódio específico ligado a esta data será descrito quando confirmado.",
     "reward": "vale-3"
   },
   {
@@ -106,7 +106,7 @@
         "memory": "memory-4"
       }
     ],
-    "conclusion": "A primeira vez que nos beijamos.",
+    "conclusion": "31 de março de 2026. Este título aparece no arquivo, mas seu sentido histórico ainda exige contexto: cartas anteriores já mencionavam beijos. Um arquivo honesto não apaga a dúvida. Preserva a data, deixa a pergunta visível e espera a lembrança correta.",
     "reward": "vale-4"
   },
   {
@@ -131,7 +131,7 @@
         "memory": "memory-5"
       }
     ],
-    "conclusion": "Achei que podia ser a última vez que eu te veria, então levei flores pra que, se fosse, ela fosse marcante.",
+    "conclusion": "Flores, uma data e um título que se recusa a ser definitivo. O objeto está registrado, mas o contexto completo não foi reconstituído. A lembrança fica aqui, sem que uma despedida inventada tome o lugar da real.",
     "reward": "vale-5"
   },
   {
@@ -152,7 +152,7 @@
       {
         "id": "talk",
         "type": "talk",
-        "label": "Converse com Maria no pátio"
+        "label": "Converse com Maria na escola"
       },
       {
         "id": "discover",
@@ -161,7 +161,7 @@
         "memory": "memory-6"
       }
     ],
-    "conclusion": "Quando te pedi em namoro.",
+    "conclusion": "21 de setembro de 2026: o arquivo marca um pedido de namoro. Os detalhes da ocasião ainda aguardam conferência, mas a importância do capítulo permanece. ‘Finalmente’ não é uma resposta para todas as perguntas. É um nome para uma etapa da história.",
     "reward": "vale-6"
   }
 ]
