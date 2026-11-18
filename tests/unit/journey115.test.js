@@ -59,3 +59,32 @@ test('earned historical memories repair missing prologue metadata instead of for
 test('unfinished legacy chapters cannot hide their missing memory behind an orphan step stamp',async()=>{
  const {chapters,nextStep}=await import('../../src/systems/quests.js');const p=validateProgress({campaign:{steps:{'chapter-1':chapters[0].steps.map(s=>s.id)}}});assert.equal(nextStep(p.campaign).type,'memory');assert.deepEqual(p.campaign.memories,[]);
 });
+
+test('exploring pauses every main engine without deleting its current objective',()=>{
+ const p=freshProgress();p.stage=2;p.collected=['notebook','card','photo'];p.script.active={group:'prologue',index:0,replay:false};p.living.mode='free';
+ assert.equal(canStartJourney(p,'script','prologue'),false);reconcileJourney(p);assert.equal(p.script.active,null);assert.equal(p.journey.suspendedScript.prologue.index,0);assert.equal(currentJourney(p).id,'opening');p.living.mode='campaign';assert.equal(canStartJourney(p,'script','prologue'),true);
+});
+
+test('unified story cannot emit a second parallel visit into a future chapter',async()=>{
+ const {Story}=await import('../../src/systems/story.js');const p=freshProgress();p.stage=2;p.campaign.memories=['memory-1'];
+ const host={c:p.campaign,journey:{current:{id:'lost-book'}},time:0,world:{update(){}},location:{updateObjects(){},visitPoint:()=>({x:0,z:0,floor:0}),floor:0},living:{free:false,settings:{quality:'low'}},dialogue:{open:false},getProgress:()=>p,changed(){},notify(){}};
+ Story.prototype.update.call(host,.1,{x:0,z:0},true);assert.deepEqual(p.campaign.steps,{});
+});
+
+test('migration keeps one exact untouched pre115 save backup',async()=>{
+ const progress=await import('../../src/systems/progress.js'),map=new Map(),old=JSON.stringify({version:4,progress:{stage:2,collected:['notebook','card','photo'],campaign:{memories:['memory-1']}},settings:{sound:false}});map.set(progress.SAVE_KEY,old);
+ const storage={getItem:k=>map.get(k)||null,setItem:(k,v)=>map.set(k,v)};progress.loadSave(storage);assert.equal(map.get('lorenzo-maria-v04-pre115'),old);map.set(progress.SAVE_KEY,JSON.stringify({version:4,progress:freshProgress()}));progress.loadSave(storage);assert.equal(map.get('lorenzo-maria-v04-pre115'),old);
+});
+
+test('malformed review metadata cannot throw away an otherwise readable old save',()=>{
+ const p=validateProgress({campaign:{memories:['memory-1']},journey:{review:{group:{bad:true},snapshot:[]}}});assert.deepEqual(p.campaign.memories,['memory-1']);assert.equal(p.journey.review,undefined);
+});
+
+test('quota denial of the safety backup does not discard the readable campaign',async()=>{
+ const {loadSave,SAVE_KEY}=await import('../../src/systems/progress.js');const old=JSON.stringify({version:4,progress:{campaign:{memories:['memory-1']}}});const s=loadSave({getItem:k=>k===SAVE_KEY?old:null,setItem(){throw Error('quota');}});assert.equal(s.exists,true);assert.deepEqual(s.progress.campaign.memories,['memory-1']);
+});
+
+test('canonical chapter completion preserves its original special item exactly once',async()=>{
+ const {DefinitiveScript}=await import('../../src/systems/definitive-script.js');const p=freshProgress();p.stage=2;p.campaign.memories=['memory-1','memory-2','memory-3','memory-4'];
+ const host={getProgress:()=>p,story:{changed(){}},adventure:{current:null}};DefinitiveScript.prototype.completeChapter.call(host,'chapter-5');DefinitiveScript.prototype.completeChapter.call(host,'chapter-5');assert.equal(p.campaign.special.filter(x=>x==='flowers').length,1);assert.equal(p.campaign.memories.filter(x=>x==='memory-5').length,1);assert.equal(p.campaign.vouchers.filter(x=>x==='vale-5').length,1);
+});

@@ -126,6 +126,7 @@ export class Adventure {
  update(dt,{active,paused}){
   if(this.photo&&!this.location)this.photo.mesh.visible=Math.hypot(this.player.position.x-this.photo.x,this.player.position.z-this.photo.z)<(this.living.settings.quality==='low'?20:55);
   if(paused)return;this.elapsed+=dt;this.actions.update(dt);this.cutscenes.update(dt);
+  if(this.journey&&this.living.free&&!this.getProgress().journey.review)return;
   const c=this.current;
   if(!this.location&&c?.id==='lost-book'&&c.node<5&&!this.actions.active){const o=this.living.campus.objects.find(o=>o.id==='lost-book');if(o)o.mesh.visible=true;}
   if(!this.location&&c?.id==='familiar-music'&&c.node<3&&!this.actions.active){const o=this.living.campus.objects.find(o=>o.id==='familiar-music');if(o)o.mesh.visible=true;}

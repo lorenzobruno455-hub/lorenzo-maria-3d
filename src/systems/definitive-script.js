@@ -45,7 +45,7 @@ export class DefinitiveScript{
   for(const s of groupScenes(group)){delete this.state.collected[s.id];delete this.state.puzzles[s.id];}
   this.living.setMode('campaign');this.story.close();this.story.start();this.save();this.notify(this.current.title);return true;
  }
- targets(){const s=this.current;if(!s||this.school.inspecting||this.adventure.cutscenes.active)return[];const p=this.stops()[0];if(!p)return[];
+ targets(){if(this.journey&&this.current&&!this.journey.allowed('script',this.state.active.group))return[];const s=this.current;if(!s||this.school.inspecting||this.adventure.cutscenes.active)return[];const p=this.stops()[0];if(!p)return[];
   if(p.outside?this.school.active:!this.school.active||p.floor!==this.school.floor)return[];
   return[{...p,x:(p.approach||p).x,z:(p.approach||p).z,id:`script:${s.id}`,kind:'script',height:(p.outside?0:this.school.navigation.floor(p.floor).baseY)+(p.top??.8)+.25,name:`${s.title} · ${p.name}`}];
  }
@@ -91,7 +91,7 @@ export class DefinitiveScript{
  collectStop(id){if(this.current?.id!==id)return;const p=this.stops()[0];if(!p)return;this.state.collected[id]||=[];this.state.collected[id].push(p.stopId);if(this.stops().length){this.save();this.notify(this.stops()[0].name);return;}this.finish(id);}
  completeChapter(group,replay=false){
   if(!group.startsWith('chapter-')||replay)return false;const memory=memories.find(m=>m.quest===group),c=this.getProgress().campaign;let changed=false;
-  if(memory&&currentChapter(c)?.id===group){while(nextStep(c)&&nextStep(c).type!=='memory')questEvent(c,nextStep(c).type);changed=unlockMemory(c,memory.id);this.story.changed();}
+  if(memory&&currentChapter(c)?.id===group){while(nextStep(c)&&nextStep(c).type!=='memory')questEvent(c,nextStep(c).type);changed=unlockMemory(c,memory.id);if(changed){const special=group==='chapter-2'?'garden-letter':group==='chapter-5'?'flowers':null;if(special&&!c.special.includes(special))c.special.push(special);}this.story.changed();}
   if(group==='chapter-1'&&this.adventure.current?.id==='first-encounter'&&this.adventure.current.step.target==='first-finale')this.adventure.director.emit('scene','first-finale');
   return changed;
  }

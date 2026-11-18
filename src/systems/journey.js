@@ -4,7 +4,7 @@ import {JOURNEY,currentJourney,journeyDone,canStartJourney,reconcileJourney} fro
 import {chapters,memories} from './quests.js';
 import {groupScenes,validateScript} from './script-progress.js';
 import {SPEAKERS,scriptLines} from './definitive-script.js';
-import {EXPANSION} from '../data/expansion.js';
+import {EXPANSION,LETTER} from '../data/expansion.js';
 import {NPC_DATA,EVENT_DATA} from './social.js';
 const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
 const button=(label,fn)=>{const n=el('button',label);n.onclick=fn;return n;};
@@ -45,13 +45,14 @@ export class Journey {
  review(group){
   const n=Number(group.split('-')[1]);const completed=group.startsWith('chapter-')?this.p.campaign.memories.includes(`memory-${n}`):groupScenes(group).length&&groupScenes(group).every(s=>this.p.script.completed.includes(s.id));
   if(!completed||this.p.journey.review)return false;
-  this.p.journey.review={group,mode:this.living.free?'free':'campaign',snapshot:validateScript(this.p.script)};this.reconcile();
+  const fromWelcome=!document.getElementById('welcome').hidden;this.originalStart();
+  this.p.journey.review={group,mode:fromWelcome||this.living.free?'free':'campaign',snapshot:validateScript(this.p.script)};this.reconcile();
   this.p.script.active={group,index:0,replay:true};for(const s of groupScenes(group)){delete this.p.script.collected[s.id];delete this.p.script.puzzles[s.id];}
   this.story.close();this.story.start();this.save();return true;
  }
  endReview(){const r=this.p.journey.review;if(!r)return;this.p.script=validateScript(r.snapshot);delete this.p.journey.review;if(this.p.script.active)delete this.p.journey.suspendedScript[this.p.script.active.group];this.p.living.mode=r.mode;this.save();}
  resume(){if(this.p.journey.review)this.endReview();this.originalStart();this.living.setMode('campaign');this.story.close();this.story.start();this.activate();}
- explore(){if(this.p.journey.review)this.endReview();this.originalStart();this.living.setMode('free');this.story.close();this.story.start();this.notify('Exploração livre · CONTINUAR retoma a história.');}
+ explore(){if(this.p.journey.review)this.endReview();this.originalStart();this.living.setMode('free');this.reconcile();this.story.close();this.story.start();this.notify('Exploração livre · CONTINUAR retoma a história.');}
  update(dt,{started,blocked}){if(!started||blocked||this.living.free||this.p.journey.review)return;this.clock=(this.clock||0)+dt;if(this.clock<.25)return;this.clock=0;this.activate();}
  panel(title){this.story.show('journey-panel');document.getElementById('story-title').textContent=title;this.story.content.classList.add('journey-content');return this.story.content;}
  show(page){
@@ -92,11 +93,12 @@ export class Journey {
  }
  album(category='memories'){const c=this.panel('Álbum'),nav=el('nav',undefined,'journey-tabs');nav.setAttribute('aria-label','Categorias do álbum');
   for(const [id,title]of [['memories','MEMÓRIAS'],['documents','CARTAS E DOCUMENTOS'],['extras','EXTRAS']]){const b=button(title,()=>this.album(id));b.dataset.albumCategory=id;b.setAttribute('aria-pressed',String(id===category));nav.append(b);}c.append(nav);
-  if(category==='memories')for(const m of memories){const unlocked=this.p.campaign.memories.includes(m.id),card=el('article',undefined,'story-card');card.append(el('small',m.date),el('h3',m.title),el('p',unlocked?'✓ Guardada no álbum':'🔒 Continue a história para descobrir.'));if(unlocked)card.append(button('LER LEMBRANÇA',()=>{this.story.close();this.story.start();this.script.readBook(m.id);}),button('REVISITAR CAPÍTULO',()=>this.review(m.quest)));c.append(card);}
+  if(category==='memories')for(const m of memories){const unlocked=this.p.campaign.memories.includes(m.id),card=el('article',undefined,'story-card');card.append(el('small',m.date),el('h3',m.title),el('p',unlocked?'✓ Guardada no álbum':'🔒 Continue a história para descobrir.'));if(unlocked)card.append(button('LER LEMBRANÇA',()=>{this.story.close();this.script.readBook(m.id);}),button('REVISITAR CAPÍTULO',()=>this.review(m.quest)));c.append(card);}
   if(category==='documents'){
    this.script.renderPage(c,'album');
    for(const m of memories)if(this.p.campaign.memories.includes(m.id))c.append(button(`Livro · ${m.title}`,()=>{this.story.close();this.script.readBook(m.id);}));
    if(this.p.campaign.letter)c.append(button('Carta final',()=>this.story.show('letter')));
+   const letter=this.p.expansion.quests.letter,letterMission=EXPANSION.find(m=>m.id==='letter');if(letter)for(let i=0;i<LETTER.length;i++){const at=letterMission.tasks.findIndex(t=>t.target===`letter-fragment-${i+1}`);if(at>=0&&letter.step>at)c.append(el('h3',`Fragmento ${i+1}`),el('p',LETTER[i],'letter-text'));}
    if(this.p.expansion.quests.letter?.completed)c.append(button('Uma Carta Nunca Entregue',()=>this.expansion.showLetter()));
    for(const [id,title]of [['notebook','Caderno de literatura'],['card','Cartão da biblioteca'],['photo','Fotografia do jardim']])if(this.p.collected.includes(id))c.append(el('p',title));
    if(!this.p.campaign.memories.length&&!this.p.collected.length)c.append(el('p','Os documentos encontrados aparecerão aqui.'));
@@ -113,9 +115,10 @@ export class Journey {
   {label:'CONVERSAR SOBRE A HISTÓRIA',action:()=>this.historyTalk('maria')},
   {label:'CONVERSAR NORMALMENTE',action:()=>this.casual('maria')},
   {label:'DESPEDIR-SE',action:()=>this.story.dialogue.close(false)},
- ]});this.story.dialogue.advance();}
+ ]});this.story.dialogue.advance();this.story.dialogue.root.dataset.mariaMenu='true';}
  historyTalk(id){
   this.living.speakingId=id;
+  if(this.living.free&&!this.p.journey.review){this.story.dialogue.start([{speaker:SPEAKERS[id]||'MARIA',text:'Selecione CONTINUAR para retomar o próximo passo da história.',provenance:'creative-fiction'}]);return;}
   if(this.current?.id==='tutorial'&&id==='maria'){this.story.tutorial();return;}
   const legacy=this.current?.system==='adventure'&&legacyQuestOwns(this.p,this.current.key)?EVENT_DATA.find(e=>e.id===this.current.key):null;
   if(legacy?.npc===id){if(this.p.living.events[legacy.id]==='found')this.living.finishEvent(legacy);else this.living.say(id,[{speaker:SPEAKERS[id],text:legacy.description,provenance:'school-fiction'}]);return;}

@@ -17,7 +17,7 @@ export const freshJourney=()=>({version:1,suspendedScript:{}});
 export function validateJourney(raw){const state=freshJourney();for(const [group,value] of Object.entries(raw?.suspendedScript||{})){
  const active=validateScript({active:value}).active;if(active?.group===group)state.suspendedScript[group]=active;
 }
- const r=raw?.review;if(r&&groupScenes(r.group).length&&r.snapshot&&typeof r.snapshot==='object')state.review={group:r.group,mode:r.mode==='free'?'free':'campaign',snapshot:validateScript(r.snapshot)};
+ const r=raw?.review;if(r&&typeof r.group==='string'&&groupScenes(r.group).length&&r.snapshot&&typeof r.snapshot==='object'&&!Array.isArray(r.snapshot)&&Array.isArray(r.snapshot.completed))state.review={group:r.group,mode:r.mode==='free'?'free':'campaign',snapshot:validateScript(r.snapshot)};
  return state;}
 export function journeyDone(p,m){
  if(m.id==='tutorial')return p.stage===2;
@@ -28,7 +28,7 @@ export function journeyDone(p,m){
  return groupScenes(m.key).every(s=>p.script.completed.includes(s.id));
 }
 export const currentJourney=p=>JOURNEY.find(m=>!journeyDone(p,m))||null;
-export function canStartJourney(p,system,key){if(p.journey?.review)return system==='script'&&key===p.journey.review.group;const m=currentJourney(p);if(!m)return false;
+export function canStartJourney(p,system,key){if(p.journey?.review)return system==='script'&&key===p.journey.review.group;if(p.living.mode==='free')return false;const m=currentJourney(p);if(!m)return false;
  if(system==='script'&&key==='chapter-1'&&m.id==='first'){
   const q=p.adventure.quests['first-encounter'];return q?.status==='completed'||q?.node===7;
  }

@@ -137,7 +137,7 @@ export class Story {
   update(dt, position, active) {
     this.time += dt; this.world.update(this.c, this.time, this.focus,dt,position,this.living.settings.quality);this.location?.updateObjects();
     if (this.focus && !this.dialogue.open) this.focus = null;
-    if (active && (!this.schoolOnlyNarrative||this.location) && !this.living.free && this.getProgress().stage === 2) {
+    if (!this.journey && active && (!this.schoolOnlyNarrative||this.location) && !this.living.free && this.getProgress().stage === 2) {
       const step = nextStep(this.c),visit=this.location?.visitPoint()||step?.position; if (step?.type === 'visit' && (!this.location||visit?.floor===this.location.floor) && Math.hypot(position.x - (visit.approach||visit).x, position.z - (visit.approach||visit).z) < (this.location?1.5:3)) { const chapter = currentChapter(this.c); questEvent(this.c, 'visit'); if (chapter?.id === 'chapter-2' && !this.c.special.includes('garden-letter')) this.c.special.push('garden-letter'); if (chapter?.id === 'chapter-5' && !this.c.special.includes('flowers')) this.c.special.push('flowers'); this.changed(); this.notify(nextStep(this.c)?.label || 'Explore a memória.'); }
     }
     if (this.game && this.gameReady && !document.hidden) {

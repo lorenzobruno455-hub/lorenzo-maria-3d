@@ -132,7 +132,7 @@ listen(document,'keydown', e => {
 });
 function nearestTarget() {
  const pos=player.position;interactions.entries.clear();
- const add=(o,kind,distance,extra={})=>interactions.register({id:`${kind}:${o.id}`,object:{...o,kind,original:o},distance,height:o.height??(o.mesh?new THREE.Box3().setFromObject(o.mesh).max.y+.04:1.4),priority:kind==='seat'?-1.2:['item','memory','game','album','memory-book'].includes(kind)?.5:0,...extra,action:t=>handleInteraction({...t,ref:o})});
+ const add=(o,kind,distance,extra={})=>{if(journey&&living.free&&!progress.journey.review&&kind==='item')return;return interactions.register({id:`${kind}:${o.id}`,object:{...o,kind,original:o},distance,height:o.height??(o.mesh?new THREE.Box3().setFromObject(o.mesh).max.y+.04:1.4),priority:kind==='seat'?-1.2:['item','memory','game','album','memory-book'].includes(kind)?.5:0,...extra,action:t=>handleInteraction({...t,ref:o})});};
  script?.targets().forEach(o=>add(o,'script',2.6,{height:o.height,priority:9}));
  expansion?.targets().forEach(o=>add(o,'expansion',2.6,{height:o.height,priority:expansion.current?6:4}));
  if(school?.active){
@@ -153,6 +153,7 @@ function handleInteraction(target) {
 
   if (!target) return;
   audio.unlock();
+  if(journey&&living.free&&!progress.journey.review&&['notebook','card','photo'].includes(target.id)){notify('CONTINUAR retoma a busca pelas lembranças.');return;}
   if(journey&&(target.id==='maria'||target.kind==='maria')){story.maria();return;}
   if(script?.handle(target))return;
   if(target.kind==='court'){sports.handle(target);return;}
@@ -266,7 +267,7 @@ function updateHUD() {
   document.querySelector('[role=progressbar]').setAttribute('aria-valuenow', amount);
   document.querySelector('[role=progressbar]').setAttribute('aria-valuemax', total);
   $('mission').querySelector('.eyebrow').textContent = expansionQuest?'EXPANSÃO NARRATIVA · FICÇÃO':living?.free ? 'COLÉGIO AURORA · EXPLORAÇÃO LIVRE' : progress.stage === 2 ? `MEMÓRIAS · CAPÍTULO ${Math.min(6, progress.campaign.memories.length + 1)}/6` : 'CAPÍTULO 01 / PRIMEIRO SINAL';
-  if(journey){const s=journey.summary();$('objective').textContent=living.free?'Exploração livre · CONTINUAR retoma sua missão.':s.objective;$('count').textContent=`${s.done}/${s.total} objetivos`;$('mission').querySelector('.eyebrow').textContent=living.free?'EXPLORAÇÃO LIVRE':s.mission;$('progress').style.width=`${Math.min(100,s.done/s.total*100)}%`;document.querySelector('[role=progressbar]').setAttribute('aria-valuenow',s.done);document.querySelector('[role=progressbar]').setAttribute('aria-valuemax',s.total);}
+  if(journey){const s=journey.summary(),exploring=living.free&&!progress.journey.review;$('objective').textContent=exploring?'Exploração livre · CONTINUAR retoma sua missão.':s.objective;$('count').textContent=`${s.done}/${s.total} objetivos`;$('mission').querySelector('.eyebrow').textContent=progress.journey.review?'REVISITA · PROGRESSO PRESERVADO':exploring?'EXPLORAÇÃO LIVRE':s.mission;$('progress').style.width=`${Math.min(100,s.done/s.total*100)}%`;document.querySelector('[role=progressbar]').setAttribute('aria-valuenow',s.done);document.querySelector('[role=progressbar]').setAttribute('aria-valuemax',s.total);}
 }
 function nextObjective(){const next=rawNextObjective();return school.waypoint(school.active?next:campusObjective(next,{expansion:!!(script?.goal()||expansion?.goal()),adventureStep:adventure.current?.step,point:id=>school.narrative.point(id),rotation:school.rotation}));}
 function rawNextObjective() {

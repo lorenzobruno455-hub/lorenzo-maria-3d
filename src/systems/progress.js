@@ -9,6 +9,7 @@ import { freshCampaign, validateCampaign } from './quests.js';
 import {BOUNDS} from './physics.js';
 import { clamp } from './physics.js';
 export const SAVE_KEY = 'lorenzo-maria-v04';
+export const PRE115_SAVE_KEY = SAVE_KEY+'-pre115';
 export const PRE08_SAVE_KEY = 'lorenzo-maria-v04-pre08';
 export const PREVIOUS_SAVE_KEY = 'lorenzo-maria-v03';
 export const LEGACY_SAVE_KEY = 'lorenzo-maria-v02';
@@ -56,7 +57,7 @@ export function validateSettings(raw = {}) {
 }
 export function loadSave(storage) {
   for (const key of [SAVE_KEY, PRE08_SAVE_KEY, PREVIOUS_SAVE_KEY, LEGACY_SAVE_KEY]) {
-    try { const raw = JSON.parse(storage?.getItem(key) || 'null'); if (raw?.progress && typeof raw.progress === 'object') return { progress: validateProgress(raw.progress), settings: validateSettings(raw.settings || {}), exists: true }; }
+    try { const text=storage?.getItem(key)||'null',raw=JSON.parse(text);if(raw?.progress&&typeof raw.progress==='object'){if(raw.progress.journey?.version!==1)try{if(!storage.getItem(PRE115_SAVE_KEY))storage.setItem(PRE115_SAVE_KEY,text);}catch{/* A denied backup must not discard a readable save. */}return {progress:validateProgress(raw.progress),settings:validateSettings(raw.settings||{}),exists:true};} }
     catch { /* Try the untouched legacy backup if the new record is corrupt. */ }
   }
   return { progress: freshProgress(), settings: { ...DEFAULT_SETTINGS }, exists: false };
