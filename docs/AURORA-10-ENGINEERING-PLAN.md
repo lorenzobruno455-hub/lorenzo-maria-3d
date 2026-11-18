@@ -4,10 +4,10 @@ Base: `53dc1c9` / PR #23 / `feat/aurora-definitive-script-v1`. Branch: `perf/aur
 
 ## Entregas incrementais
 
-- [ ] M1 — auditoria, inventário de invariantes e instrumentação opt-in; build congelado, medições antes das correções.
-- [ ] M2 — corrigir somente custos demonstrados pelo profiling e falhas reproduzidas; testes específicos e commits separados.
-- [ ] M3 — controles/ciclo de vida, saves, retomada, worker e cutscenes; preservar APIs e conteúdo.
-- [ ] M4 — regressão unitária completa, integração/navegação, seis capítulos/memórias e sete aventuras; toque/teclado e capturas; comparações de desempenho e build final.
+- [x] M1 — auditoria, inventário de invariantes e instrumentação opt-in; build congelado, medições antes das correções.
+- [x] M2 — corrigir somente custos demonstrados pelo profiling e falhas reproduzidas; testes específicos e commits separados.
+- [x] M3 — controles/ciclo de vida, saves, retomada, worker e cutscenes; preservar APIs e conteúdo.
+- [x] M4 — regressão unitária completa, integração/navegação, seis capítulos/memórias e sete aventuras; toque/teclado e capturas; comparações de desempenho e build final.
 
 ## Invariantes
 
