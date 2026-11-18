@@ -1,3 +1,4 @@
+import {FrameLimiter} from './systems/frame-limiter.js';
 import {createActorContacts} from './systems/actor-contacts.js';
 import {Journey,cleanObjective} from './systems/journey.js';
 import {narrativeOccluders} from './systems/narrative-identity.js';
@@ -309,13 +310,13 @@ function updateTarget() {
   story?.world.highlight(target);
   $('prompt').hidden = !target;
 }
-function resize() { controls.clear(); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); quality.resize(); }
+function resize() { quality.apply(false);controls.clear(); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); quality.resize(); }
 listen(window,'resize', resize);
 listen(window,'pagehide', save);
 listen(window,'blur', () => { if (started && !paused) setPause(true); });
 listen(document,'visibilitychange', () => {
   if (document.hidden) { save(); controls.clear(); if (started) setPause(true); quality.resetSample(); cancelAnimationFrame(frame); frame = 0; }
-  else if (!frame && !disposed) { last = performance.now(); frame = requestAnimationFrame(animate); }
+  else if (!frame && !disposed) { last = performance.now(); frameLimiter.reset();frame = requestAnimationFrame(animate); }
 });
 const heroLoads = [['lorenzo', lorenzo], ['maria', maria]].map(([name, character]) => {
   const asset = CHARACTER_ASSETS[name];
@@ -345,10 +346,11 @@ function uiSound(event){if(event.target.closest?.('button,select')&&!event.targe
 listen(document,'click',uiSound);
 performanceProbe=createPerformanceProbe(new URLSearchParams(location.search).has('profile'));if(performanceProbe)window.auroraPerformance.state=getGameState;
 for(const [object,key,label]of [[school,'tick','school.tick'],[school,'update','school.update'],[school,'cameraObstacles','camera.obstacles'],[school,'bodyObstacles','body.obstacles'],[school,'showFloors','floor.visibility'],[school,'presentWorld','world.visibility'],[story,'update','story.update'],[expansion,'update','expansion.update'],[script,'update','script.update'],[ink,'update','ink.update'],[landscape,'update','landscape.update'],[renderer,'render','render'],[spatialActors,'update','NPC.update'],[spatialActors?.planner,'horizontal','Astar'],[school,'moveBodyWorld','collision'],[school,'ensureFloor','floor.request'],[world.resources,'geometry','geometry.request'],[world.resources,'material','material.request'],[quality,'resize','resolution.change'],[audio,'update','audio.update']])performanceProbe?.wrap(object,key,label);
+const frameLimiter=new FrameLimiter(),mobileDisplay=matchMedia('(pointer:coarse)').matches||/Android/i.test(navigator.userAgent);
 let last = performance.now(), time = 0, hudTimer = 0;
 function animate(now) {
   if (disposed || document.hidden) { frame = 0; return; }
-  frame = requestAnimationFrame(animate); const rawDT = Math.max(.001, (now - last) / 1000), dt = Math.min(rawDT, .1); last = now;performanceProbe?.begin(rawDT*1000);
+  frame = requestAnimationFrame(animate);if(!frameLimiter.accept(now,mobileDisplay?(settings.mobileFPS||60):0))return; const rawDT = Math.max(.001, (now - last) / 1000), dt = Math.min(rawDT, .1); last = now;performanceProbe?.begin(rawDT*1000);
   let speed = 0, movementHeading,worldMovementHeading;
   if (active()) {
     time += dt; const input = controls.sample(dt); follow.rotate(input.lookX, input.lookY);
@@ -422,7 +424,7 @@ export function getGameState() {
     visual:{theme:'aurora-comic',edition:'0.7C',heroInk:ink.actorInk.filter(i=>i.actor.root===player&&i.mesh.isSkinnedMesh&&i.mesh.visible).length,fallbackInk:ink.actorInk.filter(i=>i.actor.root===player&&!i.mesh.isSkinnedMesh).length,models:{lorenzo:!!lorenzo.custom,maria:!!maria.custom},clips:{lorenzo:Object.keys(lorenzo.actions),maria:Object.keys(maria.actions)},toon:world.resources.material('#eadfc8').isMeshToonMaterial,outlineVertices:ink.staticInk.geometry.attributes.position?.count||0},
     spatial:validator.inspect(world.placed), memoryBooks:story.world.books.map(b=>({id:b.id,x:b.x,z:b.z,unlocked:b.unlocked,angle:b.mesh.userData.cover.rotation.z})),
     colorbeat:{style:'aurora-colorbeat-081',inkPixels:ink.actorMaterial.userData.inkUniforms.cbInkPixels.value,accent:interactionAccent.mesh.visible,exposure:renderer.toneMappingExposure,sharedLibrary:school?.materials?.library===world.resources.colorbeat,materials:world.resources.materials.size,textures:world.resources.textures.size,programs:renderer.info.programs?.length},
-    actorContacts:{instances:actorContacts.mesh.count,visible:actorContacts.mesh.visible,capacity:actorContacts.mesh.instanceMatrix.count},landscape:landscape?.state(),court:sports?.state(),schoolExterior:schoolExterior?.state()||null,overdrive:overdriveP0?.state()||null,quality: settings.quality, resolutionScale: quality.scale, outlines: ink.actorInk.filter(s=>s.mesh.visible).length, fps: Math.round(quality.fps), drawCalls: renderer.info.render.calls, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures, triangles: renderer.info.render.triangles, drawingBuffer:{width:renderer.domElement.width,height:renderer.domElement.height} };
+    mobileFPS:settings.mobileFPS,mobileDisplay,actorContacts:{instances:actorContacts.mesh.count,visible:actorContacts.mesh.visible,capacity:actorContacts.mesh.instanceMatrix.count},landscape:landscape?.state(),court:sports?.state(),schoolExterior:schoolExterior?.state()||null,overdrive:overdriveP0?.state()||null,quality: settings.quality, resolutionScale: quality.scale, outlines: ink.actorInk.filter(s=>s.mesh.visible).length, fps: Math.round(quality.fps), drawCalls: renderer.info.render.calls, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures, triangles: renderer.info.render.triangles, drawingBuffer:{width:renderer.domElement.width,height:renderer.domElement.height} };
 }
 registerStateReader(getGameState);
 registerNavigationReader(()=>({origin:school.active?{x:60,z:0}:{x:0,z:0},rotation:school.active?school.rotation:0,floor:school.active?school.floor:null,position:{x:player.position.x,z:player.position.z},solids:(school.active?(school.floor===0?world.solids.map(b=>schoolBoundsToLocal(b,school.rotation)):school.navigation.movementObstacles(school.floor)):world.solids).map(b=>({...b}))}));

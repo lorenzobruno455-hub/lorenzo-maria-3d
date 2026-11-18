@@ -22,5 +22,7 @@ export function installPreferences(settings, save, controls) {
     document.getElementById('quality').closest('label').before(nav);
   }
   apply.dispose=()=>{for(const off of cleanup.splice(0))off();ownedNav?.remove();ownedNav=null;};
+  const fps=document.getElementById('mobile-fps');
+  if(fps){fps.value=String(settings.mobileFPS||60);const change=()=>{settings.mobileFPS=Number(fps.value)===30?30:60;controls.clear();save();window.dispatchEvent(new Event('resize'));};fps.addEventListener('change',change);cleanup.push(()=>fps.removeEventListener('change',change));}
   apply(); return apply;
 }

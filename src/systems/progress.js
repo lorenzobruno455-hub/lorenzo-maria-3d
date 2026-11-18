@@ -18,7 +18,7 @@ export const ITEMS = [
   { id: 'card', name: 'Cartão da biblioteca', x: 14, z: -10.5 },
   { id: 'photo', name: 'Fotografia do jardim', x: 10, z: 22 },
 ];
-export const DEFAULT_SETTINGS = { quality: 'medium', sensitivity: 1, volume: .5, sound: false, shadows: true, adaptive: true, controlsSize: 1, controlsOpacity: .8, reducedMotion: false, visualEffects: true, musicVolume: .5, effectsVolume: .5 };
+export const DEFAULT_SETTINGS = { quality: 'medium', mobileFPS: 60, sensitivity: 1, volume: .5, sound: false, shadows: true, adaptive: true, controlsSize: 1, controlsOpacity: .8, reducedMotion: false, visualEffects: true, musicVolume: .5, effectsVolume: .5 };
 export function freshProgress() { return { journey:freshJourney(), script:freshScript(), expansion:freshExpansion(), schoolVisit: freshSchoolVisit(), stage: 0, collected: [], position: { x: 0, z: 19 }, yaw: 0, pitch: .38, interactions: {}, adventure:freshAdventure(), living: freshLiving(), campaign: freshCampaign(), doors: [false, false] }; }
 export function validateProgress(raw) {
   const p = freshProgress();
@@ -46,6 +46,7 @@ export function validateProgress(raw) {
 }
 export function validateSettings(raw = {}) {
   const s = { ...DEFAULT_SETTINGS };
+  if(raw.mobileFPS===30)s.mobileFPS=30;
   if (['low', 'medium', 'high'].includes(raw.quality)) s.quality = raw.quality;
   for (const k of ['sound', 'shadows', 'adaptive', 'reducedMotion', 'visualEffects']) if (typeof raw[k] === 'boolean') s[k] = raw[k];
   if (Number.isFinite(raw.sensitivity)) s.sensitivity = clamp(raw.sensitivity, .3, 2.5);

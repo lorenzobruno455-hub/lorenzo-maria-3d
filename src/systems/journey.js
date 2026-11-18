@@ -45,8 +45,8 @@ export class Journey {
  review(group){
   const n=Number(group.split('-')[1]);const completed=group.startsWith('chapter-')?this.p.campaign.memories.includes(`memory-${n}`):groupScenes(group).length&&groupScenes(group).every(s=>this.p.script.completed.includes(s.id));
   if(!completed)return false;
-  if(this.p.journey.review){if(this.p.journey.review.group===group&&this.p.script.active?.group===group){this.originalStart();this.story.close();this.story.start();return true;}this.endReview();}
-  const fromWelcome=!document.getElementById('welcome').hidden;this.originalStart();
+  if(this.p.journey.review){if(this.p.journey.review.group===group&&this.p.script.active?.group===group){this.story.close();this.originalStart();this.story.start();return true;}this.endReview();}
+  const fromWelcome=!document.getElementById('welcome').hidden;this.story.close();this.originalStart();
   this.p.journey.review={group,mode:fromWelcome||this.living.free?'free':'campaign',snapshot:validateScript(this.p.script)};this.reconcile();
   this.p.script.active={group,index:0,replay:true};for(const s of groupScenes(group)){delete this.p.script.collected[s.id];delete this.p.script.puzzles[s.id];}
   this.story.close();this.story.start();this.save();return true;
