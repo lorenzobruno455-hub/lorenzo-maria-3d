@@ -44,7 +44,8 @@ export class Journey {
  }
  review(group){
   const n=Number(group.split('-')[1]);const completed=group.startsWith('chapter-')?this.p.campaign.memories.includes(`memory-${n}`):groupScenes(group).length&&groupScenes(group).every(s=>this.p.script.completed.includes(s.id));
-  if(!completed||this.p.journey.review)return false;
+  if(!completed)return false;
+  if(this.p.journey.review){if(this.p.journey.review.group===group&&this.p.script.active?.group===group){this.originalStart();this.story.close();this.story.start();return true;}this.endReview();}
   const fromWelcome=!document.getElementById('welcome').hidden;this.originalStart();
   this.p.journey.review={group,mode:fromWelcome||this.living.free?'free':'campaign',snapshot:validateScript(this.p.script)};this.reconcile();
   this.p.script.active={group,index:0,replay:true};for(const s of groupScenes(group)){delete this.p.script.collected[s.id];delete this.p.script.puzzles[s.id];}
@@ -54,7 +55,7 @@ export class Journey {
  resume(){if(this.p.journey.review)this.endReview();this.originalStart();this.living.setMode('campaign');this.story.close();this.story.start();this.activate();}
  explore(){if(this.p.journey.review)this.endReview();this.originalStart();this.living.setMode('free');this.reconcile();this.story.close();this.story.start();this.notify('Exploração livre · CONTINUAR retoma a história.');}
  update(dt,{started,blocked}){if(!started||blocked||this.living.free||this.p.journey.review)return;this.clock=(this.clock||0)+dt;if(this.clock<.25)return;this.clock=0;this.activate();}
- panel(title){this.story.show('journey-panel');document.getElementById('story-title').textContent=title;this.story.content.classList.add('journey-content');return this.story.content;}
+ panel(title){this.story.show('journey-panel');this.story.content.dataset.journeyPage='';document.getElementById('story-title').textContent=title;this.story.content.classList.add('journey-content');return this.story.content;}
  show(page){
   if(page==='menu'){this.menu();return true;}
   if(['chapters','script','expansion','adventures'].includes(page)&&this.developer)return false;
@@ -64,7 +65,7 @@ export class Journey {
   return false;
  }
  settings(){this.story.close();this.story.start();document.getElementById('pause-button').click();}
- menu(){const c=this.panel('Nossa história');c.append(el('p','Uma história, um próximo passo.','journey-intro'));
+ menu(){const c=this.panel('Nossa história');c.dataset.journeyPage='menu';c.append(el('p','Uma história, um próximo passo.','journey-intro'));
   for(const [title,fn]of [['CONTINUAR',()=>this.resume()],['MISSÕES',()=>this.missions()],['ÁLBUM',()=>this.album()],['EXPLORAR',()=>this.explore()],['CONFIGURAÇÕES',()=>this.settings()]])c.append(button(title,fn));
  }
  goal(){if(this.p.journey.review){const g=this.script.goal();return g?{...g,name:`Revisita · ${cleanObjective(g.name)}`}:null;}const m=this.current;if(!m)return null;let g;

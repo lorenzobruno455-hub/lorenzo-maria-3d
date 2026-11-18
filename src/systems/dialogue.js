@@ -19,7 +19,7 @@ export class Dialogue {
     delete this.root.dataset.mariaMenu;
     const line = this.lines[this.index]; this.elapsed = 0; this.visible = 0; this.speaker.textContent = line.speaker;
     this.root.querySelector('.portrait').textContent = line.speaker[0];
-    this.tag.textContent = ({real_report:'Relato do autor · resposta recordada',documentary_summary:'Resumo documental',adapted:'Cena dramatizada · falas recriadas',fictional:'Ficção narrativa · não é registro histórico',pending_verification:'Ficção documental · contexto histórico pendente'})[line.provenance] || (line.provenance === 'school-fiction' ? 'Personagem ou acontecimento fictício · Colégio Aurora' : line.provenance === 'creative-fiction' ? 'Diálogo criativo do jogo Color · não é transcrição' : line.provenance === 'author-reported-memory' ? 'Memória relatada pelo autor' : '');
+    this.tag.textContent = ({real_report:'Relato do autor · resposta recordada',documentary_summary:'Resumo documental',adapted:'Cena dramatizada · falas recriadas',fictional:'Ficção narrativa · não é registro histórico',pending_verification:'Ficção documental · contexto histórico pendente'})[line.provenance] || (line.provenance === 'school-fiction' ? 'Personagem ou acontecimento fictício · Colégio Aurora' : line.provenance === 'creative-fiction' ? 'Conversa fictícia · não é transcrição' : line.provenance === 'author-reported-memory' ? 'Memória relatada pelo autor' : '');
     this.speech.textContent = ''; this.choices.replaceChildren(); this.next.hidden = false;
     this.onLine?.(line); for (const listener of this.lineListeners) listener(line,this.index); if (this.instant || this.reducedMotion()) this.reveal();
   }

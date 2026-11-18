@@ -182,7 +182,7 @@ export class LivingSchool {
   }
   renderPage(content, page) {
     if (page === 'history') {
-      for (const h of [...this.state.history].reverse()) { const article = element('article', ''); article.className = 'story-card'; article.append(element('strong', h.speaker), element('p', h.text), element('small', h.provenance === 'school-fiction' ? 'Ficção do Colégio Aurora' : h.provenance === 'creative-fiction' ? 'Diálogo criativo do Color' : 'Registro narrativo')); content.append(article); }
+      for (const h of [...this.state.history].reverse()) { const article = element('article', ''); article.className = 'story-card'; article.append(element('strong', h.speaker), element('p', h.text), element('small', h.provenance === 'school-fiction' ? 'Ficção do Colégio Aurora' : h.provenance === 'creative-fiction' ? 'Conversa fictícia do jogo' : 'Registro narrativo')); content.append(article); }
       if (!this.state.history.length) content.append(element('p', 'As conversas que você ler serão registradas aqui.'));
     } else if (page === 'campus') {
       content.append(element('p', 'Cinco personagens fictícios têm suas próprias rotinas. A amizade registra ajuda e atividades; não mede o relacionamento entre Lorenzo e Maria.'));

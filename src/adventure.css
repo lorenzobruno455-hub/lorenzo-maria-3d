@@ -18,3 +18,9 @@ body #dialog[data-cinematic-mode="messages"] #speech{background:#d5f8f0;border:2
 @media(max-height:500px){.journey-content{gap:8px}.journey-content>button{min-height:48px;padding:8px 14px;font-size:20px}.journey-row{font-size:14px}.journey-tabs{padding:5px}.journey-tabs button{font-size:13px}}
 
 #dialog[data-maria-menu] .dialogue-actions{display:none}
+
+body:has(#welcome:not([hidden])) #dialog:not([hidden]){z-index:19}
+
+#story-content[data-journey-page="menu"]{gap:6px}
+#story-content[data-journey-page="menu"]>button{margin:0;min-height:44px;height:44px;padding:5px 14px;font-size:19px;line-height:1.1}
+#story-content[data-journey-page="menu"]>.journey-intro{margin:0;font-size:13px;line-height:1.4}

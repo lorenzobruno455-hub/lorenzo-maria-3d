@@ -23,9 +23,10 @@ export class Story {
   }
   get c() { return this.getProgress().campaign; }
   changed() { const achievements = checkAchievements(this.c); this.save(); if (achievements.length) this.notify(`★ ${achievements.map(a => a.name).join(' · ')}`); }
-  close() { this.content.classList.remove('journey-content');this.game = null; this.open = false; this.panel.hidden = true; this.content.replaceChildren(); this.onPanel(false); this.audio.setMood?.('exploration'); }
+  close() { delete this.content.dataset.journeyPage;this.content.classList.remove('journey-content');this.game = null; this.open = false; this.panel.hidden = true; this.content.replaceChildren(); this.onPanel(false); this.audio.setMood?.('exploration'); }
   show(name) {
     if(this.journey?.show(name))return;
+    this.content.classList.remove('journey-content');delete this.content.dataset.journeyPage;
     this.game = null; this.open = true; this.panel.hidden = false; this.content.replaceChildren(); this.onPanel(true); this.audio.setMood?.('conversation');
     const title = { menu: 'Memórias de uma história', album: 'Álbum de memórias', chapters: 'Capítulos', inventory: 'Inventário', games: 'Minijogos', achievements: 'Conquistas', letter: 'Para a Maria', campus: 'O Colégio Vivo', history: 'Histórico de conversas' }[name];
     document.getElementById('story-title').textContent = title; this.page = name;

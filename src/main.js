@@ -110,7 +110,7 @@ function syncModal() {
   document.querySelector('header').inert = !started || paused || dialog || panelOpen || !!adventure?.busy || !!school?.loading;
   document.querySelector('footer').inert = !started || paused || dialog || panelOpen || !!adventure?.busy || !!school?.loading;
   $('dialog').inert = paused || panelOpen;
-  $('pause').inert = panelOpen; $('welcome').inert = panelOpen;
+  $('pause').inert = panelOpen; $('welcome').inert = panelOpen || dialog || !!adventure?.busy;
   if (!active()) controls?.clear();
 }
 function speak(speaker, text, done) {
