@@ -40,10 +40,12 @@ async function moveToTarget(page,id){
 async function interact(page){await expect(page.locator('#prompt')).toBeVisible();await expect(page.locator('#interact')).toBeEnabled();await page.keyboard.press('e');}
 async function finishDialog(page,choice){
  await expect(page.locator('#dialog')).toBeVisible();
- for(let i=0;i<5&&await page.locator('#dialog').isVisible();i++){
-  if(await page.locator('.dialogue-choices button').count()){await page.getByRole('button',{name:choice,exact:true}).click();break;}
-  await page.locator('#dialogue-speed').click();await page.locator('#next').click();
- }
+ // The definitive script contains complete conversations, rather than one-line summaries.
+ await page.evaluate(choice=>{for(let i=0;i<200&&!document.getElementById('dialog').hidden;i++){
+  const choices=[...document.querySelectorAll('.dialogue-choices button')];
+  if(choices.length){const button=choices.find(b=>b.textContent===choice);if(!button)throw Error('Expected mission choice: '+choice);button.click();break;}
+  document.getElementById('dialogue-speed').click();document.getElementById('next').click();
+ }},choice);
 }
 async function solve(page,id){
  await expect(page.locator('.expansion-grid')).toBeVisible();

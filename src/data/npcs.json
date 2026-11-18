@@ -1,7 +1,7 @@
 [
   {
     "id": "bia",
-    "name": "Bia",
+    "name": "Rafaella",
     "role": "Estudante · biblioteca",
     "color": "#a88b76",
     "personality": "Curiosa, adora trocar leituras.",
@@ -37,7 +37,7 @@
   },
   {
     "id": "caio",
-    "name": "Caio",
+    "name": "Porva",
     "role": "Estudante · quadra",
     "color": "#7f97b0",
     "personality": "Bem-humorado, organiza o recreio.",
@@ -73,7 +73,7 @@
   },
   {
     "id": "helena",
-    "name": "Prof. Helena",
+    "name": "Prof Newmara",
     "role": "Professora fictícia · ciências",
     "color": "#8e8baf",
     "personality": "Paciente, responde perguntas com novas perguntas.",
@@ -109,7 +109,7 @@
   },
   {
     "id": "davi",
-    "name": "Davi",
+    "name": "Bassarab",
     "role": "Estudante · música",
     "color": "#ad817f",
     "personality": "Observador, organiza ensaios.",
@@ -145,7 +145,7 @@
   },
   {
     "id": "lia",
-    "name": "Lia",
+    "name": "Helô",
     "role": "Funcionária fictícia · cantina",
     "color": "#799e95",
     "personality": "Acolhedora, conhece o movimento da escola.",

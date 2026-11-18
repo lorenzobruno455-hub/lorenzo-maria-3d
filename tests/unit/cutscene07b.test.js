@@ -43,3 +43,8 @@ test('reduced motion snaps and completion restores, replacing a scene cannot lea
   m.play({id:'b',shots:[{duration:.1}]});m.update(.2);
   assert.deepEqual(camera.position.toArray(),[0,2,8]);assert.deepEqual(locks,[true,false,true,false]);assert.deepEqual(finishes.map(x=>x.reason),['replaced','complete']);
 });
+test('scripted dialogue waits for the reader without the legacy timeout cutting lines',()=>{
+ const dialogue={open:false,start(lines,{done}){this.open=true;this.done=done;},close(){this.open=false;}};
+ const {manager:m}=setup({dialogue});m.play({id:'script:EP-CENA01',shots:[{duration:.1,waitForDialogue:true,dialogue:[{speaker:'RAFAELLA',text:'Terminou?'}]}]});
+ m.update(180);assert.equal(m.active,true);assert.equal(dialogue.open,true);dialogue.done();m.update(.1);assert.equal(m.active,false);
+});

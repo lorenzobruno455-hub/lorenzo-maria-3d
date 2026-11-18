@@ -39,7 +39,8 @@ export class Adventure {
   this.notebook=()=>this.story.world.objects.find(o=>o.id==='study-notebook');
  }
  start(id){
-  if(legacyQuestOwns(this.getProgress(),id)){this.notify('Este encontro já existe no seu save. Retome ou relembre pela conversa com Bia ou Davi.');return false;}
+  if(this.script?.current){this.notify('Conclua o capítulo em andamento antes de iniciar outra aventura.');return false;}
+  if(legacyQuestOwns(this.getProgress(),id)){this.notify('Este encontro já existe no seu save. Retome ou relembre pela conversa com Rafaella ou Bassarab.');return false;}
   if(this.story.expansion?.current){this.notify('Conclua a missão da expansão antes de iniciar outra aventura.');return false;}
   if(id==='first-encounter'&&this.getProgress().stage<2){this.notify('Conclua o prólogo das três lembranças com Maria. A aventura acontece depois dele.');this.story.close();this.startGame();return false;}
   const c=this.current;if(c){if(c.id!==id){this.notify('Conclua a aventura em andamento antes de começar outra.');return false;}this.story.close();this.startGame();this.autoKey='';return true;}
@@ -67,7 +68,7 @@ export class Adventure {
   if(id==='classroom-photo')return {...this.photo,kind:'adventure'};
   if(id==='shelf-clue'||id==='shelf-puzzle')return {id,x:23.5,z:-11.4,name:id==='shelf-clue'?'Pista entre as estantes':'Organizar as três lombadas',kind:'adventure',height:1.65};
   if(id==='lost-book'||id==='score'){const o=this.living.campus.objects.find(o=>o.id===(id==='score'?'familiar-music':id));return {...o,id,kind:'adventure',name:id==='score'?'Recolher partitura':'Recuperar o livro'};}
-  if(id==='instrument'||id==='music-rhythm')return {id,x:31,z:-12.7,name:id==='instrument'?'Examinar o teclado':'Ensaio com Davi',kind:'adventure',height:1.3};
+  if(id==='instrument'||id==='music-rhythm')return {id,x:31,z:-12.7,name:id==='instrument'?'Examinar o teclado':'Ensaio com Bassarab',kind:'adventure',height:1.3};
   if(id==='school-exercise')return {id,x:-20,z:-10,name:'Atividade de história · aventura',kind:'adventure',height:1.2};
   return null;
  }
@@ -79,7 +80,7 @@ export class Adventure {
    this.living.speakingId=id;
    const actor=this.actor(id);if(s.type==='deliver'){this.character.requestAction('pickup',{duration:.9});if(actor)actor.reaction=1.2;}actor?.character.requestAction(s.type==='deliver'?'react':'talk',{duration:1.2});
    const text=id==='maria'?'Neste encontro encenado, podemos escolher ouvir e participar da aula. O que você percebeu no caderno e na fotografia?':id==='bia'?(s.type==='deliver'?'A etiqueta confere: este é o livro! Obrigada por seguir as pistas e devolvê-lo.':'O marcador tem uma estrela e três palavras: Aurora, Jardim, Memória. Talvez as lombadas indiquem a ordem.'):c.node>2?'As pausas também fazem parte da música. Vamos ouvir juntos o resultado do ensaio.':'Minha partitura ficou na sala de música. Procure-a, experimente o teclado e ensaie o compasso.';
-   this.dialogue.start([fiction(id.toUpperCase(),text)],{done:()=>this.director.emit(s.type,id)});return true;
+   this.dialogue.start(this.script?.missionLines(c.id,s.id).length?this.script.missionLines(c.id,s.id):[fiction(id.toUpperCase(),text)],{done:()=>this.director.emit(s.type,id)});return true;
   }
   if(s.type==='activity'){this.activity(s.target);return true;}
   const object=target.mesh||this.target(s)?.mesh;
@@ -109,9 +110,10 @@ export class Adventure {
   }
  }
  hit(){const s=this.activityState;if(this.activityId!=='music-rhythm'||!this.story.open||this.story.page!=='adventure-activity'||s.pressed)return;s.pressed=true;s.attempts++;if(Math.abs(s.phase-.5)<.22){s.hits++;this.audio.play('collect');this.character.requestAction('interact',{duration:.35});}if(s.hits>=4)this.completeActivity('music-rhythm');}
- completeActivity(id){this.activityId=null;this.story.close();this.director.emit('activity',id,{completed:true});this.audio.play('confirm');this.notify('Atividade concluída · a descoberta ganhou um novo sentido.');}
+ completeActivity(id){this.activityId=null;this.story.close();if(this.script?.rhythmComplete()){this.audio.play('confirm');return;}this.director.emit('activity',id,{completed:true});this.audio.play('confirm');this.notify('Atividade concluída · a descoberta ganhou um novo sentido.');}
  updateSceneCaption(){const c=this.current;$('scene-title').textContent=c?.title||'Revisitar conclusão';$('scene-subtitle').textContent='Encenação fictícia · você pode pausar ou pular a cena';$('scene-pause').textContent='Pausar cena';}
  playScene(id){
+  if(id==='first-finale'&&this.script){if(this.replaying){this.replaying=false;return this.script.start('chapter-1',true);}if(this.script.state.completed.includes('CAP01-CENA12')){this.director.emit('scene',id);return true;}this.script.start('chapter-1');return true;}
   if(this.location){const scene=this.location.scene(id);if(!scene){this.autoKey='';return false;}this.cutscenes.play(scene);this.updateSceneCaption();return true;}
   const c=this.current,first=id.startsWith('first'),t=first?{x:-20,z:-11}:id==='book-finale'?this.actor('bia').agent.position:this.actor('davi').agent.position;
   const actor=first?'maria':id==='book-finale'?'bia':'davi';
@@ -126,7 +128,7 @@ export class Adventure {
   const c=this.current;
   if(!this.location&&c?.id==='lost-book'&&c.node<5&&!this.actions.active){const o=this.living.campus.objects.find(o=>o.id==='lost-book');if(o)o.mesh.visible=true;}
   if(!this.location&&c?.id==='familiar-music'&&c.node<3&&!this.actions.active){const o=this.living.campus.objects.find(o=>o.id==='familiar-music');if(o)o.mesh.visible=true;}
-  if(!c||this.busy||this.dialogue.open||this.story.open)return;
+  if(!c||this.busy||this.dialogue.open||this.story.open||this.script?.current)return;
   const s=c.step,key=`${c.id}:${c.node}`;
   if(s.type==='scene'&&this.autoKey!==key){this.autoKey=key;this.playScene(s.target);return;}
   if(s.type==='choice'&&this.autoKey!==key&&(!this.location||this.target(s)?.floor===this.location.floor)){this.autoKey=key;this.dialogue.start([fiction('ESCOLHA DA AVENTURA',s.title)],{instant:true,choices:s.choices.map(option=>({label:option.label,action:()=>this.director.choose(option.id)}))});this.dialogue.advance();return;}
