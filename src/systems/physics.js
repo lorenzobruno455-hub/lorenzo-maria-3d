@@ -5,6 +5,7 @@ export const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
 
 // Radial dead zone preserves the direction, including shallow diagonals.
 export function joystickVector(dx, dy, radius, deadZone = .12) {
+  if(!Number.isFinite(radius)||radius<=0||!Number.isFinite(dx)||!Number.isFinite(dy))return{x:0,z:0};
   const length = Math.hypot(dx, dy), strength = clamp(length / radius, 0, 1);
   if (strength <= deadZone) return { x: 0, z: 0 };
   const magnitude = (strength - deadZone) / (1 - deadZone);
