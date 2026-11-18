@@ -1,3 +1,5 @@
+import {buildCinematicScene,CINEMATIC_DIRECTIONS} from './cinematic-direction.js';
+import {CinematicPresentation} from './cinematic-presentation.js';
 import corpus from '../data/definitive-script.json' with {type:'json'};
 import {SCRIPT_CHOICES,sceneStops,SCENE_PUZZLES,MISSION_SCENES} from '../data/script-staging.js';
 import {groupScenes,startScript,completeScene} from './script-progress.js';
@@ -15,9 +17,10 @@ export class DefinitiveScript{
  constructor({story,adventure,expansion,school,living,world,scene,getProgress,save,notify}){
   Object.assign(this,{story,adventure,expansion,school,living,world,scene,getProgress,save,notify});
   story.script=this;living.script=this;adventure.script=this;expansion.script=this;
+  this.cinematicUI=new CinematicPresentation();
   this.onFinish=adventure.cutscenes.onFinish;
   adventure.cutscenes.onFinish=event=>{
-   if(event.id.startsWith('script:')){if(['complete','skipped'].includes(event.reason))this.afterDialogue(event.id.slice(7));else notify('Cena interrompida. Retome pelo objetivo ou pelo menu do roteiro.');}
+   if(event.id.startsWith('script:')){this.cinematicUI.hide();if(['complete','skipped'].includes(event.reason))this.afterDialogue(event.id.slice(7));else notify('Cena interrompida. Retome pelo objetivo ou pelo menu do roteiro.');}
    else this.onFinish?.(event);
   };
   this.marker=world.resources.mesh('box','#22eced',[.27,.06,.2]);this.marker.userData.inkDynamic=true;this.marker.visible=false;scene.add(this.marker);
@@ -54,10 +57,19 @@ export class DefinitiveScript{
  handle(target){if(target.kind!=='script')return false;const s=this.current;if(!s||target.id!==`script:${s.id}`)return true;
   const done=this.state.collected[s.id]||[];
   if(done.length){this.collectStop(s.id);return true;}
-  if(s.id==='CAP01-CENA09'||s.id==='EP-CENA01'){
-   const p=this.stops()[0],y=this.school.navigation.floor(p.floor).walkY;
-   const camera=s.id==='EP-CENA01'?{from:[p.x+1.5,y+1.8,p.z+1.4],to:[p.x+1.2,y+1.6,p.z+1.2],lookAt:[p.x,y+.85,p.z]}:undefined;
-   this.adventure.cutscenes.play({id:`script:${s.id}`,shots:[{duration:.5,waitForDialogue:true,camera,actors:[{id:'lorenzo',state:'observe'}],dialogue:scriptLines([s.id])}]});
+  if(CINEMATIC_DIRECTIONS[s.id]){
+   const p=this.stops()[0],y=p.outside?this.world.groundHeight(p.x,p.z):this.school.navigation.floor(p.floor).walkY;
+   const manager=this.adventure.cutscenes,camera=this.adventure.camera;
+   const scene=buildCinematicScene(s.id,scriptLines([s.id]),{
+    camera,actors:manager.actors,point:{...p,y},
+    toLocal:point=>camera.parent?camera.parent.worldToLocal(point):point,
+    obstacles:()=>this.school.active?this.school.cameraObstacles():this.world.occluders,
+    onBeat:event=>{this.cinematicUI.beat(event);if(event.index===0&&event.direction.mode==='object')this.adventure.audio.play('object');},
+    onEnd:direction=>{if(direction.bell)this.adventure.audio.play('bell');},
+   });
+   this.cinematicUI.show(CINEMATIC_DIRECTIONS[s.id]);
+   manager.play(scene);
+   document.getElementById('scene-pause').textContent='Pausar cena';
    document.getElementById('scene-title').textContent=s.title;document.getElementById('scene-subtitle').textContent=sourceLabel(s.sourceKind)+' · cena pulável';
   }else this.story.dialogue.start(scriptLines([s.id]),{done:()=>this.afterDialogue(s.id)});
   return true;
@@ -131,5 +143,5 @@ export class DefinitiveScript{
   for(const chapter of chapters){const n=chapters.indexOf(chapter),b=button(`${chapter.date} · ${chapter.title}`,()=>this.start(chapter.id,this.getProgress().campaign.memories.includes(`memory-${n+1}`)));b.disabled=this.getProgress().stage<2||n>this.getProgress().campaign.memories.length;c.append(b);}
   const ep=button('Epílogo · A página que falta',()=>this.start('epilogue',this.state.completed.includes('EP-CENA01')));ep.disabled=!this.getProgress().expansion.quests.archive?.completed||this.getProgress().campaign.memories.length!==6;c.append(ep);
  }
- dispose(){this.marker.removeFromParent();this.computer.removeFromParent();this.adventure.cutscenes.onFinish=this.onFinish;this.story.script=null;this.living.script=null;this.adventure.script=null;this.expansion.script=null;}
+ dispose(){this.cinematicUI.dispose();this.marker.removeFromParent();this.computer.removeFromParent();this.adventure.cutscenes.onFinish=this.onFinish;this.story.script=null;this.living.script=null;this.adventure.script=null;this.expansion.script=null;}
 }

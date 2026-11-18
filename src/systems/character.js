@@ -58,6 +58,7 @@ export class Character {
     this.heading=0;this.headingTarget=0;this.writtenHeading=0;this.gait = 0;this.body.updateMatrixWorld(true);this.soleHeight=new THREE.Box3().setFromObject(this.body).min.y;
   }
   update(dt, speed = 0, talking = false, interacting = false, pose = {}) {
+    this.clearGazeOffset();
     pose = this.cutscenePose || pose;
     if(this.requestedAction){this.requestedAction.remaining-=dt;if(this.requestedAction.remaining<0)this.requestedAction=null;}
     pose = {...pose, state:pose.state || this.requestedAction?.state};
@@ -81,6 +82,7 @@ export class Character {
       const seatY=pose.seatAnchor?.y ?? pose.seatHeight;
       const offset=activeSeat&&Number.isFinite(seatY)?seatY-this.root.position.y-.44:0;
       this.custom.position.y=THREE.MathUtils.damp(this.custom.position.y,offset,12,dt);
+      this.applyGaze(dt);
       return;
     }
     this.gait += speed * dt * 2.7;
@@ -98,6 +100,20 @@ export class Character {
       this.joints[`shoulder${side}`].rotation.z = side * (.07 + .08 * w.talk + (side === 1 ? .3 + Math.sin(this.time * 5) * .12 : 0) * w.wave);
       this.joints[`elbow${side}`].rotation.x = -.12 - .65 * w.run - (.5 + Math.sin(this.time * 2) * .12) * w.talk - .2 * w.interact - 1.05*w.openbook - .8 * w.sit - .3 * w.react;
     }
+    this.applyGaze(dt);
+  }
+  clearGazeOffset(){
+    if(this.gazeApplied&&this.gazeJoint){this.gazeJoint.quaternion.multiply(this.gazeApplied.invert());this.gazeApplied=null;}
+  }
+  applyGaze(dt){
+    const joint=this.gazeJoint||this.joints.head;if(!joint)return;
+    this.gazePoint ||= new THREE.Vector3();
+    let yaw=0,pitch=0;
+    if(this.gazeTarget){this.gazePoint.copy(this.gazeTarget);this.root.worldToLocal(this.gazePoint);yaw=THREE.MathUtils.clamp(Math.atan2(this.gazePoint.x,this.gazePoint.z),-.55,.55);pitch=THREE.MathUtils.clamp(-Math.atan2(this.gazePoint.y-1.6,Math.hypot(this.gazePoint.x,this.gazePoint.z)), -.25,.25);}
+    this.gazeYaw=THREE.MathUtils.damp(this.gazeYaw||0,yaw,7,dt);this.gazePitch=THREE.MathUtils.damp(this.gazePitch||0,pitch,7,dt);
+    this.gazeEuler ||= new THREE.Euler();this.gazeRotation ||= new THREE.Quaternion();
+    this.gazeEuler.set(this.gazePitch,this.gazeYaw,0);this.gazeRotation.setFromEuler(this.gazeEuler);joint.quaternion.multiply(this.gazeRotation);
+    this.gazeJoint=joint;this.gazeApplied=this.gazeRotation.clone();
   }
   requestAction(name,{duration}={}) {
     const state=String(name).toLowerCase().replace(/[ _-]/g,'');
@@ -120,10 +136,11 @@ export class Character {
       lease = { model: gltf.scene, animations:gltf.animations, release:()=>{gltf.scene.removeFromParent();this.disposeModel(gltf.scene);} };
     }
     if (this.disposed || request !== this.loadRequest) { lease.release(); return {animations:[],superseded:true}; }
-    this.controller?.dispose();
+    this.clearGazeOffset();this.gazeJoint=null;this.controller?.dispose();
     if(this.mixer) {this.mixer.stopAllAction();this.mixer.uncacheRoot(this.custom);}
     this.modelLease?.release();
     this.modelLease=lease;this.custom=lease.model;this.actions={};
+    this.gazeJoint=this.custom.getObjectByName('head')||null;
     this.body.visible=false;this.root.add(this.custom);this.mixer=new THREE.AnimationMixer(this.custom);
     this.controller=new AnimationController(this.custom,lease.animations,clipNames);
     this.mixer=this.controller.mixer;this.actions=this.controller.actions;
