@@ -105,7 +105,7 @@ export class Story {
     if (target.kind === 'memory-book') {
       const m=memories.find(m=>m.id===target.id);
       if(!this.c.memories.includes(m.id)){this.dialogue.start([{speaker:'BIBLIOTECA DAS MEMÓRIAS',text:`${m.title} · ${m.date} · ${m.rarity}. Livro bloqueado: conclua o capítulo ${memories.indexOf(m)+1} no local indicado no álbum.`,provenance:'school-fiction'}]);return;}
-      this.world.openBook(m.id);if(this.script){this.script.readBook(m.id);return;}this.memory(m,true,target);return;
+      this.world.openBook(m.id);if(this.script){this.script.readBook(m.id,target);return;}this.memory(m,true,target);return;
     }
     if(target.kind==='narrative'){const item=this.world.narratives.find(n=>n.id===target.id);this.chooseDialogue(item.category);this.getProgress().interactions[item.id]=true;this.save();return;}
     if (target.kind === 'album') { this.show('album'); return; }

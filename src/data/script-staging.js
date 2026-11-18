@@ -32,16 +32,16 @@ export function sceneStops(id){
  'CAP01-CENA09':[named('classroom','Sexta aula · aproximar-se de Maria')],
  'CAP01-CENA10':[named('reflection-seat','20/08/2024 · tomar assento')],
  'CAP01-CENA11':[named('study-notebook','Caderno · pequenas coisas')],
- 'CAP02-CENA02':[{floor:0,x:0,z:-4,name:'Marcador · tempo',top:.03},garden('Marcador · distância',10,22),named('album','Marcador · carta')],
+ 'CAP02-CENA02':[{floor:0,x:0,z:-4,name:'Marcador · tempo',top:.03},garden('Marcador · distância',12,22),named('album','Marcador · carta')],
  'CAP02-CENA04':[{floor:0,x:0,z:-12,name:'Janela do corredor · álbum',top:.03}],
  'CAP03-CENA01':[named('shelf-clue','Livro de perguntas')],
  'CAP03-CENA02':[named('science-book','Sala de estudos · reflexão')],
  'CAP03-CENA03':[garden('Jardim · uma conversa sobre fé')],
  'CAP04-CENA02':[named('instrument','Salão · intervalo musical')],
- 'CAP05-CENA01':[garden('Flores no arquivo',10,22)],
- 'CAP05-CENA02':[garden('Fita vermelha',12,23),garden('Fita azul',15,22),garden('Fita dourada',10,22)],
+ 'CAP05-CENA01':[garden('Flores no arquivo',12,22)],
+ 'CAP05-CENA02':[garden('Fita vermelha',12,23),garden('Fita azul',15,22),garden('Fita dourada',12,22)],
  'CAP06-CENA02':Array.from({length:5},(_,i)=>named(`memory-${i+1}`,`Revisão · lembrança ${i+1}`)),
- 'EP-CENA02':[garden('Depois dos créditos · encontro da turma',10,22)],
+ 'EP-CENA02':[garden('Depois dos créditos · encontro da turma',12,22)],
  };
  return (m[id]||[book()]).map((p,i)=>({...p,stopId:`${id}:${i}`}));
 }
