@@ -57,6 +57,8 @@ let progress = saved.progress, started = false, paused = false, dialog = false, 
 let adventure, previousBusy=false, scenePausedBeforeGlobal=false;
 let script, school, expansion, spatialActors, performanceProbe,sports,landscape;
 let living, story, dialogues, panelOpen = false, needsRender = true;
+const lifecycleListeners=[];
+function listen(target,type,handler){target.addEventListener(type,handler);lifecycleListeners.push(()=>target.removeEventListener(type,handler));}
 let controls, frame = 0, disposed = false, interactionTime = 0, toastTime = 0, saveTimer = 0, lastHUD = '', lastTarget = '', lastLocation = '';
 const scene = new THREE.Scene(); scene.background = new THREE.Color('#90d3eb'); scene.fog = new THREE.Fog('#90d3eb', 55, 115);
 let renderer;
@@ -118,7 +120,7 @@ dialogues = new Dialogue({ root: $('dialog'), speaker: $('speaker'), speech: $('
   onLine: value => living?.dialogueLine(value),
   onState: open => { dialog = open; if (!open) { story && (story.focus = null); if (living) living.speakingId = null; } syncModal(); if (!open) save(); audio.setMood?.(open ? 'conversation' : 'exploration'); },
 });
-document.addEventListener('keydown', e => {
+listen(document,'keydown', e => {
   if (e.key !== 'Tab') return;
   const modal = paused ? $('pause') : adventure?.cutscenes.active ? $('cinematic') : panelOpen ? $('story-panel') : paused ? $('pause') : dialog ? $('dialog') : !started ? $('welcome') : null;
   if (!modal) return;
@@ -186,7 +188,7 @@ $('start').textContent = saved.exists ? 'Continuar a explorar →' : 'Começar a
 $('start').onclick = () => { started = true; $('welcome').hidden = true; $('start').blur(); audio.unlock(); syncModal(); save(); if(progress.schoolVisit.active&&!school?.active&&!school?.loading)void openSchool(); };
 living = new LivingSchool({ scene, world, maria, player, getProgress: () => progress, settings, dialogue: dialogues, save, notify, audio });
 recoverPlayerPosition();
-installPreferences(settings, save, controls);
+const preferences=installPreferences(settings, save, controls);
 story = new Story({ player, living, scene, world, getProgress: () => progress, save, notify, dialogue: dialogues, audio, effects: visualEffects,
   start: () => { if (!started) $('start').click(); if (paused) setPause(false); },
   tutorial: () => { living.setMode('campaign'); const line = mariaDialogue(progress); speak('MARIA', line.text, () => { progress.stage = line.nextStage; updateHUD();if(progress.stage===2&&!progress.script.completed.includes('PRO-CENA01'))script.start('prologue'); }); },
@@ -229,7 +231,7 @@ function syncSettings() {
   $('sound').textContent = `Som: ${settings.sound ? 'ligado' : 'desligado'}`;
 }
 $('sound').onclick = () => { audio.unlock(); settings.sound = !settings.sound; syncSettings(); save(); };
-for (const id of ['quality', 'sensitivity', 'volume', 'audio-enabled', 'shadows', 'adaptive']) $(id).addEventListener('input', () => {
+for (const id of ['quality', 'sensitivity', 'volume', 'audio-enabled', 'shadows', 'adaptive']) listen($(id),'input', () => {
   settings.quality = $('quality').value; settings.sensitivity = Number($('sensitivity').value); settings.volume = Number($('volume').value);
   settings.sound = $('audio-enabled').checked; settings.shadows = $('shadows').checked; settings.adaptive = $('adaptive').checked;
   audio.unlock(); if (id === 'quality' || id === 'shadows') { quality.apply();  } syncSettings(); save();
@@ -296,10 +298,10 @@ function updateTarget() {
   $('prompt').hidden = !target;
 }
 function resize() { controls.clear(); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); quality.resize(); }
-addEventListener('resize', resize);
-addEventListener('pagehide', save);
-addEventListener('blur', () => { if (started && !paused) setPause(true); });
-document.addEventListener('visibilitychange', () => {
+listen(window,'resize', resize);
+listen(window,'pagehide', save);
+listen(window,'blur', () => { if (started && !paused) setPause(true); });
+listen(document,'visibilitychange', () => {
   if (document.hidden) { save(); controls.clear(); if (started) setPause(true); quality.resetSample(); cancelAnimationFrame(frame); frame = 0; }
   else if (!frame && !disposed) { last = performance.now(); frame = requestAnimationFrame(animate); }
 });
@@ -328,9 +330,9 @@ Promise.allSettled(heroLoads).then(() => {
   return living.loadNPCAssets(assets, character => {ink.registerActor(character);ink.update(settings.quality,player.position);needsRender=true;});
 });
 function uiSound(event){if(event.target.closest?.('button,select')&&!event.target.closest('[disabled]'))audio.play('ui');}
-document.addEventListener('click',uiSound);
+listen(document,'click',uiSound);
 performanceProbe=createPerformanceProbe(new URLSearchParams(location.search).has('profile'));if(performanceProbe)window.auroraPerformance.state=getGameState;
-for(const [object,key,label]of [[renderer,'render','render'],[spatialActors,'update','NPC.update'],[spatialActors?.planner,'horizontal','Astar'],[school,'moveBodyWorld','collision'],[school,'ensureFloor','floor.request'],[world.resources,'geometry','geometry.request'],[world.resources,'material','material.request'],[quality,'resize','resolution.change'],[audio,'update','audio.update']])performanceProbe?.wrap(object,key,label);
+for(const [object,key,label]of [[school,'tick','school.tick'],[school,'update','school.update'],[school,'cameraObstacles','camera.obstacles'],[school,'bodyObstacles','body.obstacles'],[school,'showFloors','floor.visibility'],[school,'presentWorld','world.visibility'],[story,'update','story.update'],[expansion,'update','expansion.update'],[script,'update','script.update'],[ink,'update','ink.update'],[landscape,'update','landscape.update'],[renderer,'render','render'],[spatialActors,'update','NPC.update'],[spatialActors?.planner,'horizontal','Astar'],[school,'moveBodyWorld','collision'],[school,'ensureFloor','floor.request'],[world.resources,'geometry','geometry.request'],[world.resources,'material','material.request'],[quality,'resize','resolution.change'],[audio,'update','audio.update']])performanceProbe?.wrap(object,key,label);
 let last = performance.now(), time = 0, hudTimer = 0;
 function animate(now) {
   if (disposed || document.hidden) { frame = 0; return; }
@@ -389,8 +391,8 @@ function animate(now) {
   audio.update?.(); if (active()) quality.sample(rawDT);performanceProbe?.end();
 }
 
-addEventListener('resize', () => needsRender = true);
-$('pause').addEventListener('input', () => needsRender = true);
+listen(window,'resize', () => needsRender = true);
+listen($('pause'),'input', () => needsRender = true);
 world.quality=settings.quality;world.update(0,0,player.position);living.update(0,{player:player.position,active:false,dialogueOpen:false,speaker:'',playerSpeed:0});follow.update(player.position,0,true);updateHUD(); syncSettings(); syncModal(); frame = requestAnimationFrame(animate);
 
 // Read-only diagnostic API; no production teleport or mission mutation hooks.
@@ -410,9 +412,10 @@ export function getGameState() {
 }
 registerStateReader(getGameState);
 registerNavigationReader(()=>({origin:school.active?{x:60,z:0}:{x:0,z:0},rotation:school.active?school.rotation:0,floor:school.active?school.floor:null,position:{x:player.position.x,z:player.position.z},solids:(school.active?(school.floor===0?world.solids.map(b=>schoolBoundsToLocal(b,school.rotation)):school.navigation.movementObstacles(school.floor)):world.solids).map(b=>({...b}))}));
-if(new URLSearchParams(location.search).has('debug')){addEventListener('keydown',e=>{if(e.code==='F3'){e.preventDefault();if(validator.visible)validator.clear();else validator.show([...world.placed,...story.world.placed],[player,...living.actors.map(a=>a.character.root)]);needsRender=true;}});}
+if(new URLSearchParams(location.search).has('debug')){listen(window,'keydown',e=>{if(e.code==='F3'){e.preventDefault();if(validator.visible)validator.clear();else validator.show([...world.placed,...story.world.placed],[player,...living.actors.map(a=>a.character.root)]);needsRender=true;}});}
 
 export function dispose() {
+  if(disposed)return;for(const off of lifecycleListeners)off();lifecycleListeners.length=0;controls.dispose();preferences.dispose();
   performanceProbe?.dispose();script?.dispose();landscape?.dispose();sports?.dispose();spatialActors?.dispose();expansion?.dispose();document.removeEventListener('click',uiSound);schoolExterior?.dispose();overdriveP0?.dispose();school?.narrative?.dispose();school?.dispose();adventure?.dispose();ink.dispose();interactionAccent.dispose();validator.dispose();interactions.dispose();visualEffects.dispose();
   disposed = true; cancelAnimationFrame(frame); controls.clear(); save(); disposeRadio(); story?.dispose(); living?.dispose(); dialogues?.dispose(); lorenzo.dispose(); maria.dispose(); assets.dispose(); world.dispose(); audio.dispose(); renderer.dispose();
 }

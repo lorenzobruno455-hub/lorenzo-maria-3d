@@ -20,7 +20,7 @@ export class Adventure {
   $('adventure-open').onclick=()=>this.show();this.key=e=>{if(e.code==='Space'&&!e.repeat&&this.activityId==='music-rhythm'&&this.story.open&&this.story.page==='adventure-activity'){e.preventDefault();this.hit();}if(this.cutscenes.active&&e.code==='Escape'){e.preventDefault();this.cutscenes.skip();}};document.addEventListener('keydown',this.key);
   living.adventure=this;story.adventure=this;this.makeProps();this.reconcile();
  }
- reset(){this.cutscenes.skip();this.actions.clear();this.director.state=freshAdventure();this.getProgress().adventure=this.director.snapshot();this.autoKey='';this.activityId=null;this.save();}
+ reset(){this.cutscenes.skip();this.actions.clear();for(const definition of ADVENTURES)if(definition.reward?.eventId)delete this.getProgress().living.events[definition.reward.eventId];this.director.state=freshAdventure();this.getProgress().adventure=this.director.snapshot();this.autoKey='';this.activityId=null;this.save();}
  get busy(){return this.cutscenes.active||!!this.actions.active;}
  get current(){return this.director.current();}
  actor(id){return this.living.actors.find(a=>a.definition.id===id);}

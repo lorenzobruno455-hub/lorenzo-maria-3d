@@ -21,7 +21,7 @@ export class ContinuousActors{
    if(speaking||this.required(id)&&onStair===null){s.state=speaking&&speaker===actor.definition.name.toUpperCase()?'talk':'observe';if(speaking)s.heading=Math.atan2(player.x-s.position.x,player.z-s.position.z);continue;}
    const route=this.route(actor),goal=route[s.index%route.length];
    if(Math.hypot(goal.x-s.position.x,goal.z-s.position.z,goal.y-s.position.y)<.2){s.timer+=dt;s.state='observe';if(s.timer>=goal.duration){s.index=(s.index+1)%route.length;s.timer=0;s.path=[];actor.agent.transitions++;}continue;}
-   if(!s.path.length&&s.wait<=0&&this.planClock<=0&&!this.planning&&dt>0){if(this.pathfinder.worker){this.planning=true;const index=s.index;void this.planner.planAsync({...s.position},goal,this.pathfinder).then(path=>{if(!this.disposed&&s.index===index)s.path=path;}).finally(()=>{this.planning=false;});}else if(typeof Worker!=='function')s.path=this.planner.plan(s.position,goal);s.wait=1.2;this.planClock=.18;}
+   if(!s.path.length&&s.wait<=0&&this.planClock<=0&&!this.planning&&dt>0){this.planning=true;const index=s.index;void this.planner.planAsync({...s.position},goal,this.pathfinder).then(path=>{if(!this.disposed&&s.index===index)s.path=path;}).catch(()=>{if(!this.disposed)s.wait=1.2;}).finally(()=>{this.planning=false;});s.wait=1.2;this.planClock=.18;}
    while(s.path.length&&Math.hypot(s.path[0].x-s.position.x,s.path[0].z-s.position.z,s.path[0].y-s.position.y)<.13)s.path.shift();
    const point=s.path[0];if(!point){s.state='observe';continue;}
    const ramp=point.ramp;

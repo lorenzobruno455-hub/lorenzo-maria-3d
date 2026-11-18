@@ -25,6 +25,7 @@ export class DefinitiveScript{
   this.computer=world.resources.mesh('box','#13182b',[.44,.025,.3]);
   const screen=world.resources.mesh('box','#1d2c48',[.44,.28,.025]);screen.position.set(0,.15,-.13);this.computer.add(screen);
   const display=world.resources.mesh('box','#26dce6',[.38,.22,.005]);display.position.set(0,.15,-.112);this.computer.add(display);this.computer.visible=false;scene.add(this.computer);
+  this.reconcile();
  }
  get state(){return this.getProgress().script;}
  get current(){const a=this.state.active;return a?groupScenes(a.group)[a.index]:null;}
@@ -74,17 +75,30 @@ export class DefinitiveScript{
   if(id==='CAP04-CENA02'&&!this.state.puzzles[id]?.includes('complete')){this.adventure.activity('music-rhythm');this.awaitRhythm=id;return;}
   this.collectStop(id);
  }
- collectStop(id){if(this.current?.id!==id)return;const p=this.stops()[0];if(!p)return;this.state.collected[id]||=[];this.state.collected[id].push(p.stopId);this.save();if(this.stops().length){this.notify(this.stops()[0].name);return;}this.finish(id);}
+ collectStop(id){if(this.current?.id!==id)return;const p=this.stops()[0];if(!p)return;this.state.collected[id]||=[];this.state.collected[id].push(p.stopId);if(this.stops().length){this.save();this.notify(this.stops()[0].name);return;}this.finish(id);}
+ completeChapter(group,replay=false){
+  if(!group.startsWith('chapter-')||replay)return false;const memory=memories.find(m=>m.quest===group),c=this.getProgress().campaign;let changed=false;
+  if(memory&&currentChapter(c)?.id===group){while(nextStep(c)&&nextStep(c).type!=='memory')questEvent(c,nextStep(c).type);changed=unlockMemory(c,memory.id);this.story.changed();}
+  if(group==='chapter-1'&&this.adventure.current?.id==='first-encounter'&&this.adventure.current.step.target==='first-finale')this.adventure.director.emit('scene','first-finale');
+  return changed;
+ }
+ reconcile(){
+  this.recovering=true;let changed=false;
+  try{
+   if(this.current&&!this.stops().length){this.finish(this.current.id);changed=true;}
+   // Older V1 saves could contain the completed scene receipt before its reward.
+   while(!this.state.active){const chapter=currentChapter(this.getProgress().campaign);if(!chapter||!groupScenes(chapter.id).every(s=>this.state.completed.includes(s.id)))break;if(!this.completeChapter(chapter.id))break;changed=true;}
+   if(changed)this.save();
+  }finally{this.recovering=false;}
+ }
  finish(id){const a=this.state.active;if(!a||this.current?.id!==id)return;const group=a.group,replay=a.replay;
-  completeScene(this.state,id);this.save();
-  if(this.state.active){this.notify(this.current.title);return;}
-  if(group.startsWith('chapter-')&&!replay){const memory=memories.find(m=>m.quest===group),c=this.getProgress().campaign;
-   if(currentChapter(c)?.id===group){while(nextStep(c)&&nextStep(c).type!=='memory')questEvent(c,nextStep(c).type);unlockMemory(c,memory.id);this.story.changed();}
-   if(group==='chapter-1'&&this.adventure.current?.id==='first-encounter'&&this.adventure.current.step.target==='first-finale')this.adventure.director.emit('scene','first-finale');
-  }
-  this.notify(group==='epilogue'?'A próxima página · exploração livre disponível.':'Página guardada · roteiro concluído.');
+  completeScene(this.state,id);
+  if(this.state.active){this.save();this.notify(this.current.title);return;}
+  // Commit scene, canonical memory and reward together before the first write.
+  DefinitiveScript.prototype.completeChapter.call(this,group,replay);
   if(group==='epilogue')this.living.setMode('free');this.save();
-  if(group==='prologue'&&!replay&&this.getProgress().stage===2&&this.getProgress().adventure.quests['first-encounter'].status==='available')this.adventure.start('first-encounter');
+  this.notify(group==='epilogue'?'A próxima página · exploração livre disponível.':'Página guardada · roteiro concluído.');
+  if(group==='prologue'&&!replay&&!this.recovering&&this.getProgress().stage===2&&this.getProgress().adventure.quests['first-encounter'].status==='available')this.adventure.start('first-encounter');
  }
  openReflection(message=''){
   const s=this.current,p=SCENE_PUZZLES[s.id];this.story.show('script-puzzle');document.getElementById('story-title').textContent=s.title;

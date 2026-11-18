@@ -27,15 +27,25 @@ export class ContinuousSchool extends SchoolVisit{
  outsidePortal(p=this.player.position){return p.z>19.2||(this.threeGates&&p.x>11.2&&p.z>=-6.8&&p.z<=-4.2);}
  cameraCeiling(){return stairAt(this.player.position)===null?this.navigation.floor(this.floor).baseY+3.05:undefined;}
  cameraDistance(){return this.floor===0?THREE.MathUtils.lerp(this.follow.distance,5.4,THREE.MathUtils.clamp(this.portalDistance()/5,0,1)):5.4;}
+ collisionGeometry(){
+  const floors=this.layout.floors,previous=this.collisionCache,stairs=this.physicalStairs.colliders;
+  if(previous&&previous.rotation===this.rotation&&previous.details===this.details.size&&previous.stairs===stairs&&previous.stairCount===stairs.length&&previous.floors.length===floors.length&&floors.every((f,i)=>previous.floors[i].boxes===f.colliders&&previous.floors[i].count===f.colliders.length))return previous;
+  const walls=floors.flatMap(f=>f.colliders),slabs=floors.flatMap(f=>{const b={kind:'floor',minX:-11.275,maxX:11.275,minZ:-19.275,maxZ:19.275,minY:f.baseY-.42,maxY:f.baseY+.07};return f.index?splitOpening(b):[b];});
+  const fixtures=[...this.details].flatMap(([i,d])=>(d.architecture?.stats.parts||[]).filter(p=>p.name==='fixture-housing'||p.name==='fixture-diffuser').map(p=>({...p,minY:p.minY+floors[i].baseY,maxY:p.maxY+floors[i].baseY})));
+  this.collisionRebuilds=(this.collisionRebuilds||0)+1;
+  return this.collisionCache={rotation:this.rotation,details:this.details.size,stairs,stairCount:stairs.length,floors:floors.map(f=>({boxes:f.colliders,count:f.colliders.length})),body:[...walls,...stairs],camera:[...walls,...fixtures,...slabs,...stairs]};
+ }
  cameraObstacles(){
-  const slabs=this.layout.floors.flatMap(f=>{const b={kind:'floor',minX:-11.275,maxX:11.275,minZ:-19.275,maxZ:19.275,minY:f.baseY-.42,maxY:f.baseY+.07};return f.index?splitOpening(b):[b];});
-  // Ceiling fixtures are visual geometry above walking height, but still occlude the camera.
-  const fixtures=[...this.details].flatMap(([i,d])=>(d.architecture?.stats.parts||[]).filter(p=>p.name==='fixture-housing'||p.name==='fixture-diffuser').map(p=>({...p,minY:p.minY+this.layout.floors[i].baseY,maxY:p.maxY+this.layout.floors[i].baseY})));
-  return [...this.layout.floors.flatMap(f=>f.colliders),...fixtures,...slabs,...this.physicalStairs.colliders,...(this.connection.schoolDoors||[this.connection.door]).map(d=>schoolBoundsToLocal(d.bounds,this.rotation))];
+  const geometry=this.collisionGeometry(),result=this.cameraWorking||(this.cameraWorking=[]);result.length=0;result.push(...geometry.camera);
+  for(const door of this.connection.schoolDoors||[this.connection.door])result.push(schoolBoundsToLocal(door.bounds,this.rotation));
+  return result;
  }
  bodyObstacles(p){
-  const doors=(this.connection.schoolDoors||[this.connection.door]).map(d=>schoolBoundsToLocal(d.bounds,this.rotation));
-  return [...this.layout.floors.flatMap(f=>f.colliders),...this.physicalStairs.colliders,...doors].filter(b=>b.enabled!==false&&(b.minY??0)<p.y+1.72&&(b.maxY??3)>p.y+.1);
+  // Borrowed scratch array: the synchronous motor consumes it before the next body.
+  const geometry=this.collisionGeometry(),result=this.bodyWorking||(this.bodyWorking=[]);result.length=0;
+  for(const b of geometry.body)if(b.enabled!==false&&(b.minY??0)<p.y+1.72&&(b.maxY??3)>p.y+.1)result.push(b);
+  for(const door of this.connection.schoolDoors||[this.connection.door]){const b=schoolBoundsToLocal(door.bounds,this.rotation);if(b.enabled!==false&&(b.minY??0)<p.y+1.72&&(b.maxY??3)>p.y+.1)result.push(b);}
+  return result;
  }
  moveBodyWorld(position,delta){
   const local=schoolPointToLocal(position,this.rotation),end=schoolPointToLocal({x:position.x+delta.x,z:position.z+delta.z},this.rotation);
@@ -113,7 +123,7 @@ export class ContinuousSchool extends SchoolVisit{
  }
  restoreCampus(){for(const[r,visible]of this.hiddenRoots)r.visible=visible;this.hiddenRoots.clear();}
  explore(){super.explore();if(this.active)this.follow.obstacles=this.cameraObstacles();}
- state(){return{...super.state(),continuous:true,physicalStairs:true,onStair:stairAt(this.player.position),origin:{...this.origin},rotation:this.rotation,prefetching:this.prefetching,entrance:{...(this.threeGates?this.connection.access.gates.find(g=>g.id==='reception'):ENTRANCE)},gates:this.connection.gatesState?.()||null,doorOpen:this.connection.door.open,doorAngle:this.connection.door.angle};}
+ state(){return{...super.state(),continuous:true,physicalStairs:true,collisionCache:{rebuilds:this.collisionRebuilds||0,bodyBoxes:this.collisionCache?.body.length||0},onStair:stairAt(this.player.position),origin:{...this.origin},rotation:this.rotation,prefetching:this.prefetching,entrance:{...(this.threeGates?this.connection.access.gates.find(g=>g.id==='reception'):ENTRANCE)},gates:this.connection.gatesState?.()||null,doorOpen:this.connection.door.open,doorAngle:this.connection.door.angle};}
  dispose(){
   if(this.disposed)return;if(this.active){this.narrative?.leave();changeFrame(this.player,this.scene,this.follow,{x:-this.origin.x,z:-this.origin.z});for(const n of this.frameNodes)this.scene.attach(n);this.active=false;}
   this.restoreCampus();for(const d of this.details.values())d.surfaces.dispose();for(const h of this.stairOpenings.values())h.dispose();for(const h of this.roomRefits.values())h.dispose();this.physicalStairs.dispose();for(const p of this.portals.values())p.dispose();this.portals.clear();this.connection.dispose();super.dispose();
