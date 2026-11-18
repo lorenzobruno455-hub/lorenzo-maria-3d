@@ -102,9 +102,14 @@ export function createSchoolFurniture({ resources, materials, floor, source }) {
       }
       if(room.type==='class' && top && w>.75 && d>.5 && b.max[1]>.65 && b.max[1]<1.25) {
         const variant=(Math.round((x-room.x1)*7)+Math.round((z-room.z1)*5))%4;
-        notebook(b,x-.12,z-.015,variant%2?blue:'#8b6a4e');
+        notebook(b,x-.12,z-.015,[blue,paper,'#8b6a4e',blue][variant]);
         bottle(b,x+.35,z+.18);
         if(variant===1)prop(b,'rounded',x+.20,z,.17,.045,.065,dark,'cloth',0,'pencil-case');
+        if(variant===3){
+          // A study set on the free right corner, supported by the existing desk.
+          prop(b,'box',x+.20,z-.10,.19,.018,.24,blue,'plain',0,'study-folder');
+          prop(b,'rounded',x+.20,z+.12,.08,.025,.035,paper,'plain',0,'eraser');
+        }
         if(variant===2)prop(b,'box',x+.20,z,.18,.016,.22,paper,'plain',0,'worksheet');
         continue;
       }

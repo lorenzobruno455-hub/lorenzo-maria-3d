@@ -12,7 +12,7 @@ export const OVERDRIVE_20_STUDIES=Object.freeze({
 export function decorateOverdrive20Material(material,variant,{expanded=false,depth=false,edgePixelRatio={value:1}}={}){
  if((!material.isMeshToonMaterial&&!(depth&&material.isMeshStandardMaterial&&material.transparent))||!OVERDRIVE_20_STUDIES[variant])return()=>{};
  const study=OVERDRIVE_20_STUDIES[variant],compile=material.onBeforeCompile,key=material.customProgramCacheKey;
- material.customProgramCacheKey=()=>key.call(material)+`:overdrive-20-${variant}-${depth?'d3':expanded?'d2':'d1'}`;
+ material.customProgramCacheKey=()=>key.call(material)+`:overdrive-20-${variant}-${depth?'d4':expanded?'d2':'d1'}`;
  material.onBeforeCompile=shader=>{
   compile.call(material,shader);
   if(material.isMeshStandardMaterial){shader.fragmentShader=shader.fragmentShader.replace('mix(coTurquoise*.58,coPaper*.9,coRim)','mix(coTurquoise*.38,coPaper*.55,coRim)');return;}
@@ -53,11 +53,13 @@ export function decorateOverdrive20Material(material,variant,{expanded=false,dep
     }
     float facing20=dot(n20,normalize(vec3(-.7,.8,-.5)))*.5+.5;
     // Orientation bands keep volumes legible even when several interior fills overlap.
-    float band20=step(${study.low},facing20)+step(${study.high},facing20);
+    float bandAA20=max(fwidth(facing20),.001);
+    float midBand20=smoothstep(${study.low}-bandAA20,${study.low}+bandAA20,facing20);
+    float highBand20=smoothstep(${study.high}-bandAA20,${study.high}+bandAA20,facing20);
     vec3 dark20=mix(pigment20*.36,co20Shadow*.42,.38);
     vec3 mid20=pigment20*${variant==='a'?'.70':'.61'};
     vec3 bright20=pigment20;
-    vec3 graphic20=band20<.5?dark20:(band20<1.5?mid20:bright20);
+    vec3 graphic20=mix(mix(dark20,mid20,midBand20),bright20,highBand20);
     float lum20=dot(base20,vec3(.2126,.7152,.0722));
     float energy20=dot(reflectedLight.directDiffuse,vec3(.2126,.7152,.0722))/max(lum20,.008);
     graphic20=mix(dark20,graphic20,.55+.45*smoothstep(.06,.22,energy20));

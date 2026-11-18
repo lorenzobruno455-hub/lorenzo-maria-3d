@@ -1,5 +1,7 @@
 import*as THREE from'three';import{mergeGeometries}from'three/addons/utils/BufferGeometryUtils.js';import{batchMeshes}from'./batching.js';
-export const COURT={x:60,z:-27,halfX:8.5,halfZ:6.2,hoopY:2.65};
+export const COURT={x:60,z:-27,halfX:8.5,halfZ:6.2,hoopY:2.65,surfaceY:.066,apronY:.055};
+// Tops of the existing blue floor and safety apron, shared by visual contact art.
+export function courtSurfaceHeight(x,z){const dx=Math.abs(x-COURT.x),dz=Math.abs(z-COURT.z);return dx<8.65&&dz<6.3?COURT.surfaceY:dx<10.8&&dz<7.8?COURT.apronY:null;}
 export function stepCourtBall(ball,dt,mode,onScore=()=>{}){const steps=Math.max(1,Math.ceil(dt/.02)),h=dt/steps;for(let i=0;i<steps;i++){const oldZ=ball.z,oldY=ball.y;ball.x+=ball.vx*h;ball.z+=ball.vz*h;ball.y=Math.max(.27,ball.y+(ball.vy||0)*h);ball.vy=(ball.vy||0)-9*h;if(ball.y<=.27){ball.y=.27;ball.vy=Math.abs(ball.vy)>.8?-ball.vy*.35:0;}ball.vx*=Math.exp(-h*.8);ball.vz*=Math.exp(-h*.8);
  if(mode==='futsal'&&Math.abs(ball.x)<1.6&&ball.y<1.9&&Math.abs(oldZ)<6&&Math.abs(ball.z)>=6){onScore(ball.z>0?0:1,1);ball.vz*=-.65;}
  if(mode==='basket'&&oldY>COURT.hoopY&&ball.y<=COURT.hoopY&&ball.vy<0&&Math.abs(ball.x)<.45&&Math.abs(Math.abs(ball.z)-5.6)<.45)onScore(ball.z>0?0:1,2);
@@ -14,7 +16,7 @@ export function createSportsCourt({scene,world,living,audio,notify}){
  const line=(color,x1,z1,x2,z2,width=.055)=>{const dx=x2-x1,dz=z2-z1,m=box(staticGroup,color,(x1+x2)/2,.077,(z1+z2)/2,Math.hypot(dx,dz),.012,width);m.geometry=paintGeometry;m.rotation.y=-Math.atan2(dz,dx);};
  const rect=(color,x,z,w,d)=>{line(color,x-w/2,z-d/2,x+w/2,z-d/2);line(color,x-w/2,z+d/2,x+w/2,z+d/2);line(color,x-w/2,z-d/2,x-w/2,z+d/2);line(color,x+w/2,z-d/2,x+w/2,z+d/2);};
  const arc=(color,x,z,radius,start,end)=>{for(let i=0;i<24;i++){const a=start+(end-start)*i/24,b=start+(end-start)*(i+1)/24;line(color,x+Math.cos(a)*radius,z+Math.sin(a)*radius,x+Math.cos(b)*radius,z+Math.sin(b)*radius,.045);}};
- box(staticGroup,'#19264D',0,.045,0,21.6,.02,15.6,'plain');box(staticGroup,'#2250FF',0,.06,0,17.3,.012,12.6,'plain');rect('#FFF8E9',0,0,17,12.4);line('#FFF8E9',-8.5,0,8.5,0);arc('#FFF8E9',0,0,1.55,0,Math.PI*2);
+ box(staticGroup,'#19264D',0,COURT.apronY-.01,0,21.6,.02,15.6,'plain');box(staticGroup,'#2250FF',0,COURT.surfaceY-.006,0,17.3,.012,12.6,'plain');rect('#FFF8E9',0,0,17,12.4);line('#FFF8E9',-8.5,0,8.5,0);arc('#FFF8E9',0,0,1.55,0,Math.PI*2);
  rect('#FFDA31',0,0,16.3,12);for(const side of[-1,1]){rect('#FFDA31',0,side*4.9,6.2,2.2);rect('#FF503A',0,side*4.7,3.8,2.5);arc('#FF503A',0,side*5.7,3.6,side>0?Math.PI:0,side>0?Math.PI*2:Math.PI);arc('#FF503A',0,side*3.45,1.5,side>0?Math.PI:0,side>0?Math.PI*2:Math.PI);}
  rect('#FF8B31',0,0,10,8);for(const z of[-2.7,2.7])line('#FF8B31',-5,z,5,z);
  const strings=[];const rope=(a,b)=>strings.push(...a,...b);
